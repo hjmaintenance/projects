@@ -71,3 +71,11 @@ npm run dev
 ## Usage <a name = "usage"></a>
 
 vue3, tailwind, jquery
+
+
+## vscode 확장 추천
+
+Tailwind Css intellisense 
+Volar
+EsLint
+Prettier-Code formatter
