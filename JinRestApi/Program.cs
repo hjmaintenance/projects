@@ -49,7 +49,7 @@ sudo systemctl restart myrestapi
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-                       ?? Environment.GetEnvironmentVariable("Help.Hanju.JIN14_CONNECTION");
+                       ?? Environment.GetEnvironmentVariable("Help_JSINI");
 
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
