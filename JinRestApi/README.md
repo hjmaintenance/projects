@@ -1,6 +1,5 @@
 <p align="center">
-  <a href="" rel="noopener">
- <img src="https://i.imgur.com/AZ2iWek.png" alt="Project logo"></a>
+  <a href="" rel="noopener"></a>
 </p>
 <h3 align="center">JinRecept Backend</h3>
 
