@@ -1,3 +1,7 @@
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using JinRestApi.Models;
 using Microsoft.AspNetCore.Identity;
 using JinRestApi.Services;
@@ -62,14 +66,38 @@ public static class UserEndpoints
             return Results.NoContent();
         });
 
-        // 로그인
 
-        group.MapPost("/login", async (AppDbContext db, LoginRequest req) =>
+        // 로그인 (JWT 토큰 발급)
+        group.MapPost("/login", async (AppDbContext db, IConfiguration config, LoginRequest req) =>
         {
             var user = db.Users.FirstOrDefault(u => u.LoginId == req.LoginId);
             if (user is null || !passwordService.VerifyPassword(user, req.Password))
                 return Results.Unauthorized();
-            return Results.Ok(user);
+
+            // JWT 토큰 생성
+            var jwtKey = config["Jwt:Key"] ?? "quristyle_blabbbbbla_secret_key_1234567890!@#$";
+            var jwtIssuer = config["Jwt:Issuer"] ?? "JinRestApi";
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.LoginId ?? user.Name ?? user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("uid", user.Id.ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: jwtIssuer,
+                audience: null,
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(2),
+                signingCredentials: credentials
+            );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Results.Ok(new { token = tokenString });
         });
 
 

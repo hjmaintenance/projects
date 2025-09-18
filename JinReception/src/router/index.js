@@ -74,6 +74,14 @@ const routes = [
   },
   {
     meta: {
+      title: 'LoginResult',
+    },
+    path: '/loginresult',
+    name: 'loginresult',
+    component: () => import('@/views/LoginResultView.vue'),
+  },
+  {
+    meta: {
       title: '404',
     },
     path: '/404',

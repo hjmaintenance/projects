@@ -53,6 +53,11 @@ export default [
     icon: mdiLock,
   },
   {
+    to: '/loginresult',
+    label: 'LoginResult',
+    icon: mdiPalette,
+  },
+  {
     to: '/404',
     label: '404',
     icon: mdiLock,

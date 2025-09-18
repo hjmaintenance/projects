@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { mdiAccount, mdiAsterisk } from '@mdi/js'
 import SectionFullScreen from '@/components/SectionFullScreen.vue'
@@ -12,15 +12,30 @@ import BaseButtons from '@/components/BaseButtons.vue'
 import LayoutGuest from '@/layouts/LayoutGuest.vue'
 
 const form = reactive({
-  login: 'john.doe',
-  pass: 'highly-secure-password-fYjUw-',
-  remember: true,
+    login: '',
+    pass: '',
+    remember: true,
 })
 
+const errorMsg = ref('')
 const router = useRouter()
 
-const submit = () => {
-  router.push('/dashboard')
+const submit = async (e) => {
+    e.preventDefault()
+    errorMsg.value = ''
+    try {
+        const res = await fetch('/users/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ LoginId: form.login, Password: form.pass })
+        })
+        if (!res.ok) throw new Error('로그인 실패')
+        const data = await res.json()
+        localStorage.setItem('jwt_token', data.token)
+        router.push('/loginresult')
+    } catch (err) {
+        errorMsg.value = err.message
+    }
 }
 </script>
 
@@ -40,17 +55,17 @@ const submit = () => {
                     <p> <span class="text-xl sm:text-2xl">Login Here</span></p>
                 
                 <hr>
-                <form action="POST">
-                    <input type="text" id="username" placeholder="Username..." class="w-full mx-auto text-base sm:textlg">
-                    <input type="password" id="password" placeholder="Password..." class="w-full mx-auto text-base sm:textlg">
-                    <button 
-                      type="submit"
-                      class="p-2 sm:text-lg bg-blue-500 rounded-2xl m-8 w-36 mx-auto sm:w-48 hover:bg-gradient-to-r hover:from-orange-500 hover:via-pink-500 hover:to-pink-700"
-                    >
-                    Login
-                    </button>            
-
-                </form>
+                                <form @submit="submit">
+                                        <input v-model="form.login" type="text" placeholder="Username..." class="w-full mx-auto text-base sm:textlg">
+                                        <input v-model="form.pass" type="password" placeholder="Password..." class="w-full mx-auto text-base sm:textlg">
+                                        <button 
+                                            type="submit"
+                                            class="p-2 sm:text-lg bg-blue-500 rounded-2xl m-8 w-36 mx-auto sm:w-48 hover:bg-gradient-to-r hover:from-orange-500 hover:via-pink-500 hover:to-pink-700"
+                                        >
+                                        Login
+                                        </button>
+                                        <div v-if="errorMsg" style="color:red">{{ errorMsg }}</div>
+                                </form>
                 <p>If you're new here, click to <a href="#" class="underline hover:text-pink-300">SignUp</a></p>             
             </div>
     
@@ -58,9 +73,6 @@ const submit = () => {
   </LayoutGuest>
 </template>
 
-<script>
-  // ...
-</script>
 
 <style>
 

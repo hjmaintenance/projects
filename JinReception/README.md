@@ -75,7 +75,8 @@ vue3, tailwind, jquery
 
 ## vscode 확장 추천
 
-Tailwind Css intellisense 
-Volar
-EsLint
-Prettier-Code formatter
+- Tailwind Css intellisense 
+- Volar
+- EsLint
+- Prettier-Code formatter
+- Vue
