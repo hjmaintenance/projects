@@ -22,15 +22,20 @@ ubuntu 24.04 버전으로 설명 합니다. 다른운영체제 사용하시는 �
 
 필수툴 설치. 자신의 환경에서 최신화 추천.
 
+ubuntu
+
 ```
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y git curl build-essential python3 ca-certificates
 ```
 
+
 ### Installing
 
 nvm, node 설치
+
+ubuntu
 
 ```
 # nvm 설치
@@ -43,11 +48,27 @@ source ~/.bashrc   # source ~/.profile , source ~/.zshrc
 nvm install --lts
 nvm use --lts
 
+
+```
+
+
+window
+```
+https://github.com/coreybutler/nvm-windows/releases
+에서 nvm-setup.exe 다운받고 실행
+
+
+관리자 권한으로 powershell 실행
+
+```
+
+```
 # 확인
 node -v
 npm -v
 
 ```
+
 
 소스 가져오기
 
