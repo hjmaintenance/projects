@@ -53,6 +53,16 @@ export default [
     icon: mdiLock,
   },
   {
+    to: '/404',
+    label: '404',
+    icon: mdiLock,
+  },
+  {
+    to: '/500',
+    label: '500',
+    icon: mdiLock,
+  },
+  {
     to: '/error',
     label: 'Error',
     icon: mdiAlertCircle,

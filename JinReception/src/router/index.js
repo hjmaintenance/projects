@@ -74,6 +74,22 @@ const routes = [
   },
   {
     meta: {
+      title: '404',
+    },
+    path: '/404',
+    name: '404',
+    component: () => import('@/views/404View.vue'),
+  },
+  {
+    meta: {
+      title: '500',
+    },
+    path: '/500',
+    name: '500',
+    component: () => import('@/views/500View.vue'),
+  },
+  {
+    meta: {
       title: 'Error',
     },
     path: '/error',
