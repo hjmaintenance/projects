@@ -1,6 +1,11 @@
 작업목록 여기에 추가 할께요. 중첩행위가 많이 생길테니 pin 꼽을사람은 얼렁 체크하고 commit 부탁합니다.
 
 
+![Badge](https://img.shields.io/badge/처리할꺼면-red)
+![Badge](https://img.shields.io/badge/이관요청-333)
+![Badge](https://img.shields.io/badge/완료및검토요청-blue)
+![Badge](https://img.shields.io/badge/완료-skyblue)
+
 
 ## 접수 시스템
 
@@ -39,10 +44,11 @@
 
 목록 오른쪽에 자기 이름 표기 하면 되요.
 
-- 처리할꺼면 ![Badge](https://img.shields.io/badge/quristyle-red)
-- 이관요청 ![Badge](https://img.shields.io/badge/quristyle-gray)
-- 완료및검토요청 ![Badge](https://img.shields.io/badge/quristyle-blue)
-- 완료 ![Badge](https://img.shields.io/badge/quristyle-darkblue) .. 적절한 시점에 삭제됨.
+
+![Badge](https://img.shields.io/badge/처리할꺼면-red)
+![Badge](https://img.shields.io/badge/이관요청-333)
+![Badge](https://img.shields.io/badge/완료및검토요청-blue)
+![Badge](https://img.shields.io/badge/완료-skyblue)
 
 ##
 
