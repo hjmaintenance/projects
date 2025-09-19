@@ -17,7 +17,8 @@ export default defineConfig({
   },
     server: {
     proxy: {
-      '/users': 'http://localhost:5223'
+      '/users': 'http://localhost:5223',
+      '/companys': 'http://localhost:5223'
     }
   },
 })

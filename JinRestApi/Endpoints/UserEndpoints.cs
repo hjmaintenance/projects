@@ -52,6 +52,7 @@ public static class UserEndpoints
         {
             user.Id = db.Users.Any() ? db.Users.Max(u => u.Id) + 1 : 1;
             db.Users.Add(user);
+            await db.SaveChangesAsync();
             return Results.Created($"/users/{user.Id}", user);
         });
 

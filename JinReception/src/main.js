@@ -2,6 +2,17 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
+
+
+
+
+// PrimeVue 관련
+import PrimeVue from 'primevue/config';
+
+import Aura from '@primeuix/themes/aura';
+
+
+
 import router from './router'
 import { useMainStore } from '@/stores/main.js'
 
@@ -11,7 +22,25 @@ import './css/main.css'
 const pinia = createPinia()
 
 // Create Vue app
-createApp(App).use(router).use(pinia).mount('#app')
+
+const app = createApp(App);
+
+app.use(router)
+app.use(pinia)
+
+
+app.use(PrimeVue, {
+    theme: {
+        preset: Aura
+    }
+});
+
+
+app.mount('#app')
+
+
+
+
 
 // Init main store
 const mainStore = useMainStore(pinia)

@@ -98,6 +98,14 @@ const routes = [
   },
   {
     meta: {
+      title: 'companys',
+    },
+    path: '/companys',
+    name: 'companys',
+    component: () => import('@/views/CompanyView.vue'),
+  },
+  {
+    meta: {
       title: 'Error',
     },
     path: '/error',

@@ -18,6 +18,31 @@ export default [
     label: 'Dashboard',
   },
   {
+    to: '/login',
+    label: 'Login',
+    icon: mdiLock,
+  },
+  {
+    to: '/loginresult',
+    label: 'LoginResult',
+    icon: mdiPalette,
+  },
+  {
+    to: '/404',
+    label: '404',
+    icon: mdiLock,
+  },
+  {
+    to: '/500',
+    label: '500',
+    icon: mdiLock,
+  },
+  {
+    to: '/companys',
+    label: 'companys',
+    icon: mdiPalette,
+  },
+  {
     to: '/tables',
     label: 'Tables',
     icon: mdiTable,
@@ -46,26 +71,6 @@ export default [
     to: '/profile',
     label: 'Profile',
     icon: mdiAccountCircle,
-  },
-  {
-    to: '/login',
-    label: 'Login',
-    icon: mdiLock,
-  },
-  {
-    to: '/loginresult',
-    label: 'LoginResult',
-    icon: mdiPalette,
-  },
-  {
-    to: '/404',
-    label: '404',
-    icon: mdiLock,
-  },
-  {
-    to: '/500',
-    label: '500',
-    icon: mdiLock,
   },
   {
     to: '/error',
