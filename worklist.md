@@ -43,7 +43,7 @@
 
 ## 관리자
 
-- 회사 관리
+- 회사 관리 ![Badge](https://img.shields.io/badge/quri-red)
 - 사용자 관리
 - 권한 관리
 - 접수리스트 화면
