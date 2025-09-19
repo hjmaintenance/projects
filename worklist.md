@@ -35,6 +35,7 @@
 ## 고객사 
 
 - ~~로그인~~ ![Badge](https://img.shields.io/badge/uspuni-red)
+- 사용자 정보 수정 
 - 접수내용 작성 화면
 - 접수 기록 확인 화면
 - 공지 화면
