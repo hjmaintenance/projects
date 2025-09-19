@@ -1,13 +1,24 @@
 작업목록 여기에 추가 할께요. 중첩행위가 많이 생길테니 pin 꼽을사람은 얼렁 체크하고 commit 부탁합니다.
 
 
+<p align="center">
+  <a href="" rel="noopener"></a>
+</p>
+<h3 align="center">접수 시스템</h3>
+<p>전화로 귀찮지 않으려면 이것이 필수<br/> 특별한 경우가 아닌 이상 회의 없다.</p>
+<div align="center">
+
 ![Badge](https://img.shields.io/badge/처리할꺼면-red)
 ![Badge](https://img.shields.io/badge/이관요청-333)
 ![Badge](https://img.shields.io/badge/완료및검토요청-blue)
 ![Badge](https://img.shields.io/badge/완료-skyblue)
 
+</div>
 
-## 접수 시스템
+
+
+
+## 시스템
 
 - 서버구성 ![Badge](https://img.shields.io/badge/dhk-darkblue) ![Badge](https://img.shields.io/badge/quristyle-red)
 - 도메인![Badge](https://img.shields.io/badge/jwp-darkblue) ![Badge](https://img.shields.io/badge/quristyle-red)
@@ -53,3 +64,7 @@
 ##
 
 예쁘게 표시하거나 추가 내용 자유롭게 넣으세요..
+
+
+## 복구 작업
+[복구작업 worklist](./repair_worklist.md)
