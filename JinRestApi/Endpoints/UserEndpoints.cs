@@ -30,15 +30,28 @@ public static class UserEndpoints
 
             db.Users.Add(user);
             await db.SaveChangesAsync();
-            return Results.Created($"/users/{user.Id}", user);
-        
+            //return Results.Created($"/users/{user.Id}", user);
+
+            var userResponse = new
+            {
+                user.Id,
+                user.Name,
+                user.LoginId,
+                user.Sex,
+                user.Photo,
+                user.EMail
+            };
+            return Results.Created($"/users/{user.Id}", userResponse);
+
+
         });
 
 
         // 1. 전체 조회 (GET /users)
         group.MapGet("/", async (AppDbContext db) =>
-            await db.Users.ToListAsync()
-        );
+        {    //await db.Users.ToListAsync();
+          await db.Users.Select(u => new { u.Id, u.Name, u.LoginId, u.Sex, u.Photo, u.EMail }).ToListAsync();
+        });
 
         // 2. 단일 조회 (GET /users/{id})
         group.MapGet("/{id:int}", async (AppDbContext db, int id) =>
@@ -52,8 +65,16 @@ public static class UserEndpoints
         {
             user.Id = db.Users.Any() ? db.Users.Max(u => u.Id) + 1 : 1;
             db.Users.Add(user);
-            await db.SaveChangesAsync();
-            return Results.Created($"/users/{user.Id}", user);
+            await db.SaveChangesAsync();var userResponse = new
+            {
+                user.Id,
+                user.Name,
+                user.LoginId,
+                user.Sex,
+                user.Photo,
+                user.EMail
+            };
+            return Results.Created($"/users/{user.Id}", userResponse);
         });
 
         // 4. 삭제 (DELETE /users/{id})
@@ -98,7 +119,19 @@ public static class UserEndpoints
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return Results.Ok(new { token = tokenString });
+            //return Results.Ok(new { token = tokenString });
+             return Results.Ok(new
+            {
+                token = tokenString,
+                user = new {
+                    user.Id,
+                    user.Name,
+                    user.LoginId,
+                    user.Sex,
+                    user.Photo,
+                    user.EMail
+                }
+            });
         });
 
 

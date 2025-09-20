@@ -1,125 +1,175 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-//import Style from '@/views/StyleView.vue'
-import Home from '@/views/HomeView.vue'
-
-const routes = [
-  {
-    meta: {
-      title: 'responsive',
-    },
-    path: '/',
-    //name: 'style',
-    //component: Style,
-    name: 'main',
-    component: () => import('@/views/ResponsiveView.vue'),
-    //component: () => import('@/views/ResponsiveView.vue'),
-  },
-  {
-    // Document title tag
-    // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
-    meta: {
-      title: 'Dashboard',
-    },
-    path: '/dashboard',
-    name: 'dashboard',
-    component: Home,
-  },
-  {
-    meta: {
-      title: 'Tables',
-    },
-    path: '/tables',
-    name: 'tables',
-    component: () => import('@/views/TablesView.vue'),
-  },
-  {
-    meta: {
-      title: 'Forms',
-    },
-    path: '/forms',
-    name: 'forms',
-    component: () => import('@/views/FormsView.vue'),
-  },
-  {
-    meta: {
-      title: 'Profile',
-    },
-    path: '/profile',
-    name: 'profile',
-    component: () => import('@/views/ProfileView.vue'),
-  },
-  {
-    meta: {
-      title: 'Ui',
-    },
-    path: '/ui',
-    name: 'ui',
-    component: () => import('@/views/UiView.vue'),
-  },
-  {
-    meta: {
-      title: 'Responsive layout',
-    },
-    path: '/responsive',
-    name: 'responsive',
-    component: () => import('@/views/ResponsiveView.vue'),
-  },
-  {
-    meta: {
-      title: 'Login',
-    },
-    path: '/login',
-    name: 'login',
-    component: () => import('@/views/LoginView.vue'),
-  },
-  {
-    meta: {
-      title: 'LoginResult',
-    },
-    path: '/loginresult',
-    name: 'loginresult',
-    component: () => import('@/views/LoginResultView.vue'),
-  },
-  {
-    meta: {
-      title: '404',
-    },
-    path: '/404',
-    name: '404',
-    component: () => import('@/views/404View.vue'),
-  },
-  {
-    meta: {
-      title: '500',
-    },
-    path: '/500',
-    name: '500',
-    component: () => import('@/views/500View.vue'),
-  },
-  {
-    meta: {
-      title: 'companys',
-    },
-    path: '/companys',
-    name: 'companys',
-    component: () => import('@/views/CompanyView.vue'),
-  },
-  {
-    meta: {
-      title: 'Error',
-    },
-    path: '/error',
-    name: 'error',
-    component: () => import('@/views/ErrorView.vue'),
-  },
-]
+import AppLayout from '@/layout/AppLayout.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import { jwtDecode } from 'jwt-decode';
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes,
-  scrollBehavior(to, from, savedPosition) {
-    return savedPosition || { top: 0 }
-  },
-})
+    history: createWebHistory(),
+    routes: [
+        {
+            path: '/',
+            component: AppLayout,
+            children: [
+                {
+                    path: '/dashboard',
+                    name: 'dashboard',
+                    component: () => import('@/views/Dashboard.vue')
+                },
+                {
+                    path: '/',
+                    name: 'home',
+                    component: () => import('@/views/Dashboard.vue')
+                },
+                {
+                    path: '/uikit/formlayout',
+                    name: 'formlayout',
+                    component: () => import('@/views/uikit/FormLayout.vue')
+                },
+                {
+                    path: '/uikit/input',
+                    name: 'input',
+                    component: () => import('@/views/uikit/InputDoc.vue')
+                },
+                {
+                    path: '/uikit/button',
+                    name: 'button',
+                    component: () => import('@/views/uikit/ButtonDoc.vue')
+                },
+                {
+                    path: '/uikit/table',
+                    name: 'table',
+                    component: () => import('@/views/uikit/TableDoc.vue')
+                },
+                {
+                    path: '/uikit/list',
+                    name: 'list',
+                    component: () => import('@/views/uikit/ListDoc.vue')
+                },
+                {
+                    path: '/uikit/tree',
+                    name: 'tree',
+                    component: () => import('@/views/uikit/TreeDoc.vue')
+                },
+                {
+                    path: '/uikit/panel',
+                    name: 'panel',
+                    component: () => import('@/views/uikit/PanelsDoc.vue')
+                },
 
-export default router
+                {
+                    path: '/uikit/overlay',
+                    name: 'overlay',
+                    component: () => import('@/views/uikit/OverlayDoc.vue')
+                },
+                {
+                    path: '/uikit/media',
+                    name: 'media',
+                    component: () => import('@/views/uikit/MediaDoc.vue')
+                },
+                {
+                    path: '/uikit/message',
+                    name: 'message',
+                    component: () => import('@/views/uikit/MessagesDoc.vue')
+                },
+                {
+                    path: '/uikit/file',
+                    name: 'file',
+                    component: () => import('@/views/uikit/FileDoc.vue')
+                },
+                {
+                    path: '/uikit/menu',
+                    name: 'menu',
+                    component: () => import('@/views/uikit/MenuDoc.vue')
+                },
+                {
+                    path: '/uikit/charts',
+                    name: 'charts',
+                    component: () => import('@/views/uikit/ChartDoc.vue')
+                },
+                {
+                    path: '/uikit/misc',
+                    name: 'misc',
+                    component: () => import('@/views/uikit/MiscDoc.vue')
+                },
+                {
+                    path: '/uikit/timeline',
+                    name: 'timeline',
+                    component: () => import('@/views/uikit/TimelineDoc.vue')
+                },
+                {
+                    path: '/pages/empty',
+                    name: 'empty',
+                    component: () => import('@/views/pages/Empty.vue')
+                },
+                {
+                    path: '/pages/crud',
+                    name: 'crud',
+                    component: () => import('@/views/pages/Crud.vue')
+                },
+                {
+                    path: '/documentation',
+                    name: 'documentation',
+                    component: () => import('@/views/pages/Documentation.vue')
+                }
+            ]
+        },
+        {
+            path: '/landing',
+            name: 'landing',
+            component: () => import('@/views/pages/Landing.vue')
+        },
+        {
+            path: '/pages/notfound',
+            name: 'notfound',
+            component: () => import('@/views/pages/NotFound.vue')
+        },
+
+        {
+            path: '/auth/login',
+            name: 'login',
+            component: () => import('@/views/pages/auth/Login.vue')
+        },
+        {
+            path: '/auth/access',
+            name: 'accessDenied',
+            component: () => import('@/views/pages/auth/Access.vue')
+        },
+        {
+            path: '/auth/error',
+            name: 'error',
+            component: () => import('@/views/pages/auth/Error.vue')
+        }
+    ]
+});
+
+router.beforeEach((to, from, next) => {
+    // 'login' 페이지와 같이 인증이 필요 없는 페이지 목록
+    const publicPages = ['login', 'landing', 'notfound', 'accessDenied', 'error'];
+    const authRequired = !publicPages.includes(to.name);
+    const loggedIn = localStorage.getItem('jwt_token');
+
+    // 인증이 필요한 페이지에 접근하는데, 토큰이 없는 경우
+    if (authRequired && !loggedIn) {
+        return next({ name: 'login' });
+    }
+
+    // 인증이 필요한 페이지에 접근하는데, 토큰이 있는 경우 만료에 대한 처리
+    if (loggedIn) {
+        try {
+            //jwt-decode와 같은 라이브러리로 토큰의 만료(exp) 여부를 확인할 수 있습니다.
+            const decoded = jwtDecode(loggedIn);
+            if (decoded.exp < Date.now() / 1000) {
+                localStorage.removeItem('jwt_token');
+                localStorage.removeItem('loginUser');
+                if (authRequired) return next({ name: 'login' });
+            }
+        } catch (e) {
+            localStorage.removeItem('jwt_token');
+            localStorage.removeItem('loginUser');
+            if (authRequired) return next({ name: 'login' });
+        }
+    }
+
+    next();
+});
+
+export default router;
