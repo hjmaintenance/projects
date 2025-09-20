@@ -17,7 +17,7 @@ public static class CompanyEndpoints
 
     public static void MapCompanyEndpoints(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("/companys");
+        var group = routes.MapGroup("/api/companys");
 
         //조회 
         group.MapGet("/", async (AppDbContext db) =>

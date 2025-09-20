@@ -15,7 +15,7 @@ const submit = async (e) => {
     e.preventDefault();
     errorMsg.value = '';
     try {
-        const res = await fetch('/users/login', {
+        const res = await fetch('/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ LoginId: userid.value, Password: password.value })
@@ -50,7 +50,7 @@ const submit2 = async (event) => {
 
     errorMsg.value = '';
     try {
-        const res = await fetch('/users/login', {
+        const res = await fetch('/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ LoginId: id, Password: pw })

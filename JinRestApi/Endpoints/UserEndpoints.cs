@@ -17,7 +17,7 @@ public static class UserEndpoints
 
     public static void MapUserEndpoints(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("/users");
+        var group = routes.MapGroup("/api/users");
 
 
         var passwordService = new PasswordService();
