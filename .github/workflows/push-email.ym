@@ -1,0 +1,27 @@
+name: Push Email Notification
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  send_email:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send mail on push
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_HOST }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "[${{ github.repository }}] Push by ${{ github.actor }}"
+          to: "quristyle@gmail.com, uspuni@gmail.com"   # 수신자 여러 명은 콤마(,)로 구분
+          from: "GitHub Actions <${{ secrets.SMTP_USERNAME }}>"
+          body: |
+            📌 Repository: ${{ github.repository }}
+            👤 Pushed by: ${{ github.actor }}
+            📝 Commit message: ${{ github.event.head_commit.message }}
+            🔗 Compare changes: ${{ github.event.compare }}
