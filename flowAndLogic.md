@@ -11,8 +11,29 @@
 - 회사명, 대표자명 을 관리
 - 유지보수 관리 항목은 회사에 할당된다.
 
+## 관계 정보
+
+관리자(Admin) 1 ⟶ N 개선요청(ImprovementRequest)
+
+관리자(Admin) N ⟶ 1 팀(Team)
+
+팀(Team) N ⟷ N 고객사(CustomerCompany) (TeamCompany 매핑 테이블 사용)
+
+팀(Team) 1 ⟶ N 팀 첨부파일(TeamAttachment)
+
+고객사(CustomerCompany) 1 ⟶ N 회사 첨부파일(CompanyAttachment)
 
 
+
+
+
+
+아래내용은 25.09.25 정도에 사라짐.
+
+#
+#
+#
+#
 
 
 ## quristyle 경우의 작업 형태를 소개함. (예시)

@@ -1,58 +1,56 @@
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using JinRestApi.Models;
-using Microsoft.AspNetCore.Identity;
-using JinRestApi.Services;
-using JinRestApi.Data;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
-
-
+using JinRestApi.Data;
 
 namespace JinRestApi.Endpoints;
 
 public static class CompanyEndpoints
 {
-
     public static void MapCompanyEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/companys");
 
-        //조회 
+        // 전체 조회
         group.MapGet("/", async (AppDbContext db) =>
-            await db.Companys.ToListAsync()
-        );
+            await db.Companies.Include(c => c.Attachments).ToListAsync());
 
-        // 1건 조회
-        group.MapGet("/{id:int}", async (AppDbContext db, int id) =>
-        {
-            var company = db.Companys.FirstOrDefault(c => c.Id == id);
-            return company is not null ? Results.Ok(company) : Results.NotFound();
-        });
+        // 상세 조회
+        group.MapGet("/{id}", async (AppDbContext db, int id) =>
+            await db.Companies.Include(c => c.Attachments).FirstOrDefaultAsync(c => c.Id == id));
 
-        // 저장
-        group.MapPost("/", async (AppDbContext db, Company company) =>
+        // 등록
+        group.MapPost("/", async (AppDbContext db, CustomerCompany company) =>
         {
-            company.Id = db.Companys.Any() ? db.Companys.Max(c => c.Id) + 1 : 1;
-            db.Companys.Add(company);
+            db.Companies.Add(company);
             await db.SaveChangesAsync();
-            return Results.Created($"/companys/{company.Id}", company);
+            return Results.Created($"/api/companys/{company.Id}", company);
         });
 
-        //삭제 
-        group.MapDelete("/{id:int}", async (AppDbContext db, int id) =>
+        // 수정
+        group.MapPut("/{id}", async (AppDbContext db, int id, CustomerCompany input) =>
         {
-            var company = await db.Companys.FindAsync(id);
-            if (company is null)
-                return Results.NotFound();
-            db.Companys.Remove(company);
+            var company = await db.Companies.FindAsync(id);
+            if (company is null) return Results.NotFound();
+
+            company.Name = input.Name;
+            company.ModifiedBy = input.ModifiedBy;
+            company.MenuContext = input.MenuContext;
+            company.ModifiedAt = DateTime.UtcNow;
+
             await db.SaveChangesAsync();
-            return Results.NoContent();
+            return Results.Ok(company);
         });
 
+        // 삭제
+        group.MapDelete("/{id}", async (AppDbContext db, int id) =>
+        {
+            var company = await db.Companies.FindAsync(id);
+            if (company is null) return Results.NotFound();
 
-
-
+            db.Companies.Remove(company);
+            await db.SaveChangesAsync();
+            return Results.Ok();
+        });
     }
 }

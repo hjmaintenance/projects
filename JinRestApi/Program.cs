@@ -55,6 +55,18 @@ app.UseAuthorization();
 
 // endpoints 
 app.MapUserEndpoints();
+//app.MapCompanyEndpoints();
+
+// Endpoint 모듈 등록
 app.MapCompanyEndpoints();
+app.MapCustomerEndpoints();
+app.MapAdminEndpoints();
+app.MapTeamEndpoints();
+app.MapRequestEndpoints();
+app.MapCommentEndpoints();
+app.MapAttachmentEndpoints();
+app.MapDashboardEndpoints();
+
+
 
 app.Run();
