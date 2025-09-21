@@ -18,7 +18,7 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "[${{ github.repository }}] Push by ${{ github.actor }}"
-          to: "quristyle@gmail.com, uspuni@gmail.com"
+          to: "quristyle@gmail.com, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
           from: "GitHub Actions <${{ secrets.SMTP_USERNAME }}>"
           body: |
             📌 Repository: ${{ github.repository }}
