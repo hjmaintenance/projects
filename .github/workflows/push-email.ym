@@ -18,7 +18,7 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "[${{ github.repository }}] Push by ${{ github.actor }}"
-          to: "quristyle@gmail.com, uspuni@gmail.com"   # 수신자 여러 명은 콤마(,)로 구분
+          to: "quristyle@gmail.com, uspuni@gmail.com"
           from: "GitHub Actions <${{ secrets.SMTP_USERNAME }}>"
           body: |
             📌 Repository: ${{ github.repository }}
