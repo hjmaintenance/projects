@@ -12,10 +12,23 @@ public static class CustomerEndpoints
         var group = routes.MapGroup("/api/customers");
 
         group.MapGet("/", async (AppDbContext db) =>
-            await db.Customers.Include(c => c.Attachments).ToListAsync());
+            await db.Customers.Include(c => c.Attachments).Select(u => new { u.Id, u.UserName, u.LoginId, u.Sex, u.Photo, u.Email }).ToListAsync()
+        );
+
+            //await db.Customers.Include(c => c.Attachments).ToListAsync());
+
+
+
 
         group.MapGet("/{id}", async (AppDbContext db, int id) =>
-            await db.Customers.Include(c => c.Attachments).FirstOrDefaultAsync(c => c.Id == id));
+        {
+            var customer = await db.Customers
+                .Where(c => c.Id == id)
+                .Select(u => new { u.Id, u.UserName, u.LoginId, u.Sex, u.Photo, u.Email })
+                .FirstOrDefaultAsync();
+
+            return customer is not null ? Results.Ok(customer) : Results.NotFound();
+        });
 
         group.MapPost("/", async (AppDbContext db, Customer customer) =>
         {

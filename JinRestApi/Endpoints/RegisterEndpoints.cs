@@ -12,10 +12,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JinRestApi.Endpoints;
 
-public static class UserEndpoints
+public static class RegisterEndpoints
 {
 
-    public static void MapUserEndpoints(this IEndpointRouteBuilder routes)
+    public static void MapRegistEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/users");
 
@@ -23,76 +23,33 @@ public static class UserEndpoints
         var passwordService = new PasswordService();
 
         // 회원가입
-        group.MapPost("/singup", async (AppDbContext db, User user) =>
+        group.MapPost("/singup", async (AppDbContext db, Customer user) =>
         {
             user.PasswordHash = passwordService.HashPassword(user, user.PasswordHash);
             // ...저장 로직...
 
-            db.Users.Add(user);
+            db.Customers.Add(user);
             await db.SaveChangesAsync();
             //return Results.Created($"/users/{user.Id}", user);
 
             var userResponse = new
             {
                 user.Id,
-                user.Name,
+                user.UserName,
                 user.LoginId,
                 user.Sex,
                 user.Photo,
-                user.EMail
+                user.Email
             };
             return Results.Created($"/api/users/{user.Id}", userResponse);
 
 
         });
-
-
-        // 1. 전체 조회 (GET /users)
-        group.MapGet("/", async (AppDbContext db) =>
-        {    //await db.Users.ToListAsync();
-          await db.Users.Select(u => new { u.Id, u.Name, u.LoginId, u.Sex, u.Photo, u.EMail }).ToListAsync();
-        });
-
-        // 2. 단일 조회 (GET /users/{id})
-        group.MapGet("/{id:int}", async (AppDbContext db, int id) =>
-        {
-            var user = db.Users.FirstOrDefault(u => u.Id == id);
-            return user is not null ? Results.Ok(user) : Results.NotFound();
-        });
-
-        // 3. 저장 (POST /users)
-        group.MapPost("/", async (AppDbContext db, User user) =>
-        {
-            user.Id = db.Users.Any() ? db.Users.Max(u => u.Id) + 1 : 1;
-            db.Users.Add(user);
-            await db.SaveChangesAsync();var userResponse = new
-            {
-                user.Id,
-                user.Name,
-                user.LoginId,
-                user.Sex,
-                user.Photo,
-                user.EMail
-            };
-            return Results.Created($"/api/users/{user.Id}", userResponse);
-        });
-
-        // 4. 삭제 (DELETE /users/{id})
-        group.MapDelete("/{id:int}", async (AppDbContext db, int id) =>
-        {
-            var user = await db.Users.FindAsync(id);
-            if (user is null)
-                return Results.NotFound();
-            db.Users.Remove(user);
-            await db.SaveChangesAsync();
-            return Results.NoContent();
-        });
-
 
         // 로그인 (JWT 토큰 발급)
         group.MapPost("/login", async (AppDbContext db, IConfiguration config, LoginRequest req) =>
         {
-            var user = db.Users.FirstOrDefault(u => u.LoginId == req.LoginId);
+            var user = db.Customers.FirstOrDefault(u => u.LoginId == req.LoginId);
             if (user is null || !passwordService.VerifyPassword(user, req.Password))
                 return Results.Unauthorized();
 
@@ -104,7 +61,7 @@ public static class UserEndpoints
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.LoginId ?? user.Name ?? user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, user.LoginId ?? user.UserName ?? user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("uid", user.Id.ToString())
             };
@@ -125,11 +82,11 @@ public static class UserEndpoints
                 token = tokenString,
                 user = new {
                     user.Id,
-                    user.Name,
+                    user.UserName,
                     user.LoginId,
                     user.Sex,
                     user.Photo,
-                    user.EMail
+                    user.Email
                 }
             });
         });

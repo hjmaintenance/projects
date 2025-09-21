@@ -36,31 +36,6 @@ namespace JinRestApi.Models
         public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
     }
 
-    /// <summary>고객</summary>
-    public class Customer : BaseEntity
-    {
-        /// <summary>로그인 ID</summary>
-        public string LoginId { get; set; } = string.Empty;
-
-        /// <summary>사용자 이름</summary>
-        public string UserName { get; set; } = string.Empty;
-
-        /// <summary>이메일</summary>
-        public string Email { get; set; } = string.Empty;
-
-        /// <summary>비밀번호 해시</summary>
-        public string PasswordHash { get; set; } = string.Empty;
-
-        /// <summary>소속 회사 ID</summary>
-        public int CompanyId { get; set; }
-
-        public CustomerCompany? Company { get; set; }
-
-        public ICollection<ImprovementRequest> ImprovementRequests { get; set; } = new List<ImprovementRequest>();
-
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
-   
-    }
 
     /// <summary>관리자</summary>
     public class Admin : BaseEntity

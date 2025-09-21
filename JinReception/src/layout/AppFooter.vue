@@ -2,7 +2,7 @@
 
 <template>
     <div class="layout-footer">
-        SAKAI by
-        <a href="https://primevue.org" target="_blank" rel="noopener noreferrer" class="text-primary font-bold hover:underline">PrimeVue</a>
+        Jin114 helper by
+        <a href="//jin114.co.kr" target="_blank" rel="noopener noreferrer" class="text-primary font-bold hover:underline">Jsini</a>
     </div>
 </template>

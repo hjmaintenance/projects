@@ -54,7 +54,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // endpoints 
-app.MapUserEndpoints();
+app.MapRegistEndpoints();
 //app.MapCompanyEndpoints();
 
 // Endpoint 모듈 등록

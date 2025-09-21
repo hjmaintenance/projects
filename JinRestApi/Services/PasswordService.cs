@@ -5,14 +5,14 @@ namespace JinRestApi.Services
 {
     public class PasswordService
     {
-        private readonly PasswordHasher<User> _hasher = new();
+        private readonly PasswordHasher<Customer> _hasher = new();
 
-        public string HashPassword(User user, string password)
+        public string HashPassword(Customer user, string password)
         {
             return _hasher.HashPassword(user, password);
         }
 
-        public bool VerifyPassword(User user, string password)
+        public bool VerifyPassword(Customer user, string password)
         {
             var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, password);
             return result == PasswordVerificationResult.Success;

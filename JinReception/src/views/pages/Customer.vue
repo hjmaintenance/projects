@@ -18,7 +18,8 @@ const loading1 = ref(null);
 
 const columns = ref([
     { field: 'id', header: 'Id' },
-    { field: 'name', header: 'Name' }
+    { field: 'userName', header: 'userName' },
+    { field: 'email', header: 'email' }
 ]);
 
 
@@ -38,12 +39,12 @@ const form = ref({ id: null, name: '', email: '' })
 
 const search = async(  ) => {
     const token = localStorage.getItem('jwt_token');
-        const res = await fetch('/api/companys', {
+        const res = await fetch('/api/customers', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
-        if (!res.ok) throw new Error('인증 실패 또는 companys 조회 실패')
+        if (!res.ok) throw new Error('인증 실패 또는 사용자 조회 실패')
        const resultvalue = await res.json();
     customers.value = resultvalue;
     return resultvalue;
@@ -70,22 +71,24 @@ const onCellEditComplete = (event) => {
 
 
 
-// 📌 데이터 조회 (READ)
+// 데이터 조회 (READ)
 const loadData = async () => {
-  const { data } = await axios.get('/api/companys')
+  const { data } = await axios.get('/api/customers')
   customers.value = data
 }
 onMounted(loadData)
 
 // 새 데이터 추가 (CREATE)
 const openNew = () => {
-    
+  form.value = { id: null, name: '', email: '' }
+  isNew.value = true
+  dialogVisible.value = true
 }
 const saveCustomer = async () => {
   if (isNew.value) {
-    await axios.post('/api/companys', form.value)
+    await axios.post('/api/customers', form.value)
   } else {
-    await axios.put(`/api/companys/${form.value.id}`, form.value)
+    await axios.put(`/api/customers/${form.value.id}`, form.value)
   }
   dialogVisible.value = false
   loadData()
@@ -100,7 +103,7 @@ const editCustomer = (customer) => {
 
 // 데이터 삭제 (DELETE)
 const deleteCustomer = async (customer) => {
-  await axios.delete(`/api/companys/${customer.id}`)
+  await axios.delete(`/api/customers/${customer.id}`)
   loadData()
 }
 
@@ -117,32 +120,15 @@ const deleteCustomer = async (customer) => {
 <Button label="search2" @click="loadData" />
 
 
- <Button label="새 companys 추가" icon="pi pi-plus" @click="openNew" class="mb-3" />
+ <Button label="새 고객 추가" icon="pi pi-plus" @click="openNew" class="mb-3" />
 
-               <!-- v-model:selection="selectedCustomer"  -->
-
-    <DataTable :value="customers" 
-               dataKey="id" 
-               selectionMode="single" 
-               v-model:selection="selectedCustomer"
-               editMode="cell" 
-               @cell-edit-complete="onCellEditComplete"
-               :pt="{
-                table: { style: 'min-width: 50rem' },
-                column: {
-                    bodycell: ({ state }) => ({
-                        class: [{ '!py-0': state['d_editing'] }]
-                    })
-                }
-            }"
-
-               >
+    <DataTable :value="customers" dataKey="id" selectionMode="single" v-model:selection="selectedCustomer">
      
 
 
 <!-- 
 
- <DataTable :value="customers" editMode="cell" @cell-edit-complete="onCellEditComplete"
+ <DataTable :value="customers1" editMode="cell" @cell-edit-complete="onCellEditComplete"
             :pt="{
                 table: { style: 'min-width: 50rem' },
                 column: {
@@ -156,8 +142,7 @@ const deleteCustomer = async (customer) => {
 
             <template #empty> No customers found. </template>
             <template #loading> Loading customers data. Please wait. </template>
-
-            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+            
             <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">
                 <template #body="{ data, field }">
                     {{ data[field] }}
@@ -178,8 +163,41 @@ const deleteCustomer = async (customer) => {
             </Column>
 
 
+            <Column header="Actions" :exportable="false">
+        <template #body="slotProps">
+          <Button icon="pi pi-pencil" class="p-button-text" @click="editCustomer(slotProps.data)" />
+          <Button icon="pi pi-trash" class="p-button-text p-button-danger" @click="deleteCustomer(slotProps.data)" />
+        </template>
+      </Column>
+
+
+
 
         </DataTable>
+
+
+
+
+    <!-- Dialog Form -->
+    <Dialog v-model:visible="dialogVisible" header="고객 정보" :modal="true">
+      <div class="flex flex-col gap-3">
+        <div>
+          <label class="block">Name</label>
+          <InputText v-model="form.name" class="w-full" />
+        </div>
+        <div>
+          <label class="block">Email</label>
+          <InputText v-model="form.email" class="w-full" />
+        </div>
+      </div>
+      <template #footer>
+        <Button label="취소" icon="pi pi-times" @click="dialogVisible=false" class="p-button-text" />
+        <Button label="저장" icon="pi pi-check" @click="saveCustomer" />
+      </template>
+    </Dialog>
+
+
+
 
     </div>
 

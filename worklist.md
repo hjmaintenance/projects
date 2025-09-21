@@ -34,7 +34,7 @@
 
 ## 고객사 
 
-- ~~로그인~~ ![Badge](https://img.shields.io/badge/uspuni-red)
+- ~~로그인~~ ![Badge](https://img.shields.io/badge/uspuni-red)  ![Badge](https://img.shields.io/badge/quri-red)
 - 사용자 정보 수정 
 - 접수내용 작성 화면
 - 접수 기록 확인 화면
@@ -44,7 +44,7 @@
 ## 관리자
 
 - 회사 관리 ![Badge](https://img.shields.io/badge/quri-red)
-- 사용자 관리
+- 사용자 관리 ![Badge](https://img.shields.io/badge/quri-red)
 - 권한 관리
 - 접수리스트 화면
 - 접수 내용 확인 및 담당자 accept 화면
