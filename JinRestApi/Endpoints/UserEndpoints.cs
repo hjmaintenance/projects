@@ -41,7 +41,7 @@ public static class UserEndpoints
                 user.Photo,
                 user.EMail
             };
-            return Results.Created($"/users/{user.Id}", userResponse);
+            return Results.Created($"/api/users/{user.Id}", userResponse);
 
 
         });
@@ -74,7 +74,7 @@ public static class UserEndpoints
                 user.Photo,
                 user.EMail
             };
-            return Results.Created($"/users/{user.Id}", userResponse);
+            return Results.Created($"/api/users/{user.Id}", userResponse);
         });
 
         // 4. 삭제 (DELETE /users/{id})

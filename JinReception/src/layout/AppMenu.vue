@@ -5,6 +5,24 @@ import AppMenuItem from './AppMenuItem.vue';
 
 const model = ref([
     {
+        label: 'xxxxx',
+        items: [
+            { label: '공지', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
+            { label: '접수목록', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
+            { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
+        ]
+    },
+    {
+        label: 'admin',
+        items: [
+            { label: '회사관리', icon: 'pi pi-fw pi-id-card', to: '/company' },
+            { label: '팀관리', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
+            { label: '사용자관리', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
+            { label: '접수관리', icon: 'pi pi-fw pi-table', to: '/uikit/table' },
+            { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
+        ]
+    },
+    {
         label: 'Home',
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
