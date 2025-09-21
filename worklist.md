@@ -20,10 +20,10 @@
 
 ## 시스템
 
-- 서버구성 ![Badge](https://img.shields.io/badge/dhk-darkblue) ![Badge](https://img.shields.io/badge/quristyle-red)
-- 도메인![Badge](https://img.shields.io/badge/jwp-darkblue) ![Badge](https://img.shields.io/badge/quristyle-red)
-- 네트워크![Badge](https://img.shields.io/badge/jwp-blue) ![Badge](https://img.shields.io/badge/quristyle-darkblue) ![Badge](https://img.shields.io/badge/dhk-darkblue)
-- 방화벽![Badge](https://img.shields.io/badge/jwp-darkblue) ![Badge](https://img.shields.io/badge/quristyle-darkblue)
+- 서버구성 ![Badge](https://img.shields.io/badge/dhk-darkblue) ![Badge](https://img.shields.io/badge/quristyle-skyblue)
+- 도메인![Badge](https://img.shields.io/badge/jwp-darkblue) ![Badge](https://img.shields.io/badge/quristyle-skyblue)
+- 네트워크![Badge](https://img.shields.io/badge/jwp-blue) ![Badge](https://img.shields.io/badge/quristyle-skyblue) ![Badge](https://img.shields.io/badge/dhk-darkblue)
+- 방화벽![Badge](https://img.shields.io/badge/jwp-darkblue) ![Badge](https://img.shields.io/badge/quristyle-skyblue)
 - 백업![Badge](https://img.shields.io/badge/jwp-red)
 
 
@@ -31,10 +31,12 @@
 
 - 암호변경
 - <p>flow, layout <img src="https://img.shields.io/badge/quristyle-red" style="vertical-align: middle;"/></p>
+- jwt, session, 권한 ![Badge](https://img.shields.io/badge/quri-red) 
 
 ## 고객사 
 
-- ~~로그인~~ ![Badge](https://img.shields.io/badge/uspuni-red)  ![Badge](https://img.shields.io/badge/quri-red)
+- 로그인, 로그아웃 ![Badge](https://img.shields.io/badge/uspuni-red)  ![Badge](https://img.shields.io/badge/quri-skyblue)
+- lock ![Badge](https://img.shields.io/badge/uspuni-red)  ![Badge](https://img.shields.io/badge/quri-skyblue)
 - 사용자 정보 수정 
 - 접수내용 작성 화면
 - 접수 기록 확인 화면
@@ -62,11 +64,23 @@
 ![Badge](https://img.shields.io/badge/완료및검토요청-blue)
 ![Badge](https://img.shields.io/badge/완료-skyblue)
 
-##
+## 공지
 
-예쁘게 표시하거나 추가 내용 자유롭게 넣으세요..
+https://github.com/jsiniboss/projects
+가 team project 로 변경 되었습니다.
+https://github.com/hjmaintenance/projects
+ 
+기존소스의 git 정보를 아래 명령으로 변경 처리 하실수 있습니다.
+ 
+git remote set-url origin https://github.com/hjmaintenance/projects.git
 
-git 알림 테스트6
+git branch --set-upstream-to=origin/main main
+
+git config pull.rebase false
+
+git fetch origin
+
+git pull origin main
 
 
 ## 복구 작업
