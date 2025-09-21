@@ -66,6 +66,8 @@
 
 예쁘게 표시하거나 추가 내용 자유롭게 넣으세요..
 
+git 알림 테스트
+
 
 ## 복구 작업
 [복구작업 worklist](./repair_worklist.md)
