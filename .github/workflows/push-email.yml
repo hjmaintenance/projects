@@ -38,8 +38,10 @@ jobs:
           fi
 
 
+          # i f :   steps.check.outputs.match == 'true'
+
+
       - name: Send mail on push
-        if: steps.check.outputs.match == 'true'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_HOST }}
