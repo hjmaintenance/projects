@@ -40,14 +40,14 @@ jobs:
 
 
       - name: Send mail on push
-        if: steps.commit.outputs.match == 'N'
+        # i f : steps.commit.outputs.match == 'N'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_HOST }}
           server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "📬 [${{ steps.commit.outputs.mail_subject }}] - ${{ github.actor }}"
+          subject: "📬 [${{ steps.commit.outputs.mail_subject }}] - ${{ github.actor }}___${{ steps.commit.outputs.match }}--"
           to: "quristyle@gmail.com" #, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
           from: "hjmaintenance"
           html_body: |
