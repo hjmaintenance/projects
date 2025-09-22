@@ -36,46 +36,46 @@ jobs:
             echo "mail_subject=📬 [${{ github.repository }}] New Push by ${{ github.actor }}" >> $GITHUB_OUTPUT
             
 
-            cat <<'EOF' > html_body.txt
-            <!DOCTYPE html>
-            <html lang="ko">
-            <head>
-              <meta charset="UTF-8">
-              <title>GitHub Push Notification</title>
-            </head>
-            <body style="margin:0; padding:20px; font-family:Arial, sans-serif; background-color:#f4f4f7;">
-              <div style="background-color:white; border:1px solid #0366d6; border-radius:12px; padding:20px; max-width:500px;">
-                <div style="font-size:20px; font-weight:bold; color:#24292f; margin-bottom:20px; display:flex; align-items:center;">
-                  <span style="margin-right:10px;">📢</span>
-                  <span>GitHub Repository Push Notification</span>
-                </div>
-                <div style="display:flex; align-items:center; margin-bottom:10px; line-height:1.2;">
-                  <span style="width:28px; text-align:center; display:inline-block;">📂</span>
-                  <strong style="color:#0366d6; width:130px; display:inline-block;">Repository:</strong>
-                  <span>${GITHUB_REPOSITORY}</span>
-                </div>
-                <div style="display:flex; align-items:center; margin-bottom:10px; line-height:1.2;">
-                  <span style="width:28px; text-align:center; display:inline-block;">👤</span>
-                  <strong style="color:#0366d6; width:130px; display:inline-block;">Pushed by:</strong>
-                  <span>${GITHUB_ACTOR}</span>
-                </div>
-                <div style="display:flex; align-items:center; margin-bottom:10px; line-height:1.2;">
-                  <span style="width:28px; text-align:center; display:inline-block;">📝</span>
-                  <strong style="color:#0366d6; width:130px; display:inline-block;">Commit message:</strong>
-                  <span>${BODY}</span>
-                </div>
-                <div style="display:flex; align-items:center; margin-bottom:10px; line-height:1.2;">
-                  <span style="width:28px; text-align:center; display:inline-block;">🔗</span>
-                  <strong style="color:#0366d6; width:130px; display:inline-block;">Compare changes:</strong>
-                  <a href="${GITHUB_EVENT_COMPARE}" style="display:inline-block; padding:4px 8px; font-size:13px; background-color:#28a745; color:white; border-radius:5px; text-decoration:none; font-weight:bold;">View Changes</a>
-                </div>
-                <div style="margin-top:20px; font-size:13px; color:#555; text-align:center;">
-                  ✨ Take a peek at what’s new!
-                </div>
-              </div>
-            </body>
-            </html>
-            EOF
+cat <<'EOF' > html_body.txt
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>GitHub Push Notification</title>
+</head>
+<body style="margin:0; padding:20px; font-family:Arial, sans-serif; background-color:#f4f4f7;">
+<div style="background-color:white; border:1px solid #0366d6; border-radius:12px; padding:20px; max-width:500px;">
+<div style="font-size:20px; font-weight:bold; color:#24292f; margin-bottom:20px; display:flex; align-items:center;">
+<span style="margin-right:10px;">📢</span>
+<span>GitHub Repository Push Notification</span>
+</div>
+<div style="display:flex; align-items:center; margin-bottom:10px; line-height:1.2;">
+<span style="width:28px; text-align:center; display:inline-block;">📂</span>
+<strong style="color:#0366d6; width:130px; display:inline-block;">Repository:</strong>
+<span>${GITHUB_REPOSITORY}</span>
+</div>
+<div style="display:flex; align-items:center; margin-bottom:10px; line-height:1.2;">
+<span style="width:28px; text-align:center; display:inline-block;">👤</span>
+<strong style="color:#0366d6; width:130px; display:inline-block;">Pushed by:</strong>
+<span>${GITHUB_ACTOR}</span>
+</div>
+<div style="display:flex; align-items:center; margin-bottom:10px; line-height:1.2;">
+<span style="width:28px; text-align:center; display:inline-block;">📝</span>
+<strong style="color:#0366d6; width:130px; display:inline-block;">Commit message:</strong>
+<span>${BODY}</span>
+</div>
+<div style="display:flex; align-items:center; margin-bottom:10px; line-height:1.2;">
+<span style="width:28px; text-align:center; display:inline-block;">🔗</span>
+<strong style="color:#0366d6; width:130px; display:inline-block;">Compare changes:</strong>
+<a href="${GITHUB_EVENT_COMPARE}" style="display:inline-block; padding:4px 8px; font-size:13px; background-color:#28a745; color:white; border-radius:5px; text-decoration:none; font-weight:bold;">View Changes</a>
+</div>
+<div style="margin-top:20px; font-size:13px; color:#555; text-align:center;">
+✨ Take a peek at what’s new!
+</div>
+</div>
+</body>
+</html>
+EOF
 
             HTML_BODY=$(cat html_body.txt)
             echo "mail_body=$HTML_BODY" >> $GITHUB_OUTPUT
