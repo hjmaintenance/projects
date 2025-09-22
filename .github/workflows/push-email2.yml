@@ -40,7 +40,7 @@ jobs:
 
 
       - name: Send mail on push
-        # i f : steps.commit.outputs.match == 'N'
+        if: steps.commit.outputs.match == 'N'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_HOST }}
