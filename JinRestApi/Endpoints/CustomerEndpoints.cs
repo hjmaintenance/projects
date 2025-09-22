@@ -4,12 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using JinRestApi.Data;
 using System.ComponentModel.DataAnnotations;
 using JinRestApi.Services;
+using JinRestApi.Dtos;
 
 namespace JinRestApi.Endpoints;
 
 public static class CustomerEndpoints
 {
-    public record CustomerCreateDto([Required] string LoginId, [Required] string UserName, [Required] string Email, [Required] string Password, int CompanyId, string? Sex, string? Photo, string? CreatedBy, string? MenuContext);
+    //public record CustomerCreateDto([Required] string LoginId, [Required] string UserName, [Required] string Email, [Required] string Password, int CompanyId, string? Sex, string? Photo, string? CreatedBy, string? MenuContext);
 
     public static void MapCustomerEndpoints(this IEndpointRouteBuilder routes)
     {

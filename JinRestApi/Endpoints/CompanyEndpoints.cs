@@ -3,13 +3,14 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using JinRestApi.Data;
+using JinRestApi.Dtos;
 
 namespace JinRestApi.Endpoints;
 
 public static class CompanyEndpoints
 {
     // DTO for creating a company to avoid expecting an ID from the client.
-    public record CompanyCreateDto([Required] string Name, string? ModifiedBy, string? MenuContext);
+    //public record CompanyCreateDto([Required] string Name, string? ModifiedBy, string? MenuContext);
 
     public static void MapCompanyEndpoints(this IEndpointRouteBuilder routes)
     {

@@ -4,12 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using JinRestApi.Data;
 using JinRestApi.Services;
 using System.ComponentModel.DataAnnotations;
+using JinRestApi.Dtos;
 
 namespace JinRestApi.Endpoints;
 
 public static class AdminEndpoints
 {
-    public record AdminCreateDto([Required] string LoginId, [Required] string UserName, [Required] string Email, [Required] string Password, int TeamId, string? CreatedBy, string? MenuContext);
+    //public record AdminCreateDto([Required] string LoginId, [Required] string UserName, [Required] string Email, [Required] string Password, int TeamId, string? CreatedBy, string? MenuContext);
 
     public static void MapAdminEndpoints(this IEndpointRouteBuilder routes)
     {

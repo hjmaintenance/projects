@@ -8,6 +8,7 @@ using JinRestApi.Services;
 using JinRestApi.Data;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using JinRestApi.Dtos;
 
 
 
@@ -15,7 +16,7 @@ namespace JinRestApi.Endpoints;
 
 public static class RegisterEndpoints
 {
-    public record CustomerCreateDto([Required] string LoginId, [Required] string UserName, [Required] string Email, [Required] string Password, int CompanyId, string? Sex, string? Photo, string? CreatedBy, string? MenuContext);
+    //public record CustomerCreateDto([Required] string LoginId, [Required] string UserName, [Required] string Email, [Required] string Password, int CompanyId, string? Sex, string? Photo, string? CreatedBy, string? MenuContext);
 
     public static void MapRegistEndpoints(this IEndpointRouteBuilder routes)
     {
