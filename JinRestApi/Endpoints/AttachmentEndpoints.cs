@@ -11,27 +11,29 @@ public static class AttachmentEndpoints
     {
         var group = routes.MapGroup("/api/attachments");
 
-        group.MapGet("/", async (AppDbContext db) =>
-            await db.Attachments.ToListAsync());
+        group.MapGet("/", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
+            () => db.Attachments.ToListAsync()
+        ));
 
-        group.MapGet("/{id}", async (AppDbContext db, int id) =>
-            await db.Attachments.FirstOrDefaultAsync(a => a.Id == id));
+        group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
+            () => db.Attachments.FirstOrDefaultAsync(a => a.Id == id)
+        ));
 
-        group.MapPost("/", async (AppDbContext db, Attachment attachment) =>
+        group.MapPost("/", (AppDbContext db, Attachment attachment) => ApiResponseBuilder.CreateAsync(async () =>
         {
             db.Attachments.Add(attachment);
             await db.SaveChangesAsync();
-            return Results.Created($"/api/attachments/{attachment.Id}", attachment);
-        });
+            return attachment;
+        }, "Attachment created successfully.", 201));
 
-        group.MapDelete("/{id}", async (AppDbContext db, int id) =>
+        group.MapDelete("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(async () =>
         {
             var attachment = await db.Attachments.FindAsync(id);
-            if (attachment is null) return Results.NotFound();
+            if (attachment is null) return null;
 
             db.Attachments.Remove(attachment);
             await db.SaveChangesAsync();
-            return Results.Ok();
-        });
+            return new { DeletedId = id };
+        }, "Attachment deleted successfully."));
     }
 }

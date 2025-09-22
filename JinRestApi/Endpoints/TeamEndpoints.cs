@@ -11,41 +11,40 @@ public static class TeamEndpoints
     {
         var group = routes.MapGroup("/api/teams");
 
-        group.MapGet("/", async (AppDbContext db) =>
-            await db.Teams.Include(t => t.Attachments).ToListAsync());
+        group.MapGet("/", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
+            () => db.Teams.Include(t => t.Attachments).ToListAsync()
+        ));
 
-        group.MapGet("/{id}", async (AppDbContext db, int id) =>
-            await db.Teams.Include(t => t.Attachments).FirstOrDefaultAsync(t => t.Id == id));
+        group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
+            () => db.Teams.Include(t => t.Attachments).FirstOrDefaultAsync(t => t.Id == id)
+        ));
 
-        group.MapPost("/", async (AppDbContext db, Team team) =>
+        group.MapPost("/", (AppDbContext db, Team team) => ApiResponseBuilder.CreateAsync(async () =>
         {
             db.Teams.Add(team);
             await db.SaveChangesAsync();
-            return Results.Created($"/api/teams/{team.Id}", team);
-        });
+            return team;
+        }, "Team created successfully.", 201));
 
-        group.MapPut("/{id}", async (AppDbContext db, int id, Team input) =>
+        group.MapPut("/{id}", (AppDbContext db, int id, Team input) => ApiResponseBuilder.CreateAsync(async () =>
         {
             var team = await db.Teams.FindAsync(id);
-            if (team is null) return Results.NotFound();
+            if (team is null) return null;
 
             team.Name = input.Name;
-            team.ModifiedBy = input.ModifiedBy;
-            team.MenuContext = input.MenuContext;
-            team.ModifiedAt = DateTime.UtcNow;
 
             await db.SaveChangesAsync();
-            return Results.Ok(team);
-        });
+            return team;
+        }, "Team updated successfully."));
 
-        group.MapDelete("/{id}", async (AppDbContext db, int id) =>
+        group.MapDelete("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(async () =>
         {
             var team = await db.Teams.FindAsync(id);
-            if (team is null) return Results.NotFound();
+            if (team is null) return null;
 
             db.Teams.Remove(team);
             await db.SaveChangesAsync();
-            return Results.Ok();
-        });
+            return new { DeletedId = id };
+        }, "Team deleted successfully."));
     }
 }

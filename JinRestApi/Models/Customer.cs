@@ -1,7 +1,9 @@
+using JinRestApi.Services;
+
 namespace JinRestApi.Models;
 
 /// <summary>고객</summary>
-public class Customer : BaseEntity
+public class Customer : BaseEntity, IPasswordEnabled
 {
     /// <summary>로그인 ID</summary>
     public string LoginId { get; set; } = string.Empty;

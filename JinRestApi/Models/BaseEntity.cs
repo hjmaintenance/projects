@@ -1,4 +1,5 @@
 using System;
+using JinRestApi.Services;
 using System.Collections.Generic;
 
 namespace JinRestApi.Models
@@ -38,7 +39,7 @@ namespace JinRestApi.Models
 
 
     /// <summary>관리자</summary>
-    public class Admin : BaseEntity
+    public class Admin : BaseEntity, IPasswordEnabled
     {
         /// <summary>로그인 ID</summary>
         public string LoginId { get; set; } = string.Empty;

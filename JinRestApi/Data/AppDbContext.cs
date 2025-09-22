@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using JinRestApi.Models;
 
 using System.Reflection;
-using System.Xml.Linq;
+using System.Xml.Linq; 
 
 
 
@@ -37,6 +37,48 @@ public class AppDbContext : DbContext
 
     /// <summary>첨부파일 테이블</summary>
     public DbSet<Attachment> Attachments { get; set; }
+
+
+
+
+    public override int SaveChanges()
+    {
+        SetAuditProperties();
+        return base.SaveChanges();
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        SetAuditProperties();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void SetAuditProperties()
+    {
+        var entries = ChangeTracker
+            .Entries<BaseEntity>()
+            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+
+        foreach (var entityEntry in entries)
+        {
+            var now = DateTime.UtcNow;
+            var user = "system"; // 기본값
+
+            if (entityEntry.State == EntityState.Added)
+            {
+                entityEntry.Entity.CreatedAt = now;
+                if (string.IsNullOrEmpty(entityEntry.Entity.CreatedBy))
+                {
+                    entityEntry.Entity.CreatedBy = user;
+                }
+            }
+
+            entityEntry.Entity.ModifiedAt = now;
+
+            if (string.IsNullOrEmpty(entityEntry.Entity.ModifiedBy)) entityEntry.Entity.ModifiedBy = user;
+            if (string.IsNullOrEmpty(entityEntry.Entity.MenuContext)) entityEntry.Entity.MenuContext = user;
+        }
+    }
 
 
 
@@ -153,6 +195,15 @@ public class AppDbContext : DbContext
         if (File.Exists(xmlPath))
         {
             xmlDoc = XDocument.Load(xmlPath);
+        }
+
+        // BaseEntity를 상속하는 모든 엔티티의 Id 속성에 대해 자동 증가(Identity) 설정
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes()
+            .Where(e => e.ClrType.IsSubclassOf(typeof(BaseEntity))))
+        {
+            modelBuilder.Entity(entityType.ClrType)
+                .Property(nameof(BaseEntity.Id))
+                .UseIdentityByDefaultColumn();
         }
 
         foreach (var entity in modelBuilder.Model.GetEntityTypes())

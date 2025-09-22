@@ -1,21 +1,33 @@
 using Microsoft.AspNetCore.Identity;
-using JinRestApi.Models;
 
 namespace JinRestApi.Services
 {
+    /// <summary>
+    /// 비밀번호 해시를 포함하는 엔티티를 위한 인터페이스
+    /// </summary>
+    public interface IPasswordEnabled
+    {
+        string PasswordHash { get; set; }
+    }
+
     public class PasswordService
     {
-        private readonly PasswordHasher<Customer> _hasher = new();
-
-        public string HashPassword(Customer user, string password)
+        /// <summary>
+        /// 지정된 사용자의 비밀번호를 해시합니다.
+        /// </summary>
+        public string HashPassword<TUser>(TUser user, string password) where TUser : class, IPasswordEnabled
         {
-            return _hasher.HashPassword(user, password);
+            var hasher = new PasswordHasher<TUser>();
+            return hasher.HashPassword(user, password);
         }
 
-        public bool VerifyPassword(Customer user, string password)
+        /// <summary>
+        /// 제공된 비밀번호가 사용자의 해시된 비밀번호와 일치하는지 확인합니다.
+        /// </summary>
+        public bool VerifyPassword<TUser>(TUser user, string providedPassword) where TUser : class, IPasswordEnabled
         {
-            var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, password);
-            return result == PasswordVerificationResult.Success;
+            var hasher = new PasswordHasher<TUser>();
+            return hasher.VerifyHashedPassword(user, user.PasswordHash, providedPassword) == PasswordVerificationResult.Success;
         }
     }
 }

@@ -23,7 +23,8 @@ const submit = async (e) => {
 
         if (!res.ok) throw new Error('로그인 실패');
 
-        const data = await res.json();
+        const odata = await res.json();
+        const data = odata.data;
         localStorage.setItem('jwt_token', data.token);
         localStorage.setItem('loginUser', JSON.stringify(data.user));
 
@@ -58,7 +59,8 @@ const submit2 = async (event) => {
 
         if (!res.ok) throw new Error('로그인 실패');
 
-        const data = await res.json();
+        const odata = await res.json();
+        const data = odata.data;
         localStorage.setItem('jwt_token', data.token);
         localStorage.setItem('loginUser', JSON.stringify(data.user));
 

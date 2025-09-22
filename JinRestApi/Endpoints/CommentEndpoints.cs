@@ -11,42 +11,43 @@ public static class CommentEndpoints
     {
         var group = routes.MapGroup("/api/comments");
 
-        group.MapGet("/", async (AppDbContext db) =>
-            await db.Comments.Include(c => c.Attachments).ToListAsync());
+        group.MapGet("/", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
+            () => db.Comments.Include(c => c.Attachments).ToListAsync()
+        ));
 
-        group.MapGet("/{id}", async (AppDbContext db, int id) =>
-            await db.Comments.Include(c => c.Attachments).FirstOrDefaultAsync(c => c.Id == id));
+        group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
+            () => db.Comments.Include(c => c.Attachments).FirstOrDefaultAsync(c => c.Id == id)
+        ));
 
-        group.MapPost("/", async (AppDbContext db, ImprovementComment comment) =>
+        group.MapPost("/", (AppDbContext db, ImprovementComment comment) => ApiResponseBuilder.CreateAsync(async () =>
         {
             db.Comments.Add(comment);
             await db.SaveChangesAsync();
-            return Results.Created($"/api/comments/{comment.Id}", comment);
-        });
+            return comment;
+        }, "Comment created successfully.", 201));
 
-        group.MapPut("/{id}", async (AppDbContext db, int id, ImprovementComment input) =>
+        group.MapPut("/{id}", (AppDbContext db, int id, ImprovementComment input) => ApiResponseBuilder.CreateAsync(async () =>
         {
             var comment = await db.Comments.FindAsync(id);
-            if (comment is null) return Results.NotFound();
+            if (comment is null) return null;
 
             comment.CommentText = input.CommentText;
             comment.RequestId = input.RequestId;
-            comment.ModifiedBy = input.ModifiedBy;
-            comment.MenuContext = input.MenuContext;
-            comment.ModifiedAt = DateTime.UtcNow;
+            comment.AuthorType = input.AuthorType;
+            comment.AuthorId = input.AuthorId;
 
             await db.SaveChangesAsync();
-            return Results.Ok(comment);
-        });
+            return comment;
+        }, "Comment updated successfully."));
 
-        group.MapDelete("/{id}", async (AppDbContext db, int id) =>
+        group.MapDelete("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(async () =>
         {
             var comment = await db.Comments.FindAsync(id);
-            if (comment is null) return Results.NotFound();
+            if (comment is null) return null;
 
             db.Comments.Remove(comment);
             await db.SaveChangesAsync();
-            return Results.Ok();
-        });
+            return new { DeletedId = id };
+        }, "Comment deleted successfully."));
     }
 }

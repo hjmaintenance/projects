@@ -1,62 +1,28 @@
 <script setup>
-import { CustomerService } from '@/service/CustomerService';
-import { ProductService } from '@/service/ProductService';
-import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
+import { CompanyService } from '@/service/CompanyService';
 import { onBeforeMount, reactive, ref , onMounted} from 'vue';
 
-import axios from 'axios'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';   // optional
-import Row from 'primevue/row';                   // optional
 
 
+let tempIdCounter = 0;
 
-
-//const customers1 = ref(null);
-const loading1 = ref(null);
-
+const loading = ref(null);
 const columns = ref([
     { field: 'id', header: 'Id' },
     { field: 'name', header: 'Name' }
 ]);
 
-
-const customers = ref([])
-const selectedCustomer = ref(null)
-const dialogVisible = ref(false)
-const isNew = ref(true)
-const form = ref({ id: null, name: '', email: '' })
-
-
-// onBeforeMount(() => {
-//     search();
-// });
-
-
-
-
-const search = async(  ) => {
-    const token = localStorage.getItem('jwt_token');
-        const res = await fetch('/api/companys', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        if (!res.ok) throw new Error('인증 실패 또는 companys 조회 실패')
-       const resultvalue = await res.json();
-    customers.value = resultvalue;
-    return resultvalue;
-};
-
-
+const companys = ref([])
+const selectedCompany = ref(null)
 
 const onCellEditComplete = (event) => {
     let { data, newValue, field } = event;
 
 
     console.log('onCellEditComplete', data, newValue, field);
-    
+    data[field] = newValue;
     // switch (field) {
     //     default:
     //         if (newValue.trim().length > 0) data[field] = newValue;
@@ -68,63 +34,77 @@ const onCellEditComplete = (event) => {
 };
 
 
-
-
-// 📌 데이터 조회 (READ)
+//onMounted(loadData)
+//초기화
+const initdata = async () => {
+  companys.value = null;
+}
+//조회
 const loadData = async () => {
-  const { data } = await axios.get('/api/companys')
-  customers.value = data
+  companys.value = await CompanyService.getList(loading);
 }
-onMounted(loadData)
+const getItem = async () => {
+  companys.value = await CompanyService.get('1', loading);
+}
 
-// 새 데이터 추가 (CREATE)
-const openNew = () => {
-    
+// 추가 
+const addData = () => {
+  tempIdCounter++;
+  const tempId = `temp-${tempIdCounter}`;
+  companys.value.push({ ui_id: tempId, name: '', addr: '' });
 }
-const saveCustomer = async () => {
-  if (isNew.value) {
-    await axios.post('/api/companys', form.value)
-  } else {
-    await axios.put(`/api/companys/${form.value.id}`, form.value)
+
+const save = async () => {
+  await CompanyService.save(companys, loading);
+  loadData();
+}
+
+// 삭제 
+const deleteSelected = async () => {
+  if (!selectedCompany.value || selectedCompany.value.length === 0) {
+    return;
   }
-  dialogVisible.value = false
-  loadData()
+
+  const isTemp = (item) => typeof item.ui_id === 'string' && item.ui_id.startsWith('temp-');
+
+  const tempIdsToRemove = selectedCompany.value.filter(isTemp).map((c) => c.ui_id);
+  if (tempIdsToRemove.length > 0) {
+      companys.value = companys.value.filter((c) => !tempIdsToRemove.includes(c.ui_id));
+  }
+
+  const itemsToDeleteInDb = selectedCompany.value.filter((c) => !isTemp(c));
+  if (itemsToDeleteInDb.length > 0) {
+    await CompanyService.deleteSelected(itemsToDeleteInDb, loading);
+  }
+  loadData();
+  selectedCompany.value = [];
 }
-
-// 기존 데이터 수정 (UPDATE)
-const editCustomer = (customer) => {
-  form.value = { ...customer }
-  isNew.value = false
-  dialogVisible.value = true
-}
-
-// 데이터 삭제 (DELETE)
-const deleteCustomer = async (customer) => {
-  await axios.delete(`/api/companys/${customer.id}`)
-  loadData()
-}
-
-
-
 
 
 </script>
 
 <template>
+
+    <div class="card srcharea">
+
+
+<Button label="초기화" class="mr-2" @click="initdata" />
+<Button label="전체" class="mr-2" @click="loadData" />
+<Button label="단건" class="mr-2" @click="getItem" />
+<Button label="저장" class="mr-2" @click="save" />
+<Button label="추가" class="mr-2" icon="pi pi-plus"  @click="addData" />
+<Button label="삭제" class="mr-2" @click="deleteSelected" />
+
+    </div>
+
     <div class="card">
 
-<Button label="search" @click="search" />
-<Button label="search2" @click="loadData" />
 
-
- <Button label="새 companys 추가" icon="pi pi-plus" @click="openNew" class="mb-3" />
-
-               <!-- v-model:selection="selectedCustomer"  -->
-
-    <DataTable :value="customers" 
+    <DataTable :value="companys" 
                dataKey="id" 
+               :loading="loading"
                selectionMode="single" 
-               v-model:selection="selectedCustomer"
+               v-model:selection="selectedCompany"
                editMode="cell" 
                @cell-edit-complete="onCellEditComplete"
                :pt="{
@@ -139,50 +119,29 @@ const deleteCustomer = async (customer) => {
                >
      
 
-
-<!-- 
-
- <DataTable :value="customers" editMode="cell" @cell-edit-complete="onCellEditComplete"
-            :pt="{
-                table: { style: 'min-width: 50rem' },
-                column: {
-                    bodycell: ({ state }) => ({
-                        class: [{ '!py-0': state['d_editing'] }]
-                    })
-                }
-            }"
-        >
- -->
-
-            <template #empty> No customers found. </template>
-            <template #loading> Loading customers data. Please wait. </template>
+            <template #empty> No companys found. </template>
+            <template #loading> Loading companys data. Please wait. </template>
 
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
             <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">
-                <template #body="{ data, field }">
-                    {{ data[field] }}
+              <template #body="{ data, field }">
+                  {{ data[field] }}
+              </template>
+  
+
+              <template #editor="{ data, field }">
+                <template v-if="field == 'id'">
+                  {{ data[field] }}
                 </template>
-   
-
-        <template #editor="{ data, field }">
-          <template v-if="field == 'id'">
-            {{ data[field] }}
-          </template>
-          <template v-else>
-            <InputText v-model="data[field]" autofocus fluid />
-          </template>
-        </template>
-
-
+                <template v-else>
+                  <InputText v-model="data[field]" autofocus fluid />
+                </template>
+              </template>
 
             </Column>
-
-
 
         </DataTable>
 
     </div>
-
-
 
 </template>

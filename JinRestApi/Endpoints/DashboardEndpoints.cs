@@ -11,50 +11,50 @@ public static class DashboardEndpoints
     {
         var group = routes.MapGroup("/api/dashboard");
 
-        group.MapGet("/requests/status-count", async (AppDbContext db) =>
-            await db.Requests.GroupBy(r => r.Status)
+        group.MapGet("/requests/status-count", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
+            () => db.Requests.GroupBy(r => r.Status)
                 .Select(g => new { Status = g.Key, Count = g.Count() })
-                .ToListAsync());
+                .ToListAsync()));
 
-        group.MapGet("/companies/requests", async (AppDbContext db) =>
-            await db.Companies
+        group.MapGet("/companies/requests", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
+            () => db.Companies
                 .Select(c => new {
                     c.Id,
                     c.Name,
                     RequestCount = db.Requests.Count(r => r.Customer.CompanyId == c.Id)
-                }).ToListAsync());
+                }).ToListAsync()));
 
-        group.MapGet("/teams/workload", async (AppDbContext db) =>
-            await db.Teams
+        group.MapGet("/teams/workload", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
+            () => db.Teams
                 .Select(t => new {
                     t.Id,
                     t.Name,
                     AssignedRequests = db.Requests.Count(r => r.Admin != null && r.Admin.TeamId == t.Id)
-                }).ToListAsync());
+                }).ToListAsync()));
 
-        group.MapGet("/admins/workload", async (AppDbContext db) =>
-            await db.Admins
+        group.MapGet("/admins/workload", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
+            () => db.Admins
                 .Select(a => new {
                     a.Id,
                     a.UserName,
                     AssignedRequests = db.Requests.Count(r => r.AdminId == a.Id),
                     CompletedRequests = db.Requests.Count(r => r.AdminId == a.Id && r.Status == ImprovementStatus.Completed)
-                }).ToListAsync());
+                }).ToListAsync()));
 
-        group.MapGet("/requests/comments", async (AppDbContext db) =>
-            await db.Requests
+        group.MapGet("/requests/comments", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
+            () => db.Requests
                 .Select(r => new {
                     r.Id,
                     r.Title,
                     CommentCount = db.Comments.Count(c => c.RequestId == r.Id)
-                }).ToListAsync());
+                }).ToListAsync()));
 
-        group.MapGet("/requests/recent", async (AppDbContext db, int topN) =>
-            await db.Requests.OrderByDescending(r => r.CreatedAt).Take(topN).ToListAsync());
+        group.MapGet("/requests/recent", (AppDbContext db, int topN) => ApiResponseBuilder.CreateAsync(
+            () => db.Requests.OrderByDescending(r => r.CreatedAt).Take(topN).ToListAsync()));
 
-        group.MapGet("/attachments/entity", async (AppDbContext db) =>
-            await db.Attachments.GroupBy(a => a.EntityType)
+        group.MapGet("/attachments/entity", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
+            () => db.Attachments.GroupBy(a => a.EntityType)
                 .Select(g => new { EntityType = g.Key, Count = g.Count() })
-                .ToListAsync());
+                .ToListAsync()));
     }
 }
