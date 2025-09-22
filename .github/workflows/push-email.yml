@@ -50,7 +50,7 @@ jobs:
               <div class='footer'>✨ Take a peek at what’s new!</div>
             </div>
           </body>
-          </html>" >> commit_list.html 
+          </html>" >> commit_list.html
 
           echo "html_body<<EOF" >> $GITHUB_ENV
           cat commit_list.html >> $GITHUB_ENV
