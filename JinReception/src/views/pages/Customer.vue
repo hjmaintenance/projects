@@ -30,7 +30,7 @@ const onCellEditComplete = (event) => {
  
 //조회
 const loadData = async () => {
-  companys.value = await CustomerService.getList();
+  customers.value = await CustomerService.getList();
 }
 </script>
  
