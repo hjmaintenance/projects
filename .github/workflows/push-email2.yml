@@ -26,7 +26,6 @@ jobs:
 
           # 접수와 구분
           if [[ "$SUBJECT" == reception_alert:* ]]; then
-            echo "mail_subject=$SUBJECT" >> $GITHUB_OUTPUT
             echo "match=Y" >> $GITHUB_OUTPUT
           else
             echo "match=N" >> $GITHUB_OUTPUT
@@ -45,7 +44,7 @@ jobs:
           server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "📬 [${{ steps.commit.outputs.mail_subject }}] - ${{ github.actor }}"
+          subject: "📬 [${{ github.event.head_commit.message }}] - ${{ github.actor }}"
           to: "quristyle@gmail.com, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
           from: "hjmaintenance"
           html_body: |
