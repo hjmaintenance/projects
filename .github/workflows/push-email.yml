@@ -37,12 +37,9 @@ jobs:
               <div class='item'><span class='item-icon'>📂</span><strong>Repository:</strong> ${{ github.repository }}</div>
               <div class='item'><span class='item-icon'>👤</span><strong>Pushed by:</strong> ${{ github.actor }}</div>" > commit_list.html
 
-          for row in $(echo "${{ toJson(github.event.commits) }}" | jq -r '.[] | @base64'); do
-            _jq() {
-              echo ${row} | base64 --decode | jq -r ${1}
-            }
-            msg=$(_jq '.message')
-            author=$(_jq '.author.name')
+          echo "${{ toJson(github.event.commits) }}" | jq -c '.[]' | while read commit; do
+            msg=$(echo "$commit" | jq -r '.message')
+            author=$(echo "$commit" | jq -r '.author.name')
             echo "<div class='item'><span class='item-icon'>📝</span><strong>Commit:</strong> $msg (by $author)</div>" >> commit_list.html
           done
 
