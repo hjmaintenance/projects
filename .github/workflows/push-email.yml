@@ -17,11 +17,7 @@ jobs:
           server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "[${{ github.repository }}] Push by ${{ github.actor }}"
-          to: "quristyle@gmail.com, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
+          subject: "📬 [${{ github.repository }}] New Push by ${{ github.actor }}"
+          to: "anstnwl27@gmail.com, qwert7913@naver.com "
           from: "GitHub Actions <${{ secrets.SMTP_USERNAME }}>"
-          body: |
-            📌 Repository: ${{ github.repository }}
-            👤 Pushed by: ${{ github.actor }}
-            📝 Commit message: ${{ github.event.head_commit.message }}
-            🔗 Compare changes: ${{ github.event.compare }}
+          body_path: "./email_template.html"
