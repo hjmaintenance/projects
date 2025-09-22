@@ -21,10 +21,8 @@ jobs:
         run: |
           # 제목, 본문
           SUBJECT="$(git log -1 --pretty=%s)"
-          BODY="$(git log -1 --pretty=%b)"
 
           echo "Full Subject: $SUBJECT"
-          echo "Body: $BODY"
 
           # 접수와 구분
           if [[ "$SUBJECT" == reception_alert:* ]]; then
@@ -48,7 +46,7 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "📬 [${{ steps.commit.outputs.mail_subject }}] - ${{ github.actor }}___${{ steps.commit.outputs.match }}--"
-          to: "quristyle@gmail.com" #, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
+          to: "quristyle@gmail.com, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
           from: "hjmaintenance"
           html_body: |
             <!DOCTYPE html>
