@@ -3,7 +3,7 @@ name: Push Email Notification
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   send_email:
