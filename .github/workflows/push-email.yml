@@ -20,5 +20,33 @@ jobs:
           subject: "📬 [${{ github.repository }}] New Push by ${{ github.actor }}"
           to: "anstnwl27@gmail.com "
           from: "GitHub Actions <${{ secrets.SMTP_USERNAME }}>"
-          body_path: "./email_template.html"
-          content_type: "text/html"
+          html_body: |
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <title>GitHub Push Notification</title>
+              <style>
+                body { font-family: Arial, sans-serif; background-color:#f4f4f7; margin:0; padding:20px; }
+                .card { background:white; border-radius:12px; padding:20px; max-width:500px; margin:auto; border-left:6px solid #0366d6; }
+                .header { font-size:20px; font-weight:bold; color:#24292f; margin-bottom:20px; display:flex; align-items:center; }
+                .header span { margin-left:10px; }
+                .item { margin-bottom:15px; line-height:1; display:flex; align-items:center; }
+                .item-icon { font-size:18px; margin-right:10px; }
+                .item strong { color:#0366d6; width:130px; display:inline-block; }
+                .link-button { display:inline-block; padding:4px 8px; font-size:13px; background-color:#28a745; color:white; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:5px; }
+                .link-button:hover { background-color:#218838; }
+                .footer { margin-top:25px; font-size:13px; color:#555; text-align:center; }
+              </style>
+            </head>
+            <body>
+              <div class="card">
+                <div class="header">📢 <span>GitHub Repository Push Notification</span></div>
+                <div class="item"><span class="item-icon">📂</span><strong>Repository:</strong> ${{ github.repository }}</div>
+                <div class="item"><span class="item-icon">👤</span><strong>Pushed by:</strong> ${{ github.actor }}</div>
+                <div class="item"><span class="item-icon">📝</span><strong>Commit message:</strong> ${{ github.event.head_commit.message }}</div>
+                <div class="item"><span class="item-icon">🔗</span><strong>Compare changes:</strong> <a class="link-button" href="${{ github.event.compare }}">View Changes</a></div>
+                <div class="footer">✨ Take a peek at what’s new!</div>
+              </div>
+            </body>
+            </html>
