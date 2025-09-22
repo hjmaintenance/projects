@@ -31,14 +31,13 @@ jobs:
             echo "mail_subject=$CLEAN_SUBJECT" >> $GITHUB_OUTPUT
 
             echo "mail_body=$BODY" >> $GITHUB_OUTPUT
-            echo "match=true" >> $GITHUB_OUTPUT
+            echo "match=Y" >> $GITHUB_OUTPUT
           else
-            echo "match=false" >> $GITHUB_OUTPUT
+            echo "match=N" >> $GITHUB_OUTPUT
 
           fi
 
 
-          # i f :   steps.check.outputs.match == 'true'
 
 
       - name: Send mail on push
@@ -48,7 +47,7 @@ jobs:
           server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
-          subject: ${{ steps.commit.outputs.mail_subject }}___${{steps.check.outputs.match }}
+          subject: ${{ steps.commit.outputs.mail_subject }}___${{ steps.check.outputs.match }}
           to: "quristyle@gmail.com" #, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
           from: "hjmaintenance"
           html_body: ${{ steps.commit.outputs.mail_body }}
