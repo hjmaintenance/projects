@@ -100,10 +100,9 @@ public class ScriptRunner
                     string output = await outputTask;
                     string error = await errorTask;
 
-                    logger.LogInformation("Script output: {Output}", output);
-                    if (!string.IsNullOrEmpty(error))
+                     if (!string.IsNullOrEmpty(output))
                     {
-                        logger.LogError("Script error: {Error}", error);
+                        logger.LogInformation("Script output: {Output}", output);
                     }
                 }
                 else

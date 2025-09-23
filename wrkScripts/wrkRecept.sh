@@ -25,6 +25,6 @@ find . -maxdepth 1 -type f -name "*.txt" -mmin +1440 -exec rm -f {} \;
 
 # git add & commit & push
 git add "$FILENAME"
-git commit -m "reception_msg:${TITLE}" -m "reception_msg:${BODY}"
+git commit -m "reception_msg:${TITLE}" -m "${BODY}"
 git pull
 git push # -f origin main
