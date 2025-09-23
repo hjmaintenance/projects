@@ -21,14 +21,7 @@ jobs:
         run: |
           # 제목, 본문
           SUBJECT="$(git log -1 --pretty=%s)"
-          BODY="$(git log -1 --pretty=%B | sed \
-          -e 's/&/\&amp;/g' \
-          -e 's/</\&lt;/g' \
-          -e 's/>/\&gt;/g' \
-          -e 's/`/\\`/g' \
-          -e 's/\$/\\$/g' \
-          -e 's/\\/\\\\/g' \
-          -e ':a;N;$!ba;s/\n/\\n/g')"
+          BODY="$(git log -1 --pretty=%B | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')"
           echo "mail_body<<EOF" >> $GITHUB_OUTPUT
           echo "$BODY" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -62,7 +55,7 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "📬 [${{ github.event.head_commit.message }}] - ${{ github.actor }}"
-          to: "anstnwl27@gmail.com" #"quristyle@gmail.com, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
+          to: "quristyle@gmail.com, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
           from: "hjmaintenance"
           html_body: |
 
