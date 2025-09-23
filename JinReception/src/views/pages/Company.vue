@@ -1,6 +1,7 @@
 <script setup>
 import { CompanyService } from '@/service/CompanyService';
-import { onBeforeMount, reactive, ref , onMounted} from 'vue';
+import { buildQueryPayload } from '@/utils/apiUtils';
+import { reactive, ref } from 'vue';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -13,6 +14,25 @@ const columns = ref([
     { field: 'id', header: 'Id' },
     { field: 'name', header: 'Name' }
 ]);
+
+// 검색영역 반응형 객체
+const searchs = reactive({
+  Srch: ''
+  // ex) addressSearch: ''
+});
+
+// 필드 구성
+const searchConfig = [
+  { model: 'Srch', fields: ['name', 'addr'], operator: 'like' }
+  // ex) { model: 'addressSearch', fields: ['addr'], operator: 'like' }
+];
+
+// 정렬 및 페이징 설정
+const queryOptions = reactive({
+  sorts: [{ field: 'id', dir: 'asc' }],
+  page: 1,
+  pageSize: 10
+});
 
 const companys = ref([])
 const selectedCompany = ref(null)
@@ -35,14 +55,26 @@ const onCellEditComplete = (event) => {
 
 
 //onMounted(loadData)
+
 //초기화
-const initdata = async () => {
-  companys.value = null;
+const initData = async () => {
+  companys.value = [];
+  searchs.Srch = '';
 }
-//조회
+//전체
 const loadData = async () => {
   companys.value = await CompanyService.getList(loading);
 }
+
+//조회
+const search = async () => {
+  // 검색 조건과 페이징/정렬 옵션을 합쳐 최종 페이로드를 생성합니다.
+  const finalPayload = buildQueryPayload(searchs, searchConfig, queryOptions);
+  companys.value = await CompanyService.search(finalPayload, loading);
+}
+
+
+
 const getItem = async () => {
   companys.value = await CompanyService.get('1', loading);
 }
@@ -56,7 +88,7 @@ const addData = () => {
 
 const save = async () => {
   await CompanyService.save(companys, loading);
-  loadData();
+  search();
 }
 
 // 삭제 
@@ -76,7 +108,7 @@ const deleteSelected = async () => {
   if (itemsToDeleteInDb.length > 0) {
     await CompanyService.deleteSelected(itemsToDeleteInDb, loading);
   }
-  loadData();
+  search();
   selectedCompany.value = [];
 }
 
@@ -85,17 +117,26 @@ const deleteSelected = async () => {
 
 <template>
 
-    <div class="card srcharea">
+    <form class="card srcharea" @submit.prevent="search">
 
+      <div class="flex flex-col md:flex-row gap-8">
+        <IconField iconPosition="left">
+            <InputText type="text" v-model="searchs.Srch" placeholder="Search..." />
+            <InputIcon class="pi pi-search" />
+        </IconField>
+      </div>
+      
+    </form>
 
-<Button label="초기화" class="mr-2" @click="initdata" />
-<Button label="전체" class="mr-2" @click="loadData" />
-<Button label="단건" class="mr-2" @click="getItem" />
-<Button label="저장" class="mr-2" @click="save" />
-<Button label="추가" class="mr-2" icon="pi pi-plus"  @click="addData" />
-<Button label="삭제" class="mr-2" @click="deleteSelected" />
-
-    </div>
+      <div class="srchbtnarea mt-2">
+        <Button label="초기화" class="mr-2" @click="initData" />
+        <Button label="전체" class="mr-2" @click="loadData" />
+        <Button label="d 조회" class="mr-2" @click="search" />
+        <Button label="단건" class="mr-2" @click="getItem" />
+        <Button label="저장" class="mr-2" @click="save" />
+        <Button label="추가" class="mr-2" icon="pi pi-plus"  @click="addData" />
+        <Button label="삭제" class="mr-2" @click="deleteSelected" />
+      </div>
 
     <div class="card">
 

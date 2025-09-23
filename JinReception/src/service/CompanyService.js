@@ -18,6 +18,10 @@ const _service = {
         const res = await apiClient.get('/companys');
         return res.data.data;
     },
+    async search(srchobj) {
+        const res = await apiClient.post('/companys/srch', srchobj);
+        return res.data.data;
+    },
     async get(id) {
         const res = await apiClient.get(`/companys/${id}`);
         return [res.data.data];
@@ -38,6 +42,7 @@ const _service = {
 
 export const CompanyService = {
     getList: (loading) => callWithLoading(loading, () => _service.getList()),
+    search: (srchobj, loading) => callWithLoading(loading, () => _service.search(srchobj)),
     get: (id, loading) => callWithLoading(loading, () => _service.get(id)),
     add: (company, loading) => callWithLoading(loading, () => _service.add(company)),
     update: (company, loading) => callWithLoading(loading, () => _service.update(company)),
