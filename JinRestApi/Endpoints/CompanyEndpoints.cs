@@ -8,6 +8,7 @@ using System.Linq.Dynamic.Core;
 
 namespace JinRestApi.Endpoints;
 
+/// <summary> 고객사 엔드포인트 </summary>
 public static class CompanyEndpoints
 {
     // DTO for creating a company to avoid expecting an ID from the client.
@@ -65,7 +66,7 @@ public static class CompanyEndpoints
             var finalQuery = QueryCollectionMerger.Merge(http.Request.Query, bodyQuery);
 
             // 3) DynamicFilterHelper 재사용
-            
+
             var baseQuery = db.Companies.AsQueryable();
 
             // 포함 관계 필요하면 Include 이후 ApplyAll 호출
