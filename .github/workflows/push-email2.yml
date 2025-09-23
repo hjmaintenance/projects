@@ -22,7 +22,10 @@ jobs:
           # 제목, 본문
           SUBJECT="$(git log -1 --pretty=%s)"
           BODY="$(git log -1 --pretty=%B | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')"
-          echo "mail_body=$BODY" >> $GITHUB_OUTPUT
+          echo "mail_body<<EOF" >> $GITHUB_OUTPUT
+          echo "$BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
           echo "Full Subject: $SUBJECT"
 
           # 접수와 구분
