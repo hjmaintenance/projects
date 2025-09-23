@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using RabbitMQ.Client;
 using JinRestApi.Data;
 using JinRestApi.Endpoints;
 
@@ -12,6 +13,23 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
                        ?? Environment.GetEnvironmentVariable("Help_JSINI");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+
+// RabbitMQ 연결을 Singleton으로 등록
+try
+{
+    var rabbitMqHostName = builder.Configuration["RabbitMQ:HostName"] ?? "localhost";
+    IConnectionFactory factory = new ConnectionFactory() { HostName = rabbitMqHostName, DispatchConsumersAsync = true };
+    var connection = factory.CreateConnection();
+    builder.Services.AddSingleton(connection);
+}
+catch (RabbitMQ.Client.Exceptions.BrokerUnreachableException ex)
+{
+    // 시작 시 RabbitMQ에 연결할 수 없는 경우, 심각한 오류로 간주하고 애플리케이션을 시작하지 않습니다.
+    // 이는 'fail-fast' 접근 방식으로, 서비스가 불완전한 상태로 실행되는 것을 방지합니다.
+    // 콘솔에 오류를 기록하고 예외를 다시 던져서 앱 시작을 중단합니다.
+    Console.WriteLine($"[ERROR] RabbitMQ connection failed: {ex.Message}. Application is shutting down.");
+    throw;
+}
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

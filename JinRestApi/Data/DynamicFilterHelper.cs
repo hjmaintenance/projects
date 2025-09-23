@@ -383,9 +383,7 @@ namespace JinRestApi.Data
         /// <summary>
         /// Try to convert raw string to target type (supports Nullable<> and enums)
         /// </summary>
-        private static bool TryConvertToType(string raw, Type targetType, out object? converted)
-        {
-            converted = null;
+        private static bool TryConvertToType(string raw, Type targetType, out object? converted)        {            converted = null;
             try
             {
                 var destType = Nullable.GetUnderlyingType(targetType) ?? targetType;
