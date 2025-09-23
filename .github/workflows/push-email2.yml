@@ -36,7 +36,16 @@ jobs:
 
 
 
+          echo "match=$MATCH" >> $GITHUB_OUTPUT
 
+          if [ "$MATCH" = "Y" ]; then
+            CLEAN_SUBJECT="${SUBJECT#reception_alert:}"
+            echo "mail_subject=$CLEAN_SUBJECT" >> $GITHUB_OUTPUT
+
+            echo "mail_body<<EOF" >> $GITHUB_OUTPUT
+            echo "$BODY" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
 
 
       - name: Send mail on push
