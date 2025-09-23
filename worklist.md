@@ -20,26 +20,23 @@
 
 ## 시스템
 
-- 서버구성 ![Badge](https://img.shields.io/badge/dhk-darkblue) ![Badge](https://img.shields.io/badge/quristyle-skyblue)
-- 도메인![Badge](https://img.shields.io/badge/jwp-darkblue) ![Badge](https://img.shields.io/badge/quristyle-skyblue)
-- 네트워크![Badge](https://img.shields.io/badge/jwp-blue) ![Badge](https://img.shields.io/badge/quristyle-skyblue) ![Badge](https://img.shields.io/badge/dhk-darkblue)
-- 방화벽![Badge](https://img.shields.io/badge/jwp-darkblue) ![Badge](https://img.shields.io/badge/quristyle-skyblue)
-- 백업![Badge](https://img.shields.io/badge/jwp-red)
+- 박부장제공 서버로 이관 ![Badge](https://img.shields.io/badge/jwp-red) ![Badge](https://img.shields.io/badge/quristyle-red)
 
 
 ## 공통
 
 - 암호변경
 - <p>flow, layout <img src="https://img.shields.io/badge/quristyle-red" style="vertical-align: middle;"/></p>
-- jwt, session, 권한 ![Badge](https://img.shields.io/badge/quri-red) 
+- 권한 ![Badge](https://img.shields.io/badge/quri-red) 
+- message que 서버 ![Badge](https://img.shields.io/badge/quri-skyblue)
+- 접수 message que 연동 으로 message 연동 샘플 ![Badge](https://img.shields.io/badge/quri-skyblue)
 
 ## 고객사 
 
-- 로그인, 로그아웃 ![Badge](https://img.shields.io/badge/uspuni-red)  ![Badge](https://img.shields.io/badge/quri-skyblue)
 - lock ![Badge](https://img.shields.io/badge/uspuni-red)  ![Badge](https://img.shields.io/badge/quri-skyblue)
-- 사용자 정보 수정 
-- 접수내용 작성 화면
-- 접수 기록 확인 화면
+- 나의 정보 수정 
+- 접수내용 작성 화면 ![Badge](https://img.shields.io/badge/quri-red)
+- 접수 기록 확인 화면 ![Badge](https://img.shields.io/badge/quri-red)
 - 공지 화면
 
 
@@ -48,8 +45,9 @@
 - 회사 관리 ![Badge](https://img.shields.io/badge/quri-red)
 - 관리자 관리 ![Badge](https://img.shields.io/badge/quri-red)
 - 고객 관리 ![Badge](https://img.shields.io/badge/frogtok-red)
+- 나의 정보 수정 
 - 권한 관리
-- 접수리스트 화면
+- 접수리스트 화면 ![Badge](https://img.shields.io/badge/quri-red)
 - 접수 내용 확인 및 담당자 accept 화면
 - 공지관리
 - 전체 모니터링

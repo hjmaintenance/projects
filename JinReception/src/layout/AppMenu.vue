@@ -9,7 +9,7 @@ const model = ref([
         items: [
             { label: '공지', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
             { label: '접수목록', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
-            { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
+            { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/request', class: 'rotated-icon' },
         ]
     },
     {
