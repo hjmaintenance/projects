@@ -27,10 +27,14 @@ jobs:
           # 접수와 구분
           if [[ "$SUBJECT" == reception_alert:* ]]; then
             echo "match=Y" >> $GITHUB_OUTPUT
-          else if [[ "$SUBJECT" == reception_msg:* ]]; then
-            echo "match=Y" >> $GITHUB_OUTPUT
           else
-            echo "match=N" >> $GITHUB_OUTPUT
+            
+            if [[ "$SUBJECT" == reception_msg:* ]]; then
+              echo "match=Y" >> $GITHUB_OUTPUT
+            else
+              echo "match=N" >> $GITHUB_OUTPUT
+            fi
+
           fi
 
 

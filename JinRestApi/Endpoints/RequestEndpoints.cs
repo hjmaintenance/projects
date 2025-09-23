@@ -84,7 +84,7 @@ public static class RequestEndpoints
 
 // 실행할 쉘 스크립트와 인자
 string scriptPath = "/home/quri/projects/wrkScripts/wrkRecept.sh";
-string[] args = new[] { "첫번째인자", "두번째인자" };
+string[] args = new[] { requestDto.Title, requestDto.Description };
 
 // JSON 메시지 만들기
 var payload = new
