@@ -9,7 +9,7 @@ using JinRestApi.Endpoints;
 var builder = WebApplication.CreateBuilder(args);
 
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                        ?? Environment.GetEnvironmentVariable("Help_JSINI");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
@@ -30,6 +30,9 @@ catch (RabbitMQ.Client.Exceptions.BrokerUnreachableException ex)
     Console.WriteLine($"[ERROR] RabbitMQ connection failed: {ex.Message}. Application is shutting down.");
     throw;
 }
+
+// IHttpContextAccessor를 등록하여 서비스 내에서 HttpContext에 접근할 수 있도록 합니다.
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -61,7 +64,8 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment()) {
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
 }

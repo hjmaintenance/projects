@@ -1,0 +1,5 @@
+
+/* 에디터의 foucus disign 유지. */
+            .ProseMirror-focused{
+            outline: none;
+            }

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using JinRestApi.Models;
 
 using System.Reflection;
-using System.Xml.Linq; 
+using System.Xml.Linq;
 
 
 
@@ -10,9 +10,16 @@ namespace JinRestApi.Data;
 
 public class AppDbContext : DbContext
 {
+    private readonly IHttpContextAccessor? _httpContextAccessor;
+
+    // 마이그레이션 도구가 매개변수 없는 생성자를 사용할 수 있도록 유지합니다.
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-
+    // DI를 통해 IHttpContextAccessor를 주입받는 생성자를 추가합니다.
+    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
 
     /// <summary>고객사 테이블</summary>
     public DbSet<CustomerCompany> Companies { get; set; }
@@ -62,21 +69,35 @@ public class AppDbContext : DbContext
         foreach (var entityEntry in entries)
         {
             var now = DateTime.UtcNow;
-            var user = "system"; // 기본값
+            var claimsPrincipal = _httpContextAccessor?.HttpContext?.User;
+            string user;
+
+            if (claimsPrincipal?.Identity?.IsAuthenticated ?? false)
+            {
+                // 'uid' 클레임을 먼저 찾고, 없으면 'sub'(LoginId)를, 그것도 없으면 "system"을 사용합니다.
+                user = claimsPrincipal.FindFirst("uid")?.Value ?? claimsPrincipal.Identity.Name ?? "system";
+            }
+            else
+            {
+                user = "system"; // 인증되지 않은 요청의 경우
+            }
 
             if (entityEntry.State == EntityState.Added)
             {
                 entityEntry.Entity.CreatedAt = now;
                 if (string.IsNullOrEmpty(entityEntry.Entity.CreatedBy))
                 {
-                    entityEntry.Entity.CreatedBy = user;
+                    entityEntry.Entity.CreatedBy = user; // 생성자 자동 설정
                 }
             }
 
             entityEntry.Entity.ModifiedAt = now;
+            entityEntry.Entity.ModifiedBy = user; // 수정자 자동 설정
 
-            if (string.IsNullOrEmpty(entityEntry.Entity.ModifiedBy)) entityEntry.Entity.ModifiedBy = user;
-            if (string.IsNullOrEmpty(entityEntry.Entity.MenuContext)) entityEntry.Entity.MenuContext = user;
+            entityEntry.Entity.ActionService = _httpContextAccessor?.HttpContext?.Request.Headers["X-Service-Name"]; // ActionService 자동 설정
+            entityEntry.Entity.MenuContext = _httpContextAccessor?.HttpContext?.Request.Headers["X-Menu-Name"]; // MenuContext 자동 설정
+
+            if (string.IsNullOrEmpty(entityEntry.Entity.MenuContext)) entityEntry.Entity.MenuContext = user; // MenuContext 기본값
         }
     }
 

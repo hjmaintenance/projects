@@ -11,18 +11,22 @@ namespace JinRestApi.Endpoints;
 /// <summary> 고객사 엔드포인트 </summary>
 public static class CompanyEndpoints
 {
-    // DTO for creating a company to avoid expecting an ID from the client.
-    //public record CompanyCreateDto([Required] string Name, string? ModifiedBy, string? MenuContext);
 
     public static void MapCompanyEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/companys");
 
         // 전체 조회
-        group.MapGet("/", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
-            () => db.Companies.Include(c => c.Attachments).ToListAsync()
-        ));
+        group.MapGet("/", (AppDbContext db, HttpContext http) =>
+        {
+            var serviceName = http.Request.Headers["X-Service-Name"].ToString();
+            var menuName = http.Request.Headers["X-Menu-Name"].ToString();
 
+
+            return ApiResponseBuilder.CreateAsync(
+                () => db.Companies.Include(c => c.Attachments).ToListAsync()
+            );
+        });
 
         // 상세 조회
         group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
@@ -82,8 +86,6 @@ public static class CompanyEndpoints
         }, "Company search successfully.", 201));
 
 
-
-
         // 등록
         group.MapPost("/", (AppDbContext db, CompanyCreateDto companyDto) => ApiResponseBuilder.CreateAsync(async () =>
         {
@@ -106,9 +108,7 @@ public static class CompanyEndpoints
             if (company is null) return null;
 
             company.Name = input.Name;
-            company.ModifiedBy = input.ModifiedBy;
-            company.MenuContext = input.MenuContext;
-            // ModifiedAt은 AppDbContext의 SaveChangesAsync에서 자동으로 설정됩니다.
+            // ModifiedBy, ModifiedAt은 AppDbContext의 SaveChangesAsync에서 자동으로 설정됩니다.
 
             await db.SaveChangesAsync();
             return company;

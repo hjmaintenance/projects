@@ -6,7 +6,8 @@ using System.Linq.Dynamic.Core;
 using JinRestApi.Dtos;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
-using System.Text;using System.Text.Json;
+using System.Text;
+using System.Text.Json;
 
 namespace JinRestApi.Endpoints;
 
@@ -52,6 +53,45 @@ public static class RequestEndpoints
 
 
 
+        // 검색
+        group.MapPost("/srch", (AppDbContext db, HttpContext http) => ApiResponseBuilder.CreateAsync(async () =>
+        {
+
+            // 1) JSON Body 읽기
+            using var reader = new StreamReader(http.Request.Body);
+            var body = await reader.ReadToEndAsync();
+
+            IQueryCollection bodyQuery = new QueryCollection();
+            if (!string.IsNullOrWhiteSpace(body))
+            {
+                bodyQuery = JsonToQueryHelper.ConvertJsonToQuery(body);
+            }
+
+            // 2) GET QueryString 과 병합
+            var finalQuery = QueryCollectionMerger.Merge(http.Request.Query, bodyQuery);
+
+            // 3) DynamicFilterHelper 재사용
+
+            var baseQuery = db.Requests.AsQueryable();
+
+            // 포함 관계 필요하면 Include 이후 ApplyAll 호출
+            baseQuery = baseQuery.Include(c => c.Attachments);
+
+            // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
+            //var resultQuery = baseQuery.ApplyAll(http.Request.Query);
+            var resultQuery = baseQuery.ApplyAll(finalQuery);
+
+            // ToListAsync 은 dynamic IQueryable 에서도 작동
+            var list = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
+            return list;
+        }, "Request srch successfully.", 201));
+
+
+
+
+
+
+
         // 요청 등록
         group.MapPost("/", (AppDbContext db, RequestCreateDto requestDto, IConnection rabbitMqConnection, ILoggerFactory loggerFactory) => ApiResponseBuilder.CreateAsync(async () =>
         {
@@ -67,7 +107,7 @@ public static class RequestEndpoints
 
             db.Requests.Add(request);
             await db.SaveChangesAsync();
-            
+
             var logger = loggerFactory.CreateLogger("RequestEndpoints");
             logger.LogInformation("Attempting to publish message to RabbitMQ.");
             try
@@ -82,16 +122,16 @@ public static class RequestEndpoints
 
                 logger.LogInformation("RabbitMQ channel created and queue 'run_script' declared.");
 
-// 실행할 쉘 스크립트와 인자
-string scriptPath = "/home/quri/projects/wrkScripts/wrkRecept.sh";
-string[] args = new[] { requestDto.Title, requestDto.Description };
+                // 실행할 쉘 스크립트와 인자
+                string scriptPath = "/home/quri/projects/wrkScripts/wrkRecept.sh";
+                string[] args = new[] { requestDto.Title, requestDto.Description };
 
-// JSON 메시지 만들기
-var payload = new
-{
-    script = scriptPath,
-    args = args
-};
+                // JSON 메시지 만들기
+                var payload = new
+                {
+                    script = scriptPath,
+                    args = args
+                };
 
                 string json = JsonSerializer.Serialize(payload);
 

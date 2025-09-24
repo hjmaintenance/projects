@@ -22,6 +22,8 @@ namespace JinRestApi.Models
         /// <summary>수정일시</summary>
         public DateTime? ModifiedAt { get; set; }
 
+        /// <summary>작업 서비스</summary>
+        public string? ActionService { get; set; }
         /// <summary>작업 메뉴/화면 정보</summary>
         public string? MenuContext { get; set; }
     }
@@ -60,8 +62,8 @@ namespace JinRestApi.Models
 
         public ICollection<ImprovementRequest> AssignedRequests { get; set; } = new List<ImprovementRequest>();
         public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
-   
-   
+
+
     }
 
     /// <summary>팀</summary>

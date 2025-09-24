@@ -85,7 +85,7 @@ public static class RegisterEndpoints
                     issuer: jwtIssuer,
                     audience: null,
                     claims: claims,
-                    expires: DateTime.UtcNow.AddHours(2),
+                    expires: DateTime.UtcNow.AddHours(12),
                     signingCredentials: credentials
                 );
 
@@ -94,14 +94,15 @@ public static class RegisterEndpoints
                 return new
                 {
                     token = tokenString,
-                    user = new {
-                    user.Id,
-                    user.UserName,
-                    user.LoginId,
-                    user.Sex,
-                    user.Photo,
-                    user.Email
-                }
+                    user = new
+                    {
+                        user.Id,
+                        user.UserName,
+                        user.LoginId,
+                        user.Sex,
+                        user.Photo,
+                        user.Email
+                    }
                 };
             }, "Login successful.");
         });
