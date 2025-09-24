@@ -1,7 +1,7 @@
 <script setup>
   import { RequestService } from '@/service/RequestService';
   import { buildQueryPayload } from '@/utils/apiUtils';
-  import { reactive, ref, watch } from 'vue';
+  import { onMounted, reactive, ref, watch } from 'vue';
 
   import DataTable from 'primevue/datatable';
   import Column from 'primevue/column';
@@ -9,15 +9,19 @@
   const loading = ref(null);
   const columns = ref([
     { field: 'id', header: 'Id' },
+    { field: 'createdAt', header: 'createdAt' },
     { field: 'title', header: 'Title' }
   ]);
 
   const searchs = reactive({
-    Srch: ''
+    Srch: '',
+    customerId: localStorage.getItem('user.user_uid')
   });
 
   // 필드 구성
-  const searchConfig = [{ model: 'Srch', fields: ['title'], operator: 'like' }];
+  const searchConfig = [{ model: 'Srch', fields: ['title'], operator: 'like' },
+  { model: 'customerId', fields: ['customerId'], operator: '' }
+];
 
   const queryOptions = reactive({
     sorts: [{ field: 'id', dir: 'desc' }],
@@ -25,12 +29,24 @@
     pageSize: 100
   });
 
+  const visible = ref(false);
+
   const requests = ref([]);
   const selectedRequest = ref(null);
 
   watch(selectedRequest, (newValue, oldValue) => {
-    //alert(`변경됨: ${oldValue} → ${newValue}`)
+    if (newValue) {
+      visible.value = true;
+    }
   });
+
+  onMounted(() => {
+    search();
+});
+
+
+
+
 
   //초기화
   const initData = async () => {};
@@ -48,23 +64,75 @@
 </script>
 
 <template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <form class="card srcharea" @submit.prevent="search">
-    <div class="flex flex-col md:flex-row gap-8">
-      <IconField iconPosition="left">
+                    <div class="flex flex-wrap items-start gap-4">
+                        <div class="field">      
+                          <IconField iconPosition="left">
         <InputText type="text" v-model="searchs.Srch" placeholder="Search..." />
         <InputIcon class="pi pi-search" />
       </IconField>
-    </div>
+                        </div>
+                        <Button label="조회" class="mr-2" @click="search" />
+                    </div>
+
+
   </form>
 
-  <div class="srchbtnarea mt-2">
-    <Button label="조회" class="mr-2" @click="search" />
-  </div>
 
-  <div class="card">
-    <h3>{{ selectedRequest?.title }}</h3>
-    <div v-html="selectedRequest?.description"></div>
-  </div>
+
+
+<Dialog v-model:visible="visible" modal :header="selectedRequest?.title" :style="{ width: '70rem' }">
+  
+    <div class="flex items-center gap-4 mb-8" >
+
+    <div class="" v-html="selectedRequest?.description" ></div>
+
+    </div>
+    <div class="flex justify-end gap-2" >
+        <Button type="button" label="close" severity="secondary" @click="visible = false"></Button>
+    </div>
+</Dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <div class="card">
     <DataTable :value="requests" dataKey="id" selectionMode="single" :loading="loading" v-model:selection="selectedRequest">

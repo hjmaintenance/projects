@@ -8,11 +8,24 @@
  */
 export function buildQueryPayload(inputs, config, queryOptions) {
   const searchConditions = {};
+
   config.forEach(item => {
     const value = inputs[item.model]?.trim();
-    if (value) {
-      item.fields.forEach(field => (searchConditions[`${field}_${item.operator}`] = value));
-    }
+    //if (value) {
+      item.fields.forEach(field => {
+        if (item.operator && item.operator.trim() !== '') {
+          // operator가 있을 경우, "필드_연산자" 형태의 키 사용
+          searchConditions[`${field}_${item.operator}`] = value;
+        } else {
+          // operator가 없는 경우, 필드명 그대로 키로 사용
+          searchConditions[`${field}`] = value;
+        }
+      }
+      );
+    //}
+
+    console.log('bqp - searchConditions:', searchConditions);
+
   });
 
   // 검색 조건과 쿼리 옵션을 병합하여 최종 페이로드 생성

@@ -14,17 +14,11 @@
   const editor = useEditor({
     extensions: [Color.configure({ types: [TextStyle.name, ListItem.name] }), TextStyle.configure({ types: [ListItem.name] }), StarterKit, Image],
     content: `
-      <h2>
-        Hi there,
-      </h2>
-      <p>이놈이 지금은 1등이야. 그래서 이것으로.
-      </p>
-      <blockquote>
-        programming is fun!
-        <br />
-        — quristyle
-      </blockquote>
-    `
+<h2>요점 내용</h2><p/><p/><p/>
+<p>상세한 설명을 여기에 작성하세요.</p><p/>
+<p>이미지를 붙여넣기 해보세요.</p><p/>
+<blockquote>programming is fun!<br />
+— quristyle</blockquote><p/><p/><p/><p/><p/><p/><p/>`
   });
 
   // 라이프사이클
@@ -87,10 +81,25 @@
 </script>
 
 <template>
-  <div>
-    <InputText type="text" v-model="request.title" placeholder="Title..." />
-    <Button label="요청" type="button" class="mr-2" @click="save" />
+
+
+
+
+
+  <div class="card srcharea" >
+                    <div class="flex flex-wrap items-start gap-4">
+                        <div class="field">      
+                          <InputText type="text" v-model="request.title" placeholder="Title..." />
+                        </div>
+                         <Button label="요청" type="button" class="mr-2" @click="save" />
+                    </div>
+
+
   </div>
+
+
+
+
   <div class="card">
     <editor-content :editor="editor" />
   </div>

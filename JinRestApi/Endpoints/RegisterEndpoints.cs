@@ -58,15 +58,49 @@ public static class RegisterEndpoints
             // ApiResponseBuilder는 성공/실패만 다루므로, 인증 실패는 별도 처리합니다.
             return ApiResponseBuilder.CreateAsync(async () =>
             {
-                var user = await db.Customers.FirstOrDefaultAsync(u => u.LoginId == req.LoginId);
-                if (user is null || !passwordService.VerifyPassword<Customer>(user, req.Password))
+
+                string user_uid = "";
+                string user_name = "";
+                string login_id = "";
+                string login_type = "";
+                string Photo = "";
+                string email = "";
+
+                if (req.LoginType == "admin")
                 {
-                    // 성공 경로가 아니므로 예외를 발생시켜 Builder의 catch 블록에서 처리하도록 합니다.
-                    // 또는 여기서 직접 Unauthorized를 반환할 수도 있습니다. 여기서는 null을 반환하여 404처럼 처리합니다.
-                    // 더 나은 방법은 인증 실패에 대한 별도 응답을 만드는 것입니다.
-                    // 여기서는 null을 반환하여 '찾을 수 없음'으로 처리합니다.
-                    return null;
+                    var admin = await db.Admins.FirstOrDefaultAsync(a => a.LoginId == req.LoginId);
+                    if (admin is null || !passwordService.VerifyPassword<Admin>(admin, req.Password))
+                    {
+                        return null;
+                    }
+                    user_name = admin.UserName;
+                    login_id = admin.LoginId;
+                    login_type = "admin";
+                    Photo = "";
+                    email = admin.Email;
+                    user_uid = admin.Id.ToString();
                 }
+                else
+                {
+
+                    var user = await db.Customers.FirstOrDefaultAsync(u => u.LoginId == req.LoginId);
+                    if (user is null || !passwordService.VerifyPassword<Customer>(user, req.Password))
+                    {
+                        // 성공 경로가 아니므로 예외를 발생시켜 Builder의 catch 블록에서 처리하도록 합니다.
+                        // 또는 여기서 직접 Unauthorized를 반환할 수도 있습니다. 여기서는 null을 반환하여 404처럼 처리합니다.
+                        // 더 나은 방법은 인증 실패에 대한 별도 응답을 만드는 것입니다.
+                        // 여기서는 null을 반환하여 '찾을 수 없음'으로 처리합니다.
+                        return null;
+                    }
+                    user_name = user.UserName;
+                    login_id = user.LoginId;
+                    login_type = "customer";
+                    Photo = user.Photo;
+                    email = user.Email;
+                    user_uid = user.Id.ToString();
+
+                }       
+
 
                 // JWT 토큰 생성
                 var jwtKey = config["Jwt:Key"] ?? "quristyle_blabbbbbla_secret_key_1234567890!@#$";
@@ -76,9 +110,9 @@ public static class RegisterEndpoints
 
                 var claims = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.LoginId ?? user.UserName ?? user.Id.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Sub, login_id),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim("uid", user.Id.ToString())
+                    new Claim("uid", user_uid)
                 };
 
                 var token = new JwtSecurityToken(
@@ -96,12 +130,12 @@ public static class RegisterEndpoints
                     token = tokenString,
                     user = new
                     {
-                        user.Id,
-                        user.UserName,
-                        user.LoginId,
-                        user.Sex,
-                        user.Photo,
-                        user.Email
+                        user_uid,
+                        user_name,
+                        login_id,
+                        login_type,
+                        Photo,
+                        email
                     }
                 };
             }, "Login successful.");
