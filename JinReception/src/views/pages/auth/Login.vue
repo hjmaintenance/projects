@@ -55,7 +55,7 @@ const submit2 = async (event) => {
     const pw = event.currentTarget.getAttribute('pw');
 
 
-    if( id === 'admin') {
+    if( id === 'admin' || id === 'manager') {
         loginType.value = 'admin';
     } else {
         loginType.value = '';
@@ -151,8 +151,10 @@ const submit2 = async (event) => {
 
                         <div v-if="errorMsg" style="color:red">{{ errorMsg }}</div>
 
-                        <Button label="고객사" id="bbb" pw="cccc" class="mr-2" @click="submit2"></Button>
-                        <Button label="관리자" id="admin" pw="0000" @click="submit2"></Button>
+                        <Button label="김고객" id="bbb" pw="cccc" class="mr-2" @click="submit2"></Button>
+                        <Button label="박고객" id="aaa" pw="cccc" class="mr-2" @click="submit2"></Button>
+                        <Button label="메니저" id="manager" pw="cccc" @click="submit2"></Button>
+                        <Button label="관리자" id="admin" pw="cccc" @click="submit2"></Button>
                     </div>
                 </div>
             </div>
