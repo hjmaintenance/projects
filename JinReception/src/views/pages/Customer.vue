@@ -27,10 +27,48 @@ const onCellEditComplete = (event) => {
     
 };
  
- 
-//조회
+// 초기화
+const initdata = () => {
+  customers.value = null;
+}
+// 전체 조회
 const loadData = async () => {
   customers.value = await CustomerService.getList();
+}
+// 단일 조회
+const getItem = async () => {
+  customers.value = await CustomerService.get('1');
+}
+// 추가 
+const addData = () => {
+  tempIdCounter++;
+  const tempId = `temp-${tempIdCounter}`;
+  customers.value.push({ ui_id: tempId, loginId: 'aaa', password: '12125', email: 'cccc@naver.com',companyId: 1});
+}
+// 저장
+const save = async () => {
+  await CustomerService.save(customers);
+  loadData();
+}
+// 삭제
+const deleteSelected = async () => {
+  if (!selectedCustomer.value || selectedCustomer.value.length === 0) {
+    return;
+  }
+
+  const isTemp = (item) => typeof item.ui_id === 'string' && item.ui_id.startsWith('temp-');
+
+  const tempIdsToRemove = selectedCustomer.value.filter(isTemp).map((c) => c.ui_id);
+  
+  if (tempIdsToRemove.length > 0) {
+    customers.value = customers.value.filter((c) => !tempIdsToRemove.includes(c.ui_id));
+  }
+  const itemsToDeleteInDb = selectedCustomer.value.filter((c) => !isTemp(c));
+  if (itemsToDeleteInDb.length > 0) {
+    await CustomerService.deleteSelected(itemsToDeleteInDb);
+  }
+  loadData();
+  selectedCustomer.value = [];
 }
 </script>
  
@@ -39,7 +77,12 @@ const loadData = async () => {
     <div class="card srcharea">
  
  
+<Button label="초기화" class="mr-2" @click="initdata" />
 <Button label="전체" class="mr-2" @click="loadData" />
+<Button label="단일" class="mr-2" @click="getItem" />
+<Button label="추가" class="mr-2" icon="pi pi-plus" @click="addData" />
+<Button label="저장" class="mr-2" @click="save" />
+<Button label="삭제" class="mr-2" @click="deleteSelected" />
  
     </div>
  
@@ -49,7 +92,7 @@ const loadData = async () => {
     <DataTable :value="customers" 
                dataKey="id" 
                :loading="loading"
-               selectionMode="single" 
+               selectionMode="multiple" 
                v-model:selection="selectedCustomer"
                editMode="cell" 
                @cell-edit-complete="onCellEditComplete"
