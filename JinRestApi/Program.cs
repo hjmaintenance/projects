@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
 using JinRestApi.Data;
 using JinRestApi.Endpoints;
+using RabbitMQ.Client.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,45 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
                        ?? Environment.GetEnvironmentVariable("Help_JSINI");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+
+
+
+// RabbitMQ 연결 시도
+IConnection? connection = null;
+try
+{
+    var rabbitMqHostName = builder.Configuration["RabbitMQ:HostName"] ?? "localhost";
+    Console.WriteLine($"[ERROR] 111111111.");
+
+    IConnectionFactory factory = new ConnectionFactory()
+    {
+        HostName = rabbitMqHostName,
+        DispatchConsumersAsync = true
+    };
+
+    Console.WriteLine($"[ERROR] 22222.");
+
+    connection = factory.CreateConnection();
+
+    Console.WriteLine($"[ERROR] 333333.");
+}
+catch (BrokerUnreachableException ex)
+{
+    Console.WriteLine($"[ERROR] RabbitMQ connection failed: {ex.Message}. RabbitMQ 없이 서비스가 계속 동작합니다.");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"[ERROR] RabbitMQ 초기화 중 알 수 없는 오류: {ex.Message}");
+}
+
+// 반드시 DI에 등록 (null일 수도 있음)
+builder.Services.AddSingleton<IRabbitMqConnectionProvider>(
+    new RabbitMqConnectionProvider(connection)
+);
+
+Console.WriteLine($"[ERROR] 444444.");
+
+/*
 
 // RabbitMQ 연결을 Singleton으로 등록
 try
@@ -27,9 +67,16 @@ catch (RabbitMQ.Client.Exceptions.BrokerUnreachableException ex)
     // 시작 시 RabbitMQ에 연결할 수 없는 경우, 심각한 오류로 간주하고 애플리케이션을 시작하지 않습니다.
     // 이는 'fail-fast' 접근 방식으로, 서비스가 불완전한 상태로 실행되는 것을 방지합니다.
     // 콘솔에 오류를 기록하고 예외를 다시 던져서 앱 시작을 중단합니다.
-    Console.WriteLine($"[ERROR] RabbitMQ connection failed: {ex.Message}. Application is shutting down.");
-    throw;
+    Console.WriteLine($"[ERROR] RabbitMQ connection failed: {ex.Message}. RabbitMQ 없이 서비스가 계속 동작합니다.");
+    // throw;
 }
+
+*/
+
+
+
+
+
 
 // IHttpContextAccessor를 등록하여 서비스 내에서 HttpContext에 접근할 수 있도록 합니다.
 builder.Services.AddHttpContextAccessor();

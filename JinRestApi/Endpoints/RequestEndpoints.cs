@@ -93,7 +93,7 @@ public static class RequestEndpoints
 
 
         // 요청 등록
-        group.MapPost("/", (AppDbContext db, RequestCreateDto requestDto, IConnection rabbitMqConnection, ILoggerFactory loggerFactory) => ApiResponseBuilder.CreateAsync(async () =>
+        group.MapPost("/", (AppDbContext db, RequestCreateDto requestDto, IRabbitMqConnectionProvider provider, ILoggerFactory loggerFactory) => ApiResponseBuilder.CreateAsync(async () =>
         {
             var request = new ImprovementRequest
             {
@@ -110,10 +110,29 @@ public static class RequestEndpoints
 
             var logger = loggerFactory.CreateLogger("RequestEndpoints");
             logger.LogInformation("Attempting to publish message to RabbitMQ.");
+
+
+
+if (!provider.IsConnected)
+    {
+        logger.LogWarning("RabbitMQ가 연결되어 있지 않습니다. 메시지를 보낼 수 없습니다.");
+        //return Results.Ok("RabbitMQ 없이 요청 처리 완료");
+    }
+    else{
+
+
+    
+
+
+
+
+
             try
             {
-                using var channel = rabbitMqConnection.CreateModel();
-
+                 using var channel = provider.Connection!.CreateModel();
+    
+    
+    
                 channel.QueueDeclare(queue: "run_script",
                                     durable: false,
                                     exclusive: false,
@@ -148,6 +167,8 @@ public static class RequestEndpoints
                 logger.LogError(ex, "Failed to publish message to RabbitMQ.");
                 // You might want to re-throw or handle the exception depending on your requirements.
             }
+
+        }
 
             return request;
         }, "Request created successfully.", 201));
