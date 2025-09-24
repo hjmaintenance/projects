@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 
 const userid = ref('');
 const password = ref('');
+const loginType = ref('');
 const checked = ref(false);
 
 const router = useRouter();
@@ -14,11 +15,15 @@ const errorMsg = ref('');
 const submit = async (e) => {
     e.preventDefault();
     errorMsg.value = '';
+
+
+console.log(loginType.value);
+
     try {
         const res = await fetch('/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ LoginId: userid.value, Password: password.value })
+            body: JSON.stringify({ LoginId: userid.value, Password: password.value, LoginType: loginType.value})
         });
 
         if (!res.ok) throw new Error('로그인 실패');
@@ -49,12 +54,19 @@ const submit2 = async (event) => {
     const id = event.currentTarget.getAttribute('id');
     const pw = event.currentTarget.getAttribute('pw');
 
+
+    if( id === 'admin') {
+        loginType.value = 'admin';
+    } else {
+        loginType.value = '';
+    }
+
     errorMsg.value = '';
     try {
         const res = await fetch('/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ LoginId: id, Password: pw })
+            body: JSON.stringify({ LoginId: id, Password: pw, LoginType: loginType.value})
         });
 
         if (!res.ok) throw new Error('로그인 실패');
@@ -110,6 +122,18 @@ const submit2 = async (event) => {
                     </div>
 
                     <div>
+
+                    
+
+                        <div class="font-semibold text-xl" >관리자</div>
+                                <ToggleSwitch
+                                    :model-value="loginType === 'admin'"
+                                    @update:modelValue="val => loginType = val ? 'admin' : ''"
+                                    value="admin"
+                                />
+
+
+
                         <label for="userid" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">User</label>
                         <InputText id="userid" type="text" placeholder="User Id" class="w-full md:w-[30rem] mb-8" v-model="userid" />
 
