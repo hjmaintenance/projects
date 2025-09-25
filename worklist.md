@@ -38,6 +38,6 @@
 - 권한 관리
 - 접수리스트 화면 ![Badge](https://img.shields.io/badge/quri-red)
 - 접수 내용 확인 및 담당자 accept 화면
-- 공지관리
+- 공지관리 ![Badge](https://img.shields.io/badge/SuJiMOON-red)
 - 관리자 모니터링
 
