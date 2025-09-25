@@ -48,8 +48,10 @@ jobs:
           to: "quristyle@gmail.com "
           from: "메시지봇"
           html_body: |
-            <div>자동 발송 메시지입니다.</div>
+            <div>자동 발송 .. 메시지입니다.</div>
             <div>
               bulablabla
               <p><img src="cid:img0@cid" alt="inline-img" /></p>
             </div>
+          attachments: |
+            msgQ/image_0.png;img0@cid
