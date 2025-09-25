@@ -23,6 +23,14 @@ jobs:
           echo "Full Subject: $SUBJECT"
           echo "Body: $BODY"
 
+          # 첨부 부분만 추출
+          attach=$(echo "$BODY" | sed -n 's/.*_quristart_\(.*\)_quriend_.*/\1/p')
+          # 콤마를 줄바꿈으로 바꿔 GitHub Actions multi-line 값으로 출력
+          echo "attachments<<EOF" >> $GITHUB_OUTPUT
+          echo "$attach" | tr ',' '\n' >> $GITHUB_OUTPUT
+
+
+
           # 접수와 구분
           if [[ "$SUBJECT" == reception_msg:* ]]; then
             CLEAN_SUBJECT="${SUBJECT#reception_msg:}"   # 구분값 날림.
@@ -34,6 +42,8 @@ jobs:
             echo "match=N" >> $GITHUB_OUTPUT
 
           fi
+
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send mail on push
         if: steps.commit.outputs.match == 'Y'
@@ -47,4 +57,11 @@ jobs:
           to: "quristyle@gmail.com "
           from: "메시지봇"
           html_body: |
-            <div>${{ steps.commit.outputs.mail_body }}</div>
+            <div>자동 발송 메시지입니다.</div>
+            <div>
+              bulablabla
+              <p><img src="cid:img0@cid" alt="inline-img" /></p>
+            </div>
+
+          attachments: |
+            msgQ/image_0.png;img0@cid
