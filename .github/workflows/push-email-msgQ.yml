@@ -36,8 +36,6 @@ jobs:
 
           fi
 
-      # echo "EOF" >> $GITHUB_OUTPUT
-
       - name: Send mail on push
         if: steps.commit.outputs.match == 'Y'
         uses: dawidd6/action-send-mail@v3
@@ -55,5 +53,3 @@ jobs:
               bulablabla
               <p><img src="cid:img0@cid" alt="inline-img" /></p>
             </div>
-          attachments: |
-            msgQ/image_0.png;img0@cid
