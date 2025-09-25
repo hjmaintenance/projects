@@ -74,53 +74,47 @@ public class ScriptRunner
 
 
                     string scriptPath = payload.Script;
-                    // 각 인자를 따옴표로 감싸서 공백이 포함된 인자도 하나의 단위로 처리
-                    //string arguments = string.Join(" ", payload.Args.Select(arg => $"\"{arg.Replace("\"", "\\\"")}\""));
-                    string arguments = newBody.Replace("\"", "\\\"");
-
+                    string title = payload.Args[0];
 
                     logger.LogInformation(" scriptPath {Message}", scriptPath);
-                    logger.LogInformation(" arguments {Message}", arguments);
+                    logger.LogInformation(" title: {Message}", title);
+                    logger.LogInformation(" newBody: {Message}", newBody);
 
-                    // 첨부파일 목록 출력
-                    Console.WriteLine("=== Attachments ===");
-                    foreach (var att in attachments)
+                    // ArgumentList를 사용하면 공백이나 특수문자가 포함된 인자를 안전하게 전달할 수 있습니다.
+                    // 운영체제가 각 인자를 올바르게 처리하도록 보장합니다.
+                    var startInfo = new ProcessStartInfo
                     {
-                        Console.WriteLine($"{att.FileName};{att.Cid}");
-                        logger.LogInformation(" attachments {Message}", $"{att.FileName};{att.Cid}");
+                        FileName = scriptPath, // /bin/bash 대신 스크립트 경로를 직접 지정
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+                    startInfo.ArgumentList.Add(title);
+                    startInfo.ArgumentList.Add(newBody);
+
+                    var process = new Process
+                    {
+                        StartInfo = startInfo
+                    };
+
+                    process.Start();
+
+                    // 비동기적으로 표준 출력과 표준 에러를 읽습니다.
+                    Task<string> outputTask = process.StandardOutput.ReadToEndAsync();
+                    Task<string> errorTask = process.StandardError.ReadToEndAsync();
+
+                    // 스크립트가 완료될 때까지 기다립니다.
+                    await process.WaitForExitAsync();
+
+                    string output = await outputTask;
+                    string error = await errorTask;
+
+                    if (!string.IsNullOrEmpty(output))
+                    {
+                        logger.LogInformation("Script output: {Output}", output);
                     }
-                    /*
 
-                                        var process = new Process
-                                        {
-                                            StartInfo = new ProcessStartInfo
-                                            {
-                                                FileName = "/bin/bash",
-                                                Arguments = $"{scriptPath} {arguments}",
-                                                RedirectStandardOutput = true,
-                                                RedirectStandardError = true,
-                                                UseShellExecute = false,
-                                                CreateNoWindow = true
-                                            }
-                                        };
-
-                                        process.Start();
-
-                                        // 비동기적으로 표준 출력과 표준 에러를 읽습니다.
-                                        Task<string> outputTask = process.StandardOutput.ReadToEndAsync();
-                                        Task<string> errorTask = process.StandardError.ReadToEndAsync();
-
-                                        // 스크립트가 완료될 때까지 기다립니다.
-                                        await process.WaitForExitAsync();
-
-                                        string output = await outputTask;
-                                        string error = await errorTask;
-
-                                        if (!string.IsNullOrEmpty(output))
-                                        {
-                                            logger.LogInformation("Script output: {Output}", output);
-                                        }
-                                        */
                 }
                 else
                 {
