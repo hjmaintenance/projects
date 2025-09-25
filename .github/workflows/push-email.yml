@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-
       - name: Checkout repo
         uses: actions/checkout@v4
 
@@ -37,9 +35,6 @@ jobs:
 
           fi
 
-
-
-
       - name: Send mail on push
         if: steps.commit.outputs.match == 'Y'
         uses: dawidd6/action-send-mail@v3
@@ -51,4 +46,5 @@ jobs:
           subject: "${{ steps.commit.outputs.mail_subject }}"
           to: "quristyle@gmail.com, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
           from: "접수봇"
-          html_body: ${{ steps.commit.outputs.mail_body }}
+          html_body: |
+            <div>${{ steps.commit.outputs.mail_body }}</div>
