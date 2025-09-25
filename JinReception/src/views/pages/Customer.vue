@@ -19,6 +19,7 @@ const columns = ref([
 const customers = ref([])
 const companies = ref([])
 const selectedCustomer = ref([])
+const editingCustomer = ref([])
 
 const onRowEditComplete = (event) => {
   console.log('onRowEditComplete', event);
@@ -39,25 +40,28 @@ const initdata = () => {
 }
 // 전체 조회
 const loadData = async () => {
-  customers.value = await CustomerService.getList();
+  customers.value = await CustomerService.getList(loading);
 }
 // 단일 조회
 const getItem = async () => {
-  customers.value = await CustomerService.get('1');
+  customers.value = await CustomerService.get('1', loading);
 }
 // 추가 
 const addData = () => {
   tempIdCounter++;
   const tempId = `temp-${tempIdCounter}`;
-  customers.value.push({ ui_id: tempId, loginId: 'aaa', password: '12125', email: 'cccc@naver.com'});
+  const newCustomer = { ui_id: tempId, loginId: 'aaa', password: '12125', email: 'cccc@naver.com'};
+  
+  customers.value.push(newCustomer);  
 }
 // 저장
 const save = async () => {
-  await CustomerService.save(customers);
+  await CustomerService.save(customers, loading);
   loadData();
 }
 // 삭제
 const deleteSelected = async () => {
+  console.log('deleteSelected', selectedCustomer.value);
   if (!selectedCustomer.value || selectedCustomer.value.length === 0) {
     return;
   }
@@ -71,7 +75,7 @@ const deleteSelected = async () => {
   }
   const itemsToDeleteInDb = selectedCustomer.value.filter((c) => !isTemp(c));
   if (itemsToDeleteInDb.length > 0) {
-    await CustomerService.deleteSelected(itemsToDeleteInDb);
+    await CustomerService.deleteSelected(itemsToDeleteInDb, loading);
   }
   loadData();
   selectedCustomer.value = [];
@@ -96,8 +100,8 @@ const deleteSelected = async () => {
     <DataTable :value="customers" 
                dataKey="id" 
                :loading="loading"
-               selectionMode="multiple" 
-               v-model:editingRows="selectedCustomer"
+               v-model:editingRows="editingCustomer"
+               v-model:selection="selectedCustomer"
                editMode="row" 
                @row-edit-save="onRowEditComplete"
                :pt="{
@@ -110,14 +114,15 @@ const deleteSelected = async () => {
             }"
  
                >
-
+               <template #empty> No customers found. </template>
+               <template #loading> Loading customers data. Please wait. </template>
  
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">  
 
   <template #body="{ data, field }">
     <template v-if="field == 'companyId'">
-      {{ companies.find(company => company.id === data[field]).name }}
+      {{ companies && Array.isArray(companies) && companies.find(company => company.id === data[field]) ? companies.find(company => company.id === data[field]).name : '' }}
     </template>
     <template v-else>
       {{ data[field] }}
