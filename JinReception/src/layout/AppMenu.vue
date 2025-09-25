@@ -165,9 +165,9 @@
           to: '/documentation'
         },
         {
-          label: 'View Source',
+          label: 'ui kit',
           icon: 'pi pi-fw pi-github',
-          url: 'https://github.com/primefaces/sakai-vue',
+          url: 'https://primevue.org/datatable/',
           target: '_blank'
         }
       ]
