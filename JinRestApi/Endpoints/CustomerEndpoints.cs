@@ -17,13 +17,13 @@ public static class CustomerEndpoints
         var group = routes.MapGroup("/api/customers");
 
         group.MapGet("/", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
-            () => db.Customers.Include(c => c.Attachments).Select(u => new { u.Id, u.UserName, u.LoginId, u.Sex, u.Photo, u.Email }).ToListAsync()
+            () => db.Customers.Include(c => c.Attachments).Select(u => new { u.Id, u.UserName, u.LoginId, u.Sex, u.Photo, u.Email, u.CompanyId }).ToListAsync()
         ));
 
         group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
             () => db.Customers
                 .Where(c => c.Id == id)
-                .Select(u => new { u.Id, u.UserName, u.LoginId, u.Sex, u.Photo, u.Email })
+                .Select(u => new { u.Id, u.UserName, u.LoginId, u.Sex, u.Photo, u.Email, u.CompanyId })
                 .FirstOrDefaultAsync()
         ));
 
@@ -54,6 +54,7 @@ public static class CustomerEndpoints
 
             customer.UserName = input.UserName;
             customer.Email = input.Email;
+            customer.CompanyId = input.CompanyId;
 
             await db.SaveChangesAsync();
             return customer;

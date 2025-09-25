@@ -1,5 +1,6 @@
 <script setup>
 import { CustomerService } from '@/service/CustomerService';
+import { CompanyService } from '@/service/CompanyService';
 import { onBeforeMount, reactive, ref , onMounted} from 'vue';
  
 import DataTable from 'primevue/datatable';
@@ -11,22 +12,27 @@ let tempIdCounter = 0;
 const loading = ref(null);
 const columns = ref([
     { field: 'id', header: 'Id' },
-    { field: 'userName', header: 'userName' }
+    { field: 'userName', header: 'userName' },
+    { field: 'companyId', header: 'company' }
 ]);
  
 const customers = ref([])
-const selectedCustomer = ref(null)
- 
-const onCellEditComplete = (event) => {
-    let { data, newValue, field } = event;
- 
- 
-    console.log('onCellEditComplete', data, newValue, field);
-    data[field] = newValue;
- 
-    
-};
- 
+const companies = ref([])
+const selectedCustomer = ref([])
+
+const onRowEditComplete = (event) => {
+  console.log('onRowEditComplete', event);
+  let{newData, index} = event;
+  customers.value[index] = newData;
+}
+// 회사정보는 한번만 불러오기 위함
+onMounted(() => {
+  const loadCompanies = async () => {
+    companies.value = await CompanyService.getList(loading);
+  }
+  loadCompanies();
+});
+
 // 초기화
 const initdata = () => {
   customers.value = null;
@@ -43,7 +49,7 @@ const getItem = async () => {
 const addData = () => {
   tempIdCounter++;
   const tempId = `temp-${tempIdCounter}`;
-  customers.value.push({ ui_id: tempId, loginId: 'aaa', password: '12125', email: 'cccc@naver.com',companyId: 1});
+  customers.value.push({ ui_id: tempId, loginId: 'aaa', password: '12125', email: 'cccc@naver.com'});
 }
 // 저장
 const save = async () => {
@@ -83,19 +89,17 @@ const deleteSelected = async () => {
 <Button label="추가" class="mr-2" icon="pi pi-plus" @click="addData" />
 <Button label="저장" class="mr-2" @click="save" />
 <Button label="삭제" class="mr-2" @click="deleteSelected" />
- 
     </div>
- 
     <div class="card">
- 
- 
+    
+    <!-- editMode="cell" 사용시, select컴포넌트 편집안돼서 editMode="row" 사용 -->
     <DataTable :value="customers" 
                dataKey="id" 
                :loading="loading"
                selectionMode="multiple" 
-               v-model:selection="selectedCustomer"
-               editMode="cell" 
-               @cell-edit-complete="onCellEditComplete"
+               v-model:editingRows="selectedCustomer"
+               editMode="row" 
+               @row-edit-save="onRowEditComplete"
                :pt="{
                 table: { style: 'min-width: 50rem' },
                 column: {
@@ -109,25 +113,30 @@ const deleteSelected = async () => {
 
  
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-<Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">
-<template #body="{ data, field }">
-                  {{ data[field] }}
-</template>
+<Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">  
 
- 
-              <template #editor="{ data, field }">
-<template v-if="field == 'id'">
-                  {{ data[field] }}
-</template>
-<template v-else>
-<InputText v-model="data[field]" autofocus fluid />
-</template>
-</template>
- 
+  <template #body="{ data, field }">
+    <template v-if="field == 'companyId'">
+      {{ companies.find(company => company.id === data[field]).name }}
+    </template>
+    <template v-else>
+      {{ data[field] }}
+    </template>
+  </template>
+  <template #editor="{ data, field }">
+    <template v-if="field == 'id'">
+      {{ data[field] }}
+    </template>
+    <template v-else-if="field == 'companyId'">
+      <Select v-model="data[field]" :options="companies" optionLabel="name" optionValue="id" fluid />
+    </template>
+    <template v-else>
+      <InputText v-model="data[field]" autofocus fluid />
+    </template>
+  </template>
             </Column>
- 
+            <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
         </DataTable>
- 
     </div>
  
 </template>
