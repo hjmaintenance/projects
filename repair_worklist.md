@@ -38,7 +38,10 @@
 ## 계측수집
 
 - 용수
+![Badge](https://img.shields.io/badge/lsg-red)
 - 스팀
+![Badge](https://img.shields.io/badge/lsg-red)
 - 전기
+![Badge](https://img.shields.io/badge/lsg-red)
 - 전용선
-
+![Badge](https://img.shields.io/badge/lsg-red)
