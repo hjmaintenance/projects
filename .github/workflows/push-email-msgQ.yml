@@ -23,13 +23,6 @@ jobs:
           echo "Full Subject: $SUBJECT"
           echo "Body: $BODY"
 
-          # 첨부 부분만 추출
-          attach=$(echo "$BODY" | sed -n 's/.*_quristart_\(.*\)_quriend_.*/\1/p')
-          # 콤마를 줄바꿈으로 바꿔 GitHub Actions multi-line 값으로 출력
-          echo "attachments<<EOF" >> $GITHUB_OUTPUT
-          echo "$attach" | tr ',' '\n' >> $GITHUB_OUTPUT
-
-
 
           # 접수와 구분
           if [[ "$SUBJECT" == reception_msg:* ]]; then
@@ -43,7 +36,7 @@ jobs:
 
           fi
 
-          echo "EOF" >> $GITHUB_OUTPUT
+      # echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send mail on push
         if: steps.commit.outputs.match == 'Y'
