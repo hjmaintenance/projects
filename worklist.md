@@ -19,6 +19,7 @@
 ## 공통
 
 - 암호변경
+- 로그인후 메뉴처리 ![Badge](https://img.shields.io/badge/puni-red) 
 - <p>flow, layout <img src="https://img.shields.io/badge/quristyle-red" style="vertical-align: middle;"/></p>
 - 권한 ![Badge](https://img.shields.io/badge/quri-red)
 
