@@ -44,7 +44,7 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "${{ steps.commit.outputs.mail_subject }}"
-          to: "quristyle@gmail.com" #, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
+          to: "quristyle@gmail.com, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
           from: "접수봇"
           html_body: |
             <div>${{ steps.commit.outputs.mail_body }}</div>

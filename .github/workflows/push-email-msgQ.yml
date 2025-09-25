@@ -44,7 +44,10 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "${{ steps.commit.outputs.mail_subject }}"
-          to: "quristyle@gmail.com "
+          to: "quristyle@gmail.com, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com"
           from: "메시지봇"
           html_body: |
             <div>${{ steps.commit.outputs.mail_body }}</div>
+            <br /><br /><br /><hr />
+            <p>이 메일은 접수봇이 보낸 메일입니다.</p>            
+            <p>접수내용의 삽입이미지는 48시간만 볼수 있습니다.</p>
