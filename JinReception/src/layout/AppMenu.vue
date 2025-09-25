@@ -1,19 +1,24 @@
 <script setup>
-  import { ref } from 'vue';
+  import {onMounted, ref } from 'vue';
 
   import AppMenuItem from './AppMenuItem.vue';
 
-  const model = ref([
-    {
-      label: 'xxxxx',
-      items: [
-        { label: '공지', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
-        { label: '접수목록', icon: 'pi pi-fw pi-check-square', to: '/user_request' },
-        { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/request', class: 'rotated-icon' }
-      ]
-    },
-    {
-      label: 'admin',
+
+
+  onMounted(() => {
+  const userName = localStorage.getItem('user.user_name');
+  var customer = {
+    label: userName,
+    items: [
+      { label: '공지', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
+      { label: '접수목록', icon: 'pi pi-fw pi-check-square', to: '/user_request' },
+      { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/request', class: 'rotated-icon' }
+    ]
+  };
+    
+    
+    var admin = {
+      label: userName,
       items: [
         { label: '회사관리', icon: 'pi pi-fw pi-id-card', to: '/company' },
         { label: '고객관리', icon: 'pi pi-fw pi-id-card', to: '/customer' },
@@ -22,7 +27,19 @@
         { label: '접수관리', icon: 'pi pi-fw pi-table', to: '/uikit/table' },
         { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' }
       ]
-    },
+    };
+
+  const loginType = localStorage.getItem('user.login_type');
+  if (loginType === 'admin') {
+    model.value.unshift(admin);
+  } else {
+    model.value.unshift(customer);
+  }
+});
+
+
+  const model = ref([
+    
     {
       label: 'Home',
       items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
