@@ -42,7 +42,7 @@
   const request = reactive({
     title: '',
     description: '',
-    customerId: localStorage.getItem('user.id')
+    customerId: localStorage.getItem('user.user_uid')
   });
 
   const save = async () => {
@@ -81,24 +81,14 @@
 </script>
 
 <template>
-
-
-
-
-
-  <div class="card srcharea" >
-                    <div class="flex flex-wrap items-start gap-4">
-                        <div class="field">      
-                          <InputText type="text" v-model="request.title" placeholder="Title..." />
-                        </div>
-                         <Button label="요청" type="button" class="mr-2" @click="save" />
-                    </div>
-
-
+  <div class="card srcharea">
+    <div class="flex flex-wrap items-start gap-4">
+      <div class="field">
+        <InputText type="text" v-model="request.title" placeholder="Title..." />
+      </div>
+      <Button label="요청" type="button" class="mr-2" @click="save" />
+    </div>
   </div>
-
-
-
 
   <div class="card">
     <editor-content :editor="editor" />

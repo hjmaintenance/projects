@@ -3,16 +3,13 @@ name: Push Email Notification
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   send_email:
     runs-on: ubuntu-latest
 
     steps:
-
-
-
       - name: Checkout repo
         uses: actions/checkout@v4
 
@@ -41,11 +38,6 @@ jobs:
 
           fi
 
-
-
-
-
-
       - name: Send mail on push
         if: steps.commit.outputs.match == 'N'
         uses: dawidd6/action-send-mail@v3
@@ -55,72 +47,72 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "📬 [${{ github.event.head_commit.message }}] - ${{ github.actor }}"
-          to: "quristyle@gmail.com, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
+          to: "quristyle@gmail.com" #, uspuni@gmail.com, utmost793@daum.net, anstnwl27@gmail.com, a0624z@naver.com "
           from: "hjmaintenance"
           html_body: |
 
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td align="left">
-                    <table width="500" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="border:1px solid #0366d6; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1); font-family:Arial, sans-serif; padding:20px;">
-                      
-                      <!-- Header -->
-                      <tr>
-                        <td style="font-size:20px; font-weight:bold; color:#24292f; padding-bottom:15px;">
-                          📢 GitHub Repository Push Notification
-                        </td>
-                      </tr>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="left">
+                  <table width="500" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="border:1px solid #0366d6; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1); font-family:Arial, sans-serif; padding:20px;">
+                    
+                    <!-- Header -->
+                    <tr>
+                      <td style="font-size:20px; font-weight:bold; color:#24292f; padding-bottom:15px;">
+                        📢 GitHub Repository Push Notification
+                      </td>
+                    </tr>
 
-                      <!-- Repository -->
-                      <tr>
-                        <td style="padding-bottom:8px;">
-                          <span style="display:inline-block; width:28px; text-align:center;">📂</span>
-                          <strong style="color:#0366d6;">Repository:</strong>
-                          <span>${{ github.repository }}</span>
-                        </td>
-                      </tr>
+                    <!-- Repository -->
+                    <tr>
+                      <td style="padding-bottom:8px;">
+                        <span style="display:inline-block; width:28px; text-align:center;">📂</span>
+                        <strong style="color:#0366d6;">Repository:</strong>
+                        <span>${{ github.repository }}</span>
+                      </td>
+                    </tr>
 
-                      <!-- Pushed by -->
-                      <tr>
-                        <td style="padding-bottom:8px;">
-                          <span style="display:inline-block; width:28px; text-align:center;">👤</span>
-                          <strong style="color:#0366d6;">Pushed by:</strong>
-                          <span>${{ github.actor }}</span>
-                        </td>
-                      </tr>
+                    <!-- Pushed by -->
+                    <tr>
+                      <td style="padding-bottom:8px;">
+                        <span style="display:inline-block; width:28px; text-align:center;">👤</span>
+                        <strong style="color:#0366d6;">Pushed by:</strong>
+                        <span>${{ github.actor }}</span>
+                      </td>
+                    </tr>
 
-                      <!-- Commit messages -->
-                      <tr>
-                        <td style="padding-bottom:8px;">
-                          <span style="display:inline-block; width:28px; text-align:center;">📝</span>
-                          <strong style="color:#0366d6;">Commit messages:</strong>
-                          <span><pre style="display:inline; font-family:Arial, sans-serif; white-space:pre-wrap;">${{ steps.commit.outputs.mail_body }}</pre></span>
-                        </td>
-                      </tr>
+                    <!-- Commit messages -->
+                    <tr>
+                      <td style="padding-bottom:8px;">
+                        <span style="display:inline-block; width:28px; text-align:center;">📝</span>
+                        <strong style="color:#0366d6;">Commit messages:</strong>
+                        <span><pre style="display:inline; font-family:Arial, sans-serif; white-space:pre-wrap;">${{ steps.commit.outputs.mail_body }}</pre></span>
+                      </td>
+                    </tr>
 
-                      <!-- Compare changes -->
-                      <tr>
-                        <td style="padding-bottom:8px;">
-                          <span style="display:inline-block; width:28px; text-align:center; color:#0366d6;">🔗</span>
-                          <strong style="color:#0366d6;">Compare changes:</strong>
-                          <table cellpadding="0" cellspacing="0" border="0" style="display:inline-block; vertical-align:middle;">
-                            <tr>
-                              <td bgcolor="#28a745" style="border-radius:5px; text-align:center;">
-                                <a href="${{ github.event.compare }}" style="display:block; padding:4px 8px; font-size:13px; color:#ffffff; text-decoration:none; font-weight:bold;">View Changes</a>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
+                    <!-- Compare changes -->
+                    <tr>
+                      <td style="padding-bottom:8px;">
+                        <span style="display:inline-block; width:28px; text-align:center; color:#0366d6;">🔗</span>
+                        <strong style="color:#0366d6;">Compare changes:</strong>
+                        <table cellpadding="0" cellspacing="0" border="0" style="display:inline-block; vertical-align:middle;">
+                          <tr>
+                            <td bgcolor="#28a745" style="border-radius:5px; text-align:center;">
+                              <a href="${{ github.event.compare }}" style="display:block; padding:4px 8px; font-size:13px; color:#ffffff; text-decoration:none; font-weight:bold;">View Changes</a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
 
-                      <!-- Footer -->
-                      <tr>
-                        <td style="padding-top:15px; font-size:13px; color:#555; text-align:center;">
-                          ✨ Take a peek at what’s new!
-                        </td>
-                      </tr>
+                    <!-- Footer -->
+                    <tr>
+                      <td style="padding-top:15px; font-size:13px; color:#555; text-align:center;">
+                        ✨ Take a peek at what’s new!
+                      </td>
+                    </tr>
 
-                    </table>
-                  </td>
-                </tr>
-              </table>
+                  </table>
+                </td>
+              </tr>
+            </table>

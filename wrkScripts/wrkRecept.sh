@@ -21,7 +21,7 @@ echo "wrkRecept.sh" > "/home/quri/projects/msgQ/$FILENAME"
 cd /home/quri/projects/msgQ || exit 1
 
 # 오래된 파일 정리 (2시간 지난 txt 파일 삭제)
-find . -maxdepth 1 -type f -name "*.txt" -mmin +120 -exec rm -f {} \;
+# find . -maxdepth 1 -type f -name "*.txt" -mmin +120 -exec rm -f {} \;
 
 # git add & commit & push
 git add "$FILENAME"
