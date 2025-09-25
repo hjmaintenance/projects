@@ -26,8 +26,6 @@
 
 - lock ![Badge](https://img.shields.io/badge/uspuni-red) ![Badge](https://img.shields.io/badge/quri-skyblue)
 - 나의 정보 수정
-- 접수내용 작성 화면 ![Badge](https://img.shields.io/badge/quri-red)
-- 접수 기록 확인 화면 ![Badge](https://img.shields.io/badge/quri-red)
 - 모니터링 화면
 
 ## 관리자
