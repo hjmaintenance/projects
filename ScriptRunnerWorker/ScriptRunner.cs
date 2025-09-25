@@ -187,7 +187,6 @@ public class ScriptRunner
         string pattern = @"<img[^>]+src=""data:(image\/[a-zA-Z]+);base64,([^""]+)""";
 
         int index = 0;
-        string attachmentsStr = "_quristart_";
         string newBody = Regex.Replace(body, pattern, match =>
         {
             string mimeType = match.Groups[1].Value; // image/png
@@ -205,6 +204,7 @@ public class ScriptRunner
 
             string dtname = DateTime.Now.Ticks.ToString() + "_";
 
+            string fileName2 = dtname + $"image_{index}{extension}";
             string fileName = "/home/quri/projects/msgQ/" + dtname + $"image_{index}{extension}";
             File.WriteAllBytes(fileName, bytes);
 
@@ -212,14 +212,10 @@ public class ScriptRunner
             attachments.Add((fileName, cid));
 
             index++;
-            attachmentsStr += fileName.Replace("/home/quri/projects/", ".") + ";" + cid + ",";
-            return $"<img src=\"cid:{cid}\" alt=\"inline-img\" />";
+            return $"<img src=\"https://raw.githubusercontent.com/hjmaintenance/projects/main/msgQ/{fileName2}\" alt=\"inline-img\" />";
         });
 
 
-        attachmentsStr += "_quriend_";
-
-        newBody = newBody + attachmentsStr;
 
         return (newBody, attachments);
     }
