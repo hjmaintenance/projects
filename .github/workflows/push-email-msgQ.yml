@@ -23,12 +23,6 @@ jobs:
           echo "Full Subject: $SUBJECT"
           echo "Body: $BODY"
 
-
-          echo "files<<EOF" >> $GITHUB_OUTPUT
-          find $GITHUB_WORKSPACE/msgQ -type f >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-
           # 접수와 구분
           if [[ "$SUBJECT" == reception_msg:* ]]; then
             CLEAN_SUBJECT="${SUBJECT#reception_msg:}"   # 구분값 날림.
@@ -40,6 +34,8 @@ jobs:
             echo "match=N" >> $GITHUB_OUTPUT
 
           fi
+
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send mail on push
         if: steps.commit.outputs.match == 'Y'
@@ -53,14 +49,4 @@ jobs:
           to: "quristyle@gmail.com "
           from: "메시지봇"
           html_body: |
-            <div>자동 발송 .. 메시지입니다.</div>
-            <div>
-              bulablabla
-              <p><img src="cid:img0@cid" alt="inline-img" /></p>
-            </div>
-            <h3>Runner 안의 msgQ 폴더 파일들</h3>
-              <pre>
-              ${{ steps.commit.outputs.files }}
-              </pre>
-          attachments: |
-            msgQ/image_0.png;img0@cid
+            <div>${{ steps.commit.outputs.mail_body }}</div>
