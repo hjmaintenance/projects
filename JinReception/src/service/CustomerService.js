@@ -1,6 +1,20 @@
 import apiClient from './api';
+import { serviceWrapper } from './serviceWrapper';
 
-export const CustomerService = {
+const callWithLoading = async (loadingRef, fn) => {
+    if (loadingRef && typeof loadingRef === 'object' && 'value' in loadingRef) {
+      loadingRef.value = true;
+    }
+    try {
+      return await fn();
+    } finally {
+      if (loadingRef && typeof loadingRef === 'object' && 'value' in loadingRef) {
+        loadingRef.value = false;
+      }
+    }
+  };
+
+const _serviceMethods = {
     async getList(){
         const res = await apiClient.get('/customers');
         return res.data.data;
@@ -20,23 +34,37 @@ export const CustomerService = {
     async delete(customer){
         const res = await apiClient.delete(`/customers/${customer.id}`);
         return res.data.data;
-    },
-    async save(customers){
-        if (!customers.value || customers.value.length === 0) return;
-        const savePromises = customers.value.map(customer => {
-            // 변경되지 않은 항목은 무시 로직 나중에 추가 하자.
-            if (customer.id) {
-                return this.update(customer);
-            } else {
-                return this.add(customer);
-            }
+    }
+}
+
+const _service = serviceWrapper('CustomerService', _serviceMethods);
+
+export const CustomerService = {
+    getList: (loading) => callWithLoading(loading, () => _service.getList()),
+    get: (id, loading) => callWithLoading(loading, () => _service.get(id)),
+    add: (customer, loading) => callWithLoading(loading, () => _service.add(customer)),
+    update: (customer, loading) => callWithLoading(loading, () => _service.update(customer)),
+    delete: (customer, loading) => callWithLoading(loading, () => _service.delete(customer, { serviceName: 'CustomerService' })),
+    save(customers, loading){
+        return callWithLoading(loading, async () => {
+            if (!customers.value || customers.value.length === 0) return;
+            const savePromises = customers.value.map(customer => {
+                // 변경되지 않은 항목은 무시 로직 나중에 추가 하자.
+                if (customer.id) {
+                    return _service.update(customer);
+                } else {
+                    return _service.add(customer);
+                }
+            });
+            await Promise.all(savePromises);
         });
-        await Promise.all(savePromises);
     },
-    async deleteSelected(customersToDelete){
-        if (!customersToDelete || customersToDelete.length === 0) return;
-        const deletePromises = customersToDelete.map(customer => this.delete(customer));
-        await Promise.all(deletePromises);
+    deleteSelected(customersToDelete, loading){
+        return callWithLoading(loading, async () => {
+            if (!customersToDelete || customersToDelete.length === 0) return;
+            const deletePromises = customersToDelete.map(customer => _service.delete(customer));
+            await Promise.all(deletePromises);
+        });
     },
        
 
