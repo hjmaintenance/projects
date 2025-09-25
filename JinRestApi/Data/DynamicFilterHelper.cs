@@ -62,12 +62,8 @@ namespace JinRestApi.Data
                     grouped = grouped.Where(having.ToString());
                 }
 
-                // 4) select projection (optional)
-                if (qs.TryGetValue("select", out var sel) && !string.IsNullOrWhiteSpace(sel))
-                {
-                    grouped = grouped.Select("new (" + sel.ToString() + ")");
-                }
-
+                // 4) select/remove projection (optional) - Grouping 결과에 대해서는 select만 지원
+                grouped = ApplyProjection(grouped, qs);
                 // 5) ordering on grouped results
                 if (qs.TryGetValue("orderBy", out var order) && !string.IsNullOrWhiteSpace(order))
                 {
@@ -84,12 +80,7 @@ namespace JinRestApi.Data
                 // No group -> projection, order, paging on T
                 IQueryable result = query;
 
-                // select (projection)
-                if (qs.TryGetValue("select", out var sel) && !string.IsNullOrWhiteSpace(sel))
-                {
-                    result = result.Select("new (" + sel.ToString() + ")");
-                }
-
+                result = ApplyProjection(result, qs, typeof(T));
                 // orderBy
                 if (qs.TryGetValue("orderBy", out var orderByVal) && !string.IsNullOrWhiteSpace(orderByVal))
                 {
@@ -102,6 +93,46 @@ namespace JinRestApi.Data
                 return result;
             }
         }
+
+        /// <summary>
+        /// select 또는 remove 쿼리 파라미터를 기반으로 프로젝션을 적용합니다.
+        /// </summary>
+        private static IQueryable ApplyProjection(IQueryable query, IQueryCollection qs, Type? entityType = null)
+        {
+            // 1. select가 우선순위가 가장 높음
+            if (qs.TryGetValue("select", out var selectVal) && !string.IsNullOrWhiteSpace(selectVal))
+            {
+                return query.Select($"new ({selectVal})");
+            }
+
+            // 2. select가 없고 remove가 있을 경우 (entityType이 제공되어야 함)
+            if (entityType != null && qs.TryGetValue("remove", out var removeVal) && !string.IsNullOrWhiteSpace(removeVal))
+            {
+                var propertiesToRemove = removeVal.ToString()
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                var allProperties = entityType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(p => p.CanRead);
+
+                var propertiesToSelect = allProperties
+                    .Where(p => !propertiesToRemove.Contains(p.Name))
+                    .Select(p => p.Name);
+
+                if (propertiesToSelect.Any())
+                {
+                    var selectString = "new (" + string.Join(", ", propertiesToSelect) + ")";
+                    return query.Select(selectString);
+                }
+            }
+
+            // 3. 둘 다 없으면 원본 IQueryable 반환
+            return query;
+        }
+
+
+
+
 
         /// <summary>
         /// QueryString 으로 들어온 where 필터들을 파싱하여 IQueryable 에 Where 절로 적용합니다.
@@ -377,7 +408,8 @@ namespace JinRestApi.Data
                 || key.Equals("orderBy", StringComparison.OrdinalIgnoreCase)
                 || key.Equals("page", StringComparison.OrdinalIgnoreCase)
                 || key.Equals("pageSize", StringComparison.OrdinalIgnoreCase)
-                || key.Equals("select", StringComparison.OrdinalIgnoreCase);
+                || key.Equals("select", StringComparison.OrdinalIgnoreCase)
+                || key.Equals("remove", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

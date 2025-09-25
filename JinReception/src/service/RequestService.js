@@ -9,6 +9,10 @@ const _RequestService = {
   async add(request) {
     const res = await apiClient.post('/requests', request);
     return res.data.data;
+  },
+  async get(id) {
+    const res = await apiClient.get(`/requests/${id}`);
+    return res.data.data;
   }
 };
 

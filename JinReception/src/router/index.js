@@ -10,6 +10,11 @@ const router = createRouter({
       component: AppLayout,
       children: [
         {
+          path: '/mng_request',
+          name: 'mng_request',
+          component: () => import('@/views/pages/MngRequest.vue')
+        },
+        {
           path: '/user_request',
           name: 'user_request',
           component: () => import('@/views/pages/UserRequest.vue')

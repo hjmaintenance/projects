@@ -40,7 +40,7 @@ public static class RequestEndpoints
             var baseQuery = db.Requests.AsQueryable();
 
             // 포함 관계 필요하면 Include 이후 ApplyAll 호출
-            baseQuery = baseQuery.Include(c => c.Attachments);
+            baseQuery = baseQuery.Include(c => c.Attachments).Include(r => r.Customer);
 
             // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
             var resultQuery = baseQuery.ApplyAll(http.Request.Query);
@@ -75,11 +75,10 @@ public static class RequestEndpoints
             var baseQuery = db.Requests.AsQueryable();
 
             // 포함 관계 필요하면 Include 이후 ApplyAll 호출
-            baseQuery = baseQuery.Include(c => c.Attachments);
+            var queryWithIncludes = baseQuery.Include(c => c.Attachments).Include(c => c.Comments).Include(r => r.Customer);
 
             // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
-            //var resultQuery = baseQuery.ApplyAll(http.Request.Query);
-            var resultQuery = baseQuery.ApplyAll(finalQuery);
+            var resultQuery = queryWithIncludes.ApplyAll(finalQuery);
 
             // ToListAsync 은 dynamic IQueryable 에서도 작동
             var list = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());

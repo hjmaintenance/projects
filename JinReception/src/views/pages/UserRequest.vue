@@ -24,6 +24,7 @@
 ];
 
   const queryOptions = reactive({
+    select:'id,title,createdAt,customerId,Customer.UserName as CustomerName',
     sorts: [{ field: 'id', dir: 'desc' }],
     page: 1,
     pageSize: 100
@@ -34,9 +35,11 @@
   const requests = ref([]);
   const selectedRequest = ref(null);
 
-  watch(selectedRequest, (newValue, oldValue) => {
+  watch(selectedRequest, async (newValue, oldValue) => {
     if (newValue) {
       visible.value = true;
+     const fullRequestData = await RequestService.get(newValue.id);
+     selectedRequest.value.description = fullRequestData.description;
     }
   });
 
@@ -130,6 +133,12 @@
       </Column>
       <Column header="작성자" field="customerId"  style="min-width: 1rem" > 
       </Column>
+      <Column header="작성자" field="customerName"  style="min-width: 1rem" > 
+      </Column>
+
+
+
+
 
 
     </DataTable>

@@ -20,11 +20,13 @@
     var admin = {
       label: userName,
       items: [
+
+      
         { label: '회사관리', icon: 'pi pi-fw pi-id-card', to: '/company' },
         { label: '고객관리', icon: 'pi pi-fw pi-id-card', to: '/customer' },
         { label: '팀관리', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
         { label: '사용자관리', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
-        { label: '접수관리', icon: 'pi pi-fw pi-table', to: '/uikit/table' },
+        { label: '접수관리', icon: 'pi pi-fw pi-table', to: '/mng_request' },
         { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' }
       ]
     };

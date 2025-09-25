@@ -14,8 +14,7 @@
   ]);
 
   const searchs = reactive({
-    Srch: '',
-    customerId: localStorage.getItem('user.user_uid')
+    Srch: ''
   });
 
   // 필드 구성
@@ -24,6 +23,7 @@
 ];
 
   const queryOptions = reactive({
+    remove:'customerId,description',
     sorts: [{ field: 'id', dir: 'desc' }],
     page: 1,
     pageSize: 100
@@ -34,9 +34,11 @@
   const requests = ref([]);
   const selectedRequest = ref(null);
 
-  watch(selectedRequest, (newValue, oldValue) => {
+  watch(selectedRequest, async (newValue, oldValue) => {
     if (newValue) {
       visible.value = true;
+     const fullRequestData = await RequestService.get(newValue.id);
+     selectedRequest.value.description = fullRequestData.description;
     }
   });
 
@@ -128,8 +130,12 @@
       </Column>
       <Column header="제목" field="title"  > 
       </Column>
-      <Column header="작성자" field="customerId"  style="min-width: 1rem" > 
+      <Column header="작성자" field="customer.userName"  style="min-width: 1rem" > 
       </Column>
+
+
+
+
 
 
     </DataTable>
