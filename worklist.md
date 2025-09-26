@@ -18,11 +18,16 @@
 
 ## 공통
 
-- 암호변경 ![Badge](https://img.shields.io/badge/puni-red) 
+- 암호변경 ![Badge](https://img.shields.io/badge/puni-red)
 - <p>flow, layout <img src="https://img.shields.io/badge/quristyle-red" style="vertical-align: middle;"/></p>
 - 권한 ![Badge](https://img.shields.io/badge/quri-red)
 - 메뉴 네비 상단어느곳 적당히
 - 페이지 열리면 페이지 어딘가에서 어떤 메뉴의 창인지 인지.
+
+## 인증전
+
+- 비번 재설정
+- contact us
 
 ## 고객사
 
@@ -40,4 +45,3 @@
 - 접수 내용 확인 및 담당자 accept 화면
 - 공지관리 ![Badge](https://img.shields.io/badge/SuJiMOON-red)
 - 관리자 모니터링
-

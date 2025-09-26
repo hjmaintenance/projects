@@ -1,5 +1,6 @@
 using JinRestApi.Models;
 using Microsoft.AspNetCore.Routing;
+using System.Dynamic;
 using Microsoft.EntityFrameworkCore;
 using JinRestApi.Data;
 using System.Linq.Dynamic.Core;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace JinRestApi.Endpoints;
 
@@ -33,24 +35,24 @@ public static class RequestEndpoints
         ));
 
 
+        /*
+                // 검색
+                group.MapGet("/srch", (AppDbContext db, HttpContext http) => ApiResponseBuilder.CreateAsync(async () =>
+                {
+                    var baseQuery = db.Requests.AsQueryable();
 
-        // 검색
-        group.MapGet("/srch", (AppDbContext db, HttpContext http) => ApiResponseBuilder.CreateAsync(async () =>
-        {
-            var baseQuery = db.Requests.AsQueryable();
+                    // 포함 관계 필요하면 Include 이후 ApplyAll 호출
+                    baseQuery = baseQuery.Include(c => c.Attachments).Include(r => r.Customer);
 
-            // 포함 관계 필요하면 Include 이후 ApplyAll 호출
-            baseQuery = baseQuery.Include(c => c.Attachments).Include(r => r.Customer);
+                    // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
+                    var resultQuery = baseQuery.ApplyAll(http.Request.Query);
 
-            // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
-            var resultQuery = baseQuery.ApplyAll(http.Request.Query);
+                    // ToListAsync 은 dynamic IQueryable 에서도 작동
+                    var list = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
+                    return list;
+                }, "Request srch successfully.", 201));
 
-            // ToListAsync 은 dynamic IQueryable 에서도 작동
-            var list = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
-            return list;
-        }, "Request srch successfully.", 201));
-
-
+        */
 
 
         // 검색
@@ -75,14 +77,61 @@ public static class RequestEndpoints
             var baseQuery = db.Requests.AsQueryable();
 
             // 포함 관계 필요하면 Include 이후 ApplyAll 호출
-            var queryWithIncludes = baseQuery.Include(c => c.Attachments).Include(c => c.Comments).Include(r => r.Customer);
+            var queryWithIncludes = baseQuery.Include(c => c.Attachments)
+            .Include(c => c.Comments)
+            .Include(r => r.Customer)
+            .Include(r => r.Admin)
+            ;
 
             // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
             var resultQuery = queryWithIncludes.ApplyAll(finalQuery);
 
             // ToListAsync 은 dynamic IQueryable 에서도 작동
-            var list = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
+
+            // ToListAsync 은 dynamic IQueryable 에서도 작동
+            var requests = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
+
+
+
+            //var requests = await (resultQuery as IQueryable<ImprovementRequest>).ToDynamicListAsync();
+
+            //if (requests == null)
+            //{
+            //    return new List<object>();
+            //}
+
+
+
+            // 메모리에서 StatusName을 추가합니다.
+            var list = requests.Select(item =>
+            {
+                // dynamic 객체를 ExpandoObject로 변환합니다.
+                dynamic expando = new ExpandoObject();
+                var properties = (IDictionary<string, object?>)expando;
+
+                // 기존 객체의 속성을 ExpandoObject로 복사합니다.
+                foreach (var prop in item.GetType().GetProperties())
+                {
+                    // 인덱서가 아닌 일반 속성만 복사하여 'Parameter count mismatch' 오류를 방지합니다.
+                    if (prop.GetIndexParameters().Length == 0)
+                    {
+                        // 속성 이름을 camelCase로 변환하여 클라이언트와 일관성을 유지합니다.
+                        var camelCaseName = char.ToLowerInvariant(prop.Name[0]) + prop.Name.Substring(1);
+                        properties[camelCaseName] = prop.GetValue(item, null);
+                    }
+                }
+
+                // StatusName 속성을 동적으로 추가합니다.
+                var attributes = (DisplayAttribute[])item.Status.GetType().GetField(item.Status.ToString())?.GetCustomAttributes(typeof(DisplayAttribute), false);
+                properties["statusName"] = attributes?.Length > 0 ? attributes[0].Name : item.Status.ToString();
+
+                return expando;
+            }).ToList();
+
             return list;
+
+
+            return requests;
         }, "Request srch successfully.", 201));
 
 
@@ -112,62 +161,63 @@ public static class RequestEndpoints
 
 
 
-if (!provider.IsConnected)
-    {
-        logger.LogWarning("RabbitMQ가 연결되어 있지 않습니다. 메시지를 보낼 수 없습니다.");
-        //return Results.Ok("RabbitMQ 없이 요청 처리 완료");
-    }
-    else{
-
-
-    
-
-
-
-
-
-            try
+            if (!provider.IsConnected)
             {
-                 using var channel = provider.Connection!.CreateModel();
-    
-    
-    
-                channel.QueueDeclare(queue: "run_script",
-                                    durable: false,
-                                    exclusive: false,
-                                    autoDelete: false,
-                                    arguments: null);
+                logger.LogWarning("RabbitMQ가 연결되어 있지 않습니다. 메시지를 보낼 수 없습니다.");
+                //return Results.Ok("RabbitMQ 없이 요청 처리 완료");
+            }
+            else
+            {
 
-                logger.LogInformation("RabbitMQ channel created and queue 'run_script' declared.");
 
-                // 실행할 쉘 스크립트와 인자
-                string scriptPath = "/home/quri/projects/wrkScripts/wrkRecept.sh";
-                string[] args = new[] { requestDto.Title, requestDto.Description };
 
-                // JSON 메시지 만들기
-                var payload = new
+
+
+
+
+
+                try
                 {
-                    script = scriptPath,
-                    args = args
-                };
+                    using var channel = provider.Connection!.CreateModel();
 
-                string json = JsonSerializer.Serialize(payload);
 
-                var body = Encoding.UTF8.GetBytes(json);
 
-                channel.BasicPublish(exchange: "",
-                                    routingKey: "run_script",
-                                    basicProperties: null,
-                                    body: body);
-                logger.LogInformation("Successfully published message to RabbitMQ.");
+                    channel.QueueDeclare(queue: "run_script",
+                                        durable: false,
+                                        exclusive: false,
+                                        autoDelete: false,
+                                        arguments: null);
+
+                    logger.LogInformation("RabbitMQ channel created and queue 'run_script' declared.");
+
+                    // 실행할 쉘 스크립트와 인자
+                    string scriptPath = "/home/quri/projects/wrkScripts/wrkRecept.sh";
+                    string[] args = new[] { requestDto.Title, requestDto.Description };
+
+                    // JSON 메시지 만들기
+                    var payload = new
+                    {
+                        script = scriptPath,
+                        args = args
+                    };
+
+                    string json = JsonSerializer.Serialize(payload);
+
+                    var body = Encoding.UTF8.GetBytes(json);
+
+                    channel.BasicPublish(exchange: "",
+                                        routingKey: "run_script",
+                                        basicProperties: null,
+                                        body: body);
+                    logger.LogInformation("Successfully published message to RabbitMQ.");
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Failed to publish message to RabbitMQ.");
+                    // You might want to re-throw or handle the exception depending on your requirements.
+                }
+
             }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Failed to publish message to RabbitMQ.");
-                // You might want to re-throw or handle the exception depending on your requirements.
-            }
-
-        }
 
             return request;
         }, "Request created successfully.", 201));

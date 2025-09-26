@@ -212,7 +212,7 @@ public class ScriptRunner
             attachments.Add((fileName, cid));
 
             index++;
-            return $"<img src=\"https://raw.githubusercontent.com/hjmaintenance/projects/main/msgQ/{fileName2}\" alt=\"inline-img\" />";
+            return $"<img src=\"https://raw.githubusercontent.com/hjmaintenance/projects/main/msgQ/{fileName2}\" alt=\"inline-img\" >";
         });
 
 

@@ -1,27 +1,27 @@
 <script setup>
-  import {onMounted, ref } from 'vue';
+  import { watch, ref } from 'vue';
 
   import AppMenuItem from './AppMenuItem.vue';
+  import { useLayout } from '@/layout/composables/layout';
 
+  const { loginUser } = useLayout();
 
+  const menuMake = () => {
+    // 메뉴를 생성하기 전에 기본 메뉴 목록으로 초기화합니다.
+    model.value = getBaseMenu();
 
-  onMounted(() => {
-  const userName = localStorage.getItem('user.user_name');
-  var customer = {
-    label: userName,
-    items: [
-      { label: '공지', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
-      { label: '접수목록', icon: 'pi pi-fw pi-check-square', to: '/user_request' },
-      { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/request', class: 'rotated-icon' }
-    ]
-  };
-    
-    
-    var admin = {
-      label: userName,
+    var customer = {
+      label: loginUser.value?.user_name || '고객',
       items: [
+        { label: '공지', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
+        { label: '접수목록', icon: 'pi pi-fw pi-check-square', to: '/user_request' },
+        { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/request', class: 'rotated-icon' }
+      ]
+    };
 
-      
+    var admin = {
+      label: loginUser.value?.user_name || '관리자',
+      items: [
         { label: '회사관리', icon: 'pi pi-fw pi-id-card', to: '/company' },
         { label: '고객관리', icon: 'pi pi-fw pi-id-card', to: '/customer' },
         { label: '팀관리', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
@@ -31,17 +31,16 @@
       ]
     };
 
-  const loginType = localStorage.getItem('user.login_type');
-  if (loginType === 'admin') {
-    model.value.unshift(admin);
-  } else {
-    model.value.unshift(customer);
-  }
-});
+    const loginType = loginUser.value?.login_type;
+    if (loginType === 'admin') {
+      model.value.unshift(admin); // 관리자 메뉴를 맨 앞에 추가
+    } else if (loginType === 'customer') {
+      model.value.unshift(customer);
+    }
+  };
 
-
-  const model = ref([
-    
+  // 기본 메뉴 구조를 반환하는 함수
+  const getBaseMenu = () => [
     {
       label: 'Home',
       items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
@@ -174,7 +173,19 @@
         }
       ]
     }
-  ]);
+  ];
+
+  // model 변수를 먼저 선언하고 초기화합니다.
+  const model = ref(getBaseMenu());
+
+  // loginUser가 변경될 때마다 메뉴를 다시 생성합니다.
+  watch(
+    loginUser,
+    () => {
+      menuMake();
+    },
+    { immediate: true, deep: true }
+  );
 </script>
 
 <template>

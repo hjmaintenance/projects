@@ -40,32 +40,6 @@ namespace JinRestApi.Models
     }
 
 
-    /// <summary>관리자</summary>
-    public class Admin : BaseEntity, IPasswordEnabled
-    {
-        /// <summary>로그인 ID</summary>
-        public string LoginId { get; set; } = string.Empty;
-
-        /// <summary>관리자 이름</summary>
-        public string UserName { get; set; } = string.Empty;
-
-        /// <summary>이메일</summary>
-        public string Email { get; set; } = string.Empty;
-
-        /// <summary>비밀번호 해시</summary>
-        public string PasswordHash { get; set; } = string.Empty;
-
-        /// <summary>팀 ID</summary>
-        public int TeamId { get; set; }
-
-        public Team? Team { get; set; }
-
-        public ICollection<ImprovementRequest> AssignedRequests { get; set; } = new List<ImprovementRequest>();
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
-
-
-    }
-
     /// <summary>팀</summary>
     public class Team : BaseEntity
     {
@@ -87,41 +61,20 @@ namespace JinRestApi.Models
         public CustomerCompany? Company { get; set; }
     }
 
-    /// <summary>개선 요청</summary>
-    public class ImprovementRequest : BaseEntity
-    {
-        /// <summary>제목</summary>
-        public string Title { get; set; } = string.Empty;
-
-        /// <summary>내용</summary>
-        public string Description { get; set; } = string.Empty;
-
-        /// <summary>요청일시</summary>
-        public DateTime RequestedAt { get; set; } = DateTime.UtcNow;
-
-        /// <summary>고객 ID</summary>
-        public int CustomerId { get; set; }
-
-        public Customer? Customer { get; set; }
-
-        /// <summary>담당 관리자 ID</summary>
-        public int? AdminId { get; set; }
-
-        public Admin? Admin { get; set; }
-
-        /// <summary>상태</summary>
-        public ImprovementStatus Status { get; set; } = ImprovementStatus.Pending;
-
-        public ICollection<ImprovementComment> Comments { get; set; } = new List<ImprovementComment>();
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
-    }
 
     /// <summary>개선 요청 상태</summary>
     public enum ImprovementStatus
     {
+        [System.ComponentModel.DataAnnotations.Display(Name = "접수대기")]
         Pending,
+
+        [System.ComponentModel.DataAnnotations.Display(Name = "처리중")]
         InProgress,
+
+        [System.ComponentModel.DataAnnotations.Display(Name = "처리완료")]
         Completed,
+
+        [System.ComponentModel.DataAnnotations.Display(Name = "반려")]
         Rejected
     }
 
