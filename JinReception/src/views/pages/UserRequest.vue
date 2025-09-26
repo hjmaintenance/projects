@@ -1,6 +1,7 @@
 <script setup>
   import { RequestService } from '@/service/RequestService';
   import { buildQueryPayload } from '@/utils/apiUtils';
+  import { formatDate } from '@/utils/formatters';
   import { onMounted, reactive, ref, watch, computed } from 'vue';
   import { useLayout } from '@/layout/composables/layout';
 
@@ -73,14 +74,6 @@
 
   const getItem = async () => {
     //requests.value = await requests.get('1', loading);
-  };
-
-  const formatDate = (value) => {
-    return value.toLocaleDateString('ko-KR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
   };
 </script>
 

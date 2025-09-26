@@ -1,6 +1,7 @@
 <script setup>
   import { RequestService } from '@/service/RequestService';
   import { buildQueryPayload } from '@/utils/apiUtils';
+  import { formatDate } from '@/utils/formatters';
   import { onMounted, reactive, ref, watch } from 'vue';
   import { useLayout } from '@/layout/composables/layout';
 
@@ -9,11 +10,6 @@
 
   const { loginUser } = useLayout();
   const loading = ref(null);
-  const columns = ref([
-    { field: 'id', header: 'Id' },
-    { field: 'createdAt', header: 'createdAt' },
-    { field: 'title', header: 'Title' }
-  ]);
 
   const searchs = reactive({
     Srch: ''
@@ -61,8 +57,6 @@
     { immediate: true }
   );
 
-  //초기화
-  const initData = async () => {};
 
   //접수 담당자 지정
   const accept_request = async () => {
@@ -79,17 +73,6 @@
     */
   };
 
-  const getItem = async () => {
-    //requests.value = await requests.get('1', loading);
-  };
-
-  const formatDate = (value) => {
-    return value.toLocaleDateString('ko-KR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
 </script>
 
 <template>
@@ -105,11 +88,13 @@
     </div>
   </form>
 
-  <Dialog v-model:visible="visible" modal :header="selectedRequest?.title" :style="{ width: '70rem' }">
+  <Dialog v-model:visible="visible" modal :header="selectedRequest?.title" :style="{ width: '70rem', height: '90vh' }">
     <div class="flex justify-end gap-2">
       <Button type="button" label="이거 내가 접수 할께요" severity="danger" @click="accept_request"></Button>
     </div>
-    <div class="flex items-center gap-4 mb-8">
+    <div class="flex items-center gap-4 mb-8" style="overflow-y: auto;
+  height: calc(81vh - 100px);
+  align-items: flex-start;">
       <div class="" v-html="selectedRequest?.description"></div>
     </div>
     <div class="flex justify-end gap-2">

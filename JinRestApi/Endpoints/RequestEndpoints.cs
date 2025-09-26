@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using JinRestApi.Data;
 using System.Linq.Dynamic.Core;
 using JinRestApi.Dtos;
+using JinRestApi.Helpers;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace JinRestApi.Endpoints;
 
@@ -86,51 +88,9 @@ public static class RequestEndpoints
             // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
             var resultQuery = queryWithIncludes.ApplyAll(finalQuery);
 
-            // ToListAsync 은 dynamic IQueryable 에서도 작동
-
+    
             // ToListAsync 은 dynamic IQueryable 에서도 작동
             var requests = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
-
-
-
-            //var requests = await (resultQuery as IQueryable<ImprovementRequest>).ToDynamicListAsync();
-
-            //if (requests == null)
-            //{
-            //    return new List<object>();
-            //}
-
-
-
-            // 메모리에서 StatusName을 추가합니다.
-            var list = requests.Select(item =>
-            {
-                // dynamic 객체를 ExpandoObject로 변환합니다.
-                dynamic expando = new ExpandoObject();
-                var properties = (IDictionary<string, object?>)expando;
-
-                // 기존 객체의 속성을 ExpandoObject로 복사합니다.
-                foreach (var prop in item.GetType().GetProperties())
-                {
-                    // 인덱서가 아닌 일반 속성만 복사하여 'Parameter count mismatch' 오류를 방지합니다.
-                    if (prop.GetIndexParameters().Length == 0)
-                    {
-                        // 속성 이름을 camelCase로 변환하여 클라이언트와 일관성을 유지합니다.
-                        var camelCaseName = char.ToLowerInvariant(prop.Name[0]) + prop.Name.Substring(1);
-                        properties[camelCaseName] = prop.GetValue(item, null);
-                    }
-                }
-
-                // StatusName 속성을 동적으로 추가합니다.
-                var attributes = (DisplayAttribute[])item.Status.GetType().GetField(item.Status.ToString())?.GetCustomAttributes(typeof(DisplayAttribute), false);
-                properties["statusName"] = attributes?.Length > 0 ? attributes[0].Name : item.Status.ToString();
-
-                return expando;
-            }).ToList();
-
-            return list;
-
-
             return requests;
         }, "Request srch successfully.", 201));
 

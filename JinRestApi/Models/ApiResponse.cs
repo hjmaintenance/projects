@@ -2,6 +2,25 @@ using System.Collections;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 
+
+
+using JinRestApi.Models;
+using Microsoft.AspNetCore.Routing;
+using System.Dynamic;
+using Microsoft.EntityFrameworkCore;
+using JinRestApi.Data;
+using System.Linq.Dynamic.Core;
+using JinRestApi.Dtos;
+using JinRestApi.Helpers;
+using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
+using System.Text;
+using System.Text.Json;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+
+
+
 namespace JinRestApi.Models
 {
     /// <summary>
@@ -57,7 +76,7 @@ namespace JinRestApi.Models
     /// </summary>
     public static class ApiResponseBuilder
     {
-        public static async Task<IResult> CreateAsync<T>(Func<Task<T>> action, string successMessage = "Request processed successfully.", int successStatusCode = 200)
+        public static async Task<IResult> CreateAsync<T>(Func<Task<T?>> action, string successMessage = "Request processed successfully.", int successStatusCode = 200) where T : class
         {
             var stopwatch = Stopwatch.StartNew();
             var requestTime = DateTime.UtcNow;
@@ -73,14 +92,19 @@ namespace JinRestApi.Models
                     return Results.NotFound(new ApiResponse<object>(false, "Resource not found.", null, CreateMetadata(requestTime, completionTime, stopwatch.ElapsedMilliseconds)));
                 }
 
+
+                // 데이터 변환 로직 호출
+                var processedData = ProcessData(data);
+
+
                 int? rowCount = null;
                 int? colCount = null;
 
-                if (data is IEnumerable enumerable)
+                if (processedData is IEnumerable enumerable)
                 {
                     var items = new List<object>();
                     foreach (var item in enumerable) items.Add(item);
-                    
+
                     rowCount = items.Count;
                     if (rowCount > 0)
                     {
@@ -90,11 +114,11 @@ namespace JinRestApi.Models
                 else
                 {
                     rowCount = 1;
-                    colCount = data.GetType().GetProperties().Length;
+                    colCount = processedData.GetType().GetProperties().Length;
                 }
 
                 var meta = CreateMetadata(requestTime, completionTime, stopwatch.ElapsedMilliseconds, rowCount, colCount);
-                var response = new ApiResponse<T>(true, successMessage, data, meta);
+                var response = new ApiResponse<object>(true, successMessage, processedData, meta);
 
                 return successStatusCode switch
                 {
@@ -120,5 +144,30 @@ namespace JinRestApi.Models
             RowCount = rowCount,
             ColumnCount = colCount
         };
+
+
+        /// <summary>
+        /// 데이터를 순회하며 ToExpandoWithEnumNames를 적용합니다.
+        /// </summary>
+        private static object? ProcessData(object? data)
+        {
+            if (data is null)
+            {
+                return null;
+            }
+
+            // 데이터가 컬렉션(List, Array 등)인 경우
+            if (data is IEnumerable collection && data is not string)
+            {
+                // 각 항목에 대해 변환 함수를 적용합니다.
+                return collection.Cast<object>().Select(item => item.ToExpandoWithEnumNames()).ToList();
+            }
+
+            // 단일 객체인 경우
+            return data.ToExpandoWithEnumNames();
+        }
     }
+
+
+
 }
