@@ -11,9 +11,16 @@ const _RequestService = {
     return res.data.data;
   },
   async get(id) {
-    const res = await apiClient.get(`/requests/${id}`);
+    //const res = await apiClient.get(`/requests/${id}`);
+
+    const res = await apiClient.post('/requests/srch', {id:id+'',remove	:"customerId"});
+
+    return res.data.data[0];
+  },
+  async accept(request) {
+    const res = await apiClient.put(`/requests/${request.id}`, request);
     return res.data.data;
-  }
+  },
 };
 
 export const RequestService = serviceWrapper('RequestService', _RequestService);

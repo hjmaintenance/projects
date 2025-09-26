@@ -5,6 +5,7 @@
   import { $t, updatePreset, updateSurfacePalette } from '@primeuix/themes';
 
   import AppFooter from './AppFooter.vue';
+  import AppMenuNavi from './AppMenuNavi.vue';
   import AppSidebar from './AppSidebar.vue';
   import AppTopbar from './AppTopbar.vue';
 
@@ -226,6 +227,16 @@
 
     return !(sidebarEl?.isSameNode(event.target) || sidebarEl?.contains(event.target) || topbarEl?.isSameNode(event.target) || topbarEl?.contains(event.target));
   }
+  const home = ref({
+    icon: 'pi pi-home'
+});
+const items = ref([
+    { label: 'Electronics' },
+    { label: 'Computer' },
+    { label: 'Accessories' },
+    { label: 'Keyboard' },
+    { label: 'Wireless' }
+]);
 </script>
 
 <template>
@@ -234,6 +245,7 @@
     <app-sidebar></app-sidebar>
     <div class="layout-main-container">
       <div class="layout-main">
+        <app-menu-navi></app-menu-navi>
         <router-view></router-view>
       </div>
       <app-footer></app-footer>

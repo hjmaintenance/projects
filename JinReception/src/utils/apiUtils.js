@@ -6,6 +6,9 @@
  * @param {object} [queryOptions] - 정렬 및 페이징 옵션. e.g., { sorts: [...], page: 1, pageSize: 10 }
  * @returns {object} API 요청에 사용될 전체 페이로드. e.g., { name_like: 'someValue', sorts: [...], ... }
  */
+
+
+// 이거 개선이 필요하다...
 export function buildQueryPayload(inputs, config, queryOptions) {
   const searchConditions = {};
 
@@ -19,6 +22,35 @@ export function buildQueryPayload(inputs, config, queryOptions) {
         } else {
           // operator가 없는 경우, 필드명 그대로 키로 사용
           searchConditions[`${field}`] = value;
+        }
+      }
+      );
+    //}
+
+    console.log('bqp - searchConditions:', searchConditions);
+
+  });
+
+  // 검색 조건과 쿼리 옵션을 병합하여 최종 페이로드 생성
+  // queryOptions가 undefined나 null일 경우를 대비하여 빈 객체로 처리
+  return { ...searchConditions, ...(queryOptions || {}) };
+}
+
+
+// 이거 개선이 필요하다...
+export function buildQueryPayload2( config, queryOptions) {
+  const searchConditions = {};
+
+  config.forEach(item => {
+    //const value = inputs[item.model]?.trim();
+    //if (value) {
+      item.fields.forEach(field => {
+        if (item.operator && item.operator.trim() !== '') {
+          // operator가 있을 경우, "필드_연산자" 형태의 키 사용
+          searchConditions[`${field}_${item.operator}`] = item.model;
+        } else {
+          // operator가 없는 경우, 필드명 그대로 키로 사용
+          searchConditions[`${field}`] = item.model;
         }
       }
       );

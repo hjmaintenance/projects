@@ -1,8 +1,8 @@
 <script setup>
   import { RequestService } from '@/service/RequestService';
-  import { buildQueryPayload } from '@/utils/apiUtils';
-  import { formatDate } from '@/utils/formatters';
-  import { onMounted, reactive, ref, watch } from 'vue';
+  import { buildQueryPayload2 } from '@/utils/apiUtils';
+  import { formatDate, STATUS } from '@/utils/formatters';
+  import { onMounted, reactive, ref, watch, nextTick, computed } from 'vue';
   import { useLayout } from '@/layout/composables/layout';
 
   import DataTable from 'primevue/datatable';
@@ -11,15 +11,22 @@
   const { loginUser } = useLayout();
   const loading = ref(null);
 
+
+
   const searchs = reactive({
-    Srch: ''
+    Srch: '',
+    dropdownItem: ref(null)
   });
 
-  // 필드 구성
-  const searchConfig = [
-    { model: 'Srch', fields: ['title'], operator: 'like' },
-    { model: 'customerId', fields: ['customerId'], operator: '' }
-  ];
+
+// const dropdownItem = ref(null);
+
+  // 필드 구성을 computed 속성으로 변경하여 항상 최신 값을 유지합니다.
+  const searchConfig = computed(() => [
+    { model: searchs.Srch, fields: ['title'], operator: 'like' },
+    //{ model: 'Srch', fields: ['id'], operator: '' },
+    { model: searchs.dropdownItem?.code, fields: ['status'], operator: '' }
+  ]);
 
   const queryOptions = reactive({
     remove: 'customerId,description',
@@ -36,15 +43,18 @@
   //조회
   const search = async () => {
     // 검색 조건과 페이징/정렬 옵션을 합쳐 최종 페이로드를 생성합니다.
-    const finalPayload = buildQueryPayload(searchs, searchConfig, queryOptions);
+    const finalPayload = buildQueryPayload2(searchConfig.value, queryOptions);
+
+    //var aaa={"title_like":searchs.Srch,"status":searchs.dropdownItem?.code,remove: 'customerId,description'};
+
     requests.value = await RequestService.search(finalPayload, loading);
+    //requests.value = await RequestService.search(aaa, loading);
   };
 
   watch(selectedRequest, async (newValue, oldValue) => {
     if (newValue) {
       visible.value = true;
-      const fullRequestData = await RequestService.get(newValue.id);
-      selectedRequest.value.description = fullRequestData.description;
+      getDetail();
     }
   });
 
@@ -58,33 +68,98 @@
   );
 
 
+
+  //
+  const getDetail = async () => {
+      const fullRequestData = await RequestService.get(selectedRequest.value.id);
+      selectedRequest.value.description = fullRequestData.description;
+  };
+
+
+
+
+
   //접수 담당자 지정
   const accept_request = async () => {
     if (!selectedRequest.value) return;
+        visible.value = false;
+await nextTick();
 
-    await RequestService.accept(selectedRequest.value.id, loading);
-    /*
-    visible.value = false;
+    // 매직 넘버 대신 명확한 상수를 사용합니다.
+    selectedRequest.value.status = STATUS.IN_PROGRESS;
+    selectedRequest.value.adminId = loginUser.value?.user_uid;
+    await RequestService.accept(selectedRequest.value);
+    
+    actionRun();
+    
+    //search(); // 목록 새로고침
+  };
 
-    // 접수 처리 후, 해당 항목의 정보만 새로 불러와 목록을 업데이트합니다.
-    const updatedItem = await RequestService.get(selectedRequest.value.id, { remove: queryOptions.remove });
+  //
+  const actionRun = async () => {
+
+    const updatedItem = await RequestService.get(selectedRequest.value.id, {
+      remove: queryOptions.remove
+    });
     const index = requests.value.findIndex((item) => item.id === updatedItem.id);
     if (index !== -1) requests.value[index] = updatedItem;
-    */
+
+
+
   };
+
+
+
+  //반려
+  const reject_request = async () => {
+    if (!selectedRequest.value) return;
+        visible.value = false;
+await nextTick();
+
+    selectedRequest.value.status = STATUS.REJECTED; // '대기' 상태로 변경 (또는 별도의 '반려' 상태가 있다면 해당 값 사용)
+    selectedRequest.value.adminId = loginUser.value?.user_uid;
+    await RequestService.accept(selectedRequest.value); // 'accept'는 PUT 요청이므로 재사용 가능
+
+    actionRun();
+  };
+
+  //완료
+  const complete_request = async () => {
+    if (!selectedRequest.value) return;
+        visible.value = false;
+    await nextTick();
+
+    selectedRequest.value.status = STATUS.COMPLETED; // '완료' 상태로 변경
+    selectedRequest.value.adminId = loginUser.value?.user_uid;
+    await RequestService.accept(selectedRequest.value);
+
+    actionRun();
+  };
+
+
+const dropdownItems = ref([
+    { name: 'PENDING', code: '0' },
+    { name: 'IN_PROGRESS', code: '1' },
+    { name: 'REJECTED', code: '2' },
+    { name: 'COMPLETED', code: '3' },
+]);
+
 
 </script>
 
 <template>
   <form class="card srcharea" @submit.prevent="search">
-    <div class="flex flex-wrap items-start gap-4">
-      <div class="field">
+    <div class="flex flex-wrap items-start">
         <IconField iconPosition="left">
-          <InputText type="text" v-model="searchs.Srch" placeholder="Search..." />
+          <InputText type="text" v-model="searchs.Srch" placeholder="Search..."  size="small"/>
           <InputIcon class="pi pi-search" />
         </IconField>
-      </div>
-      <Button label="조회" class="mr-2" @click="search" />
+
+        <Select  size="small" id="state" v-model="searchs.dropdownItem" :options="dropdownItems" optionLabel="name" placeholder="Select One" class="ml-2"></Select>
+                   
+
+
+      <Button  size="small" label="조회" class="ml-2 mr-2" @click="search" raised />
     </div>
   </form>
 
@@ -98,9 +173,10 @@
       <div class="" v-html="selectedRequest?.description"></div>
     </div>
     <div class="flex justify-end gap-2">
+      <Button type="button" label="reload" severity="primary" @click="getDetail"></Button>
       <Button type="button" :label="`이거 ${loginUser?.user_name} 접수 할께요`" severity="primary" @click="accept_request"></Button>
-      <Button type="button" :label="`반려`" severity="secondary" @click="reject_request"></Button>
-      <Button type="button" :label="`완료`" severity="success" @click="reject_request"></Button>
+      <Button type="button" label="반려" severity="secondary" @click="reject_request"></Button>
+      <Button type="button" label="완료" severity="success" @click="complete_request"></Button>
       <Button type="button" label="Close" severity="secondary" @click="visible = false"></Button>
     </div>
   </Dialog>

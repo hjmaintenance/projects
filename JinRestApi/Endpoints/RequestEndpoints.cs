@@ -31,10 +31,18 @@ public static class RequestEndpoints
             return query.ToListAsync();
         }));
 
+
         // 요청 상세
         group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
-            () => db.Requests.Include(r => r.Comments).Include(r => r.Attachments).FirstOrDefaultAsync(r => r.Id == id)
+            () => db.Requests
+            //.Include(r => r.Comments)
+            //.Include(r => r.Customer)
+            //.Include(r => r.Admin)
+            //.Include(r => r.Attachments)
+            .FirstOrDefaultAsync(r => r.Id == id)
         ));
+
+
 
 
         /*
