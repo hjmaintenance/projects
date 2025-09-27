@@ -41,6 +41,11 @@ ubuntu
 # nvm 설치
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
 
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
+
+
+
 # 설치 후 셸 환경 재로딩 
 source ~/.bashrc   # source ~/.profile , source ~/.zshrc
 
@@ -100,4 +105,5 @@ vue3, tailwind, jquery
 - Volar
 - EsLint
 - Prettier-Code formatter
+
 - Vue
