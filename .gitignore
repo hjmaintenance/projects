@@ -5,3 +5,4 @@ obj/
 *.log
 *.sln
 Migrations/
+HANJU_UMS/packages/
