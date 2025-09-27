@@ -1,0 +1,258 @@
+﻿@import url('open.iconic/font/css/open-iconic-bootstrap.min.css');
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    src: url('../font/notosans/notosanskr-bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'notosanskr-bold';
+    src: url('../font/notosans/notosanskr-bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'notosanskr-regular';
+    src: url('../font/notosans/notosanskr-regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'notosanskr-medium';
+    src: url('../font/notosans/notosanskr-medium.ttf') format('truetype');
+}
+
+html, body {
+    font-family: 'Noto Sans KR', Helvetica, Arial, sans-serif;
+}
+
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-thumb {
+  outline: none;
+  border-radius: 10px;
+  border: 4px solid transparent;
+  box-shadow: inset 6px 6px 0 rgba(34, 34, 34, 0.7);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    border: 4px solid transparent;
+    box-shadow: inset 6px 6px 0 rgba(34, 34, 34, 0.9);
+  }
+
+::-webkit-scrollbar-track {
+  box-shadow: none;
+  background-color: transparent;
+}
+
+html, body ,#app{
+  width: 100%;
+  display: flex;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  justify-content: center;
+/*  background-color: #F7F7F730;*/
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+
+
+.demo-header .logo-image .logo-img {
+  width: 32px;
+  height: 32px;
+  background-image: url(/images/t/Logo_Symbol_Gray.svg);
+  display: block;
+}
+
+.logo-sep {
+  margin: 0 0.75rem;
+  border: solid 1px var(--bs-border-color);
+  border-radius: 15px;
+}
+
+
+
+.theme-default-dark .demo-header .logo-image .logo-img,
+.theme-blazing-dark .demo-header .logo-image .logo-img,
+.theme-cyborg .demo-header .logo-image .logo-img,
+.theme-solar .demo-header .logo-image .logo-img,
+.theme-superhero .demo-header .logo-image .logo-img {
+  background-image: none;
+  background-color: var(--bs-body-color);
+  -webkit-mask: url(/images/t/Logo_Symbol_Gray.svg) no-repeat center;
+}
+
+.logo-image .logo-sec-img {
+  width: 115px;
+  height: 39px;
+  background-color: var(--bs-body-color);
+  -webkit-mask: url(/images/t/Logo_Text_length.svg) no-repeat center;
+  mask: url(/images/t/Logo_Text_length.svg) no-repeat center;
+  display: block;
+  opacity: 0.7;
+}
+
+
+
+.sidebar .expand {
+  left: 0;
+  height: 100%;
+  min-width: 270px !important;
+  width: 270px !important;
+  z-index: 1050;
+  border-radius: 0px;
+  transition: all 0.6s ease-in-out;
+}
+
+.sidebar .collapse {
+  left: -270px;
+  width: 0px;
+  min-width: 0px;
+  transition: all 0.6s ease-in-out;
+}
+
+
+.themeswitcher-item.list-group-item{
+  cursor:pointer;
+}
+
+
+.mit-search-area .dxbl-group-header {
+  display: none !important;
+}
+
+
+.common-grid-toolbar{
+  border:0;
+}
+
+
+
+
+.main-toolbar-btn-icon-search,
+.main-toolbar-btn-icon-save,
+.main-toolbar-btn-icon-delete,
+.main-toolbar-btn-icon-print,
+.main-toolbar-btn-icon-close,
+.main-toolbar-btn-icon-fav {
+  background-size: auto;
+  -webkit-mask-repeat: round;
+  background-position: center center;
+  background-color: currentColor;
+  height: 20px;
+  width: 20px;
+  font-size: 28px;
+  filter: brightness(1.2);
+}
+
+
+
+.main-toolbar-btn-icon-search {
+  -webkit-mask-image: url("/images/main/32SearchIcon.png");
+  mask-image: url("/images/main/32SearchIcon.png");
+}
+
+.main-toolbar-btn-icon-save {
+  -webkit-mask-image: url("/images/main/32SaveIcon.png");
+  mask-image: url("/images/main/32SaveIcon.png");
+}
+
+.main-toolbar-btn-icon-delete {
+  -webkit-mask-image: url("/images/main/32DeleteIcon.png");
+  mask-image: url("/images/main/32DeleteIcon.png");
+}
+
+.main-toolbar-btn-icon-print {
+  -webkit-mask-image: url("/images/main/32PrintIcon.png");
+  mask-image: url("/images/main/32PrintIcon.png");
+}
+
+.main-toolbar-btn-icon-close {
+  -webkit-mask-image: url("/images/main/32CloseIcon.png");
+  mask-image: url("/images/main/32CloseIcon.png");
+}
+
+.main-toolbar-btn-icon-fav {
+  -webkit-mask-image: url("/images/main/32FavIcon.png");
+  mask-image: url("/images/main/32FavIcon.png");
+}
+
+
+.common-grid-toolbar{
+  border:0 !important;
+}
+
+.grid-col-left-line {
+  border-left: solid !important;
+  border-left-color: var(--bs-link-color) !important;
+}
+
+.mit-grd-toolbar i{
+  margin-right: 3px;
+  font-size: 20px;
+}
+
+.dxbl-grid .dxbl-grid-table .dxbl-grid-focused-row:not(.dxbl-grid-touch-selection):not(.dxbl-grid-touch-selection-edge) {
+  background-color: transparent ;
+}
+
+
+.mit-grid-highright {
+  /*  background-color: var(--dxbl-client-component-palette-warning);*/
+  background-color: var(--dxbl-client-component-palette-danger);
+/*  background-color: var(--dxbl-grid-focus-bg);*/
+}
+
+
+
+/*한주 햄버거 숨기기*/
+.demo-header.navbar .navbar-toggler {
+/*  display: none !important;*/
+}
+
+
+
+/* 소계 합계 글짜 굵기 */
+.mit-sum-row {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+
+  .mit-sum-row td {
+    font-weight: bold;
+    font-size: 0.9rem !important;
+    /*    background-color: pink !important;*/
+    background-color: var(--dxbl-client-component-palette-danger);
+    /*
+      --dxbl-client-component-palette-primary: #5f368d;
+    --dxbl-client-component-palette-success: #28a745;
+    --dxbl-client-component-palette-info: #00a9e6;
+    --dxbl-client-component-palette-warning: #ffc107;
+    */
+  }
+
+  .mit-sum-row.row1 td {
+    background-color: var(--dxbl-client-component-palette-primary);
+  }
+  .mit-sum-row.row2 td {
+    background-color: var(--dxbl-client-component-palette-success);
+  }
+  .mit-sum-row.row3 td {
+    background-color: var(--dxbl-client-component-palette-info);
+  }
+  .mit-sum-row.row4 td {
+    background-color: var(--dxbl-client-component-palette-warning);
+  }
+
+
+
+
+.main-foot {
+  color: var(--bs-body-bg);
+}
+
+

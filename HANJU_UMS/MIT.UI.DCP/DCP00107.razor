@@ -1,0 +1,87 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+
+@inherits DCP00107Base
+
+
+<DxFormLayout CssClass="w-100">
+    <DxFormLayoutGroup Caption="조회조건" ColSpanSm="12" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start">
+        <DxFormLayoutItem Caption="메시지ID" ColSpanSm="3">
+            <MsgIDImageComboBox @ref="@cbo_MSG_ID" IsFirstRowSelected="true" IsShowEmptyRow="false" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="송수신타입" ColSpanSm="2">
+            <CommonCodeImageComboBox @ref="@cbo_RS_TYPE" GroupCode="RS_TYPE" IsFirstRowSelected="true" IsShowEmptyRow="false"></CommonCodeImageComboBox>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="업체목록" ColSpanSm="5" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                            IsCheckBox="true"
+                        IsShowToolBar="false"
+                          IsSearchButtonEnabled="false"
+                        IsAddButtonEnabled="this.MainCommonButtonData == null ? false : MainCommonButtonData.IsButtonSave || MainCommonButtonData.IsButtonDelete"
+                        IsSaveButtonEnabled="false"
+                        IsDeleteButtonEnabled="false"
+                        ControlHeight="480">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn FieldName="CUST_CODE" Caption="업체코드" Width="150px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" FixedPosition="GridColumnFixedPosition.Left">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="CUST_NAME" Caption="업체명" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="업체이동" ColSpanSm="2" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.None">
+        <DxFormLayoutItem ColSpanSm="12" CaptionPosition="CaptionPosition.Vertical">
+            <DxButton RenderStyle="ButtonRenderStyle.Secondary" Text="◀" Click="@btn_Cust_Move_Left_Click" CssClass="w-100 h-240px" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanSm="12" CaptionPosition="CaptionPosition.Vertical">
+            <DxButton RenderStyle="ButtonRenderStyle.Secondary" Text="▶" Click="@btn_Cust_Move_Right_Click" CssClass="w-100 h-240px" />
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="접근권한 업체목록" ColSpanSm="5" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd2"
+                            IsCheckBox="true"
+                            IsShowToolBar="false"
+                          IsSearchButtonEnabled="false"
+                        IsAddButtonEnabled="this.MainCommonButtonData == null ? false : MainCommonButtonData.IsButtonSave || MainCommonButtonData.IsButtonDelete"
+                        IsSaveButtonEnabled="false"
+                        IsDeleteButtonEnabled="false"
+                        ControlHeight="480">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn FieldName="CUST_CODE" Caption="업체코드" Width="150px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" FixedPosition="GridColumnFixedPosition.Left">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="CUST_NAME" Caption="업체명" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style>
+    
+    .h-240px {
+        height: 238px;
+    }
+
+</style>

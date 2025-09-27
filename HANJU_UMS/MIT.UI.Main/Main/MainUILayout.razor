@@ -1,0 +1,137 @@
+﻿@using DevExpress.Blazor
+@using MIT.Razor.Pages.Component
+@using MIT.Razor.Pages.Component.LoadingPanel
+@using MIT.Razor.Pages.Component.MessageBox
+@using MIT.Razor.Pages.Component.Popup
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Routing
+
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+<DxLayoutBreakpoint MaxWidth="1200" @bind-IsActive="@IsMobileLayout" />
+<LoadingPanel >
+    <LoadingTemplate>
+        <AuthorizeView>
+            <Authorized>
+                <div class="page">
+                    <DxGridLayout CssClass="page-layout">
+                        <Rows>
+                            @if (IsMobileLayout)
+                            {
+                                <DxGridLayoutRow Areas="header" Height="auto"></DxGridLayoutRow>
+                                <DxGridLayoutRow Areas="sidebar" Height="auto"></DxGridLayoutRow>
+                                <DxGridLayoutRow Areas="content" />
+                                <DxGridLayoutRow Areas="footer" Height="40px" />
+                            }
+                            else
+                            {
+                                <DxGridLayoutRow Areas="header header" Height="auto" />
+                                @* <DxGridLayoutRow Areas="@(IsSidebarExpanded ? "sidebar content" : "content content")" /> *@
+                                <DxGridLayoutRow Areas="sidebar content" />
+                                <DxGridLayoutRow Areas="footer footer" Height="40px" />
+                            }
+                        </Rows>
+                        <Columns>
+                            @if (!IsMobileLayout)
+                            {
+                                <DxGridLayoutColumn Width="auto" />
+                                <DxGridLayoutColumn  />
+                            }
+                        </Columns>
+                        <Items>
+                            <DxGridLayoutItem Area="header" CssClass="layout-item">
+                                <Template>
+                                    <MainHeader @bind-ToggleOn="@IsSidebarExpanded" ></MainHeader>
+                                </Template>
+                            </DxGridLayoutItem>
+                            <DxGridLayoutItem Area="sidebar" CssClass="layout-item side-bar-elem">
+                                <Template>
+                                    <MainNavMenu StateCssClass="@NavMenuCssClass" />
+                                </Template>
+                            </DxGridLayoutItem>
+                            
+                            <DxGridLayoutItem Area="content" CssClass="content layout-item">
+                                <Template>
+                                    @Body
+                                </Template>
+                            </DxGridLayoutItem>
+                            <DxGridLayoutItem Area="footer">
+                                <Template>
+                                    <MainFooter></MainFooter>
+                                </Template>
+                            </DxGridLayoutItem>
+                        </Items>
+                    </DxGridLayout>
+                </div>
+                <CommonPopup></CommonPopup>
+            </Authorized>
+            <NotAuthorized>
+                @* @Body *@
+            </NotAuthorized>
+        </AuthorizeView>
+    </LoadingTemplate>
+</LoadingPanel>
+
+<CommonMessageBox></CommonMessageBox>
+
+
+
+@code {
+
+    string? NavMenuCssClass { get; set; }
+    bool _isMobileLayout;
+    bool IsMobileLayout
+    {
+        get => _isMobileLayout;
+        set
+        {
+            _isMobileLayout = value;
+            IsSidebarExpanded = !_isMobileLayout;
+            CommonUIComponentBase.IsMobileMode = value;
+        }
+    }
+
+    bool _isSidebarExpanded = true;
+    bool IsSidebarExpanded
+    {
+        get => _isSidebarExpanded;
+        set
+        {
+            if (_isSidebarExpanded != value)
+            {
+                NavMenuCssClass = value ? "expand" : "collapse";
+                _isSidebarExpanded = value;
+            }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += OnLocationChanged;
+        MainNavMenu.ToggleSidebarEvent += (sender, isExpanded) => ToggleSidebar(isExpanded);
+    }
+
+    async void OnLocationChanged(object? sender, LocationChangedEventArgs args)
+    {
+        if (IsMobileLayout)
+        {
+            IsSidebarExpanded = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    private void ToggleSidebar(bool isExpanded)
+    {
+        IsSidebarExpanded = isExpanded;
+        StateHasChanged();
+    }
+
+
+
+}

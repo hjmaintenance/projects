@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Components.Routing;
+@implements IDisposable
+
+@inherits CommonComponentBase
+
+<DxLoadingPanel @bind-Visible="Visible"
+                 IsContentBlocked="true"
+                 CloseOnClick="false"
+                 ApplyBackgroundShading="true"
+                 IndicatorAreaVisible="false"
+                CssClass="w-100">
+    @LoadingTemplate
+</DxLoadingPanel>
+
+@code {
+
+    /// <summary>
+    /// 로딩 될 자식 Razor페이지
+    /// </summary>
+    [Parameter]
+    public RenderFragment? LoadingTemplate { get; set; }
+
+    /// <summary>
+    /// 로딩 보이기/숨기기 변수
+    /// </summary>
+    private bool Visible { get; set; } = false;
+
+    protected override void OnInitialized()
+    {
+        var loadingPanelSystem = this.LoadingPanelService as ILoadingPanelSystem;
+
+        // 로딩 패널 보이기/숨기기 관련 이벤트 추가
+        if (loadingPanelSystem != null)
+            loadingPanelSystem.OnLoadingPanelProgressAsync += OnLoadingPanelProgressAsync;
+        if (NavigationManager != null)
+            NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    public void Dispose()
+    {
+        var loadingPanelSystem = LoadingPanelService as ILoadingPanelSystem;
+
+        // 로딩 패널 보이기/숨기기 관련 이벤트 삭제
+        if (loadingPanelSystem != null)
+            loadingPanelSystem.OnLoadingPanelProgressAsync -= OnLoadingPanelProgressAsync;
+        if (NavigationManager != null)
+            NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    /// <summary>
+    /// 로딩 패널 보이기/숨기기 함수
+    /// </summary>
+    /// <param name="isShow"></param>
+    private void OnLoadingPanelProgressAsync(bool isShow)
+    {
+        // 로딩 보이기/숨기기 셋팅
+        Visible = isShow;
+        StateHasChanged();
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        Visible = false;
+        StateHasChanged();
+    }
+}

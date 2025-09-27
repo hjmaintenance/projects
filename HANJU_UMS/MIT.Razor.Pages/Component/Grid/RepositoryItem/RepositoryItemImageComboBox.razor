@@ -1,0 +1,270 @@
+﻿@using System.Collections.ObjectModel;
+@using System.Data;
+@using System.Linq;
+@using DevExpress.Blazor;
+@using MIT.DataUtil.Common;
+@using MIT.Razor.Pages.Component.DataEdits.Data
+@using MIT.Razor.Pages.Component.DataEdits
+
+@inherits RepositoryItemComponentBase
+
+@if (IsEditCheck())
+{
+    <DxComboBox Data="@_dataSource"
+                NullText="text..."
+                FilteringMode="DataGridFilteringMode.StartsWith"
+                Value="@_selectedItem"
+                ValueChanged="@((ImageComboBoxData dataItem) => OnValueChanged(CellContext, dataItem))">
+        <EditBoxTemplate Context="context2">
+            <div class="rep-combobox-item-template">
+                @if (!string.IsNullOrEmpty(ImageFieldName) && context2 != null)
+                {
+                    <img class="rep-combobox-item-template-image" src="@context2.Row?[ImageFieldName].ToStringTrim()" />
+                }
+
+                @if (!string.IsNullOrEmpty(DisplayFieldName) && context2 != null)
+                {
+                    <div>@context2.Row?[DisplayFieldName].ToStringTrim()</div>
+                }
+            </div>
+        </EditBoxTemplate>
+        <ItemTemplate>
+            <div class="rep-combobox-item-template">
+                @if (!string.IsNullOrEmpty(ImageFieldName) && context != null)
+                {
+                    <img class="rep-combobox-item-template-image" src="@context.Row?[ImageFieldName].ToStringTrim()" />
+                }
+                @if (!string.IsNullOrEmpty(DisplayFieldName) && context != null)
+                {
+                    <div>@context.Row?[DisplayFieldName].ToStringTrim()</div>
+                }
+            </div>
+        </ItemTemplate>
+    </DxComboBox>
+}
+else
+{
+    @* <div class="combobox-item-template dxbl-align-center">
+        
+    </div> *@
+    <div class="rep-combobox-item-template">
+        @if (!string.IsNullOrEmpty(ImageFieldName))
+        {
+            <img class="rep-combobox-item-template-image" src="@GetImageUriValue()" />
+        }
+        @if (!string.IsNullOrEmpty(DisplayFieldName))
+        {
+            <div>@GetDisplayValue()</div>
+        }
+    </div>
+    
+    @* @GetDisplayValue() *@
+}
+
+
+
+@code {
+
+    /// <summary>
+    /// DisplayFieldName 멤버 셋팅
+    /// </summary>
+    [Parameter]
+    public string? DisplayFieldName { get; set; }
+    /// <summary>
+    /// ValueFieldName 멤버 셋팅
+    /// </summary>
+    [Parameter]
+    public string? ValueFieldName { get; set; }
+    /// <summary>
+    /// ImageFieldName 멤버 셋팅
+    /// </summary>
+    [Parameter]
+    public string? ImageFieldName { get; set; }
+    /// <summary>
+    /// 첫번째 로우에 빈값 추가 유무
+    /// </summary>
+    [Parameter]
+    public bool IsShowEmptyRow { get; set; } = false;
+    /// <summary>
+    /// 빈값 명칭
+    /// </summary>
+    [Parameter]
+    public string EmptyRowName { get; set; } = "전체";
+
+    /// <summary>
+    /// 값 변경시 호출 이벤트 셋팅
+    /// </summary>
+    [Parameter]
+    public EventCallback<ImageComboBoxData> ValueChanged { get; set; }
+    /// <summary>
+    /// ComboBox Item에 적용할 데이터 테이블
+    /// </summary>
+    [Parameter]
+    public DataTable? DataSource
+    {
+        get { return _datatable; }
+        set
+        {
+            if (IsShowEmptyRow && value != null && !string.IsNullOrEmpty(DisplayFieldName))
+            {
+                DataRow row = value.NewRow();
+                row[DisplayFieldName] = EmptyRowName;
+                value.Rows.InsertAt(row, 0);
+            }
+
+            _dataSource = ConvertDataSourceToObservableCollection(value);
+
+            InitSelectedItem();
+            _datatable = value;
+            StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// 선택된 Value값
+    /// </summary>
+    public object? Value
+    {
+        get { return _selectedItem?.Value; }
+    }
+
+    /// <summary>
+    /// 데이터테이블을 ComboBox에 적용가능하게 변환
+    /// </summary>
+    ObservableCollection<ImageComboBoxData> _dataSource { get; set; } = new ObservableCollection<ImageComboBoxData>();
+    /// <summary>
+    /// 원본 데이터 테이블
+    /// </summary>
+    private DataTable? _datatable;
+    /// <summary>
+    /// ComboBox에서 선택된 아이템
+    /// </summary>
+    protected ImageComboBoxData? _selectedItem { get; set; }
+
+    /// <summary>
+    /// 데이터 테이블을 ComboBox에 적용가능한 데이터로 변환 함수
+    /// </summary>
+    /// <param name="datatable"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    private ObservableCollection<ImageComboBoxData> ConvertDataSourceToObservableCollection(DataTable? datatable)
+    {
+        ObservableCollection<ImageComboBoxData> list = new ObservableCollection<ImageComboBoxData>();
+
+        if (ValueFieldName == null)
+            throw new Exception("ValueFieldName는 필수 입니다.");
+
+        if (datatable == null)
+            return list;
+
+        foreach (DataRow row in datatable.Rows)
+        {
+            var item = new ImageComboBoxData();
+            item.Value = row[ValueFieldName];
+            item.Row = row;
+
+            list.Add(item);
+        }
+
+        return list;
+    }
+
+    /// <summary>
+    /// 선택 초기화
+    /// </summary>
+    protected void InitSelectedItem()
+    {
+        if (CellContext == null)
+            return;
+
+        var row = CellContext.DataItem as DataRowView;
+
+        if (row == null)
+            return;
+
+        var value = row[CellContext.DataColumn.FieldName].ToStringTrim();
+
+        _selectedItem = _dataSource.FirstOrDefault(s => s.Value.ToStringTrim().Equals(value));
+    }
+
+    /// <summary>
+    /// DisplayFieldName에 대한 값
+    /// </summary>
+    /// <returns></returns>
+    protected string? GetDisplayValue()
+    {
+        if (CellContext == null || ValueFieldName == null || DisplayFieldName == null)
+            return string.Empty;
+
+        var row = CellContext.DataItem as DataRowView;
+
+        if (row == null || row.Row == null || row.Row.Table.Columns.IndexOf(CellContext.DataColumn.FieldName) == - 1)
+            return string.Empty;
+
+        var value = row[CellContext.DataColumn.FieldName].ToStringTrim();
+
+        var item = DataSource?.AsEnumerable().FirstOrDefault(s => s[ValueFieldName].ToStringTrim().Equals(value));
+
+        return item?[DisplayFieldName].ToStringTrim();
+    }
+
+    /// <summary>
+    /// ImageFieldName에 대한 값
+    /// </summary>
+    /// <returns></returns>
+    protected string? GetImageUriValue()
+    {
+        if (CellContext == null || ValueFieldName == null || ImageFieldName == null)
+            return string.Empty;
+
+        var row = CellContext.DataItem as DataRowView;
+
+        if (row == null)
+            return string.Empty;
+
+        var value = row[CellContext.DataColumn.FieldName].ToStringTrim();
+
+        var item = DataSource?.AsEnumerable().FirstOrDefault(s => s[ValueFieldName].ToStringTrim().Equals(value));
+
+        return item?[ImageFieldName].ToStringTrim();
+    }
+
+    /// <summary>
+    /// 선택 변경시 Selected변경 값 셋팅
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="item"></param>
+    protected void OnValueChanged(GridDataColumnCellDisplayTemplateContext? context, ImageComboBoxData? item)
+    {
+        if (context == null || context.DataItem == null || item == null)
+            return;
+        var grd = context.Grid as DxGrid;
+        var dataItem = context.DataItem as DataRowView;
+
+        if (dataItem == null || grd == null)
+            return;
+
+        dataItem["CHK"] = "Y";
+
+        var value = item.Value;
+        dataItem[context.DataColumn.FieldName] = value;
+
+        grd.SelectDataItem(dataItem);
+
+        _selectedItem = item;
+
+        ValueChanged.InvokeAsync(item);
+    }
+
+}
+
+
+<style>
+    .rep-combobox-item-template {
+        display: inline-flex;
+    }
+
+    .rep-combobox-item-template-image {
+        margin: 0 5px 0 0 ;
+    }
+</style>

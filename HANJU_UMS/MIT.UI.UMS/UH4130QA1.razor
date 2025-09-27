@@ -1,0 +1,85 @@
+@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-01-24
+     * 최종수정 : 25-02-11
+     * 화면명 : FMS 데이터 조회 년보
+     * 프로시저 : P_HMI_FMS_YEAR_WTR_GEN_RST, P_HMI_FMS_YEAR_GEN_RST, P_HMI_FMS_YEAR_BOILER_RSTT
+    */
+}
+
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@inherits UH4130QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="검침년" ColSpanSm="4"><CommonDateEdit @ref="@SYYYY" DisplayFormat="yyyy"/></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="~" ColSpanSm="4"><CommonDateEdit @ref="@EYYYY" DisplayFormat="yyyy"/></DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanSm="4">
+            <DxRadioGroup Items="@ArrayGenType" @bind-Value="@SelectedGenType" Layout="@RadioGroupLayout.Horizontal" />
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="FMS 데이터 조회 년보" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12" Visible="@(SelectedGenType=="수전")">
+            <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-grid">
+                <DataColumnsTemplate> 
+                    <DxGridDataColumn Caption="년" FieldName="GAUGE_YEAR" GroupIndex="0" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="년월" FieldName="GAUGE_YYMM" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridBandColumn Caption="수전량" CaptionAlignment="GridTextAlignment.Center">
+                        <Columns>
+                            <DxGridDataColumn Caption="한주T/L" FieldName="HTL_01_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="석지T/L" FieldName="STL_01_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                        </Columns>
+                    </DxGridBandColumn>
+                    <DxGridDataColumn Caption="합계" FieldName="tab_total" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanSm="12" Visible="@(SelectedGenType=="발전")">
+            <CommonGrid @ref="Grd2" CssClass="setting-program-grid mit-grid">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn Caption="년" FieldName="GAUGE_YEAR" GroupIndex="0" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="년월" FieldName="GAUGE_YYMM" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#1 STG" FieldName="G1_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#2 STG" FieldName="G2_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#3 STG" FieldName="G3_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#4 STG" FieldName="G4_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#5 STG" FieldName="G5_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#1 GTG" FieldName="GTG1_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#2 GTG" FieldName="GTG2_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="합계" FieldName="tab_total" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanSm="12" Visible="@(SelectedGenType=="보일러")">
+            <CommonGrid @ref="Grd3" CssClass="setting-program-grid mit-grid">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn Caption="년" FieldName="GAUGE_YEAR" GroupIndex="0" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="년월" FieldName="GAUGE_YYMM" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#6 BLR" FieldName="BLR6_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#7 BLR" FieldName="BLR7_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#8 BLR" FieldName="BLR8_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#9 BLR" FieldName="BLR9_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#10 BLR" FieldName="BLR10_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#1 HRSG" FieldName="HRSG1_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="#2 HRSG" FieldName="HRSG2_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="합계" FieldName="tab_total" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style>
+
+</style>

@@ -1,0 +1,363 @@
+﻿@{
+    /*
+    * 작성자명 : jskim
+    * 작성일자 : 25-04-16
+    * 최종수정 : 25-04-16
+    * 화명명 : 종합 모니터링 화면(전기,증기,용수)
+    * 프로시저 : P_HMI_REAL_ELEC_COMP_SPPLY_QTY, P_HMI_COMP_STM_REAL_SERV_QTY, P_HMI_WATER_DW_MACH_MNTR_SELECT01, P_HMI_WATER_FW_MACH_MNTR_SELECT01
+    */
+}
+
+@using MIT.Razor.Pages
+@using MIT.Razor.Pages.Common
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using System.Data
+@using static MIT.Razor.Pages.TrendCode
+@inherits UH1011MA1_bkBase
+
+
+<DxFormLayout CssClass="w-100">
+
+    @{
+        /* content area */
+    }
+    <DxFormLayoutGroup CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutGroup ColSpanSm="3" Caption="전기 공급량 현황">
+            <DxFormLayoutItem ColSpanSm="12">
+                <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-toolbar-grid"
+                            IsExportDocEnabled=false
+                            IsExportImageEnabled=false
+                            IsExportPDFEnabled=false
+                            IsExportXlsxEnabled=false
+                            ExportFileName="종합 모니터링 현황"  
+                            IsShowToolBar=true>
+                    <DataColumnsTemplate>
+                        <DxGridDataColumn Caption="점검중" FieldName="Maintenance_YN" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="40">
+                            <CellDisplayTemplate Context="context2">
+                                @if (!string.IsNullOrEmpty(context2.GetRowValue("COM_ID") + ""))
+                                {
+                                    <a class="badge bg-primary hhh " @onclick=@((args)=> {
+                                   DataRowView? row = context2.DataItem as DataRowView;
+                                   string newValue = context2.Value+"" == "Y" ? "N" : "Y";
+                                   if (row == null) return;
+                                   row[context2.DataColumn.FieldName] = newValue;
+                                   btn_Save_Maintenance_YN(com_id:row["COM_ID"]+"",gauge_section:"PW", value:newValue);
+                                   })>전환</a>
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="구분" FieldName="COM_NAME" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" MinWidth="95"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox ReadOnly="true" CellContext="context2" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="순시(KW)" FieldName="S01" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="65">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N0" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        @* <DxGridDataColumn Caption="일(KW)" FieldName="S02" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="60"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn> *@
+                        @* <DxGridDataColumn Caption="월(KW)" FieldName="S03" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="70"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn> *@
+                        <DxGridDataColumn Caption="당월PEAK" FieldName="S04" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="70">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N0" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="역률" FieldName="S05" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="60">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                    </DataColumnsTemplate>
+                </CommonGrid>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+        <DxFormLayoutGroup Caption="증기 공급량 현황" ColSpanSm="4" Decoration="FormLayoutGroupDecoration.Card">
+            <DxFormLayoutItem ColSpanSm="12">
+                <CommonGrid @ref="Grd2" CssClass="setting-program-grid mit-grid">
+                    <DataColumnsTemplate>
+                        <DxGridDataColumn Caption="점검중" FieldName="Maintenance_YN" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="40">
+                            <CellDisplayTemplate Context="context2">
+                                @if (!string.IsNullOrEmpty(context2.GetRowValue("COM_ID") + ""))
+                                {
+                                    <a class="badge bg-primary hhh " @onclick=@((args)=> {
+                                   DataRowView? row = context2.DataItem as DataRowView;
+                                   string newValue = context2.Value+"" == "Y" ? "N" : "Y";
+                                   if (row == null) return;
+                                   //row[context2.DataColumn.FieldName] = newValue;
+                                   btn_Save_Maintenance_YN(com_id:row["COM_ID"]+"",gauge_section:"ST", value:newValue);
+                                   })>전환</a>
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="구분" FieldName="COM_NAME" MinWidth="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="증기계" FieldName="SUM_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="원증기" FieldName="PRI_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="고압증기" FieldName="HP_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="중압증기" FieldName="MP_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="저압증기" FieldName="LP_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                    </DataColumnsTemplate>
+                </CommonGrid>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+        <DxFormLayoutGroup ColSpanSm="5" Decoration="FormLayoutGroupDecoration.None">
+            <DxFormLayoutGroup Caption="순수 모니터링 현황" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="6">
+                <DxFormLayoutItem ColSpanSm="12">
+                    <CommonGrid @ref="Grd3" CssClass="setting-program-grid mit-grid" RowDoubleClick="OnRowDoubleClick">
+                        <DataColumnsTemplate>
+                            <DxGridDataColumn Caption="점검중" FieldName="Maintenance_YN" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="40">
+                                <CellDisplayTemplate Context="context2">
+                                    @if (!string.IsNullOrEmpty(context2.GetRowValue("MC_ID") + ""))
+                                    {
+                                        <a class="badge bg-primary hhh " @onclick=@((args)=> {
+                                       DataRowView? row = context2.DataItem as DataRowView;
+                                       string newValue = context2.Value+"" == "Y" ? "N" : "Y";
+                                       if (row == null) return;
+                                       row[context2.DataColumn.FieldName] = newValue;
+                                       btn_Save_Maintenance_YN(mc_id:row["MC_ID"]+"", value:newValue);
+                                       })>전환</a>
+                                    }
+                                </CellDisplayTemplate>
+                            </DxGridDataColumn>
+                            <DxGridDataColumn Caption="구분" FieldName="COM_MC" Name="COM_MC" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" MinWidth="140"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="순시(T/H)" FieldName="S01" Name="S01" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="65">
+                                <CellDisplayTemplate Context="context2">
+                                    @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                    {
+                                        <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                    }
+                                    else
+                                    {
+                                        <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                    }
+                                </CellDisplayTemplate>
+                            </DxGridDataColumn>
+                            @* <DxGridDataColumn Caption="일(TON)" FieldName="S02" Name="S02" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="60"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn> *@
+                            @* <DxGridDataColumn Caption="일(T/D)" FieldName="S03" Name="S03" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="60"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn> *@
+                            @* <DxGridDataColumn Caption="월(TON)" FieldName="S04" Name="S04" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="60"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn> *@
+                            @* <DxGridDataColumn Caption="월(T/D)" FieldName="S05" Name="S05" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="60"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn> *@
+                            @*고객사 요청으로 적산량 삭제, 나중에 쓸꺼면 주석풀고사용 : 시안 화면 수정 건 (250310).pptx*@
+                            @* <DxGridDataColumn Caption="적산량" FieldName="S06" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="105"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N3" /></CellDisplayTemplate></DxGridDataColumn> *@
+                            <DxGridDataColumn Caption="PEAK" FieldName="S07" Name="S07" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="50">
+                                <CellDisplayTemplate Context="context2">
+                                    @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                    {
+                                        <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                    }
+                                    else
+                                    {
+                                        <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                    }
+                                </CellDisplayTemplate>
+                            </DxGridDataColumn>
+                        </DataColumnsTemplate>
+                    </CommonGrid>
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+            <DxFormLayoutGroup Caption="여과수 모니터링 현황" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="6">
+                <DxFormLayoutItem ColSpanSm="12">
+                    <CommonGrid @ref="Grd4" CssClass="setting-program-grid mit-grid" RowDoubleClick="OnRowDoubleClick">
+                        <DataColumnsTemplate>
+                            <DxGridDataColumn Caption="점검중" FieldName="Maintenance_YN" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="40">
+                                <CellDisplayTemplate Context="context2">
+                                    @if (!string.IsNullOrEmpty(context2.GetRowValue("MC_ID") + ""))
+                                    {
+                                        <a class="badge bg-primary hhh " @onclick=@((args)=> {
+                                       DataRowView? row = context2.DataItem as DataRowView;
+                                       string newValue = context2.Value+"" == "Y" ? "N" : "Y";
+                                       if (row == null) return;
+                                       row[context2.DataColumn.FieldName] = newValue;
+                                       btn_Save_Maintenance_YN(mc_id:row["MC_ID"]+"", value:newValue);
+                                       })>전환</a>
+                                    }
+                                </CellDisplayTemplate>
+                            </DxGridDataColumn>
+                            <DxGridDataColumn Caption="구분" FieldName="COM_MC" Name="COM_MC" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" MinWidth="140"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="순시(T/H)" FieldName="S01" Name="S01" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="65">
+                                <CellDisplayTemplate Context="context2">
+                                    @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                    {
+                                        <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                    }
+                                    else
+                                    {
+                                        <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                    }
+                                </CellDisplayTemplate>
+                            </DxGridDataColumn>
+                            @* <DxGridDataColumn Caption="일(TON)" FieldName="S02" Name="S02" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="60"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn> *@
+                            @* <DxGridDataColumn Caption="일(T/D)" FieldName="S03" Name="S03" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="60"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn> *@
+                            @* <DxGridDataColumn Caption="월(TON)" FieldName="S04" Name="S04" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="60"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn> *@
+                            @* <DxGridDataColumn Caption="월(T/D)" FieldName="S05" Name="S05" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="60"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn> *@
+                            @* <DxGridDataColumn Caption="적산량" FieldName="S06" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"MinWidth="105"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N3" /></CellDisplayTemplate></DxGridDataColumn> *@
+                            <DxGridDataColumn Caption="PEAK" FieldName="S07" Name="S07" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" MinWidth="50">
+                                <CellDisplayTemplate Context="context2">
+                                    @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                    {
+                                        <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                    }
+                                    else
+                                    {
+                                        <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                    }
+                                </CellDisplayTemplate>
+                            </DxGridDataColumn>
+                        </DataColumnsTemplate>
+                    </CommonGrid>
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayoutGroup>
+
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style>
+
+    .mit-toolbar-grid {
+        height: calc(100vh - 23.4rem) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        /*    max-width: calc(100vw - 19.3rem);*/
+    }
+    .mit-maintenance-text{
+        /* color: red; */
+        /* font-sie: 1rem; */
+    }
+
+    .hhh {
+        cursor: pointer;
+        text-decoration: none;
+    }
+</style>
+@code {
+    private void OnRowDoubleClick(GridRowClickEventArgs e)
+    {
+        if (CommonPopupService != null)
+        {
+            // 소계 합계는 눌러도 안나오게..
+            var COM_MC = (e.Grid.GetRowValue(e.VisibleIndex, "COM_MC") + "");
+            string[] excludedNames = { "순수계", "입주사계", "제염 응축수", "제염소계", "여과수 계" };
+            if (excludedNames.Contains(COM_MC)) return;
+
+            // com_id
+            var com_id = (e.Grid.GetRowValue(e.VisibleIndex, "COM_ID") + "");
+
+            // mc..
+            var mc_id = (e.Grid.GetRowValue(e.VisibleIndex, "MC_ID") + "");
+
+            TrendCode tc = new TrendCode() { ComId = com_id, FdrId = mc_id, GaugeType = GAUGE_TYPE.WA };
+            //TrendCode tc = new TrendCode() { ComId = "STAC", FdrId = "STAC_HP", GaugeType = GAUGE_TYPE.WA };
+            switch (e.Column.Name)
+            {
+                case "COM_MC":
+                    tc.TrendType = TrendTypeEnum.Real;
+                    break;
+                case "S01": // 실시간
+                    tc.TrendType = TrendTypeEnum.Real;
+                    break;
+                case "S02": // 일(TON)
+                case "S03": // 일(T/D)
+                    tc.TrendType = TrendTypeEnum.Day;
+                    break;
+                case "S04": // 월(TON)
+                case "S05": // 월(T/D)
+                    tc.TrendType = TrendTypeEnum.Month;
+                    tc.CompreDate = tc.CompreDate.AddMonths(-1);
+                    break;
+                case "S07": // 당월 PEAK
+                    tc.TrendType = TrendTypeEnum.CurMonth;
+                    tc.CompreDate = tc.CompreDate.AddMonths(-1);
+                    break;
+            }
+
+            CommonPopupService.Show(typeof(UH1070QA1_POP), "Trend View", Width: 1280, Height: 740, Parameter: tc, CloseCallback: OnCloseCallback);
+        }
+    }
+
+
+    protected async Task OnCloseCallback(PopupResult result)
+    {
+
+        if (result.PopupResultType != PopupResultType.OK) return;
+        await Task.Delay(1);
+
+    }
+
+
+
+
+
+}

@@ -1,0 +1,172 @@
+﻿@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-01-31
+     * 최종수정 : 25-02-05
+     * 화면명 : 증기 실시간 회사별 공급 현황
+     * 프로시저 : P_HMI_COMP_STM_REAL_SERV_QTY, P_HMI_COMP_STM_REAL_PRESS_QTY, P_HMI_FR_STM_SERV_REAL_QTY, P_HMI_UTILITY_PRD_SRV_REAL_QTY
+    */
+}
+
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using System.Data
+@inherits UH2100QA1_SBase
+
+
+<DxFormLayout CssClass="w-100">
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="증기 실시간 회사별 공급 현황" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutGroup Caption="회사별공급량" ColSpanSm="6" Decoration="FormLayoutGroupDecoration.Card">
+        <DxFormLayoutItem ColSpanSm="12">
+                <CommonGrid @ref="Grd1" CssClass="setting-program-grid height1">
+                <DataColumnsTemplate>
+                        <DxGridDataColumn Caption="점검중" FieldName="Maintenance_YN" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="40">
+                            <CellDisplayTemplate Context="context2">
+                                @if (!string.IsNullOrEmpty(context2.GetRowValue("COM_ID") + ""))
+                                {
+                                    <a class="badge bg-primary hhh " @onclick=@((args)=> {
+                                   DataRowView? row = context2.DataItem as DataRowView;
+                                   string newValue = context2.Value+"" == "Y" ? "N" : "Y";
+                                   if (row == null) return;
+                                   //row[context2.DataColumn.FieldName] = newValue;
+                                   btn_Save_Maintenance_YN(com_id:row["COM_ID"]+"",gauge_section:"ST", value:newValue);
+                                   })>전환</a>
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="구분" FieldName="COM_NAME" MinWidth="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="증기계" FieldName="SUM_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="원증기" FieldName="PRI_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="고압증기" FieldName="HP_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="중압증기" FieldName="MP_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="저압증기" FieldName="LP_VAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                            <CellDisplayTemplate Context="context2">
+                                @if (context2.GetRowValue("Maintenance_YN") + "" == "Y")
+                                {
+                                    <span class="badge bg-danger mit-maintenance-text">점검중</span>
+                                }
+                                else
+                                {
+                                    <RepositoryItemSpinEdit ReadOnly="true" CellContext="context2" DisplayFormat="N1" />
+                                }
+                            </CellDisplayTemplate>
+                        </DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+        <DxFormLayoutGroup Decoration="FormLayoutGroupDecoration.None" ColSpanSm="6">
+            <DxFormLayoutGroup Caption="Utility 생산 공급" ColSpanSm="12" Decoration="FormLayoutGroupDecoration.Card">
+                <DxFormLayoutItem Caption="증기생산" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0} T/H", UtilityDataRow?["STM_PRD_WGT"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="수전량" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0} MW", UtilityDataRow?["WATER_GEN_SUM"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#6 BLR" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["BLR6_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="한주T/L" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["WATER_GEN_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#7 BLR" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["BLR7_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="석지T/L" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["GEN_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#8 BLR" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["BLR8_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="발전계" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0} MW", UtilityDataRow?["GEN_SUM_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#9 BLR" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["BLR9_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="G1_VAL" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["G1_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#10 BLR" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["BLR10_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="G2_VAL" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["G2_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#1 HRSG" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["HRSG1_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="G3_VAL" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["G3_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#2 HRSG" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["HRSG2_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#4 STG" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["STG4_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="잉여증기" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0} T/H", UtilityDataRow?["SST_FR"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#5 STG" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["STG5_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="증기공급" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0} T/H", UtilityDataRow?["STM_SVR"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#1 GTG" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["GTG1_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="G4_VAL" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["G4_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="#2 GTG" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["GTSG2_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="G5_VAL" ColSpanSm="6"><DxTextBox Text="@(String.Format("{0:N0}", UtilityDataRow?["G5_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+            </DxFormLayoutGroup>
+            <DxFormLayoutGroup Caption="압력별 공급량" ColSpanSm="6" Decoration="FormLayoutGroupDecoration.Card">
+                <DxFormLayoutItem Caption="입주사계" ColSpanSm="12"><DxTextBox Text="@(String.Format("{0:N1}", PressSupDataRow?["IN_COMP_TOT"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="원증기" ColSpanSm="12"><DxTextBox Text="@(String.Format("{0:N1}", PressSupDataRow?["PRI_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="고압증기" ColSpanSm="12"><DxTextBox Text="@(String.Format("{0:N1}", PressSupDataRow?["HP_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="중압증기" ColSpanSm="12"><DxTextBox Text="@(String.Format("{0:N1}", PressSupDataRow?["MP_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="저압증기" ColSpanSm="12"><DxTextBox Text="@(String.Format("{0:N1}", PressSupDataRow?["LP_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="제염" ColSpanSm="12"><DxTextBox Text="@(String.Format("{0:N1}", PressSupDataRow?["SALT_SUM_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="단지외부" ColSpanSm="12"><DxTextBox Text="@(String.Format("{0:N1}", PressSupDataRow?["OUT_SUM_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+                <DxFormLayoutItem Caption="전체 합계" ColSpanSm="12"><DxTextBox Text="@(String.Format("{0:N1}", PressSupDataRow?["TOTAL_VAL"]))" ReadOnly="true" CssClass="mit-text-end" /></DxFormLayoutItem>
+            </DxFormLayoutGroup>
+            <DxFormLayoutGroup Caption="잉여증기 공급량" ColSpanSm="6" Decoration="FormLayoutGroupDecoration.Card">
+        <DxFormLayoutItem ColSpanSm="12">
+                    <CommonGrid @ref="Grd2" CssClass="setting-program-grid height2">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn Caption="회사명" FieldName="COM_NAME" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="공급량" FieldName="R_USEQTY" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayoutGroup>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style>
+
+    .mit-text-end input {
+        text-align:right;
+    }
+
+    .height1 {
+        height: 728px !important;
+    }
+    .height2 {
+        height: 265px !important;
+    }
+
+
+    .hhh {
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+</style>

@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+<!-- 
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Blazor" Version="25.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.1" />
+  </ItemGroup> -->
+
+
+<ItemGroup>
+  <PackageReference Include="DevExpress.Blazor" Version="25.1.5" />
+  <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.8" />
+  <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
+</ItemGroup>
+
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\MIT.DataUtil\MIT.DataUtil.csproj" />
+    <ProjectReference Include="..\MIT.Razor.Pages\MIT.Razor.Pages.csproj" />
+    <ProjectReference Include="..\MIT.ServiceModel\MIT.ServiceModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="DataEdits\MsgIDImageComboBox.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
+</Project>

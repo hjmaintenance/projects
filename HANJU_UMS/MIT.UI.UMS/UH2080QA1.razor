@@ -1,0 +1,65 @@
+﻿@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-01-31
+     * 최종수정 : 25-02-11
+     * 화면명 : FDR별 전기 공급량 현황
+     * 프로시저 : P_HMI_ELEC_FACT_FDR_SERV_RST, P_HMI_ELEC_FACT_FDR_SERV_COM_RST
+    */
+}
+
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@inherits UH2080QA1Base
+
+@{
+    // 고객사 요청으로 달력을 보여주기위해 yyyy-MM-dd로 변경
+    // 스크롤 불편하다고함
+    string dateFormat = "yyyy-MM-dd";
+}
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="공급월" ColSpanSm="3"><CommonDateEdit @ref="@YYMM" DisplayFormat="@dateFormat" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="수용가" ColSpanSm="3"><MitCombo2 CodeId="COMPANY2" @bind-Value="COM_ID" Etc0="PW" IsAll=true /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="FDR" ColSpanSm="4"><MitTagBox CodeId="FDR_PW" @bind-Values="MC_IDS" Etc0=@COM_ID?.Name IsDataFixed=false /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="그룹" ColSpanSm="2"><DxCheckBox @bind-Checked="@IsGroupCell">GroupCell</DxCheckBox>  </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="FDR별 전기 공급 현황" CssClass="mit-content-area " Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+      <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-grid"
+                  ExportFileName="FDR별 전기 공급량 현황"
+                  IsExportXlsxEnabled=false
+                  IsExportButtonEnabled=true
+                  IsShowToolBar="true"
+      
+      
+      >
+                <DataColumnsTemplate>
+          <DxGridDataColumn MinWidth="130" Caption="구분" FieldName="FAC_NM" GroupIndex=@CellGroupIndex TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn MinWidth="130" Caption="FDR" FieldName="FDR_NM" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    @{
+                        DateTime sm = DateTime.ParseExact(SearchedYYMM ?? DateTime.Today.ToString(), dateFormat, null);
+                        int daysInMonth = DateTime.DaysInMonth(sm.Year, sm.Month);
+                    }
+                    @for (int i = 0; i < 31; i++)
+                    {
+                        <DxGridDataColumn Caption="@( '`' + sm.ToString("MM") + "-" + (i+1).ToString("00"))" MinWidth="80" FieldName="@("DD_" + (i+1).ToString("00"))" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" Visible="@(daysInMonth > i)"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                    }
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+@code {
+  protected bool IsGroupCell { get; set; } = true;
+  protected int CellGroupIndex { get{
+      return IsGroupCell ? 0 : -1;
+  }
+  }
+}

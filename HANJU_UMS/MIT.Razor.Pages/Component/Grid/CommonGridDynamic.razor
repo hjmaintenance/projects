@@ -1,0 +1,207 @@
+﻿@using DevExpress.Blazor;
+@using MIT.DataUtil.Common
+@using System.Data
+@using MIT.Razor.Pages.Component.Grid.Data;
+@namespace MIT.Razor.Pages.Component.Grid
+
+
+@inherits CommonGridDynamicBase
+
+<div class="common-control-page-width common-control-page-height"
+     style="@(IsLayoutAuto ? $"--grid-width:100%;--grid-height:{(IsShowToolBar ? ControlHeight - 32 : ControlHeight)}px;--control-width:100%;--control-height:{ControlHeight}px;--grid-layout-width:100%;--grid-layout-height:{(IsShowToolBar ? ControlHeight - 32 : ControlHeight)}px" :
+        $"--grid-width:{GridWidth}px;--grid-height:{GridHeight}px;--control-width:{ControlWidth}px;--control-height:{ControlHeight}px;--grid-layout-width:{GridLayoutWidth}px;--grid-layout-height:{GridLayoutHeight}px;")">
+
+    @if (IsShowToolBar)
+    {
+        <DxToolbar CssClass="common-grid-toolbar-width common-grid-toolbar" ItemRenderStyleMode="@ToolbarRenderStyleMode.Plain">
+            <Items>
+                @BeginToolbarTemplate
+                <DxToolbarItem Text="조회" Click="@OnSearchButtonClick" IconCssClass="custom-grid-popup-toolbar-search" Visible="IsSearchButtonEnabled" />
+                <DxToolbarItem Text="신규" Click="@OnCreateButtonClick" IconCssClass="custom-grid-popup-toolbar-add" Visible="IsCreateButtonEnabled" />
+                <DxToolbarItem Text="삭제" Click="@OnDeleteButtonClick" IconCssClass="custom-grid-popup-toolbar-delete" Visible="IsDeleteButtonEnabled" />
+                <DxToolbarItem Text="엑셀 Export" Click="@OnExportButtonClick" IconCssClass="custom-grid-popup-toolbar-export" Alignment="ToolbarItemAlignment.Right" Visible="IsExportButtonEnabled" />
+                @AfterToolbarTemplate
+            </Items>
+        </DxToolbar>
+    }
+
+    <div class="common-layout-grid">
+        
+        <DxGrid @ref="Grid" id="@Id"
+                Data="@_datatable"
+                CssClass="@($"{CssClass} common-grid")"
+                EditorRenderMode="GridEditorRenderMode.Integrated"
+                ShowAllRows="false"
+                SelectionMode="@SelectionMode"
+                SelectAllCheckboxMode="@GridSelectAllCheckboxMode.AllPages"
+                FocusedRowChanged="@OnFocusedRowChanged"
+                RowClick="@RowClick"
+                ColumnResizeMode="@GridColumnResizeMode.ColumnsContainer"
+                RowDoubleClick="@OnRowDoubleClick"
+                FocusedRowEnabled="true"
+                TextWrapEnabled="false"
+                CustomizeElement="OnCustomizeElement"
+                AllowColumnReorder="false"
+                VirtualScrollingEnabled="true">
+            <Columns>
+                @if (!IsCheckBoxRightPosition)
+                {
+                    <DxGridDataColumn FieldName="@CheckedFieldName"
+                                      Width="50px"
+                                      TextAlignment="GridTextAlignment.Center"
+                                      FixedPosition="GridColumnFixedPosition.Left"
+                                      Visible="@IsCheckBox"
+                                      AllowSort="false">
+                        <HeaderCaptionTemplate>
+                            <DxCheckBox Checked="@IsAllChecked"
+                                        Alignment="CheckBoxContentAlignment.Center"
+                                        CheckedChanged="@((bool value) => OnAllCheckedChanged(value))"
+                                        CheckType="CheckType.Checkbox" />
+                        </HeaderCaptionTemplate>
+                        <CellDisplayTemplate Context="context2">
+                            <DxCheckBox Checked="@context2?.GetRowValue(@CheckedFieldName).ToStringTrim("N")"
+                                        ValueChecked="@("Y")"
+                                        ValueUnchecked="@("N")"
+                                        CheckedChanged="@((string value) => OnCheckedChanged(context2, value))"
+                                        CheckType="CheckType.Checkbox" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                }
+
+                @DataColumnsTemplate
+                @foreach (var col in Columns)
+                {
+                    <DxGridDataColumn FieldName="@col.FieldName"
+                                      Caption="@col.Caption"
+                                      Width="@($"{(col.Width <= 0 ? string.Empty : col.Width.ToString() + (WidthType == WidthType.Rate ? "%" : "px"))}")"
+                                      CaptionAlignment="@col.CaptionAlignment"
+                                      DisplayFormat="@col.DisplayFormat"
+                                      AllowSort="false"
+                                      FixedPosition="@col.GridColumnFixedPosition"
+                                      Visible="@col.Visible"
+                                      TextAlignment="@col.TextAlignment">
+                    </DxGridDataColumn>
+                }
+                @if (IsCheckBoxRightPosition)
+                {
+                    <DxGridDataColumn FieldName="@CheckedFieldName"
+                                      Width="50px"
+                                      TextAlignment="GridTextAlignment.Center"
+                                      FixedPosition="GridColumnFixedPosition.Right"
+                                      Visible="@IsCheckBox"
+                                      AllowSort="false">
+                        <HeaderCaptionTemplate>
+                            <DxCheckBox Checked="@IsAllChecked"
+                                        Alignment="CheckBoxContentAlignment.Center"
+                                        CheckedChanged="@((bool value) => OnAllCheckedChanged(value))"
+                                        CheckType="CheckType.Checkbox" />
+                        </HeaderCaptionTemplate>
+                        <CellDisplayTemplate Context="context2">
+                            <DxCheckBox Checked="@context2?.GetRowValue(@CheckedFieldName).ToStringTrim("N")"
+                                        ValueChecked="@("Y")"
+                                        ValueUnchecked="@("N")"
+                                        CheckedChanged="@((string value) => OnCheckedChanged(context2, value))"
+                                        CheckType="CheckType.Checkbox" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                }
+            </Columns>
+            <TotalSummary>
+                @TotalSummaryTemplate
+            </TotalSummary>
+
+        </DxGrid>
+    </div>
+</div>
+
+<style>
+    .common-control-page-width {
+        width: var(--control-width);
+    }
+
+    .common-control-page-height {
+        height: var(--control-height);
+    }
+
+    .common-grid-toolbar {
+        border-color: lightgray !important;
+        border: solid;
+        border-width: 1px;
+    }
+
+    .common-grid-toolbar-width {
+        width: var(--grid-layout-width);
+    }
+
+    .common-layout-grid {
+        overflow: auto;
+        width: var(--grid-layout-width);
+        height: var(--grid-layout-height);
+        margin: 0;
+        padding: 0;
+    }
+
+    .common-grid-need-col-color {
+        background-color: mistyrose !important
+    }
+
+    .common-grid {
+        width: var(--grid-width);
+        height: var(--grid-height);
+        margin: 0;
+        padding: 0;
+    }
+
+        .common-grid .card {
+            border-top-width: 0px;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+
+    .custom-grid-popup-toolbar-init,
+    .custom-grid-popup-toolbar-add,
+    .custom-grid-popup-toolbar-search,
+    .custom-grid-popup-toolbar-save,
+    .custom-grid-popup-toolbar-delete,
+    .custom-grid-popup-toolbar-export {
+        background-size: contain;
+        mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
+        background-position: center center;
+        background-color: currentColor;
+        height: 16px;
+        width: 16px;
+        opacity: 0.7;
+    }
+
+    .custom-grid-popup-toolbar-init {
+        -webkit-mask-image: url("images/lib/16InitIcon.png");
+        mask-image: url("images/lib/16InitIcon.png");
+    }
+
+    .custom-grid-popup-toolbar-add {
+        -webkit-mask-image: url("images/lib/16NewIcon.png");
+        mask-image: url("images/lib/16NewIcon.png");
+    }
+
+    .custom-grid-popup-toolbar-search {
+        -webkit-mask-image: url("images/lib/16SearchIcon.png");
+        mask-image: url("images/lib/16SearchIcon.png");
+    }
+
+    .custom-grid-popup-toolbar-save {
+        -webkit-mask-image: url("images/lib/16SaveIcon.png");
+        mask-image: url("images/lib/16SaveIcon.png");
+    }
+
+    .custom-grid-popup-toolbar-delete {
+        -webkit-mask-image: url("images/lib/16DeleteIcon.png");
+        mask-image: url("images/lib/16DeleteIcon.png");
+    }
+
+    .custom-grid-popup-toolbar-export {
+        -webkit-mask-image: url("images/lib/16exlsx.png");
+        mask-image: url("images/lib/16exlsx.png");
+    }
+
+</style>

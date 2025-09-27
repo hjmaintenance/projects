@@ -1,0 +1,184 @@
+﻿@using System.Collections.ObjectModel;
+@using System.Data
+@using MIT.DataUtil.Common
+@using MIT.Razor.Pages.Component.DataEdits.Data
+
+@typeparam TItem where TItem : ImageComboBoxData
+
+<DxComboBox Data="@_dataSource"
+            NullText="text..."
+            FilteringMode="DataGridFilteringMode.StartsWith"
+            Value="@SelectedItem"
+            EditFormat="@EditFormat"
+            ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+            ValueChanged="@((TItem dataItem) => OnValueChanged(dataItem))">
+    <Columns>
+        @foreach (SearchLookupColumns col in Columns)
+        {
+            <DxListEditorColumn FieldName="@col.FieldName"
+                                Caption="@col.Caption"
+                                Width="@col.Width"
+                                Visible="@col.Visible">
+
+            </DxListEditorColumn>
+        }
+    </Columns>
+
+    @* <EditBoxTemplate>
+    <div class="combobox-item-template">
+
+    @if (!string.IsNullOrEmpty(ImageFieldName) && context != null)
+    {
+    <img class="combobox-item-template-image" src="@context.Row?[ImageFieldName].ToStringTrim()" />
+    }
+
+    @if (!string.IsNullOrEmpty(DisplayFieldName) && context != null)
+    {
+    <div>@context.Row?[DisplayFieldName].ToStringTrim()</div>
+    }
+    </div>
+    </EditBoxTemplate>
+    <ItemTemplate>
+    <div class="combobox-item-template">
+    @if (!string.IsNullOrEmpty(ImageFieldName) && context != null)
+    {
+    <img class="combobox-item-template-image" src="@context.Row?[ImageFieldName].ToStringTrim()" />
+    }
+    @if (!string.IsNullOrEmpty(DisplayFieldName) && context != null)
+    {
+    <div>@context.Row?[DisplayFieldName].ToStringTrim()</div>
+    }
+    </div>
+    </ItemTemplate> *@
+</DxComboBox>
+
+@code {
+    [Parameter]
+    public string? EditFormat { get; set; } = "{0}";
+    [Parameter]
+    public string? DisplayFieldName { get; set; }
+    [Parameter]
+    public string? ValueFieldName { get; set; }
+    [Parameter]
+    public string? ImageFieldName { get; set; }
+    [Parameter]
+    public bool IsShowEmptyRow { get; set; } = true;
+    [Parameter]
+    public string EmptyRowName { get; set; } = "전체";
+    [Parameter]
+    public bool IsFirstRowSelected { get; set; } = true;
+    [Parameter]
+    public List<SearchLookupColumns> Columns { get; set; } = new List<SearchLookupColumns>();
+
+    public object? EditValue
+    {
+        get
+        {
+            return SelectedItem?.Value;
+        }
+        set
+        {
+            if (value == null || string.IsNullOrEmpty(ValueFieldName))
+            {
+                SelectedItem = null;
+                return;
+            }
+
+            var item = _dataSource.FirstOrDefault(w => w.Value.ToStringTrim().Equals(value.ToStringTrim()));
+            SelectedItem = item;
+            StateHasChanged();
+        }
+    }
+
+    [Parameter]
+    public EventCallback<ImageComboBoxData> ValueChanged { get; set; }
+
+    // public DataTable? DataSource
+    // {
+    //     get { return _datatable; }
+    //     set
+    //     {
+    //         if (IsShowEmptyRow && value != null && !string.IsNullOrEmpty(DisplayFieldName))
+    //         {
+    //             DataRow row = value.NewRow();
+    //             row[DisplayFieldName] = EmptyRowName;
+    //             value.Rows.InsertAt(row, 0);
+    //         }
+    //         _dataSource = ConvertDataSourceToObservableCollection(value);
+    //         _datatable = value;
+    //         StateHasChanged();
+
+    //         if (_dataSource.Count > 0 && IsFirstRowSelected)
+    //         {
+    //             var first = _dataSource.FirstOrDefault();
+    //             EditValue = first?.Value;
+    //         }
+    //         StateHasChanged();
+    //     }
+    // }
+    public ObservableCollection<TItem> DataSource
+    {
+        get { return _dataSource; }
+        set
+        {
+            _dataSource = value;
+
+            if (_dataSource != null && _dataSource.Count > 0 && IsFirstRowSelected)
+            {
+                 var first = _dataSource.FirstOrDefault();
+                 EditValue = first?.Value;
+            }
+            StateHasChanged();
+        }
+    }
+
+    protected ObservableCollection<TItem> _dataSource { get; set; } = new ObservableCollection<TItem>();
+    protected DataTable? _datatable;
+
+    public TItem? SelectedItem { get; protected set; }
+
+    protected ObservableCollection<ImageComboBoxData> ConvertDataSourceToObservableCollection(DataTable? datatable)
+    {
+        ObservableCollection<ImageComboBoxData> list = new ObservableCollection<ImageComboBoxData>();
+
+        if (ValueFieldName == null)
+            throw new Exception("ValueFieldName는 필수 입니다.");
+
+        if (datatable == null)
+            return list;
+
+        foreach (DataRow row in datatable.Rows)
+        {
+            var item = new ImageComboBoxData();
+            item.Value = row[ValueFieldName];
+            item.Row = row;
+
+            list.Add(item);
+        }
+
+        return list;
+    }
+
+    protected void OnValueChanged(ImageComboBoxData dataItem)
+    {
+        SelectedItem = dataItem as TItem;
+        ValueChanged.InvokeAsync(dataItem);
+    }
+}
+
+<style>
+    .combobox-item-template {
+        display: inline-flex;
+        align-items: center;
+        width: 100%;
+    }
+
+        .combobox-item-template > img {
+            width: 1rem;
+            height: 1rem;
+        }
+
+    .combobox-item-template-image {
+        margin: 0 5px 0 0;
+    }
+</style>

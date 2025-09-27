@@ -1,0 +1,88 @@
+﻿.blazor-themes a.blazing-berry {
+  color: #5c2d91;
+}
+
+.blazor-themes a.blazing-dark {
+  color: #46444a;
+}
+
+.blazor-themes a.office-white {
+  color: #fe7109;
+}
+
+.blazor-themes a.purple {
+  color: #7989ff;
+}
+
+
+.blazor-themes a.default {
+  color: #007bff;
+}
+
+.blazor-themes a.default-dark {
+  color: #212529;
+}
+
+.blazor-themes a.cerulean {
+  color: #2fa4e7;
+}
+
+.blazor-themes a.cyborg {
+  color: #060606;
+}
+
+.blazor-themes a.flatly {
+  color: #dce4ec;
+}
+
+.blazor-themes a.journal {
+  color: #eb6864;
+}
+
+.blazor-themes a.litera {
+  color: #4582ec;
+}
+
+.blazor-themes a.lumen {
+  color: #158cba;
+}
+
+.blazor-themes a.lux {
+  color: #1a1a1a;
+}
+
+.blazor-themes a.pulse {
+  color: #593196;
+}
+
+.blazor-themes a.simplex {
+  color: #d9230f;
+}
+
+.blazor-themes a.solar {
+  color: #b58900;
+}
+
+.blazor-themes a.superhero {
+  color: #df691a;
+}
+
+.blazor-themes a.united {
+  color: #e95420;
+}
+
+.blazor-themes a.yeti {
+  color: #008cba;
+}
+
+.theme-external {
+  font-size: 0.875rem;
+}
+
+.blazor-themes a.fluent-light {
+  color: #0f6cbd;
+}
+
+.blazor-themes a.fluent-dark {
+  color: #282828;
+}

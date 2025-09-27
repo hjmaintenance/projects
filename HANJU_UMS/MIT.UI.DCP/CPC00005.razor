@@ -1,0 +1,40 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+
+@inherits CPC00005Base
+
+<DxFormLayout CssClass="w-100">
+
+    <DxFormLayoutGroup Caption="조회조건" ColSpanSm="12">
+        <Items>
+
+            <DxFormLayoutItem Caption="거래처" ColSpanSm="3">
+                <CommonCustSearchLookup @ref="@cbo_CUST_CODE" />
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem ColSpanSm="4">
+                <div style="display: flex; align-items: center;">
+                    <label class="dxbl-fl-cpt dxbl-text" style=" margin-right: 10px;">검사일자</label>
+                    <CommonDateEdit @ref="@Dte_FromDate" />
+                    <label class="dxbl-fl-cpt dxbl-text" style="margin: 0 10px;">~</label>
+                    <CommonDateEdit @ref="@Dte_ToDate" />
+                </div>
+            </DxFormLayoutItem>
+
+        </Items>
+    </DxFormLayoutGroup>
+
+    <DxFormLayoutGroup Caption="수입검사" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+
+            <CommonGridDynamic @ref="Grd1"
+                               ControlHeight="500"
+                               InputSearchParameter="@Grd1_OnInputSearchParameter"
+                               SearchQueryName="SP_CPC005_QMB300_SELECT" />
+
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+
+</DxFormLayout>

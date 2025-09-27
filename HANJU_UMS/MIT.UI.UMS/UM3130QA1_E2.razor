@@ -1,0 +1,414 @@
+﻿@{
+  /*
+  * 작성자명 : 김지수
+  * 작성일자 : 25-02-27
+  * 최종수정 : 25-02-27
+  * 화면명 : 계측기별 Peak값 조회
+  * 프로시저명 : : P_HMI_DAY_USEQTY_PEAK, P_HMI_TIME_USEQTY_PEAK, P_HMI_MIN_UEEQTY_PEAK, P_HMI_PEAK_VALUE_RST
+  */
+}
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Charts
+@using System.Data
+@using MIT.ServiceModel
+@using System.Drawing
+@inherits UM3130QA1_E2Base
+
+<DxFormLayout CssClass="w-100">
+        @{ /* search area */ }
+  <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+
+    <DxFormLayoutItem Caption="조회 년월" ColSpanSm="2" >
+      <CommonDateEdit @ref="@SYYYYMM" DisplayFormat="yyyy-MM-dd" />
+    </DxFormLayoutItem>
+    <DxFormLayoutItem Caption="~" ColSpanSm="2" >
+      <CommonDateEdit @ref="@EYYYYMM" DisplayFormat="yyyy-MM-dd" />
+    </DxFormLayoutItem>
+    <DxFormLayoutItem Caption="수용가" ColSpanSm="3" >
+      <MitCombo CodeId="company"
+      @ref=ComObj
+      @bind-Value="@SelComp"
+      SelectedItemChanged="COM_Change"
+      SearchMode="ListSearchMode.AutoSearch"
+      SearchFilterCondition="ListSearchFilterCondition.Contains" />
+    </DxFormLayoutItem>
+
+  </DxFormLayoutGroup>
+
+
+
+
+
+  <DxFormLayoutGroup Caption="차트 제어" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+
+  </DxFormLayoutGroup>
+
+
+</DxFormLayout>
+
+
+
+
+<DxGridLayout CssClass="w-100">
+  <Rows>
+    <DxGridLayoutRow Height="auto" />
+  </Rows>
+  <Columns>
+    <DxGridLayoutColumn Width="17%" />
+    <DxGridLayoutColumn Width="3%" />
+    <DxGridLayoutColumn Width="80%" />
+  </Columns>
+  <Items>
+
+    <DxGridLayoutItem Row="0" Column="2">
+      <Template>
+
+
+        <DxChart @ref="_chart"
+        Data="@ChartData"
+        Width="100%" Height="40vh"
+
+
+>
+
+          <DxChartCrosshair Enabled="true" Width="2" DashStyle="ChartDashStyle.Dash"
+          Color="#f05b41"
+          Opacity="0.8">
+
+            <DxChartCrosshairLabel Visible="true">        </DxChartCrosshairLabel>
+
+            <DxChartCrosshairHorizontalLine Width="3" Color="#f05b41" Opacity="0.7">
+              <DxChartCrosshairLabel BackgroundColor="#f05b41" Format='ChartElementFormat.FromLdmlString("#.0")'>
+                <DxChartFont Weight="700" />
+              </DxChartCrosshairLabel>
+            </DxChartCrosshairHorizontalLine>
+
+            <DxChartCrosshairVerticalLine Color="#f05b41">
+              <DxChartCrosshairLabel BackgroundColor="#f05b41" Format='ChartElementFormat.FromLdmlString("yyyy-MM-dd HH:mm:ss")'>
+                <DxChartFont Size="16" />
+              </DxChartCrosshairLabel>
+            </DxChartCrosshairVerticalLine>
+
+          </DxChartCrosshair>
+
+          @if (ChartData != null) {
+
+            @foreach (var cd in ChartData) {
+
+              <DxChartSplineSeries T="DPoint"
+                TArgument="DateTime?"
+                TValue="double?"
+                Data="@cd.DPoints"
+                ArgumentField="i => i.Xtime"
+                ValueField="i => i.Qty1"
+                Name="@cd.RName">
+                <DxChartSeriesPoint Visible=false />
+
+
+              </DxChartSplineSeries>
+
+            }
+
+          }
+
+          <DxChartLegend VerticalAlignment="VerticalEdge.Bottom" HorizontalAlignment="HorizontalAlignment.Center" Position="RelativePosition.Outside" />
+
+          <DxChartArgumentAxis MinorTickInterval="ChartAxisInterval.Hour"                               VisualRangeUpdateMode=ChartVisualRangeUpdateMode.Keep>
+
+            @* VisualRangeUpdateMode=ChartVisualRangeUpdateMode.Keep *@
+
+
+
+            <DxChartAxisRange StartValue="@StartValue" EndValue=@EndValue   />
+
+            <DxChartAxisLabel WordWrap="ChartWordWrap.None" Overlap="ChartAxisLabelOverlap.Hide" Format='ChartElementFormat.FromLdmlString("yy-MM-dd <br />HH:mm:ss")' />
+
+
+            <DxChartAxisMinorTick Visible=true    Color="Color.Blue"  Opacity="1" />
+            
+          </DxChartArgumentAxis>
+
+
+          <DxChartValueAxis ZeroAlwaysVisible=true >
+            <DxChartAxisRange StartValue=@StartValueY EndValue=@EndValueY  />
+
+            <DxChartAxisMinorTick Visible=true    Color="Color.Red"        Opacity="1" />
+            <DxChartAxisLabel  Format='ChartElementFormat.FromLdmlString(LabelFormat)' />
+          </DxChartValueAxis>
+
+
+
+          @* <DxChartZoomAndPanSettings ArgumentAxisZoomAndPanMode="ChartAxisZoomAndPanMode.Both"          /> *@
+
+
+          <DxChartZoomAndPanSettings ArgumentAxisZoomAndPanMode="ChartAxisZoomAndPanMode.Both" ValueAxisZoomAndPanMode="ChartAxisZoomAndPanMode.None" />
+          <DxChartScrollBarSettings ArgumentAxisScrollBarVisible=@IsRealTime ArgumentAxisScrollBarPosition="ChartScrollBarPosition.Bottom" />
+
+
+
+
+          @* <DxChartScrollBarSettings ArgumentAxisScrollBarVisible="true" ArgumentAxisScrollBarPosition="ChartScrollBarPosition.Bottom" /> *@
+
+
+
+
+          <DxChartTooltip Enabled="true">
+          @*   @context.Point.Render((sp) => *@
+          @*     @<div style="margin: 0.75rem"> *@
+          @*       <span>@($"{sp.Argument}")</span> *@
+          @*       <hr /> *@
+          @*       <span>@($"{sp.Value}")</span> *@
+          @*     </div> *@
+          @*          ) *@
+          </DxChartTooltip>
+
+
+
+
+
+
+
+
+
+
+
+        </DxChart>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <DxRangeSelector Width="100%" ValueChanged="@OnValueChanged" AllowSliderSwap="true"
+                         SelectedRangeStartValue=@StartValueC SelectedRangeEndValue=@EndValueC
+                         Data=gardData>
+
+
+          <DxRangeSelectorChart>
+
+            <DxChartAreaSeries T="DPoint" TArgument="DateTime?" TValue="double?"
+                               ArgumentField="@(dp => dp.Xtime)"
+                               ValueField="@(dp => dp.Qty1)">
+            </DxChartAreaSeries>
+
+          </DxRangeSelectorChart>
+          <DxRangeSelectorScale ValueType="ChartAxisDataType.DateTime" TickInterval="ChartAxisInterval.Minutes(10)"
+                                StartValue="@StartValueF"
+                                EndValue="@EndValueF">
+          </DxRangeSelectorScale>
+
+
+          <DxRangeSelectorSliderMarker>
+            <DxTextFormatSettings LdmlString=@LabelFormatDate />
+          </DxRangeSelectorSliderMarker>
+
+
+
+        </DxRangeSelector>
+
+        <div class="gaide" />
+
+
+      </Template>
+    </DxGridLayoutItem>
+
+    
+    <DxGridLayoutItem Row="0" Column="1">
+      <Template>
+
+        
+        <DxFormLayout CssClass="w-100 "     >
+
+        <DxFormLayoutItem Caption="" ColSpanSm="12" CaptionPosition=CaptionPosition.Horizontal>
+
+        <div class="range_grp" style="height:38vh;width:100%;">
+          <span class="badge bg-secondary range_top">@EndValueY</span>
+
+              <input type="range" orient="vertical" @bind-value=StartValueX min="@StartValueY2" max="@EndValueY2" class="range_bottom-input" />
+              <input type="range" orient="vertical" @bind-value=EndValueY min="@StartValueY2" max="@EndValueY2" class="range_top-input" />
+
+          <span class="badge bg-secondary range_bottom">@StartValueY</span>
+        </div>
+          
+
+
+        </DxFormLayoutItem>
+
+        </DxFormLayout>
+
+        </Template>
+    </DxGridLayoutItem>
+
+    <DxGridLayoutItem Row="0" Column="0">
+      <Template>
+        <DxFormLayout CssClass="w-100 "     >
+          
+          
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <DxFormLayoutItem Caption="유틸리티" ColSpanSm="12" CaptionPosition=CaptionPosition.Vertical>
+
+
+            <DxListBox Data="@FdrData"
+            TextFieldName="Value"
+            SelectionMode="ListBoxSelectionMode.Multiple"
+                       ValuesChanged="@( (IEnumerable<KeyValuePair<string,string>> values) => FDR_Change(values))"
+            ShowCheckboxes=true
+            style="height:auto;"
+            
+            >
+            </DxListBox>
+
+
+          </DxFormLayoutItem>
+
+
+
+          
+
+          <DxFormLayoutItem Caption="Control" ColSpanSm="12" CaptionPosition=CaptionPosition.Vertical>
+
+
+            <DxCheckBox CssClass="w-100"
+                        @bind-Checked="@IsRealTime"
+                        Alignment="CheckBoxContentAlignment.Left"
+                        LabelPosition="LabelPosition.Right">
+              실시간 데이터 가져오기 
+            </DxCheckBox>
+
+            <DxCheckBox CssClass="w-100"
+                        @bind-Checked="@IsVerticalSizeAuto"
+                        Alignment="CheckBoxContentAlignment.Left"
+                        LabelPosition="LabelPosition.Right">
+              자동 차트 세로크기 
+            </DxCheckBox>
+
+
+          </DxFormLayoutItem>
+
+
+
+
+
+        </DxFormLayout>
+      </Template>
+    </DxGridLayoutItem>
+
+
+
+
+  </Items>
+</DxGridLayout>
+
+@code{
+  
+  string LabelFormat = ",##0";
+  string LabelFormatDate = "yy-MM-dd HH:mm";
+
+
+}
+
+            <style>
+
+
+  input[type='range'] {
+    overflow: hidden;
+    -webkit-appearance: none;
+    background-color: #9a905d;
+  }
+
+
+  input[type='range']::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    color: #13bba4;
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #434343;
+  }
+
+
+
+  input[type=range][orient=vertical] {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    appearance: slider-vertical;
+    width: 16px;
+    vertical-align: bottom;
+    height: 95%;
+    float: right;
+    /* clear: both; */
+  }
+
+  .range_grp{
+
+  }
+
+
+  .range_grp .range_top {
+    float: right;
+    clear: both;
+      font-size: 12px;
+      background-color: var(--dxbl-client-component-palette-danger) !important;
+  }
+
+
+  .range_grp .range_bottom {
+    float: right;
+    clear: both;
+      font-size: 12px;
+      background-color: var(--dxbl-client-component-palette-primary) !important;
+  }
+  
+  .range_top-input {
+    accent-color: var(--dxbl-client-component-palette-danger) !important;
+  }
+
+  .range_bottom-input {
+    clear: both;
+    transform: rotate(180deg);
+    accent-color: var(--dxbl-client-component-palette-primary) !important;
+
+  }
+
+
+  .gaide{
+    width: 100%;
+    background: #ffffff;
+    height: 100px;
+    position: relative;
+    top: -110px;
+  }
+
+              </style>

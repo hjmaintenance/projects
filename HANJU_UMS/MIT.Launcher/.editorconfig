@@ -1,0 +1,17 @@
+﻿[*.cs]
+
+# BL0005: Component parameter should not be set outside of its component.
+dotnet_diagnostic.BL0005.severity = silent
+
+
+
+
+dotnet_diagnostic.CS0105.severity = silent
+
+dotnet_diagnostic.CS0659.severity = silent
+dotnet_diagnostic.cs8600.severity = silent
+dotnet_diagnostic.cs8601.severity = silent
+dotnet_diagnostic.cs8602.severity = silent
+dotnet_diagnostic.cs8603.severity = silent
+dotnet_diagnostic.CS8604.severity = silent
+dotnet_diagnostic.CS8618.severity = silent

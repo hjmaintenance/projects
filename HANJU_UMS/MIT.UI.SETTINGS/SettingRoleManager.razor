@@ -1,0 +1,107 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@inherits SettingRoleManagerBase
+
+<DxFormLayout CssClass="w-100">
+    @if (!IsMainMenuUIMode)
+    {
+        <DxFormLayoutGroup CssClass="card-search-layout-group" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+            <DxFormLayoutItem ColSpanSm="1">
+                <DxButton RenderStyle="ButtonRenderStyle.Primary"
+                          RenderStyleMode="ButtonRenderStyleMode.Contained"
+                          IconCssClass="main-toolbar-btn-icon-search"
+                          Text="조회"
+                          Click="btn_Search"
+                          CssClass="w-100 main-toolbar-btn" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem ColSpanSm="1">
+                <DxButton RenderStyle="ButtonRenderStyle.Primary"
+                          RenderStyleMode="ButtonRenderStyleMode.Contained"
+                          IconCssClass="main-toolbar-btn-icon-save"
+                          Text="저장"
+                          Click="btn_Save"
+                          CssClass="w-100 main-toolbar-btn" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem ColSpanSm="1">
+                <DxButton RenderStyle="ButtonRenderStyle.Primary"
+                          RenderStyleMode="ButtonRenderStyleMode.Contained"
+                          IconCssClass="main-toolbar-btn-icon-delete"
+                          Text="삭제"
+                          Click="btn_Delete"
+                          CssClass="w-100 main-toolbar-btn" />
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    }
+    
+    <DxFormLayoutGroup Caption="조회조건" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="권한코드" ColSpanSm="3">
+            <DxTextBox @bind-Text="@RoleGrpID" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="권한명" ColSpanSm="3">
+            <DxTextBox @bind-Text="@RoleGrpName" />
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="프로그램목록" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                        ControlHeight="@(IsMainMenuUIMode ? 400 : 310)"
+                        IsShowToolBar="true"
+                        IsAddButtonEnabled="true"
+                        IsSearchButtonEnabled="false"
+                        IsSaveButtonEnabled="false"
+                        IsDeleteButtonEnabled="false"
+                         IsCheckBox="true">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn FieldName="ROLE_GRP_ID" Caption="권한ID" Width="200px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" IsPrimaryKey="true" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="ROLE_GRP_NAME" Caption="권한명" Width="300px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="SORT" Caption="순번" Width="150px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemSpinEdit CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="USE_YN" Caption="사용유무" Width="150px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemCheckBox CellContext="context2"  />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="REMARK" Caption="비고" Width="" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style>
+
+    .card-search-layout-group {
+        margin: 20px 0 0 0;
+    }
+
+    .main-toolbar-btn-icon-search,
+    .main-toolbar-btn-icon-save,
+    .main-toolbar-btn-icon-delete,
+    .main-toolbar-btn-icon-print,
+    .main-toolbar-btn-icon-close,
+    .main-toolbar-btn-icon-fav {
+        background-size: auto;
+        -webkit-mask-repeat: round;
+        background-position: center center;        
+        height: 16px;
+        width: 16px;                
+    }
+
+</style>

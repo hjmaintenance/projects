@@ -1,0 +1,52 @@
+﻿@using MIT.Razor.Pages.Component
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.DataEdits.Data
+@using System.Data
+@using MIT.UI.LIB.DataEdits.Data
+
+@inherits CommonImageComboBoxUIComponentBase
+
+<CommonImageComboBox @ref="@ComboBox"
+                     ValueFieldName="@ValueFieldName"
+                     DisplayFieldName="@DisplayFieldName"
+                     IsShowEmptyRow="@IsShowEmptyRow"
+                     EmptyRowName="@EmptyRowName"
+                     IsFirstRowSelected="@IsFirstRowSelected"
+                     ValueChanged="@((ImageComboBoxData? item) => OnValueChanged(item))">
+
+</CommonImageComboBox>
+@code {
+
+    [Parameter]
+    public string DisplayFieldName { get; set; } = "MSG_NAME";
+    [Parameter]
+    public string ValueFieldName { get; set; } = "MSG_ID";
+
+    protected string QueryName { get; set; } = "SP_COMBO_COM_MSG_ID_SELECT";
+
+    public override async Task LoadData()
+    {
+        if (ComboBox != null)
+            ComboBox.DataSource = await DBSearch();
+    }
+
+
+    #region [ 데이터 정의 메소드 ]
+
+    private async Task<DataTable?> DBSearch()
+    {
+        if (QueryService == null)
+            throw new Exception("QueryService가 Null 입니다.");
+
+        if (QueryName == null)
+            throw new Exception("QueryName의 값이 없습니다.");
+
+        var datatable = await QueryService.ExecuteDatatableAsync(QueryName, new Dictionary<string, object?>()
+        {
+        });
+
+        return datatable;
+    }
+
+    #endregion [ 데이터 정의 메소드 ]
+}

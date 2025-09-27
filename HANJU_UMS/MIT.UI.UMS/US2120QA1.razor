@@ -1,0 +1,109 @@
+﻿@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-02-06
+     * 최종수정 : 25-02-06
+     * 화면명 : 증기 일별사용량 현황
+     * 프로시저 : P_HMI_USE_MONTHSTMDAYTOTAL_SELECT01
+    */
+}
+
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.Charts
+@using MIT.UI.UMS
+@using System.Data
+@using System.Linq
+@inherits US2120QA1Base
+
+
+@{
+    string suffix = "T";
+    string dataFormat = "N0";
+}
+@if (string.Compare(USE_QTY_TYPE, "2") == 0)
+{
+    suffix = "V";
+    dataFormat = "N1";
+}
+
+<DxFormLayout CssClass="w-100">
+    @{
+        /* search area */
+    }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="조회년월" ColSpanSm="4"><CommonDateEdit @ref="@YYMM" DisplayFormat="yyyy-MM-dd" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="수용가" ColSpanSm="4">
+            @if (isHanju)
+            {
+                <MitCombo CodeId="company2" Etc0="ST" @bind-Value="@COM_ID" SearchMode="ListSearchMode.AutoSearch" SearchFilterCondition="ListSearchFilterCondition.Contains" IsAll="true" />
+            }
+            else
+            {
+                <CommonTextBox @ref=@ComText ReadOnly="true" />
+            }
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="구분" ColSpanSm="4"><MitCombo CodeId="use_qty_type" @bind-Value="@USE_QTY_TYPE" @bind-Text="@UseQtyTypeLegend" NullText="사용량" /></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{
+        /* content area */
+    }
+    <DxFormLayoutGroup Caption="증기 일별 사용량 현황" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-grid"
+                        IsExportDocEnabled=false
+                        IsExportImageEnabled=false
+                        IsExportPDFEnabled=false
+                        IsExportXlsxEnabled=false
+                        ExportFileName="증기 일별 사용량 현황"
+                        IsShowToolBar=true>
+                <DataColumnsTemplate>
+                    <DxGridDataColumn Caption="구분" FieldName="DD" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridBandColumn Caption="공급량(TON)" CaptionAlignment="GridTextAlignment.Center">
+                        <Columns>
+                            <DxGridBandColumn Caption="수용가" CaptionAlignment="GridTextAlignment.Center">
+                                <Columns>
+                                    <DxGridDataColumn Caption="원증기" FieldName="@("PRI_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                                    <DxGridDataColumn Caption="고압" FieldName="@("HP_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                                    <DxGridDataColumn Caption="중압" FieldName="@("MP_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                                    <DxGridDataColumn Caption="저압" FieldName="@("LP_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                                    <DxGridDataColumn Caption="소계" FieldName="@("HI_SS"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                                </Columns>
+                            </DxGridBandColumn>
+                            @* <DxGridDataColumn Caption="합계" FieldName="@("HI_USEQTY_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn> *@
+                        </Columns>
+                    </DxGridBandColumn>
+                    <DxGridBandColumn Caption="잉여증기 수급량(TON)" CaptionAlignment="GridTextAlignment.Center" Visible="@(isHanju == true || COM_ID is "yci_MA" or "kpchem_KPC" or "akp_PA" or "tspc_AN" or "samsung_BP" or "USA_FR_PRI")">
+                        <Columns>
+                            <DxGridDataColumn Caption="용산" FieldName="@("FR01_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" Visible="@(isHanju || COM_ID == "yci_MA")"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="롯데" FieldName="@("FR02_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" Visible="@(isHanju || COM_ID == "kpchem_KPC")"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="애경" FieldName="@("FR03_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" Visible="@(isHanju || COM_ID == "akp_PA")"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="한화임팩트" FieldName="@("FR04_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" Visible="@(isHanju || COM_ID == "tspc_AN")"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="롯데이네오스" FieldName="@("FR05_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" Visible="@(isHanju || COM_ID == "samsung_BP")"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="성암소각장" FieldName="@("FR06_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" Visible="@(isHanju || COM_ID == "USA_FR_PRI")"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                            @* <DxGridDataColumn Caption="합계" FieldName="@("FR_"+suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" Visible="@(isHanju || COM_ID == "yci_MA")"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn> *@
+                        </Columns>
+                    </DxGridBandColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+            @*<CommonGrid @ref="Grd1" CssClass="setting-program-grid">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn Caption="구분" FieldName="DD" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="원증기" FieldName="@($"PRI_" + suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="고압" FieldName="@($"HP_" + suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="중압" FieldName="@($"MP_" + suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="저압" FieldName="@($"LP_" + suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="소계" FieldName="@($"HI_SS" + suffix)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="@dataFormat" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>*@
+        </DxFormLayoutItem>
+        <MitChartLine HeightStr="200px" XName="DD" YName="@($"HI_SS" + suffix)" @ref="Chart1" YTitle="@UseQtyTypeLegend" IsShowLegend="true" IsShowToolTip="true"></MitChartLine>
+    </DxFormLayoutGroup>
+    
+</DxFormLayout>
+
+<style>
+
+</style>

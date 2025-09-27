@@ -1,0 +1,282 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+
+@inherits UH2220QA1Base
+@{/*
+   * 작성자명 : quristyle
+   * 작성일자 : 25-02-05
+   * 최종수정 : 25-02-18   
+   * 화면ID : UH2220QA1
+   * 화면명 : 수용가별 공급혐황(기간)
+   * 프로시저 : P_HMI_EVENT_SELECT02
+*/}
+<DxFormLayout CssClass="w-100">    
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="조회일시" ColSpanSm="2"><CommonDateEdit @ref="@SDATE" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="" ColSpanSm="2"><CommonTimeEdit @ref="@STIME" DisplayFormat="HH:mm"  /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="비교일시" ColSpanSm="2"><CommonDateEdit @ref="@EDATE" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="" ColSpanSm="2"><CommonTimeEdit @ref="@ETIME" DisplayFormat="HH:mm" /></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="수용가별 공급현황(기간)" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                IsCheckBox="true"
+                CssClass="mit-grid"
+
+                
+
+                  IsExportDocEnabled=false
+                  IsExportImageEnabled=false
+                  IsExportPDFEnabled=false
+                  IsExportXlsxEnabled=false
+                  IsShowToolBar=true>
+        <DataColumnsTemplate>
+
+          <DxGridBandColumn Caption="@SDTTM" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="수용가" FieldName="COM_NAME" Width="11em" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+<CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" />
+</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="전기(kW)" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="1공장" FieldName="SPW_PW1" Width="5em" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_PW1"))</CellDisplayTemplate>
+                </DxGridDataColumn>
+              <DxGridDataColumn Caption="2공장" FieldName="SPW_PW2" Width="5em" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_PW2"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="3공장" FieldName="SPW_PW3" Width="5em" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_PW3"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="계" FieldName="SPW" Width="5em" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="증기(T/H)" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="원" FieldName="SST_PRI" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_PRI"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="고압" FieldName="SST_HP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_HP"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="중압" FieldName="SST_MP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_MP"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="저압" FieldName="SST_LP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_LP"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="계" FieldName="SST" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridDataColumn Caption="잉여증기" Width="70" FieldName="SST_FR" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_FR"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+          <DxGridBandColumn Caption="순수" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="T/H" FieldName="SDWR" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SDWR"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="T/D" FieldName="SDW" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SDW"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="여과수" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="T/H" FieldName="SFWR" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SFWR"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="T/D" FieldName="SFW" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SFW"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="응축수" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="T/H" FieldName="SCDFWR" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SCDFWR"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="T/D" FieldName="SCDFW" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SCDFW"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+
+          <DxGridBandColumn Caption="@EDTTM" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="수용가" FieldName="COM_NAME1" Width="11em" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+<CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" />
+</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="전기(kW)" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="1공장" FieldName="SPW_PW1_B" Width="5em" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_PW1_B"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="2공장" FieldName="SPW_PW2_B" Width="5em" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_PW2_B"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="3공장" FieldName="SPW_PW3_B" Width="5em" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_PW3_B"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="계" FieldName="SPW_B" Width="5em" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_B"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="증기(T/H)" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="원" FieldName="SST_PRI_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_PRI_B"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="고압" FieldName="SST_HP_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_HP_B"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="중압" FieldName="SST_MP_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_MP_B"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="저압" FieldName="SST_LP_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_LP_B"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="계" FieldName="SST_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_B"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridDataColumn Caption="잉여증기" Width="70" FieldName="SST_FR_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_FR_B"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+          <DxGridBandColumn Caption="순수" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="T/H" FieldName="SDWR_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SDWR_B"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="T/D" FieldName="SDW_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SDW_B"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="여과수" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="T/H" FieldName="SFWR_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SFWR_B"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="T/D" FieldName="SFW_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SFW_B"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="응축수" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="T/H" FieldName="SCDFWR_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SCDFWR_B"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="T/D" FieldName="SCDFW_B" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SCDFW_B"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+
+          <DxGridBandColumn Caption="차이" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="수용가" FieldName="COM_NAME1" Width="11em" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("COM_NAME1"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="전기(kW)" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="1공장" FieldName="SPW_PW1_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_PW1_CHA"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="2공장" FieldName="SPW_PW2_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_PW2_CHA"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="3공장" FieldName="SPW_PW3_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_PW3_CHA"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="계" FieldName="SPW_PW_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SPW_PW_CHA"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="증기(T/H)" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="원" FieldName="SST_PRI_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_PRI_CHA"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="고압" FieldName="SST_HP_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_HP_CHA"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="중압" FieldName="SST_MP_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_MP_CHA"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="저압" FieldName="SST_LP_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_LP_CHA"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="계" FieldName="SST_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_CHA"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridDataColumn Caption="잉여증기" Width="70" FieldName="SST_FR_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SST_FR_CHA"), 1)</CellDisplayTemplate>
+</DxGridDataColumn>
+          <DxGridBandColumn Caption="순수" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="T/H" FieldName="SDWR_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SDWR_CHA"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="T/D" FieldName="SDW_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SDW_CHA"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="여과수" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="T/H" FieldName="SFWR_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SFWR_CHA"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="T/D" FieldName="SFW_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SFW_CHA"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+          <DxGridBandColumn Caption="응축수" CaptionAlignment="GridTextAlignment.Center">
+            <Columns>
+              <DxGridDataColumn Caption="T/H" FieldName="SCDFWR_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SCDFWR_CHA"))</CellDisplayTemplate>
+</DxGridDataColumn>
+              <DxGridDataColumn Caption="T/D" FieldName="SCDFW_CHA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center">
+                <CellDisplayTemplate Context="context2">@ZeroEmp(context2.GetRowValue("SCDFW_CHA"))</CellDisplayTemplate>
+</DxGridDataColumn>
+            </Columns>
+          </DxGridBandColumn>
+
+          <DxGridDataColumn Caption="비고" FieldName="REMARK" Width="15em" TextAlignment="GridTextAlignment.Left" CaptionAlignment="GridTextAlignment.Center">
+<CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="@(context2.GetRowValue("COM_ID").ToString()=="")" />
+</CellDisplayTemplate>
+</DxGridDataColumn>
+
+
+        </DataColumnsTemplate>
+
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+

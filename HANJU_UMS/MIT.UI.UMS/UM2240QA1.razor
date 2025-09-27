@@ -1,0 +1,95 @@
+﻿@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-02-06
+     * 최종수정 : 25-02-13
+     * 화면명 : 증기 공급량 현황 (수용가별,일별)
+     * 프로시저 : P_HMI_USE_DAYSTMCOMDAY_SELECT01
+    */
+}
+
+@using MIT.Razor.Pages.Common
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@inherits UM2240QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="조회년도" ColSpanSm="3"><CommonDateEdit @ref="@DATE"/></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="수용가" ColSpanSm="3"><MitCombo CodeId="company2" Etc0="ST" @bind-Value="@COM_ID" IsAll="true" SearchMode="ListSearchMode.AutoSearch" SearchFilterCondition="ListSearchFilterCondition.Contains" /></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="증기 공급량 현황 (수용가별,일별)" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="8">
+        <DxFormLayoutItem ColSpanSm="8">
+      <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-grid"
+                  RowDoubleClick="OnRowDoubleClick"
+                  IsExportDocEnabled=false
+                  IsExportImageEnabled=false
+                  IsExportPDFEnabled=false
+                  IsExportXlsxEnabled=false
+                        ExportFileName="증기 공급량 현황 (수용가별 일별)"
+                  IsShowToolBar=true>
+                <DataColumnsTemplate>
+          <DxGridDataColumn Caption="수용가" FieldName="COM_NAME" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridBandColumn Caption="일 사용량" CaptionAlignment="GridTextAlignment.Center">
+                        <Columns>
+              <DxGridDataColumn Caption="TON" FieldName="DI_USEQTY" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+              <DxGridDataColumn Caption="T/H" FieldName="D_USEQTY" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                        </Columns>
+                    </DxGridBandColumn>
+                    <DxGridBandColumn Caption="전일 사용량" CaptionAlignment="GridTextAlignment.Center">
+                        <Columns>
+              <DxGridDataColumn Caption="TON" FieldName="Y_DI_USEQTY" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+              <DxGridDataColumn Caption="T/H" FieldName="Y_D_USEQTY" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                        </Columns>
+                    </DxGridBandColumn>
+          <DxGridDataColumn Caption="전일대비(%)" FieldName="RATE" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+@code {
+  private void OnRowDoubleClick(GridRowClickEventArgs e){
+    if (CommonPopupService != null){
+
+      try{
+
+      // 수용가..
+        var com_id = (e.Grid.GetRowValue(e.VisibleIndex, "COM_ID") + "").Trim().Replace(" ", "");      // com_id 로 바꿔야 함.
+      if (string.IsNullOrEmpty(com_id)
+      || com_id == "소계"
+          || com_id == "합계"
+      ) {
+
+        return;
+      }
+
+    // 이걸로 구분 
+      // e.Column
+
+
+        TrendCode tc = new TrendCode() {
+            ComId = com_id,
+            FdrId = "",
+          GaugeType = TrendCode.GAUGE_TYPE.ST
+      };
+
+      CommonPopupService.Show(typeof(UH1070QA1_POP), "Trend View", Width: 1280, Height: 740, Parameter: tc, CloseCallback: OnCloseCallback);
+      }
+      catch (Exception ee) {
+      }
+    }
+  }
+  protected async Task OnCloseCallback(PopupResult result) {
+    if (result.PopupResultType != PopupResultType.OK) return;
+    await Task.Delay(1);
+
+  }
+
+}

@@ -1,0 +1,53 @@
+﻿@using MIT.DataUtil.Common
+@namespace MIT.Razor.Pages.Component.DataEdits
+<DxMemo ResizeMode="MemoResizeMode.Disabled"
+        Rows="@Rows"
+        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
+        Enabled="@Enabled"
+        ReadOnly="@ReadOnly"
+        maxlength="@_maxLength"
+        Text="@_text"
+        TextChanged="@((string text) => OnTextChanged(text))">
+</DxMemo>
+
+@code {
+    [Parameter]
+    public bool Enabled { get; set; } = true;
+
+    [Parameter]
+    public bool ReadOnly { get; set; } = false;
+
+    [Parameter]
+    public string MaxLength
+    {
+        get { return _maxLength; }
+        set { _maxLength = value; StateHasChanged(); }
+    }
+
+    [Parameter]
+    public int Rows { get; set; }
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    [Parameter]
+    public string? Text
+    {
+        get { return _text; }
+        set
+        {
+            OnTextChanged(value);
+            StateHasChanged();
+        }
+    }
+    protected string? _text = string.Empty;
+    protected string _maxLength = "";
+
+    protected void OnTextChanged(string text)
+    {
+        _text = text;
+        TextChanged.InvokeAsync(text);
+        StateHasChanged();
+    }
+
+}

@@ -1,0 +1,160 @@
+﻿@layout LoginUILayout
+@page "/Login"
+@using Microsoft.JSInterop
+@inherits LoginBase
+@inject IJSRuntime JsRuntime
+
+
+<link href="css\Login.css" rel="stylesheet" />
+<div class="login-container">
+    <div class="col-10 card login-child">
+
+        <div class="col-12 row login-child-body">
+            <div class="login-child-logo">
+        <img src="/images/t/Logo_Symbol_color.svg" style="width:140px;" />
+            </div>
+
+            <div>
+        <div style="width:100%;font-size:43px;text-align:center;margin-top: 17px;">
+          <image src="/images/t/Logo_Text_length.svg" style="width:65%;" />
+        </div>
+            </div>
+            <div class="login-child-form" style="margin-top:47px;">
+                <div class="col-8">
+                    <DxFormLayout>
+
+            <div class="btn-group col" role="group" aria-label="" style="margin: 0 8px;">
+              <button type="button" class="btn btn-sm @hanju_choice" @onclick='() => login_Choice( "h" )' >한주사내</button>
+              <button type="button" class="btn btn-sm @company_choice" @onclick='() => login_Choice( "c" )'>수용가</button>
+            </div>
+
+
+
+
+                        <DxFormLayoutItem ColSpanMd="12">
+                            <DxTextBox @bind-Text="@USER_ID" NullText="아이디" />
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem ColSpanMd="12">
+                            <DxTextBox @bind-Text="@PASSWORD" NullText="비밀번호" Password="true" CssClass="cw-320" @onkeyup="OnKeyUp" />
+                        </DxFormLayoutItem>
+
+            <a style="width:100%; height:1px; margin-top:8px; background-color:#999;"></a>
+
+                        <DxFormLayoutItem ColSpanMd="12">
+                            <DxButton CssClass="w-100 b-btn"
+                            Text="로그인"
+                            RenderStyle="ButtonRenderStyle.Primary"
+                            Click="@OnLogin" />
+                        </DxFormLayoutItem>
+
+                    </DxFormLayout>
+                </div>
+
+
+
+            </div>
+
+
+      <div>
+        <div style="width:100%;text-align:center;font-weight:bold;font-size: 13px;margin-top: 14px;color: #4f4a4a;">이용안내 : 불편사항 접수(내선번호 181-3)</div>
+        <div style="width:100%;text-align:center;color: #cbc8c8;font-size: 13px;margin-top: 26px;">Copyright Hanju.Co.LTD. All rights reserved.</div>
+      </div>
+        
+        
+        </div>
+
+
+
+    </div>
+
+<DxButton @onclick='() => {PASSWORD="super";USER_ID="super"; OnLogin(null);}'>super</DxButton>
+</div>
+
+
+<style>
+    .develop-test-login{
+        position: absolute;
+        top: 50%;
+        left: 77%;
+    }
+    .develop-test-login ul{
+            list-style: none;
+    }
+    .develop-test-login ul li{
+        margin: 5px 0px;
+    }
+    .develop-test-login ul li button{
+                    border: none;
+                    border-radius: 5px;
+                    padding: 5px 25px;
+                    min-width: 200px;
+    }
+
+
+  .btn-sm {
+    border: 0px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+
+  .btn-primary {
+    background-color: #003985;
+  }
+
+  .btn-secondary {
+  }
+
+  .btn-primary:after {
+      background-color:white !important;
+  }
+
+  .btn-primary:before {
+    background-color: white !important;
+  }
+
+
+  .btn-secondary:before {
+    background-color: white !important;
+  }
+
+  .btn-secondary:after {
+    background-color: white !important;
+  }
+
+
+  .login-child-logo {
+    height: 158px;
+  }
+
+
+
+</style>
+
+
+@code {
+  
+
+  public async void login_Choice(string han){
+    if( han == "h"){
+      hanju_choice = "btn-primary";
+      company_choice = "";
+    }
+    else{      
+      hanju_choice = "";
+      company_choice = "btn-primary";
+    }
+
+
+    StateHasChanged();
+
+  }
+
+
+    public async void setUser(string id, string pw)
+  {
+        USER_ID = id;
+        PASSWORD = pw;
+        await this.OnLogin(null);
+    }
+}

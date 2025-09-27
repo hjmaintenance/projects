@@ -1,0 +1,95 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.Charts
+@using MIT.UI.UMS
+@using System.Data
+@using System.Linq
+
+
+@inherits ZSYSLOG0001Base
+@{/*
+   * 작성자명 : quristyle
+   * 작성일자 : 25-02-10
+   * 최종수정 : 25-02-10   
+   * 화면ID : ZSYSLOG0001
+   * 화면명 : 프로그램제목을입력하세요
+   * 프로시저 : p_log_search
+  */}
+<DxFormLayout CssClass="w-100">    
+  @{ /* search area */ }
+  <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="검색" ColSpanSm="2"><MitTextBox @bind-Text="@SRCH" @onkeydown="srch_keydown" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="성공여부" ColSpanSm="2"><MitCombo CodeId="YN" IsAll="true" @bind-Value="@IsSuccess" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="일자" ColSpanSm="2">      <CommonDateEdit @ref="s_dt" />    </DxFormLayoutItem>
+    <DxFormLayoutItem ColSpanSm="2" Caption="-">      <CommonDateEdit @ref="E_DT" />    </DxFormLayoutItem>
+    <DxFormLayoutItem Caption="위험" ColSpanSm="2"><MitCombo CodeId="DANGER" IsAll="true" @bind-Value="@Danger" /></DxFormLayoutItem>
+  </DxFormLayoutGroup>
+  @{ /* content area */ }
+  <DxFormLayoutGroup Caption="데이터 로그" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem ColSpanSm="12">
+      <CommonGrid @ref="Grd1"
+      IsShowToolBar="true"
+      ExportFileName="데이터로그"
+      IsAddButtonEnabled="true"
+      IsSearchButtonEnabled="false"
+      IsSaveButtonEnabled="false"
+      IsDeleteButtonEnabled="false"
+      CssClass="mit-grid">
+        <DataColumnsTemplate> 
+          <DxGridDataColumn Caption="사용자" FieldName="USER_NAME" Width="80" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="컨트롤" FieldName="ComponentName" Width="100" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+
+
+          <DxGridDataColumn Caption="UI" FieldName="UI_NAME" Width="110"  CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+
+          
+
+          <DxGridDataColumn Caption="프로시저" FieldName="proc_nm" Width="240" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="Params" FieldName="prams" Width="400" CaptionAlignment="GridTextAlignment.Center" ><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true"  /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="Row" FieldName="ReturnCnt" Width="60" CaptionAlignment="GridTextAlignment.Center" />
+            
+          <DxGridDataColumn Caption="시작" FieldName="s_dt" Width="170" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemDateEdit CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="종료" FieldName="E_DT" Width="170" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemDateEdit CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+
+          <DxGridDataColumn Caption=" " FieldName="time_gap" Width="40" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+
+
+          
+
+
+          <DxGridDataColumn Caption="처리" FieldName="IsSuccess" Width="40" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemCheckBox2 CellContext="context2" Enable="false" /></CellDisplayTemplate></DxGridDataColumn>
+
+          
+          <DxGridDataColumn Caption="IP" FieldName="Client_ip" Width="100" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"  />
+         
+
+          <DxGridDataColumn Caption="WIP" FieldName="Web_ip" Width="100" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" />
+
+
+
+
+          <DxGridDataColumn Caption="Message" FieldName="Message" Width="auto" CaptionAlignment="GridTextAlignment.Center" />
+
+
+
+
+
+        </DataColumnsTemplate>
+      </CommonGrid>
+    </DxFormLayoutItem>
+  </DxFormLayoutGroup>
+</DxFormLayout>
+@code {
+
+
+  private async Task srch_keydown(KeyboardEventArgs e)
+  {
+    if (e.Key == "Enter")
+    {
+      await btn_Search();
+    }
+  }
+}

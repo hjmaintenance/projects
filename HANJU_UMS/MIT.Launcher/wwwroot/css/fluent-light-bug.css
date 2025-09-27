@@ -1,0 +1,13 @@
+﻿
+/*devexpress 버그 수정*/
+.dxbl-image .dxbl-icon-set-default {
+  display: unset !important;
+}
+
+.dxbl-tabs > .dxbl-tabs-tablist > .dxbl-scroll-viewer > .dxbl-scroll-viewer-content > ul > li > .dxbl-tabs-item:not(.dxbl-tabs-tmpl):not(.dxbl-disabled):not(:disabled).dxbl-active, .dxbl-tabs > .dxbl-tabs-tablist > ul > li > .dxbl-tabs-item:not(.dxbl-tabs-tmpl):not(.dxbl-disabled):not(:disabled).dxbl-active {
+  background-color: unset !important;
+}
+
+.dxbl-tag-box > .dxbl-tag > .dxbl-btn.dxbl-tag-btn-close > svg.dxbl-image {
+  color: white !important;
+}

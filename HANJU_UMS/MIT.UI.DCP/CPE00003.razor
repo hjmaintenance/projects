@@ -1,0 +1,37 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+
+@inherits CPE00003Base
+
+<DxFormLayout CssClass="w-100">
+
+    <DxFormLayoutGroup Caption="조회조건" ColSpanSm="12">
+        <Items>
+
+            <DxFormLayoutItem Caption="외주업체" ColSpanSm="3">
+                <CommonCustSearchLookup @ref="@cbo_CUST_CODE" />
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="품명" ColSpanSm="2">
+                <CommonTextBox @ref="@txt_ITEM" />
+            </DxFormLayoutItem>
+
+
+
+        </Items>
+    </DxFormLayoutGroup>
+
+    <DxFormLayoutGroup Caption="설계 특이사항" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+
+            <CommonGridDynamic @ref="Grd1"
+                               ControlHeight="500"
+                               InputSearchParameter="@Grd1_OnInputSearchParameter"
+                               SearchQueryName="SP_CPE003_DWA100_SELECT" />
+
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+
+</DxFormLayout>

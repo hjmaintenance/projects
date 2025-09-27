@@ -1,0 +1,296 @@
+﻿
+
+@font-face {
+  font-family: 'S-CoreDream';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'S-CoreDream';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+* {
+  font-family: S-CoreDream;
+}
+
+:root {
+  /*text-color*/
+  --text-color-base: #333333;
+  --text-color-focus: #0d6efd;
+  --text-color-exp: #808080;
+  --text-color-menu-2: #666666;
+  /*main*/
+  --bg-main: #ffffff;
+  --bg-contant: #f5f6f9;
+  /*data grid*/
+  --grid-title: #e6e6e6;
+  --grid-row-1: #f7f9fc;
+  --grid-row-2: #ffffff;
+  /*data main color*/
+  --data-red: #ff5935;
+  --data-bule: #34a6d4;
+  --data-yellow: #fa9f03;
+}
+
+/* main layout ----------------------------------------------------------------------------------- */
+.layout-item:has(.demo-header-container) {
+  z-index: 99;
+}
+/* main layout - header start*/
+.layout-item > .demo-header-container {
+  height: 52px;
+  box-shadow: 0 1px 4px 2px var(--bs-border-color);
+}
+
+.demo-header-container > .demo-header {
+  height: 100%;
+  background: var(--bg-main);
+  justify-content: flex-start;
+}
+
+.demo-header .d-block {
+  height: 100%;
+  transition: 0.3s ease;
+}
+
+  .demo-header .d-block:hover {
+    transform: scale(1.04);
+  }
+
+  .demo-header .d-block:focus {
+    box-shadow: none !important;
+  }
+
+.logo-image {
+  margin-left: 8px;
+/*  background-image: url(../images/main/logo_hanju_gray.png);*/
+  height: 32px;
+  width: 118px;
+  align-self: center;
+  justify-self: flex-start;
+}
+
+.demo-btn-container {
+  display: flex !important;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+/* main layout - header end */
+
+
+
+/* main layout - sidebar start */
+ui.dxbl-treeview-items-container li {
+  margin-top: 0.6rem;
+}
+
+.sidebar .dxbl-treeview-items-container {
+  gap: 0.3rem;
+}
+
+/* sidebar 2번째 deps menu 의 디자인 변경*/
+.dxbl-treeview .dxbl-expandable-container .dxbl-treeview-item > .dxbl-treeview-item-content > .dxbl-treeview-item-container span {
+  opacity: 0.8;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.area-side {
+  z-index: 98;
+  padding: 0.7rem 0.4rem;
+/*  background-color: var(--bg-main);*/
+  box-shadow: 1px 0 4px 2px var(--bs-border-color)
+}
+
+  .area-side span {
+    font-family: 'S-CoreDream';
+    font-weight: 500;
+/*    font-size: 0.9rem;*/
+  }
+
+    .area-side span:hover {
+      color: var(--text-color-focus);
+    }
+
+.dxbl-treeview .dxbl-treeview-item > .dxbl-treeview-item-content > .dxbl-t reeview-item-container:not(.dxbl-disabled):not(.dxbl-active) {
+  transition: 0.2s ease-in;
+}
+
+.dxbl-treeview .dxbl-treeview-item > .dxbl-treeview-item-content > .dxbl-treeview-item-container:not(.dxbl-disabled):not(.dxbl-active):hover {
+  color: var(--text-color-focus) !important;
+}
+/* main layout - sidebar end */
+/* content layout ----------------------------------------------------------------------------------- */
+.content {
+/*  background-color: var(--bg-contant);*/
+  padding: 0.6rem;
+  height: 100%;
+}
+/* content layout - head start */
+
+/*Top Tab menu */
+.Top-Btn-nav > .dxbl-tabs-tablist {
+  background-color: transparent !important;
+}
+
+.dxbl-tabs > .dxbl-tabs-tablist > .dxbl-scroll-viewer > .dxbl-scroll-viewer-content > ul > li > .dxbl-tabs-item:not(.dxbl-tabs-tmpl):not(.dxbl-disabled):not(:disabled).dxbl-active::after, .dxbl-tabs > .dxbl-tabs-tablist > ul > li > .dxbl-tabs-item:not(.dxbl-tabs-tmpl):not(.dxbl-disabled):not(:disabled).dxbl-active::after {
+/*  background-color: var(--text-color-focus);*/
+}
+
+.dxbl-tabs > .dxbl-tabs-tablist > .dxbl-scroll-viewer > .dxbl-scroll-viewer-content > ul > li > .dxbl-tabs-item:not(.dxbl-tabs-tmpl):not(.dxbl-disabled):not(:disabled).dxbl-active, .dxbl-tabs > .dxbl-tabs-tablist > ul > li > .dxbl-tabs-item:not(.dxbl-tabs-tmpl):not(.dxbl-disabled):not(:disabled).dxbl-active {
+  color: var(--text-color-focus);
+}
+
+.top-btn-text:focus {
+  color: var(--text-color-focus);
+}
+
+.top-btn-text {
+  font-family: 'S-CoreDream';
+  font-weight: 500;
+  font-size: 0.75rem;
+  margin: auto;
+}
+
+.dxbl-tabs-item:has(.top-btn-text) {
+  height: 2.8rem;
+  min-width: 8rem;
+  width: auto;
+  box-shadow: 0px 0px 1px 1px #efefef;
+  border-radius: 10px 10px 0 0 !important;
+/*  background-color: #fff !important;*/
+  padding-right: 0 !important;
+}
+
+.close-ico {
+  margin-left: auto;
+}
+/*Top Tab menu end */
+
+
+/* content layout - head end */
+/* content layout - context start */
+/*First Contents box*/
+
+.dxbl-tabs-content-panel {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.main-toolbar {
+  box-shadow: 0px 0px 1px 1px #efefef;
+  border-radius: 6px !important;
+}
+
+.main-toolbar-body {
+  padding: 0.6rem !important;
+}
+
+.main-toolbar-btn:has(.bi) {
+  font-family: 'S-CoreDream';
+  font-weight: 400;
+}
+/*First Contents box End*/
+/*Second Contents box */
+
+.mit-crr-page {
+  margin-top: 0.5rem;
+  width: 100%;
+  height: calc(100vh - 10rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 0 1rem 0;
+}
+
+
+
+.mit-search-area {
+/*  background-color: #fff;*/
+  box-shadow: 0px 0px 1px 1px #efefef;
+  border-radius: 12px;
+}
+/* xxxxxx xx*/
+.common-grid-toolbar {
+  border: 0;
+  /* border-radius: 5px 5px 0 0;
+    background: radial-gradient(red, transparent);*/
+}
+
+.dxbl-grid-table {
+  font-family: 'S-CoreDream';
+  font-weight: 400;
+}
+
+
+
+  .dxbl-grid-table tbody tr:nth-child(2n) {
+/*    background-color: var(--grid-row-1);*/
+  }
+
+
+  .dxbl-grid-table tbody > .dxbl-grid-focused-row:nth-child(2n) {
+/*    background-color: unset;*/
+    font-size: 50px;
+  }
+
+.grid-col-left-line {
+  border-left: 0;
+}
+/* content layout - context end */
+/*font */
+.dxbl-text {
+  font-family: 'S-CoreDream';
+}
+
+
+.demo-header.navbar .navbar-toggler {
+  height: unset;
+}
+
+
+
+
+.app-sidebar {
+  height: 90vh;
+  margin-bottom: 10px;
+  overflow-y: auto;
+}
+
+.area-side {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.dxbl-navigation-filter {
+  /*  background:red;*/
+  padding: 5px;
+  border-radius: 12px;
+  border: 0.5px solid #b3b3b3;
+  background-color: #f2f2f2;
+}
+
+
+
+
+
+
+
+
+.board_content {
+    background-color: #fff;
+}
+
+
+.mit-side-toggle_ {
+  left: 8px !important;
+}
+
+.mit-side-toggle_expand {
+  left: 208px !important;
+}

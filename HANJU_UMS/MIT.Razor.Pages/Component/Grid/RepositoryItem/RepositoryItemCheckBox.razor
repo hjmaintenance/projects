@@ -1,0 +1,49 @@
+﻿@using DevExpress.Blazor
+@using MIT.DataUtil.Common;
+@using System.Data;
+
+@inherits RepositoryItemComponentBase
+
+<DxCheckBox Enabled="@Enable" ReadOnly="@ReadOnly"
+            Checked="@CellContext?.GetRowValue(CellContext.DataColumn.FieldName).ToStringTrim(ValueUnchecked)"
+            ValueChecked="@ValueChecked"
+            ValueUnchecked="@ValueUnchecked"
+            CheckedChanged="@((string value) => OnCheckedChanged(CellContext, value))"
+            CheckType="CheckType" />
+
+
+@code {
+
+    /// <summary>
+    /// 체크시 VALUE 값
+    /// </summary>
+    [Parameter]
+    public string ValueChecked { get; set; } = "Y";
+    /// <summary>
+    /// 체크해제시 VALUE 값
+    /// </summary>
+    [Parameter]
+    public string ValueUnchecked { get; set; } = "N";
+    /// <summary>
+    /// 체크 모드 설정
+    /// </summary>
+    [Parameter]
+    public CheckType CheckType { get; set; } = CheckType.Checkbox;
+
+    private void OnCheckedChanged(GridDataColumnCellDisplayTemplateContext? context, string value)
+    {
+        
+        if (context == null || context.DataItem == null)
+            return;
+        var grd = context.Grid as DxGrid;
+        var dataItem = context.DataItem as DataRowView;
+
+        if (dataItem == null || grd == null)
+            return;
+
+        dataItem["CHK"] = "Y";
+        dataItem[context.DataColumn.FieldName] = value;
+
+        grd.SelectDataItem(dataItem);
+    }
+}

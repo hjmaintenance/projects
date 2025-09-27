@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultApplicationPartAssemblyInfo>false</EnableDefaultApplicationPartAssemblyInfo>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+<!-- 
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Blazor" Version="25.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.1" />
+    <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="25.1.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup> -->
+
+
+<ItemGroup>
+  <PackageReference Include="DevExpress.Blazor" Version="25.1.5" />
+  <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.8" />
+  <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.8" />
+  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.8" />
+  <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
+  <!-- <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="25.1.5" /> -->
+  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+</ItemGroup>
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\MIT.DataUtil\MIT.DataUtil.csproj" />
+    <ProjectReference Include="..\MIT.ServiceModel\MIT.ServiceModel.csproj" />
+  </ItemGroup>
+
+
+
+
+  <ItemGroup>
+    <Content Update="Component\Grid\RepositoryItem\RepositoryItemCheckBox2.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+  
+  
+<!--   
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="::echo f | xcopy /y d:\svn\HANJU_UMS\MIT.Razor.Pages\bin\Debug\net9.0\MIT.Razor.Pages.dll d:\svn\HANJU_UMS\MIT.libs\MIT.Razor.Pages.dll&#xD;&#xA;echo f | xcopy /y C:\projects\HANJU_UMS\MIT.Razor.Pages\bin\Debug\net9.0\MIT.Razor.Pages.dll C:\projects\HANJU_UMS\MIT.libs\MIT.Razor.Pages.dll&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+  </Target> -->
+
+</Project>

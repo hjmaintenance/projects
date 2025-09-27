@@ -1,0 +1,103 @@
+﻿@using MIT.DataUtil.Common
+@using MIT.Razor.Pages.Component.DataEdits.Data
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using System.Data
+@using MIT.UI.LIB.DataEdits.Data
+@using System.Collections.ObjectModel
+
+@inherits RepositoryItemSearchLookup<CustImageComboBoxData>
+
+<RepositoryItemSearchLookup TItem="CustImageComboBoxData"
+                            DisplayFieldName="@DisplayFieldName"
+                            ValueFieldName="@ValueFieldName"
+                            AllowEdit="@AllowEdit"
+                            IsPrimaryKey="@IsPrimaryKey"
+                            ReadOnly="@ReadOnly"
+                            Enable="@Enable"
+                            DataSource="@DataSource"
+                            ValueChanged="@ValueChanged"
+                            Columns="@Columns"
+                            CellContext="CellContext">
+</RepositoryItemSearchLookup>
+
+@code {
+
+
+    #region [조회조건]
+    [Parameter]
+    public string CUST_CODE { get; set; } = string.Empty;
+    [Parameter]
+    public string CUST_DIV { get; set; } = string.Empty;
+    [Parameter]
+    public string CUST_NAME { get; set; } = string.Empty;
+    #endregion [조회조건]
+
+    [Parameter]
+    public string QueryName { get; set; } = "SP_COMBO_COM_CUST_SELECT";
+
+    public List<SearchLookupColumns> Columns { get; set; } = new List<SearchLookupColumns>() {
+            new SearchLookupColumns() { FieldName = "CUST_NAME", Caption="거래처명", Width="200px" },
+            new SearchLookupColumns() { FieldName = "CUST_DIV", Caption="구분", Width="100px" },
+            new SearchLookupColumns() { FieldName = "CUST_CODE", Caption="거래처코드", Width="100px" },
+        };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+
+        DisplayFieldName = "CUST_NAME";
+        ValueFieldName = "CUST_CODE";
+
+        await LoadData();
+    }
+
+    public async Task LoadData()
+    {
+        DataTable? dt = await DBSearch();
+
+        if (dt == null || dt.Rows.Count == 0)
+            DataSource.Clear();
+        else
+        {
+            ObservableCollection<CustImageComboBoxData> list = new ObservableCollection<CustImageComboBoxData>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                CustImageComboBoxData data = new CustImageComboBoxData();
+                data.CUST_CODE = row["CUST_CODE"].ToStringTrim();
+                data.CUST_DIV = row["CUST_DIV"].ToStringTrim();
+                data.CUST_NAME = row["CUST_NAME"].ToStringTrim();
+                data.Value = row[ValueFieldName].ToStringTrim();
+                data.Row = row;
+
+                list.Add(data);
+            }
+
+            DataSource = list;
+        }
+        StateHasChanged();
+    }
+
+    #region [ 데이터 정의 메소드 ]
+
+    private async Task<DataTable?> DBSearch()
+    {
+        if (QueryService == null)
+            throw new Exception("QueryService가 Null 입니다.");
+
+        if (QueryName == null)
+            throw new Exception("QueryName의 값이 없습니다.");
+
+        var datatable = await QueryService.ExecuteDatatableAsync(QueryName, new Dictionary<string, object?>()
+        {
+            { "CUST_CODE", CUST_CODE },
+            { "CUST_DIV", CUST_DIV },
+            { "CUST_NAME", CUST_NAME },
+        });
+
+        return datatable;
+    }
+
+    #endregion [ 데이터 정의 메소드 ]
+}

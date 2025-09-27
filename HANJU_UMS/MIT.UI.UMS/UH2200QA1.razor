@@ -1,0 +1,118 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+
+
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@inherits UH2200QA1Base
+@{/*
+   * 작성자명 : quristyle
+   * 작성일자 : 25-01-22
+   * 최종수정 : 25-01-22
+   * 화면ID : UH2200QA1
+   * 화면명 : 용수 시간대 공급 현황
+   * 프로시저 : P_HMI_WATER_HOUR_SRV_RST_SELECT02
+  */
+}
+<DxFormLayout CssClass="w-100">
+  @{ /* search area */ }
+  <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="공급일자" ColSpanSm="3">
+      <CommonDateEdit @ref="@Dte_P_DATE" />
+    </DxFormLayoutItem>
+
+    <DxFormLayoutItem Caption="수용가" ColSpanSm="9">
+
+      <MitTagBox CodeId="company3" @bind-Values="ComValues" />
+
+    </DxFormLayoutItem>      
+
+  </DxFormLayoutGroup>
+  @{ /* content area */ }
+  <DxFormLayoutGroup Caption="용수 시간대별 공급 현황" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12"   >
+    <DxFormLayoutItem ColSpanSm="12">
+      <CommonGrid @ref="Grd1"
+                        CssClass="setting-program-grid mit-grid"
+                  RowDoubleClick="OnRowDoubleClick"
+                        ExportFileName="용수 시간대별 공급 현황"
+                  IsExportDocEnabled=false
+                  IsExportImageEnabled=false
+                  IsExportPDFEnabled=false
+                  IsExportXlsxEnabled=false
+                  IsShowToolBar=true>
+        <DataColumnsTemplate>
+          <DxGridDataColumn Caption="구분" Width="10em" FieldName="GAUGE_TYPE" GroupIndex="0" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox ReadOnly="true" CellContext="context2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="수용가" Width="12em" FieldName="com_name" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox ReadOnly="true" CellContext="context2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="1" MinWidth="75" FieldName="VAL_001" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="2" MinWidth="75" FieldName="VAL_002" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="3" MinWidth="75" FieldName="VAL_003" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="4" MinWidth="75" FieldName="VAL_004" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="5" MinWidth="75" FieldName="VAL_005" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="6" MinWidth="75" FieldName="VAL_006" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="7" MinWidth="75" FieldName="VAL_007" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="8" MinWidth="75" FieldName="VAL_008" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="9" MinWidth="75" FieldName="VAL_009" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="10" MinWidth="75" FieldName="VAL_010" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="11" MinWidth="75" FieldName="VAL_011" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="12" MinWidth="75" FieldName="VAL_012" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="13" MinWidth="75" FieldName="VAL_013" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="14" MinWidth="75" FieldName="VAL_014" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="15" MinWidth="75" FieldName="VAL_015" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="16" MinWidth="75" FieldName="VAL_016" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="17" MinWidth="75" FieldName="VAL_017" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="18" MinWidth="75" FieldName="VAL_018" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="19" MinWidth="75" FieldName="VAL_019" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="20" MinWidth="75" FieldName="VAL_020" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="21" MinWidth="75" FieldName="VAL_021" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="22" MinWidth="75" FieldName="VAL_022" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="23" MinWidth="75" FieldName="VAL_023" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="24" MinWidth="75" FieldName="VAL_024" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="TOTAL" Width="6em" FieldName="COM_TOTAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+        </DataColumnsTemplate>
+      </CommonGrid>
+    </DxFormLayoutItem>
+  </DxFormLayoutGroup>
+</DxFormLayout>
+
+
+
+@code {
+  private void OnRowDoubleClick(GridRowClickEventArgs e) {
+    if (CommonPopupService != null) {
+
+      try {
+
+        // 수용가..
+        var COM_ID = (e.Grid.GetRowValue(e.VisibleIndex, "COM_ID") + "").Trim().Replace(" ", "");      // com_id 로 바꿔야 함.
+        if (string.IsNullOrEmpty(COM_ID)
+      || COM_ID == "소계"
+          || COM_ID == "합계"
+      ) {
+
+          return;
+        }
+
+        // 이걸로 구분
+        // e.Column
+
+
+        TrendCode tc = new TrendCode() {
+            ComId = COM_ID,
+            FdrId = "",
+            GaugeType = TrendCode.GAUGE_TYPE.ST
+          };
+
+        CommonPopupService.Show(typeof(UH1070QA1_POP), "Trend View", Width: 1280, Height: 740, Parameter: tc, CloseCallback: OnCloseCallback);
+      }
+      catch (Exception ee) {
+      }
+    }
+  }
+  protected async Task OnCloseCallback(PopupResult result) {
+    if (result.PopupResultType != PopupResultType.OK) return;
+    await Task.Delay(1);
+
+  }
+
+}

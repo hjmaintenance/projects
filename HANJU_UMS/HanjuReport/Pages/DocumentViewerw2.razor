@@ -1,0 +1,46 @@
+﻿@page "/docviewer2"
+@layout MainLayoutEmp
+
+@using DevExpress.Blazor.Reporting
+@using DevExpress.XtraReports.UI
+@using HanjuReport.Reports
+@using System.Data
+@using HanjuReport.Service
+@using MIT.ServiceModel
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+@inject RptService _rptService
+
+<link href="_content/DevExpress.Blazor.Themes/blazing-berry.bs5.css" rel="stylesheet" />
+<link href="_content/DevExpress.Blazor.Reporting.Viewer/css/dx-blazor-reporting-components.bs5.css" rel="stylesheet" />
+
+<DxReportViewer @ref="reportViewer" Report="Report" RootCssClasses="w-100 h-100"   />
+
+@code{
+  DxReportViewer reportViewer;
+  XtraReport Report ;
+  protected override async Task OnInitializedAsync() {
+   await base.OnInitializedAsync();
+
+        MeterTableReport mtr = new MeterTableReport();
+
+        Report = mtr;
+
+        string formDataJson = _rptService.FormData;
+       
+    RptInfo ri = null;
+    try{
+      if (!string.IsNullOrEmpty(formDataJson)) {
+        ri = JsonConvert.DeserializeObject<RptInfo>(formDataJson);
+        Report.DataSource = ri.Data;
+        mtr.SetTitle(ri.Title, ri.SubTitle);
+      }
+
+    }
+    catch(Exception ee){
+    }
+
+  }
+
+}

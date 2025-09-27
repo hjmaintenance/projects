@@ -1,0 +1,41 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+
+@inherits DCP00401Base
+
+<DxFormLayout CssClass="w-100">
+
+    <DxFormLayoutGroup Caption="조회조건" ColSpanSm="12">
+        <Items>
+            <DxFormLayoutItem ColSpanSm="4">
+                <div style="display: flex; align-items: center;">
+                    <label class="dxbl-fl-cpt dxbl-text" style=" margin-right: 10px;">일자</label>
+                    <CommonDateEdit @ref="@Dte_FromDate" />
+                    <label class="dxbl-fl-cpt dxbl-text" style="margin: 0 10px;">~</label>
+                    <CommonDateEdit @ref="@Dte_ToDate" />
+                </div>
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="라인" ColSpanSm="2">
+                <CommonTextBox @ref="@Txt_LineCd" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="공정" ColSpanSm="2">
+                <CommonTextBox @ref="@Txt_ProcCd" />
+            </DxFormLayoutItem>
+        </Items>
+    </DxFormLayoutGroup>
+
+    <DxFormLayoutGroup Caption="라인별 공정 정보" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+
+            <CommonGridDynamic @ref="Grd1"
+                               ControlHeight="480"
+                               IsCheckBox="true"
+                               InputSearchParameter="@Grd1_OnInputSearchParameter"
+                               SearchQueryName="SP_COM006_GRD1_SELECT" />
+
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+</DxFormLayout>

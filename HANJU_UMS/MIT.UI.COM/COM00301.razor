@@ -1,0 +1,104 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+
+@inherits COM00301Base
+
+
+<DxFormLayout CssClass="w-100">
+    <DxFormLayoutGroup Caption="조회조건" ColSpanSm="12">
+        <DxFormLayoutItem Caption="거래처명" ColSpanSm="2">
+            <CommonTextBox @ref="@Txt_CUST_NAME" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="구분" ColSpanSm="2">
+            <CommonCodeImageComboBox @ref="@Cbo_GUBUN" GroupCode="ACT"></CommonCodeImageComboBox>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="거래처 정보" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                            IsCheckBox="true"
+                            IsShowToolBar="true"
+                          IsSearchButtonEnabled="false"
+                        IsAddButtonEnabled="this.MainCommonButtonData == null ? false : MainCommonButtonData.IsButtonSave || MainCommonButtonData.IsButtonDelete"
+                        IsSaveButtonEnabled="false"
+                        IsDeleteButtonEnabled="false"
+                        ControlHeight="480">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn FieldName="CUST_CODE" Caption="거래처코드" Width="200px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" FixedPosition="GridColumnFixedPosition.Left">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" IsPrimaryKey="true" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="CUST_DIV" Caption="거래처구분" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemCommonCodeImageComboBox CellContext="context2" GroupCode="ACT" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="REQ_ID" Caption="등록번호" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="CUST_NAME" Caption="거래처명" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="TEL" Caption="전화번호" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="EXPO" Caption="대표명" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="BUSINESS_NO" Caption="사업자번호" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="ADDRESS" Caption="주소" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="BIS_TYPE" Caption="업태" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="KIND" Caption="종목" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="EMAIL" Caption="E-MAIL(담당자)" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="USE_YN" Caption="사용(Y/N)" Width="100px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemUseYNImageComboBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="REMARK" Caption="비고" Width="250px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+@* 
+    RowDoubleClick="@Grd1_RowDoubleClick"
+
+*@

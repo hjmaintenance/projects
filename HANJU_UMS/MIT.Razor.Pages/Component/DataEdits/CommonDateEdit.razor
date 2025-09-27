@@ -1,0 +1,113 @@
+﻿@using MIT.DataUtil.Common
+@namespace MIT.Razor.Pages.Component.DataEdits
+<DxDateEdit Date="@_date" DisplayFormat="@DisplayFormat"
+            Enabled="@_enable"
+            ReadOnly="@_readOnly"
+            Format="@DisplayFormat"
+            Mask="@DisplayFormat"
+            DateChanged="@((DateTime newValue) => OnDateChanged(newValue))"
+            PickerDisplayMode="@PickerDisplayMode"
+            ScrollPickerFormat="@DisplayFormat"
+            ShowValidationIcon="@ShowValidationIcon"            
+            CssClass="txt_center" />
+
+@code {
+    [Parameter]
+    public bool Enabled
+    {
+        get { return _enable; }
+        set { _enable = value; StateHasChanged(); }
+    }
+    [Parameter]
+    public bool ReadOnly
+    {
+        get { return _readOnly; }
+        set { _readOnly = value; StateHasChanged(); }
+    }
+    [Parameter]
+    public string? DisplayFormat { get; set; } = "yyyy-MM-dd";
+    [Parameter]
+    public bool? ShowValidationIcon { get; set; } = false;
+    [Parameter]
+    public string? EditValue
+    {
+        get
+        {
+            return _date.ToString(DisplayFormat);
+        }
+        set
+        {
+            _date = value.ToDateTime();
+            StateHasChanged();
+        }
+    }
+    [Parameter]
+    public EventCallback<DateTime> DateChanged { get; set; }
+    
+    protected void OnDateChanged(DateTime date)
+    {
+        _date = date;
+
+        DateChanged.InvokeAsync(date);
+        StateHasChanged();
+    }
+
+    protected DatePickerDisplayMode PickerDisplayMode
+    {
+        get
+        {
+            return DisplayFormat == "yyyy-MM-dd" ? DatePickerDisplayMode.Auto : DatePickerDisplayMode.ScrollPicker;
+        }
+    }
+
+    protected bool _enable = true;
+    protected bool _readOnly = false;
+
+    protected DateTime _date = GetToday();
+
+    protected static DateTime GetToday()
+    {
+        return DateTime.Today;
+    }
+
+    public void SetToday()
+    {
+        _date = GetToday();
+        DateChanged.InvokeAsync(_date);
+        StateHasChanged();
+
+    }
+    public void SetOffsetMonthDate(int offset)
+    {
+        _date = GetToday().AddMonths(offset);
+        DateChanged.InvokeAsync(_date);
+        StateHasChanged();
+    }
+
+    public void SetOffsetDayDate(int offset)
+    {
+        _date = GetToday().AddDays(offset);
+        DateChanged.InvokeAsync(_date);
+        StateHasChanged();
+    }
+
+    public void SetMonthStart()
+    {
+        DateTime today = GetToday();
+
+        _date = today.AddDays(1 - today.Day);
+        DateChanged.InvokeAsync(_date);
+        StateHasChanged();
+    }
+
+    public void SetMonthLast()
+    {
+        DateTime today = GetToday();
+        DateTime firstDay = today.AddDays(1 - today.Day);
+
+        _date = firstDay.AddMonths(1).AddDays(-1);
+        DateChanged.InvokeAsync(_date);
+        StateHasChanged();
+    }
+
+}

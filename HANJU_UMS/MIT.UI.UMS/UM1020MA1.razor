@@ -1,0 +1,62 @@
+﻿@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-02-21
+     * 최종수정 : 25-02-21
+     * 화면: 수용가별 공급량 및 매출액
+     * 프로시저 : P_HMI_USE_COM_COMTOTAL_M0_SELECT
+     */
+}
+
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@inherits UM1020MA1Base
+
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="조회년월" ColSpanSm="3"><CommonDateEdit @ref="@YYMM" DisplayFormat="yyyy-MM"/></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="수용가별 공급량 및 매출액" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-toolbar-grid"
+                IsExportDocEnabled=false
+                IsExportImageEnabled=false
+                IsExportPDFEnabled=false
+                IsExportXlsxEnabled=false
+                ExportFileName="수용가별 공급량 및 매출액" 
+                IsShowToolBar=true>	
+                <DataColumnsTemplate>
+                    <DxGridDataColumn Caption="수용가" FieldName="COM_NAME" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true"/></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridBandColumn Caption="전기" CaptionAlignment="GridTextAlignment.Center">
+                        <Columns>
+                            <DxGridDataColumn Caption="공급량(kWh)" FieldName="EVELCNUSE" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="매출액(원)" FieldName="BLELCTOT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0"/></CellDisplayTemplate></DxGridDataColumn>
+                        </Columns>
+                    </DxGridBandColumn>
+                    <DxGridBandColumn Caption="증기" CaptionAlignment="GridTextAlignment.Center">
+                        <Columns>
+                            <DxGridDataColumn Caption="공급량(TON)" FieldName="EVSTMNUSE" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="매출액(원)" FieldName="BLSTMTOT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        </Columns>
+                    </DxGridBandColumn>
+                    <DxGridBandColumn Caption="용수" CaptionAlignment="GridTextAlignment.Center">
+                        <Columns>
+                            <DxGridDataColumn Caption="공급량(TON)" FieldName="EVWATNUSE" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="매출액(원)" FieldName="BLWATTOT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        </Columns>
+                    </DxGridBandColumn>
+                    <DxGridDataColumn Caption="매출액합계(원)" FieldName="BLTOT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style>
+
+</style>

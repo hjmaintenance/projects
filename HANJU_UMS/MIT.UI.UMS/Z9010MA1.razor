@@ -1,0 +1,97 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.Charts
+@using MIT.UI.UMS
+@using System.Data
+@using System.Linq
+
+@using MIT.Razor.Pages.Component.Popup
+
+@inherits Z9010MA1Base
+@{/*
+   * 작성자명 : quristyle
+   * 작성일자 : 25-02-26
+   * 최종수정 : 25-02-26   
+   * 화면ID : Z9010MA1
+   * 화면명 : 프로그램제목을입력하세요
+   * 프로시저 : P_HMI_COMMUNITY_BOARDINFO_SELECT01
+*/}
+<DxFormLayout CssClass="w-100">    
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="제목" ColSpanSm="3"><DxTextBox @bind-Text="@BOARD_TITLE" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="작성자" ColSpanSm="3"><DxTextBox @bind-Text="@USER_NAME" /></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                ExportFileName="공지사항"
+                        IsShowToolBar="true"
+                        IsAddButtonEnabled="true"
+                        IsSearchButtonEnabled="false"
+                        IsSaveButtonEnabled="false"
+                        IsDeleteButtonEnabled="false"
+                  InitNewRowChanging="NewRowEventCall"
+                  RowDoubleClick="DBLRowEventCall"
+
+                        CssClass="mit-grid">
+                <DataColumnsTemplate> 
+                  <DxGridDataColumn Caption="Num"  FieldName="BOARD_NUM"  Width="100" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" ><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext = "context2" ReadOnly="true" /></CellDisplayTemplate ></DxGridDataColumn>
+          <DxGridDataColumn Caption="제목" FieldName="BOARD_TITLE" Width="auto" TextAlignment="GridTextAlignment.Left" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">
+              <RepositoryItemTextBox CellContext="context2" ReadOnly="true" />
+              @if ( !string.IsNullOrEmpty( context2.GetRowValue("FILE_EXSIT").ToString() ) ) {
+                <i class="bi bi-save" style="float:right;margin-right:5px;"></i>
+              }
+            </CellDisplayTemplate>
+          </DxGridDataColumn>
+          <DxGridDataColumn Caption="작성자" FieldName="USER_NAME" Width="100" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="작성일" FieldName="DATE_WRITE" Width="120" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="POP" FieldName="USE_POP" Width="60" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemCheckBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="조회수" FieldName="READ_NUM" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="미리보기" FieldName="" Width="100" CaptionAlignment="GridTextAlignment.Center" >
+            <CellDisplayTemplate Context="context2">
+              <span class="badge bg-secondary smfont" @onclick="PreviewClick">미리보기</span>
+            </CellDisplayTemplate>
+          </DxGridDataColumn>
+          <DxGridDataColumn Caption=" " FieldName="" Width="50" CaptionAlignment="GridTextAlignment.Center" />
+        </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    <MitNotiBoardSingle  @ref="NotiPop"/>
+
+</DxFormLayout>
+
+@code {
+
+  protected MitNotiBoardSingle? NotiPop { get; set; }
+
+  private void PreviewClick(MouseEventArgs args)  {
+   var thread_num = Grd1.GetFocusedRowCellValue("THREAD_NUM").ToString();
+
+    NotiPop.IsVisible = true;
+    NotiPop.ThreadNum = thread_num;
+
+  }
+}
+
+
+<style>
+  .board_box {
+    top: 41%;
+    left: 44%;
+  }
+
+  .smfont{
+    font-size:0.7rem;
+    font-weight:normal;
+    cursor:pointer;
+  }
+
+</style>

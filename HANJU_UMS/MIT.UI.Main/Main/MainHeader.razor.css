@@ -1,0 +1,113 @@
+﻿.navbar.header-navbar {
+    flex-grow: 0;
+    flex-wrap: nowrap;
+    border: none;
+    background-color: inherit;
+    border-radius: 0;
+    height: 4rem;
+    min-height: 3.5rem;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.12);
+    justify-content: flex-start;
+}
+
+.header-navbar .navbar-toggler {
+    outline: none;
+    border-radius: 0;
+    padding-left: .75rem;
+    padding-right: .75rem;
+    box-shadow: none;
+    align-self: stretch;
+}
+
+.header-navbar .navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    background-color: transparent !important;
+    height: 2rem;
+    width: 2rem;
+}
+
+.header-navbar .navbar-logo {
+    padding-left: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .header-navbar .navbar-logo .navbar-logo-img {
+        width: 40px;
+        height: 40px;
+        background-image: url("../../images/main/logo_icon.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: block;
+    }
+
+.header-navbar .navbar-logo .navbar-logo-sep {
+    margin: 0 0.75rem;
+    background: currentColor;
+    opacity: 0.15;
+    width: 1px;
+    height: 40px;
+}
+    .header-navbar .navbar-logo .navbar-logo-text-img {
+        width: 141px;
+        height: 32px;
+        background-image: url("../../images/main/Magic_Mes.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: block;
+    }
+
+.header-navbar .navbar-container {
+    margin-left: auto;
+    align-items: center;
+    display: flex;
+    padding-right: 0.5rem;
+}
+
+    .header-navbar .navbar-container .navbar-container-setting-icon {
+        width: 42px;
+        height: 42px;
+        border: none;
+        background-image: url("../../images/main/UI_SideMenu_5.png");
+        filter:brightness(0.2);
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: block;
+    }
+
+.d-flex {
+    display: -webkit-box !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+}
+
+.title {
+    font-size: 1.1rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+@media (max-width: 350px) {
+    .title {
+        font-size: inherit;
+    }
+}
+
+::deep .user-btn-img {
+  width: 32px;
+  height: 32px;
+  mask-size: 28px;
+  -webkit-mask-image: url("../../images/main/user.png");
+  mask-image: url("../../images/main/user.png");
+  background-color: currentColor;
+  opacity: 1;
+  filter: brightness(0);
+}
+
+.b_design {
+    color: black;
+    text-decoration: none;
+    cursor:pointer;
+}

@@ -1,0 +1,36 @@
+﻿@using MIT.Razor.Pages.Component.LoadingPanel
+@inherits SettingPopupBase
+
+<DxFormLayout CssClass="setting-popup-size">
+    
+    <DxFormLayoutTabPages @bind-ActiveTabIndex="@ActiveTabIndex"
+                          ScrollMode="TabsScrollMode.NavButtons"
+                          RenderMode="TabsRenderMode.OnDemand"
+                          CssClass="child-menu-btn">
+        <DxFormLayoutTabPage Caption="프로그램관리">
+            <SettingProgramManager />
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="메뉴관리">
+            <SettingMenuManager />
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="권한관리">
+            <SettingRoleManager />
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="프로그램권한관리">
+            <SettingProgramRoleManager />
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="사용자관리">
+            <SettingUserManager />
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="사용자 개인정보변경">
+            <SettingUserInfo />
+        </DxFormLayoutTabPage>
+    </DxFormLayoutTabPages>
+</DxFormLayout>
+
+<style>
+    .setting-popup-size {
+        width:99%;
+        
+    }
+</style>

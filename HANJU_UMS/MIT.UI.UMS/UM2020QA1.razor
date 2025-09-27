@@ -1,0 +1,85 @@
+﻿@{
+    /*
+    * 작성자명 : 김지수
+    * 작성일자 : 25-02-07
+    * 최종수정 : 25-02-13
+    * 화면명 : 전기 수용가별 역률 현황
+     * 프로시저 : P_HMI_USE_YEARELCREV_SELECT01
+    */
+}
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@inherits UM2020QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="조회년도" ColSpanSm="3"><CommonDateEdit @ref="@YYYY" DisplayFormat="yyyy"/></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="전기 수용가별 역률 현황" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+      <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-grid"
+                  RowDoubleClick="OnRowDoubleClick"
+                  IsExportDocEnabled=false
+                  IsExportImageEnabled=false
+                  IsExportPDFEnabled=false
+                  IsExportXlsxEnabled=false
+                  ExportFileName="전기 수용가별 역률 현황"
+                  IsShowToolBar=true>
+                <DataColumnsTemplate> 
+                    <DxGridDataColumn Caption="회사명" FieldName="COM_NAME" GroupIndex="0"  TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="구분" FieldName="MC_ID" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    @for (int i = 0; i < 12; i++)                    {
+                        <DxGridDataColumn Caption="@((i+1)+"월")" FieldName="@string.Format("S{0:D2}", i+1)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                    }
+                    <DxGridDataColumn Caption="평균" FieldName="ST" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+
+@code {
+  private void OnRowDoubleClick(GridRowClickEventArgs e) {
+    if (CommonPopupService != null) {
+
+      try {
+
+        // 수용가..
+        var MC_ID = (e.Grid.GetRowValue(e.VisibleIndex, "MC_ID") + "").Trim().Replace(" ", "");      // com_id 로 바꿔야 함.
+        if (string.IsNullOrEmpty(MC_ID)
+        || MC_ID == "소계"
+            || MC_ID == "합계"
+        ) {
+
+          return;
+        }
+
+        // 이걸로 구분
+        // e.Column
+
+
+        TrendCode tc = new TrendCode() {
+            ComId = "",
+            FdrId = MC_ID,
+            //GaugeType = TrendCode.GAUGE_TYPE.ST
+          };
+
+        CommonPopupService.Show(typeof(UH1070QA1_POP), "Trend View", Width: 1280, Height: 740, Parameter: tc, CloseCallback: OnCloseCallback);
+      }
+      catch (Exception ee) {
+      }
+    }
+  }
+  protected async Task OnCloseCallback(PopupResult result) {
+    if (result.PopupResultType != PopupResultType.OK) return;
+    await Task.Delay(1);
+
+  }
+
+}

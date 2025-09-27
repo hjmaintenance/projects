@@ -1,0 +1,108 @@
+﻿@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-01-23
+     * 최종수정 : 25-02-14
+     * 화면명 : 증기 시간대별 공급 현황
+     * 프로시저 : P_HMI_STM_HOUR_SERV_RST
+    */
+}
+
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@inherits UH2120QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="공급일" ColSpanSm="3"><CommonDateEdit @ref="@DATE" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="수용가" ColSpanSm="7"><MitTagBox CodeId="company2" Etc0="ST" @bind-Values="ComValues" /></DxFormLayoutItem>
+    @*엑셀 출력시 그룹화되어있으면 해당열이 누락되어 그룹 해제가능하도록 버튼추가*@
+    <DxFormLayoutItem Caption="그룹" ColSpanSm="2"><DxCheckBox @bind-Checked="@IsGroupCell">GroupCell</DxCheckBox>  </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="증기 시간대별 공급 현황" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+      <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-grid" IsExportDocEnabled=false
+                  RowDoubleClick="OnRowDoubleClick"
+                  IsExportImageEnabled=false
+                  IsExportPDFEnabled=false
+                  IsExportXlsxEnabled=false
+                  ExportFileName="증기 시간대별 공급 현황"
+                  IsExportAllColumn=true
+                  SwapColumns="com_name2|com_name,mc_id2|mc_id"
+                  IsShowToolBar=true>
+                <DataColumnsTemplate>
+                    <DxGridDataColumn Width="130" Caption="수용가" FieldName="com_name2" GroupIndex=@CellGroupIndex TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            @(context2.GetRowValue("com_name").ToString())
+                            @* <RepositoryItemTextBox CellContext="context2" ReadOnly="true"/> *@
+                        </CellDisplayTemplate >
+                    </DxGridDataColumn>
+                    <DxGridDataColumn Width="100" Caption="구분"  FieldName="mc_id2" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" >
+                        <CellDisplayTemplate Context="context2">
+                            @(context2.GetRowValue("mc_id").ToString())
+                            @* @(context2.GetRowValue("mc_id2").ToString().Split(':')[1]) *@
+                        </CellDisplayTemplate >
+                    </DxGridDataColumn>
+                    @for (int i = 0; i < 24; i++)
+                    {
+                        <DxGridDataColumn Width="70" Caption="@("`"+(i+1).ToString("00") + ":00")" FieldName="@("VAL_" + (i+1).ToString("000"))" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2"/></CellDisplayTemplate></DxGridDataColumn>
+                    })
+                    <DxGridDataColumn Width="80" Caption="합계" FieldName="COM_TOTAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+@code {
+  protected bool IsGroupCell { get; set; } = true;
+  protected int CellGroupIndex {
+    get {
+      return IsGroupCell ? 0 : -1;
+    }
+  }
+
+  private void OnRowDoubleClick(GridRowClickEventArgs e) {
+    if (CommonPopupService != null) {
+
+      try {
+
+        // 수용가..
+        var com_id = (e.Grid.GetRowValue(e.VisibleIndex, "COM_ID") + "").Trim().Replace(" ", "");      // com_id 로 바꿔야 함.
+        if (string.IsNullOrEmpty(com_id)
+        || com_id == "소계"
+            || com_id == "합계"
+        ) {
+
+          return;
+        }
+
+        // 이걸로 구분
+        // e.Column
+
+
+        TrendCode tc = new TrendCode() {
+                        CompreDate = DateTime.ParseExact(DATE.EditValue, "yyyy-MM-dd", null).AddDays(-1),
+            ComId = com_id,
+            FdrId = "",
+            GaugeType = TrendCode.GAUGE_TYPE.ST
+          };
+
+        CommonPopupService.Show(typeof(UH1070QA1_POP), "Trend View", Width: 1280, Height: 740, Parameter: tc, CloseCallback: OnCloseCallback);
+      }
+      catch (Exception ee) {
+      }
+    }
+  }
+  protected async Task OnCloseCallback(PopupResult result) {
+    if (result.PopupResultType != PopupResultType.OK) return;
+    await Task.Delay(1);
+
+  }
+
+}

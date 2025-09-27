@@ -1,0 +1,119 @@
+﻿@using DevExpress.Blazor
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.ServiceModel
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@* @inject RptService rptService *@
+
+@inherits B4015MA1_POPBase
+@{/*
+   * 작성자명 : quristyle
+   * 작성일자 : 25-02-03
+   * 최종수정 : 25-02-03   
+   * 화면ID : B4015MA1
+   * 화면명 : 수용가 현황 
+   * 프로시저 : P_HMI_COMMON_COMINFO_SELECT
+  */}
+<DxFormLayout CssClass="w-100">    
+
+
+  @{ /* content area */ }
+  <DxFormLayoutGroup CssClass="mit-pop-content-area" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+
+    <DxFormLayoutItem Caption="수용가 ID" ColSpanSm="6"><DxTextBox @bind-Text="@COM_ID" Enabled='@(string.IsNullOrEmpty(COM_ID)?true:false)' /></DxFormLayoutItem>
+  <DxFormLayoutItem Caption="회사명" ColSpanSm="6"><DxTextBox @bind-Text="@COM_NAME"  /></DxFormLayoutItem>
+
+
+    <DxFormLayoutItem Caption="수용가 암호" ColSpanSm="6"><DxTextBox @bind-Text="@COM_PASS" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="사용여부" ColSpanSm="6"><MitCombo CodeId="YN" @bind-Text="@USE_YN" /></DxFormLayoutItem>
+
+  <DxFormLayoutItem Caption=" " ColSpanSm="12"></DxFormLayoutItem>
+
+  <DxFormLayoutItem Caption="수용가 이메일" ColSpanSm="6"><DxTextBox @bind-Text="@COM_EMAIL1" /></DxFormLayoutItem>
+  <DxFormLayoutItem Caption="수용가 이메일2" ColSpanSm="6"><DxTextBox @bind-Text="@COM_EMAIL2" /></DxFormLayoutItem>
+  <DxFormLayoutItem Caption="수용가 이메일3" ColSpanSm="6"><DxTextBox @bind-Text="@COM_EMAIL3" /></DxFormLayoutItem>
+  <DxFormLayoutItem Caption="수용가 이메일4" ColSpanSm="6"><DxTextBox @bind-Text="@COM_EMAIL4" /></DxFormLayoutItem>
+  <DxFormLayoutItem Caption="수용가 이메일5" ColSpanSm="6"><DxTextBox @bind-Text="@COM_EMAIL5" /></DxFormLayoutItem>
+
+  <DxFormLayoutItem Caption=" " ColSpanSm="12"></DxFormLayoutItem>
+
+
+  <DxFormLayoutItem Caption="대표자" ColSpanSm="6"><DxTextBox @bind-Text="@COM_CHIEF" /></DxFormLayoutItem>
+  <DxFormLayoutItem Caption="사업자등록번호" ColSpanSm="6"><DxTextBox @bind-Text="@COM_NUM" /></DxFormLayoutItem>
+  <DxFormLayoutItem Caption="업태" ColSpanSm="6"><DxTextBox @bind-Text="@COM_COND" /></DxFormLayoutItem>
+  <DxFormLayoutItem Caption="종목" ColSpanSm="6"><DxTextBox @bind-Text="@COM_ITEM" /></DxFormLayoutItem>
+  
+  <DxFormLayoutItem Caption="" ColSpanSm="12"></DxFormLayoutItem>
+
+  <DxFormLayoutItem Caption="대표자 전화" ColSpanSm="6"><DxTextBox @bind-Text="@COM_PHONE" /></DxFormLayoutItem>
+  <DxFormLayoutItem Caption="팩스" ColSpanSm="6"><DxTextBox @bind-Text="@COM_FAX" /></DxFormLayoutItem>
+
+  <DxFormLayoutItem Caption="" ColSpanSm="12"></DxFormLayoutItem>
+
+  <DxFormLayoutItem Caption="우편번호" ColSpanSm="6"><DxTextBox @bind-Text="@COM_ZIP1" /></DxFormLayoutItem>
+  <DxFormLayoutItem Caption="-" ColSpanSm="6"><DxTextBox @bind-Text="@COM_ZIP2" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="주소" ColSpanSm="12"><DxTextBox @bind-Text="@COM_ADDR" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="비고" ColSpanSm="12"><DxTextBox @bind-Text="@COMMENT" /></DxFormLayoutItem>
+  
+  <DxFormLayoutItem Caption=" " ColSpanSm="12"></DxFormLayoutItem>
+
+  @* <DxFormLayoutItem Caption="COM_DIV" ColSpanSm="3"><DxTextBox @bind-Text="@COM_DIV" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="COM_DIV_NAME" ColSpanSm="3"><DxTextBox @bind-Text="@COM_DIV_NAME" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="COM_KIND" ColSpanSm="3"><DxTextBox @bind-Text="@COM_KIND" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="COM_AREA" ColSpanSm="3"><DxTextBox @bind-Text="@COM_AREA" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="COM_CITY" ColSpanSm="3"><DxTextBox @bind-Text="@COM_CITY" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="COM_LANDING" ColSpanSm="3"><DxTextBox @bind-Text="@COM_LANDING" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="COM_LANDING_ETC" ColSpanSm="3"><DxTextBox @bind-Text="@COM_LANDING_ETC" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="COM_ETC" ColSpanSm="3"><DxTextBox @bind-Text="@COM_ETC" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="BY_X01" ColSpanSm="3"><DxTextBox @bind-Text="@BY_X01" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="BY_X02" ColSpanSm="3"><DxTextBox @bind-Text="@BY_X02" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="DATE_ELI" ColSpanSm="3"><DxTextBox @bind-Text="@DATE_ELI" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="SET_APP" ColSpanSm="3"><DxTextBox @bind-Text="@SET_APP" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="COM_NUM_S" ColSpanSm="3"><DxTextBox @bind-Text="@COM_NUM_S" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="COM_CODE" ColSpanSm="3"><DxTextBox @bind-Text="@COM_CODE" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="COM_CODE1" ColSpanSm="3"><DxTextBox @bind-Text="@COM_CODE1" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="ORDERBY" ColSpanSm="3"><DxTextBox @bind-Text="@ORDERBY" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="MID_CHECK_YN" ColSpanSm="3"><DxTextBox @bind-Text="@MID_CHECK_YN" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="REGULAT_CHECK_YN" ColSpanSm="3"><DxTextBox @bind-Text="@REGULAT_CHECK_YN" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="ORDERBY_STM" ColSpanSm="3"><DxTextBox @bind-Text="@ORDERBY_STM" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="ORDERBY_WTR" ColSpanSm="3"><DxTextBox @bind-Text="@ORDERBY_WTR" /></DxFormLayoutItem> *@
+  @* <DxFormLayoutItem Caption="IN_OUT_TYP" ColSpanSm="3"><DxTextBox @bind-Text="@IN_OUT_TYP" /></DxFormLayoutItem> *@
+
+
+  </DxFormLayoutGroup>
+
+
+
+
+
+  <DxFormLayoutGroup CssClass="card-search-layout-group" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+    <DxFormLayoutItem ColSpanSm="12">
+      <DxButton RenderStyle="ButtonRenderStyle.Primary"
+                RenderStyleMode="ButtonRenderStyleMode.Contained"
+                IconCssClass="main-toolbar-btn-icon-save"
+                Text="저장"
+                Click="btn_Save"
+                CssClass="w-100 main-toolbar-btn" />
+    </DxFormLayoutItem>
+  </DxFormLayoutGroup>
+
+
+
+
+
+
+
+
+</DxFormLayout>
+
+
+  <style>
+
+  .mit-pop-content-area {
+
+  }
+
+
+    </style>

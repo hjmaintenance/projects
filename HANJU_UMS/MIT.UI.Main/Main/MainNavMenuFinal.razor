@@ -1,0 +1,39 @@
+﻿@using MIT.UI.Main.MainFrame;
+@using MIT.Razor.Pages.Component.TreeView
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+@inherits MainNavMenuFinalBase
+
+
+<i class=" bi bi-chevron-right mit-side-toggle mit-side-toggle_@StateCssClass" @onclick="Side_Toggle_Click" ></i>
+
+ @* <link href="\main\mainnavmenu.razor.css" rel="stylesheet" /> *@
+<div class="sidebar @StateCssClass" >
+      <CommonTreeView CssClass="app-sidebar"
+                      KeyFieldName="MENU_ID"
+                      ParentFieldName="PARENT_MENU_ID"
+                      TextFieldName="MENU_NAME"
+                      LevelFiledName="MENU_LEVEL"
+                      SortFiledName="SORT"
+                      IconUrlFieldName="ICON_URI"
+                      IconCssClassFiledName="ICON_CSS_CLASS"
+                      AllowSelectNodes="false"
+                      RootID="ROOT"
+                      ShowFilter="true"
+                      NodeClick="@OnNodeClick"
+                      @ref="@TreeView">
+
+      </CommonTreeView>
+
+</div>
+ 
+<style>
+  </style>
+       
+@code {
+  private void Side_Toggle_Click(MouseEventArgs e)
+  {
+    OnSizeSwitch();
+  }
+}

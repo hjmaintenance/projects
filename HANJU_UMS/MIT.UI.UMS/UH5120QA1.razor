@@ -1,0 +1,154 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.Data
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@using MIT.DataUtil.Common;
+@using System.Data;
+
+@inherits UH5120QA1Base
+@{/*
+    * 작성자명 : quristyle
+    * 작성일자 : 25-02-05
+    * 최종수정 : 25-02-14
+    * 화면ID : UH5120QA1
+    * 화면명 : 실적외 데이터 관리
+    * 프로시저 : P_EXCL_RST_SELECT, P_EXCEL_RST_SAVE, P_EXCL_RST_DEL
+    */
+            }
+<DxFormLayout CssClass="w-100">    
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="실적제외일자" ColSpanSm="3"><CommonDateEdit @ref=@SDATE /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="~" ColSpanSm="3"><CommonDateEdit @ref=@EDATE /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="계측기" ColSpanSm="6"><MitCombo CodeId="FDR" @ref="@MC_ID"  @bind-Text="@CmName" @bind-Value="@CmId" /></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                        IsCheckBox="true"
+                        IsShowToolBar="true"
+                        ExportFileName="실적 외 데이터 관리"
+                        IsAddButtonEnabled="true"
+                  InitNewRowChanging=OnRowNewClick
+
+                        CssClass="setting-program-grid mit-grid">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn Caption="장치" FieldName="MC_ID" Width="300" TextAlignment="GridTextAlignment.Left" CaptionAlignment="GridTextAlignment.Center">
+                      <CellDisplayTemplate Context="context2">
+                            <RepositoryItemImageComboBox DisplayFieldName="CM_NAME"
+                                                         ValueFieldName="CM_ID"
+                                                         DataSource="@FDR_DATA"
+                                                         CellContext="context2" />
+
+              @* <MitCombo CodeId="FDR" Value=@(context2.GetRowValue("MC_ID")+"") Text=@(context2.GetRowValue("DESCRIPT")+"") /> *@
+                                                
+                      
+                      </CellDisplayTemplate>
+                      </DxGridDataColumn>
+                    @* <DxGridDataColumn Caption="장치명" FieldName="DESCRIPT" Width="160" TextAlignment="GridTextAlignment.Left" CaptionAlignment="GridTextAlignment.Center"></DxGridDataColumn>                     *@
+                    
+                    <DxGridDataColumn Caption="실적제외 시작일" FieldName="EXCL_SDATE" Width="180" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                      <CellDisplayTemplate Context="context2">
+
+
+              <RepositoryItemDateEdit CellContext="context2" />
+                        
+                        
+                        </CellDisplayTemplate>
+                      </DxGridDataColumn>
+          <DxGridDataColumn Caption="시작시간" FieldName="EXCL_STIME" Width="120" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">
+
+              <RepositoryItemTimeEdit CellContext="context2" DisplayFormat="HH:mm"/>
+
+              </CellDisplayTemplate>
+            </DxGridDataColumn>
+
+          <DxGridDataColumn Caption="실적제외 종료일" FieldName="EXCL_EDATE" Width="180" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">
+
+              @* <DxDateEdit Date='@((context2.GetRowValue("EXCL_EDATE")+" "+context2.GetRowValue("EXCL_ETIME")).ToDateTime())' TimeSectionVisible="true" Enabled="true" Format="yyyy:MM:dd HH:mm" *@
+              @*             CssClass="cw-420" /> *@
+
+              <RepositoryItemDateEdit CellContext="context2" />
+              
+            
+            </CellDisplayTemplate>
+            </DxGridDataColumn>
+          <DxGridDataColumn Caption="종료시간" FieldName="EXCL_ETIME" Width="120" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2">
+
+
+                            <RepositoryItemTimeEdit CellContext="context2" DisplayFormat="HH:mm" />
+            
+          
+          
+          </CellDisplayTemplate></DxGridDataColumn>
+                    
+                    <DxGridDataColumn Caption="실적제외사유" FieldName="EXCL_REMARK" TextAlignment="GridTextAlignment.Left" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+
+          @code{
+
+
+
+  protected async Task OnRowNewClick(CommonGridInitNewRowEventArgs e) {
+
+    DataRow dr = e.Row;
+    try {
+
+
+      if(!string.IsNullOrEmpty(MC_ID.Value)){
+        dr["MC_ID"] = MC_ID.Value;
+        dr["DESCRIPT"] = MC_ID.Text;
+      }
+
+      if (string.IsNullOrEmpty(dr["EXCL_SDATE"] + "")) {
+        dr["EXCL_SDATE"] = DateTime.Now.ToString("yyyy-MM-dd");
+        dr["EXCL_STIME"] = DateTime.Now.ToString("HH:mm");
+
+
+        
+      } else {
+        DateTime dateTime = (DateTime)dr["EXCL_SDATE"];
+        if (dateTime != null && dateTime == DateTime.MinValue) {
+          dr["EXCL_SDATE"] = DateTime.Now;
+          dr["EXCL_STIME"] = DateTime.Now.ToString("HH:mm");
+        }
+      }
+
+
+
+
+      if (string.IsNullOrEmpty(dr["EXCL_EDATE"] + "")) {
+        dr["EXCL_EDATE"] = DateTime.Now.ToString("yyyy-MM-dd");
+        dr["EXCL_ETIME"] = DateTime.Now.ToString("HH:mm");
+      } else {
+        DateTime dateTime = (DateTime)dr["EXCL_EDATE"];
+        if (dateTime != null && dateTime == DateTime.MinValue) {
+          dr["EXCL_EDATE"] = DateTime.Now;
+          dr["EXCL_ETIME"] = DateTime.Now.ToString("HH:mm");
+        }
+      }
+
+
+
+
+    } catch {
+
+    }
+
+    StateHasChanged();
+  }
+
+
+
+          }

@@ -1,0 +1,75 @@
+﻿@font-face {
+  font-family: 'S-CoreDream';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'S-CoreDream';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+* {
+  font-family: S-CoreDream;
+}
+
+:root {
+  /*text-color*/
+  --text-color-base: #333333;
+  --text-color-focus: #0d6efd;
+  --text-color-exp: #808080;
+  --text-color-menu-2: #666666;
+  /*main*/
+  --bg-main: #ffffff;
+  --bg-contant: #f5f6f9;
+  /*data grid*/
+  --grid-title: #e6e6e6;
+  --grid-row-1: #f7f9fc;
+  --grid-row-2: #ffffff;
+  /*data main color*/
+  --data-red: #ff5935;
+  --data-bule: #34a6d4;
+  --data-yellow: #fa9f03;
+}
+
+
+/* main layout - header end */
+
+
+
+.area-side {
+  background-color: var(--bs-body-bg);
+}
+
+
+
+
+/* main layout - sidebar end */
+/* content layout ----------------------------------------------------------------------------------- */
+.content {
+    background-color: var(--bs-body-bg);
+}
+/* content layout - head start */
+
+
+
+
+.dxbl-navigation-filter {
+  padding: 5px !important;
+  border-radius: 12px !important;
+  border: 0.5px solid #b3b3b3;
+  margin-top: 8px;
+}
+
+
+
+.dxbl-tabs > .dxbl-tabs-tablist {
+  background-color: unset;
+}
+
+.main-foot {
+  color: var(--bs-body-bg);
+}

@@ -1,0 +1,40 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+
+@inherits DCP00201Base
+
+
+<DxFormLayout CssClass="w-100">
+    <DxFormLayoutGroup Caption="조회조건" ColSpanSm="12" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start">
+        <DxFormLayoutItem Caption="등록일자" ColSpanSm="4" >
+            <div id="layout_left" style="display:flex;">
+                <CommonDateEdit @ref="dte_FR_DT" />
+                <p style="width:20px;min-width:20px;height:30px;padding:0;margin:0;align-content:center;text-align:center;">~</p>
+                <CommonDateEdit @ref="dte_TO_DT" />
+            </div>
+        </DxFormLayoutItem>
+        
+        <DxFormLayoutItem Caption="업체명" ColSpanSm="3">
+            <CommonCustSearchLookup @ref="@cbo_CUST_CODE"  />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="메시지명" ColSpanSm="3">
+            <MsgIDImageComboBox @ref="@cbo_MSG_ID" IsShowEmptyRow="false" IsFirstRowSelected="true" />
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="데이터 내역 정보" ColSpanSm="12" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                            IsCheckBox="false"
+                            IsShowToolBar="false"
+                          IsSearchButtonEnabled="false"
+                        IsAddButtonEnabled="this.MainCommonButtonData == null ? false : MainCommonButtonData.IsButtonSave || MainCommonButtonData.IsButtonDelete"
+                        IsSaveButtonEnabled="false"
+                        IsDeleteButtonEnabled="false"
+                        ControlHeight="480">
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>

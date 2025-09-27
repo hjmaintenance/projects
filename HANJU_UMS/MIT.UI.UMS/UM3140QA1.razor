@@ -1,0 +1,141 @@
+﻿@{
+    /*
+    * 작성자명 : jskim
+    * 작성일자 : 25-04-14
+    * 최종수정 : 25-04-15
+    * 프로시저 : p_get_daily_peak
+    */
+            }
+
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using System.Data
+@inherits UM3140QA1Base
+
+
+            <DxFormLayout CssClass="w-100">
+                @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+
+        @if (USER_TYPE != "H")
+        {
+            <DxFormLayoutItem Caption="수용가" ColSpanSm="3">
+                <DxTextBox Text="@USER_NAME" Enabled="false" />
+            </DxFormLayoutItem>
+        }
+        else
+        {
+            <DxFormLayoutItem Caption="수용가" ColSpanSm="3">
+                <MitCombo2 CodeId="COMPANY2"
+                @ref=ComObj
+                @bind-Value="@SelComp"
+                Etc0="ST"
+                SelectedItemChanged="COM_Change"
+                SearchFilterCondition="ListSearchFilterCondition.Contains" IsAll=false IsDataFixed=false />
+            </DxFormLayoutItem>
+        }
+
+
+
+
+
+
+        <DxFormLayoutItem Caption="유틸리티" ColSpanSm="3">
+            <DxTagBox @bind-Data="@FDR_DATA"
+            TextFieldName="@nameof(CommCode.Value)"
+            @bind-Values="@FDR_Tag_Value" />
+        </DxFormLayoutItem>
+
+
+
+
+
+
+        <DxFormLayoutItem Caption="조회년월" ColSpanSm="3"><CommonDateEdit @ref="@YYMM" DisplayFormat="yyyy-MM-dd" /></DxFormLayoutItem>
+
+
+
+
+        <DxFormLayoutItem Caption="기간별" ColSpanSm="3">
+            <DxRadioGroup Items="@Periodes"
+            @bind-Value="@SelectedPeriod"
+            Layout="RadioGroupLayout.Horizontal"
+            CssClass="dx-demo-radio-group" />
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="기간별 Peak값 조회" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <DxChart @ref="Chart" T="PeakData" Width="100%" AdjustOnZoom="true" Height="60vh" Data="@ChartData">
+
+                @if (SelectedPeriod == "일간")
+                { 
+                    foreach (string series in SeriesList)
+                    {
+                        <DxChartBarSeries Name="@series"
+                        T="PeakData"
+                        TArgument="DateTime"
+                        TValue="double"
+                        ArgumentField='dp => dp.PeakDate'
+                        ValueField="dp => dp.DailyPeakValue"
+                        Filter="dp => dp.InstrumentId == series"
+                        SummaryMethod="Enumerable.Max" >
+                            <DxChartSeriesLabel Visible="true" />
+                        </DxChartBarSeries>
+
+                    }
+                    <DxChartArgumentAxis TickInterval="ChartAxisInterval.Days(1)" />
+                }
+                else{
+                    foreach (string series in SeriesList)
+                    {
+                        <DxChartBarSeries Name="@series"
+                        T="PeakData"
+                        TArgument="DateTime"
+                        TValue="double"
+                        ArgumentField='dp => dp.PeakDate'
+                        ValueField="dp => dp.ExtendedPeakValue"
+                        Filter="dp => dp.InstrumentId == series"
+                        SummaryMethod="Enumerable.Max">
+                            <DxChartSeriesLabel Visible="true" />
+                        </DxChartBarSeries>
+
+                    }
+                    <DxChartArgumentAxis TickInterval="ChartAxisInterval.Months(1)" />
+                }
+
+
+
+                <DxChartTooltip Enabled="true">
+                    <ChildContent Context="tooltipContext">
+                        @tooltipContext.Point.Render((seriesPoint) =>
+                            @<div style="margin: 0.75rem">
+                                <div>@seriesPoint.SeriesName</div>
+                                <span>@($"{seriesPoint.Argument: yyyy.MM.dd}: ")</span>
+                                <span>@($"{(double)seriesPoint.Value:F1}")</span>
+                            </div>
+                                                            )
+                    </ChildContent>
+                </DxChartTooltip>
+
+            </DxChart>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style>
+
+</style>
+@code{
+    public async void COM_Change(Razor.Pages.CommCode args)
+    {
+         await SetFDR_DATA(args.Name);
+       
+
+        StateHasChanged();
+
+
+    }
+}

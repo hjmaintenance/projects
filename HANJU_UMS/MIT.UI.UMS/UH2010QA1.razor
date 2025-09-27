@@ -1,0 +1,197 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+
+@inherits UH2010QA1Base
+@{/*
+   * 작성자명 : quristyle
+   * 작성일자 : 25-02-05
+   * 최종수정 : 25-02-05   
+   * 화면ID : UH2010QA1
+   * 화면명 : 로그시트조회
+   * 프로시저 : P_HMI_LOG_ELEC
+*/}
+<DxFormLayout CssClass="w-100">    
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="검침일자" ColSpanSm="3"><CommonDateEdit @ref="@P_DATE" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="" ColSpanSm="3"><MitCombo CodeId="GAUGE_TYPE" @ref="P_GAUGE_TYPE" @bind-Value="P_GAUGE_Val" @bind-Text="P_GAUGE_Text" />
+      </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                        CssClass="mit-grid"
+                  IsExportAllColumn=true
+                        IsExportDocEnabled=false
+                        IsExportXlsxEnabled=false
+                        IsExportPDFEnabled=false
+                        IsExportImageEnabled=false
+                        Rpt_Title="LOG시트 조회"
+                        Rpt_SubTitle="@subtitle"
+                        ExportFileName="LOG시트 조회"
+                  IsShowToolBar="true">
+                <DataColumnsTemplate> 
+
+
+
+
+                  <DxGridDataColumn Caption="시간"  FieldName="GAUGE_MIN" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" ><CellDisplayTemplate Context="context2"><RepositoryItemTextBox ReadOnly="true" CellContext= "context2" /></CellDisplayTemplate ></DxGridDataColumn>
+
+                    @{
+
+            if (P_GAUGE_TYPE == null || P_GAUGE_TYPE?.Value == null || P_GAUGE_TYPE.Value == "" || P_GAUGE_TYPE.Value == "PW") {
+                      for( int i = 0; i < cols.Count; i++){
+
+              var k = i;
+
+              <DxGridBandColumn Caption='@cols[k]' CaptionAlignment="GridTextAlignment.Center">
+                <Columns>
+
+                  <DxGridBandColumn Caption="유효" CaptionAlignment="GridTextAlignment.Center">
+                    <Columns>
+
+                      <DxGridDataColumn Caption='경' FieldName="@( ReVal("REC_AC_KWH_C_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+                                                <DxGridDataColumn Caption='중' FieldName="@( ReVal("REC_AC_KWH_A_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+                                                <DxGridDataColumn Caption='최대' FieldName="@( ReVal("REC_AC_KWH_B_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+
+                    </Columns>
+                  </DxGridBandColumn>
+
+                  <DxGridBandColumn Caption="무효" CaptionAlignment="GridTextAlignment.Center">
+                    <Columns>
+                                                <DxGridDataColumn Caption='중' FieldName="@( ReVal("REC_AC_KVARH_A_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+                                                <DxGridDataColumn Caption='최대' FieldName="@( ReVal("REC_AC_KVARH_B_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+
+                    </Columns>
+                  </DxGridBandColumn>
+
+                </Columns>
+              </DxGridBandColumn>
+
+
+                      }
+                      }            else          if (P_GAUGE_TYPE.Value == "WA") {
+
+
+
+
+
+
+              for (int i = 0; i < cols.Count; i++) {
+
+                var k = i;
+
+                <DxGridBandColumn Caption='@cols[k]' CaptionAlignment="GridTextAlignment.Center">
+                  <Columns>
+
+                                        <DxGridDataColumn Caption='유량' FieldName="@( ReVal("R_USEQTY_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+
+                                        <DxGridDataColumn Caption='적산지침' FieldName="@( ReVal("AC_TON_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+                      
+
+                  </Columns>
+                </DxGridBandColumn>
+
+
+              }
+
+
+
+
+
+
+
+
+
+
+
+          }
+
+            else if (P_GAUGE_TYPE.Value == "ST") {
+
+
+
+
+
+
+              for (int i = 0; i < cols.Count; i++) {
+
+                var k = i;
+
+                <DxGridBandColumn Caption='@cols[k]' CaptionAlignment="GridTextAlignment.Center">
+                  <Columns>
+
+                                        <DxGridDataColumn Caption='유량' FieldName="@( ReVal("R_USEQTY_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+
+                                        <DxGridDataColumn Caption='온도' FieldName="@( ReVal("AV_TEMPER_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+
+                                        <DxGridDataColumn Caption='압력' FieldName="@( ReVal("AV_PRESS_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+
+                                        <DxGridDataColumn Caption='적산지침' FieldName="@( ReVal("AC_TON_", k) )" Width="80" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" />
+
+
+                  </Columns>
+                </DxGridBandColumn>
+
+
+              }
+
+
+
+
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    }
+
+        
+        </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+
+
+@code{
+
+
+  async Task OnGaugeChange(){
+    // await btn_Search();
+  }
+
+}

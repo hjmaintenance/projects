@@ -1,0 +1,140 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.Charts
+@using MIT.UI.UMS
+@using System.Data
+@using System.Linq
+@using MIT.DataUtil.Common;
+
+
+@inherits US3140QA1Base
+@{/*
+   * 작성자명 : quristyle
+   * 작성일자 : 25-02-24
+   * 최종수정 : 25-02-24   
+   * 화면ID : US3140QA1
+   * 화면명 : 프로그램제목을입력하세요
+   * 프로시저 : P_HMI_MC_INSP_RST_SELECT
+*/}
+<DxFormLayout CssClass="w-100">    
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="수용가" ColSpanSm="3"><MitCombo CodeId="company" @bind-value="@COM_ID" IsAll=true /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="점검일자" ColSpanSm="3"><CommonDateEdit @ref="@SDATE" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="-" ColSpanSm="3"><CommonDateEdit @ref="@EDATE" /></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="수용가 점검여부 관리" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                        IsCheckBox="true"
+                        IsShowToolBar="true"
+                        ExportFileName="수용가 점검여부 관리"
+                        IsAddButtonEnabled="true"
+                  InitNewRowChanging="NewRowEventCall"
+
+                  FocusedRowEnabled="true"
+                        CssClass="mit-grid">
+                <DataColumnsTemplate> 
+                  @* <DxGridDataColumn Caption="설비ID"  FieldName="MC_ID"  Width="100" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" /> *@
+          <DxGridDataColumn Caption="설비명" FieldName="MC_ID" Width="350" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                    <CellDisplayTemplate Context="context2">
+                      
+
+              <RepositoryItemImageComboBox DisplayFieldName="CM_NAME"
+                                           ValueFieldName="CM_ID"
+
+                                           DataSource="@CompanyList"
+                                           CellContext="context2" 
+                                           />
+                    
+                    </CellDisplayTemplate ></DxGridDataColumn>
+
+                  <DxGridDataColumn Caption="점검시작구분"  FieldName="CHK_STRT_TYP"  Width="100" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" ><CellDisplayTemplate Context="context2">
+                    
+                    <RepositoryItemCheckBox CellContext = "context2" />
+                    
+                  </CellDisplayTemplate ></DxGridDataColumn>
+          <DxGridDataColumn Caption="점검시작일" FieldName="CHK_STRT_DT" Width="180" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">
+
+
+              <RepositoryItemDateEdit CellContext="context2" ReadOnly=' (context2.GetRowValue("CHK_STRT_TYP") != "Y") ' />
+              
+            </CellDisplayTemplate></DxGridDataColumn>
+
+
+
+          <DxGridDataColumn Caption="시간" FieldName="CHK_STRT_TM" Width="180" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">
+
+                            <RepositoryItemTimeEdit CellContext="context2" ReadOnly=' (context2.GetRowValue("CHK_STRT_TYP") != "Y") ' DisplayFormat="HH:mm" />
+
+
+            </CellDisplayTemplate>
+          </DxGridDataColumn>
+
+
+
+
+
+
+
+
+
+
+          <DxGridDataColumn Caption="점검종료구분" FieldName="CHK_END_TYP" Width="100" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">
+
+
+
+              <RepositoryItemCheckBox CellContext="context2" />
+
+            </CellDisplayTemplate>
+          </DxGridDataColumn>
+
+          <DxGridDataColumn Caption="점검종료일시" FieldName="CHK_END_DT" Width="180" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">
+
+
+              <RepositoryItemDateEdit CellContext="context2" ReadOnly=' (context2.GetRowValue("CHK_END_TYP") != "Y") ' />
+
+              </CellDisplayTemplate>
+              </DxGridDataColumn>
+
+
+
+          <DxGridDataColumn Caption="시간" FieldName="CHK_END_TM" Width="180" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+            <CellDisplayTemplate Context="context2">
+
+              <RepositoryItemTimeEdit CellContext="context2" ReadOnly=' (context2.GetRowValue("CHK_END_TYP") != "Y") ' DisplayFormat="HH:mm"/>
+
+
+            </CellDisplayTemplate>
+          </DxGridDataColumn>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>

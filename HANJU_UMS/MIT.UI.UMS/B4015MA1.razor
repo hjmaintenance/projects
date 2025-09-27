@@ -1,0 +1,63 @@
+﻿@using DevExpress.Blazor
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.Data
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.ServiceModel
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@* @inject RptService rptService *@
+
+@inherits B4015MA1Base
+@{/*
+   * 작성자명 : quristyle
+   * 작성일자 : 25-02-03
+   * 최종수정 : 25-02-03   
+   * 화면ID : B4015MA1
+   * 화면명 : 수용가 현황 
+   * 프로시저 : P_HMI_COMMON_COMINFO_SELECT
+  */}
+<DxFormLayout CssClass="w-100">    
+  @{ /* search area */ }
+  <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="회사코드" ColSpanSm="4"><MitTextBox @bind-Text="@P_COM_ID" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="회사명" ColSpanSm="4"><DxTextBox @bind-Text="@P_COM_NAME" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="사용여부" ColSpanSm="4"><MitCombo CodeId="YN" IsAll="true" @bind-Value="@P_USE_YN" NullText="Y"/></DxFormLayoutItem>
+
+
+  </DxFormLayoutGroup>
+
+  @{ /* content area */ }
+
+  <DxFormLayoutGroup CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem ColSpanSm="12">
+
+      <CommonGrid @ref="Grd1"
+      IsCheckBox="true"
+      IsShowToolBar="true"
+      IsAddButtonEnabled="true"
+                  InitNewRowChanging="NewRowEventCall"
+
+      ExportFileName="수용가현황"
+      Rpt_Title="수용가현황"
+      Rpt_SubTitle=""
+      Rpt_UName=""
+
+      RowDoubleClick="OnSetting"
+
+      CssClass="mit-grid">
+        <DataColumnsTemplate> 
+          <DxGridDataColumn Caption="ID" FieldName="COM_ID" Width="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox  CellContext="context2" ReadOnly="true" IsPrimaryKey="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="업체명" FieldName="COM_NAME" Width="250" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="대표자명" FieldName="COM_CHIEF" Width="200" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="사업자등록번호" FieldName="COM_NUM" Width="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+          <DxGridDataColumn Caption="대표전화" FieldName="COM_PHONE" Width="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+        <DxGridDataColumn Caption="비고" FieldName="COMMENT" TextAlignment="GridTextAlignment.Left" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" /></CellDisplayTemplate></DxGridDataColumn>
+
+        </DataColumnsTemplate>
+      </CommonGrid>
+    </DxFormLayoutItem>
+  </DxFormLayoutGroup>
+</DxFormLayout>
+
+    

@@ -1,0 +1,246 @@
+﻿@using MIT.Razor.Pages
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.Charts
+@using MIT.UI.UMS
+@using System.Data
+@using System.Linq
+@using MIT.ServiceModel
+
+
+@inherits UH1070QA1_POPBase
+@{/*
+  * 작성자명 : quristyle
+  * 작성일자 : 25-03-14
+  * 최종수정 : 25-03-14   
+  * 화면ID : UH1070QA1
+  * 화면명 : 유틸리티 트랜드 조회
+  * 프로시저 : P_HMI_TREND_SELECT
+  */}
+
+
+
+      <style>
+        .container {
+        max-width: unset;
+        }
+
+
+      </style>
+
+
+      <DxFormLayout CssClass="w-100">    
+
+
+
+
+        <DxFormLayoutGroup Caption="" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+
+
+
+
+          <div class="container w-100">
+
+            <div class="row">
+              <div class="col-md-3 col-12" style="display:@(IsSideView?"block;":"none;")">
+
+                <DxFormLayoutGroup Caption="비교일자" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+                  <DxFormLayoutItem ColSpanSm="12">
+                    <CommonDateEdit @ref="CompareDate" DateChanged=OnCDateChangeDated DisplayFormat="yyyy-MM-dd" />
+                  </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+
+                <DxFormLayoutGroup Caption="트랜드 종류" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+                  <DxFormLayoutItem ColSpanSm="12">
+                    <DxRadioGroup Items="@Languages"
+                    @bind-Value="@PreferredLanguage"
+                    Layout="RadioGroupLayout.Vertical"
+                    CssClass="dx-demo-radio-group" />
+                  </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+
+
+                <DxFormLayoutGroup Caption="수용가" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+                  <DxFormLayoutItem ColSpanSm="12">
+                    <MitCombo CodeId="company" @ref="CompCm" @bind-Value=@SelComp SearchMode=ListSearchMode.AutoSearch />
+                  </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+
+
+                <DxFormLayoutGroup Caption="유틸리티 구분" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+                  <DxFormLayoutItem ColSpanSm="12">
+                    <MitCombo CodeId="GAUGE_TYPE" @bind-Value=@GAUGE_TYPE_Code IsAll=false />
+                  </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+
+
+
+                <DxFormLayoutGroup Caption="FDR" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+                  <DxFormLayoutItem ColSpanSm="12">
+
+
+                    <DxListBox Data="@FdrData" 
+                    TextFieldName="Value"
+                    SelectionMode="ListBoxSelectionMode.Multiple"
+                    CssClass="w-auto mt-1 me-1 flex-grow-1 chi-220"
+                    ShowCheckboxes=true
+
+                    style="flex-basis: 240px"
+                    @bind-Values="@Values">
+                    </DxListBox>
+
+
+                  </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+
+
+              </div>
+
+
+
+              <div class="col-md-@(IsSideView?"9":"12") col-12">
+
+                <DxFormLayoutGroup Caption="Infomation" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+                  
+                  <DxFormLayoutItem Caption="비교일" ColSpanSm="2">
+                    <DxTextBox ReadOnly=true @bind-Text=@CompareDt />
+                  </DxFormLayoutItem>
+                  <DxFormLayoutItem Caption="트랜드" ColSpanSm="2">
+                    <DxTextBox ReadOnly=true @bind-Text=@TrendName />
+                  </DxFormLayoutItem>
+                  <DxFormLayoutItem Caption="수용가" ColSpanSm="3">
+                    <DxTextBox ReadOnly=true @bind-Text=@CompanyName />
+                  </DxFormLayoutItem>
+                  <DxFormLayoutItem Caption="구분" ColSpanSm="2">
+                    <DxTextBox ReadOnly=true @bind-Text=@FdtType />
+                  </DxFormLayoutItem>
+                  <DxFormLayoutItem Caption="유틸리티" ColSpanSm="3">
+                    <DxTextBox ReadOnly=true @bind-Text=@UtilityName />
+                  </DxFormLayoutItem>
+
+                </DxFormLayoutGroup>
+
+                <DxFormLayoutGroup Caption="Trend View" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+                  <DxFormLayoutItem ColSpanSm="12">
+
+
+                    <DxChart @ref="_chart"
+                    Data="@ChartData"
+                             Width="100%" Height="@(@IsSideView?" 60vh":"45vh")">
+
+
+
+                      @foreach ( var cd in ChartData ) {
+
+
+                  <DxChartSplineSeries Name=@cd.RName
+                  T="DPoint"
+                  TArgument="DateTime?"
+                  TValue="double?"
+                  ArgumentField="si => si.Xtime"
+                  ValueField="si => si.Qty1"
+                  SummaryMethod="Enumerable.Sum"
+                  Data="@cd.DPoints"
+                  
+
+                  HoverMode="ChartContinuousSeriesHoverMode.None">
+
+
+                    <DxChartSeriesPoint Visible=false SelectionMode=ChartSeriesPointSelectionMode.Point HoverMode="ChartSeriesPointHoverMode.None" />
+
+
+                  </DxChartSplineSeries>
+
+
+                  <DxChartSplineSeries Name=@(cd.RName+" ( "+ CompareDate?.EditValue +" )")
+
+                  
+
+                  T="DPoint"
+                  TArgument="DateTime?"
+                  TValue="double?"
+                  ArgumentField="si => si.Xtime"
+                  ValueField="si => si.Qty2"
+                  SummaryMethod="Enumerable.Sum"
+                  Data="@cd.DPoints"
+                  HoverMode="ChartContinuousSeriesHoverMode.None">
+                    <DxChartSeriesPoint Visible=false HoverMode="ChartSeriesPointHoverMode.Point" />
+
+                  </DxChartSplineSeries>
+
+
+
+                }
+
+
+                <DxChartLegend VerticalAlignment="VerticalEdge.Bottom"
+                               Position="RelativePosition.Outside" />
+
+
+                <DxChartTooltip Enabled="true">
+                  <ChildContent Context="tooltipContext">
+                    @tooltipContext.Point.Render((seriesPoint) =>
+                      @<div style="margin: 0.75rem">
+                        <div>@seriesPoint.SeriesName</div>
+                        <span>@($"{seriesPoint.Argument: MMMM yyyy}: ")</span>
+                        <span>@($"{seriesPoint.Value: 0,.0}")</span>
+                      </div>
+                           )
+                  </ChildContent>
+                </DxChartTooltip>
+
+
+
+
+                <DxChartValueAxis ZeroAlwaysVisible=false >
+
+                  <DxChartAxisRange StartValue="@StartValue" EndValue=@EndValue />
+                  
+                </DxChartValueAxis>
+
+
+
+                <DxChartArgumentAxis  >
+                  @* <DxChartAxisLabel Format="ChartElementFormat.Hour" /> *@
+
+
+
+                </DxChartArgumentAxis>
+
+
+
+
+              </DxChart>
+
+
+                  </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+
+
+
+        </div>
+
+      </div> 
+
+    </div>
+
+
+
+  </DxFormLayoutGroup>
+
+
+</DxFormLayout>
+@code {
+
+
+  
+
+
+
+  private async Task OnCDateChangeDated(DateTime args)  {
+    await Search2();
+  }
+}

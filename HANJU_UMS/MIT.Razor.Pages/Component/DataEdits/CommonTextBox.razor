@@ -1,0 +1,85 @@
+﻿@using MIT.DataUtil.Common
+@using System.Text.RegularExpressions
+
+@namespace MIT.Razor.Pages.Component.DataEdits
+
+<DxTextBox Password="@IsPassword" 
+           Enabled="@_enable" 
+           ReadOnly="@_readOnly" 
+           Text="@_text" 
+           maxlength="@_maxLength"
+           TextChanged="@((string text) => OnTextChanged(text))"
+           InputId="@InputId"
+           ShowValidationIcon="@ShowValidationIcon" />
+
+@code {
+
+    [Parameter]
+    public bool Enabled
+    {
+        get { return _enable; }
+        set { _enable = value; StateHasChanged(); }
+    }
+    [Parameter]
+    public bool ReadOnly 
+    {
+        get { return _readOnly; }
+        set { _readOnly = value; StateHasChanged(); }
+    }
+
+    [Parameter]
+    public string MaxLength
+    {
+        get { return _maxLength; }
+        set { _maxLength = value; StateHasChanged(); }
+    }
+
+    [Parameter]
+    public string InputId { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool IsPassword { get; set; } = false;
+
+    [Parameter]
+    public string? Text 
+    {
+        get { return _text; }
+        set
+        {
+            _text = value;
+            StateHasChanged();
+        }
+    }
+    [Parameter]
+    public bool? ShowValidationIcon { get; set; } = false;
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    [Parameter]
+    public string? EditValue
+    {
+        get
+        {
+            return _text;
+        }
+        set
+        {
+            _text = value;
+            StateHasChanged();
+        }
+    }
+
+    protected bool _enable = true;
+    protected bool _readOnly = false;
+    protected string _maxLength = "";
+
+    protected string? _text = string.Empty;
+
+    protected async Task OnTextChanged(string text)
+    {
+        _text = text;
+
+        await TextChanged.InvokeAsync(text);
+        StateHasChanged();
+    }
+}

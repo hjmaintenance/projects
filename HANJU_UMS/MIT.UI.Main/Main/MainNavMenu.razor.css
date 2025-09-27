@@ -1,0 +1,48 @@
+﻿@font-face {
+    font-family: 'Noto Sans KR';
+    src: url('font/notosans/notosanskr-bold.ttf') format('truetype');
+}
+
+
+
+.side-bar-elem .collapse {
+    width: 0px;
+    min-width: 0px;
+    transition: all 0.6s ease-in-out;
+}
+
+.side-bar-elem .expand {
+    width: 270px;
+    min-width: 270px;
+    transition: all 0.6s ease-in-out;
+}
+
+
+::deep .app-sidebar {
+    --dxbl-treeview-spacing-x: 0.5rem;
+    --dxbl-treeview-spacing-y: 1rem;
+}
+
+::deep .app-sidebar .root-item > :first-child {
+    --dxbl-treeview-font-weight: 600;
+}
+
+::deep .app-sidebar .root-item > :only-child:not(.dxbl-treeview-tmpl) > button {
+    display: none;
+}
+
+@media (max-width: 1199.98px) {
+    ::deep .app-sidebar {
+        padding-bottom: 0;
+    }
+}
+/*좌측 메뉴 아이콘*/
+
+    ::deep .main-nav-treelist-icon img {
+        width: 42px;
+    }
+.dxbl-treeview .dxbl-treeview-item > .dxbl-treeview-item-content > .dxbl-treeview-item-container:not(.dxbl-disabled):not(.dxbl-active) {
+    transition: 0.3s ease-in;
+}
+
+

@@ -1,0 +1,62 @@
+﻿@using DevExpress.Blazor;
+@using System.Data;
+@using DevExpress.Blazor.Internal
+@using MIT.DataUtil.Common;
+@using MIT.Razor.Pages.Common;
+
+@inherits RepositoryItemComponentBase
+@if (ReadOnly)
+{
+@CellContext?.GetRowValue(CellContext.DataColumn.FieldName).ToStringTrim()
+}
+else if (IsEditCheck())
+{
+    <DxTextBox Password="@IsPassword" Enabled="@Enable" ReadOnly="@ReadOnly"  
+        Text="@CellContext?.GetRowValue(CellContext.DataColumn.FieldName).ToStringTrim()" 
+        TextChanged="@((newValue) => OnTextChanged(CellContext, newValue))" />
+}
+else
+{
+    if (IsPassword)
+    {
+        @("*****")
+    }
+    else
+    {
+        @CellContext?.GetRowValue(CellContext.DataColumn.FieldName).ToStringTrim()
+    }
+}
+
+
+@code {
+
+    /// <summary>
+    /// 비밀번호 사용 유무
+    /// </summary>
+    [Parameter]    public bool IsPassword { get; set; } = false;
+
+    [Parameter]    public EventCallback<string> TextChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    private void OnTextChanged(GridDataColumnCellDisplayTemplateContext? context, object value)
+    {
+
+        if (context == null || context.DataItem == null)            return;
+
+        var grd = context.Grid as DxGrid;
+        var dataItem = context.DataItem as DataRowView;
+
+        if (dataItem == null || grd == null)            return;
+
+        dataItem["CHK"] = "Y";
+        dataItem[context.DataColumn.FieldName] = value;
+
+        grd.SelectDataItem(dataItem);
+        
+        TextChanged.InvokeAsync(value.ToStringTrim());
+    }
+}

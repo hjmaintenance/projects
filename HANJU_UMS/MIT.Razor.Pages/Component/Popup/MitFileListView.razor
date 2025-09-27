@@ -1,0 +1,142 @@
+﻿@using MIT.Razor.Pages.Component
+@using System.Data
+@using Microsoft.JSInterop
+@using MIT.ServiceModel
+@inject IJSRuntime JS
+@inherits CommonComponentBase
+
+
+@if (filelist != null && filelist.Count > 0) {
+
+    <div class="file_list">
+      <ul>
+        @foreach (var f in filelist) {
+          <li><i class="bi bi-file"></i><span class="file_name" @onclick="() => FileDownload(f)">@(f.FileName)(@(f.FileSize))</span>
+          @if (IsDelVisible) {
+            <span class="file_del" @onclick="() => FileDelete(f)">x</span>
+          }
+          </li>
+        }
+      </ul>
+    </div>
+
+}
+
+@code {
+
+
+  public List<UploadResult> filelist = new List<UploadResult>();
+
+  [Parameter] public bool IsDelVisible { get; set; } = false;
+
+  [Parameter] public bool IsVisible { get; set; } = false;
+  private string _file_gid;
+  [Parameter] public string FILE_GID { get { return _file_gid; } set { _file_gid = value; LoadData(); } }
+
+  
+  protected override async Task OnInitializedAsync() {
+
+  }
+
+
+  async Task LoadData(){
+
+
+    if (QueryService == null) { return; }
+
+
+    
+          filelist.Clear();
+          var dt = await QueryService.ExecuteDatatableAsync("SP_GetFilesByFgid", new Dictionary<string, object?>() {
+                    {"FILE_GID", FILE_GID }
+                });
+
+          if (dt != null) {
+            foreach(DataRow d in dt.Rows) {
+              filelist.Add(
+                
+                new UploadResult() {
+                  FileName = d["FILE_NAME"] + "",
+                  FileSize = d["FILE_SIZE"] + "",
+                  File_Gid = d["FILE_GID"] + "",
+                  File_id = d["FILE_ID"] + ""
+                }
+                
+                );
+            }
+          }
+
+    StateHasChanged();
+
+  }
+
+  private async Task FileDelete(UploadResult file) {
+    filelist.Remove(file);
+    StateHasChanged();
+  }
+
+  private async Task FileDownload(UploadResult file) {
+    var downloadUrl = QueryService_src.GetHttpService().GetUrl() + $"Upload/Download?fgid={file.File_Gid}&fid={file.File_id}";
+    NavigationManager.NavigateTo(downloadUrl, false);
+  }
+
+}
+
+<style>
+
+
+  .file_list {
+    width: 100%;
+  }
+
+  .file_list ul{
+    list-style: none;
+    width: 100%;
+    min-height:70px;
+
+    margin-left: 0;
+    padding-left:0;
+    margin-right: 1rem;
+    
+  }
+  
+  .file_list li{
+      float: left;
+      clear: both;
+      width: 100%;
+
+    border-bottom: dotted 0.1px #b9b5b575;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+
+  }
+
+      .file_list li i {
+        margin-left: 1rem;
+        margin-right: 1rem;
+        float:left;
+      }
+
+      .file_list li span {
+        margin-left: 1rem;
+        display:block;
+        float:left;
+      }
+
+  .file_name{
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .file_del{
+    float: right !important;
+    margin-right: 1rem;
+    cursor:pointer;
+  }
+
+  .file_del:hover {
+    font-weight:bold;
+    color:red;
+  }
+
+</style>

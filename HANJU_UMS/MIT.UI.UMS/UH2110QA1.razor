@@ -1,0 +1,220 @@
+﻿@{
+    /*
+    * 작성자명 : 김지수
+    * 작성일자 : 25-01-23
+    * 최종수정 : 25-02-05
+    * 화면명 : 1분 주기 증기 공급 현황
+    * 프로시저 : P_HMI_STM_1MIN_SERV_RST, P_HMI_STM_1MIN_SERV_RST_SELECT02
+    */
+}
+
+@using MIT.Razor.Pages.Common
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using static MIT.Razor.Pages.TrendCode
+@inherits UH2110QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="공급일" ColSpanSm="3"><CommonDateEdit @ref="@DATE" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="시작시간(~3시간)" ColSpanSm="3"><CommonTimeEdit @ref="@MINUTE" DisplayFormat="HH" StringFormat="hh"/></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="수용가" ColSpanSm="4"><MitTagBox CodeId="company2" Etc0="PW" @bind-Values="ComValues" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="그룹" ColSpanSm="2"><DxCheckBox @bind-Checked="@IsGroupCell">GroupCell</DxCheckBox>  </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+  <DxFormLayoutGroup Caption="1분 주기 증기 공급 현황" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+
+            <div class="control-container w-100">
+                <div class="control w-100">
+                    <input type="range" @onchange=@(e=>OnMoveChange2(e)) min="20" max="180" step="20" class="w-100" value="@(vPoint)" list="markers" />
+                    <datalist id="markers" class="w-100">
+                        <option value="20">20</option>
+                        <option value="40">40</option>
+                        <option value="60">1`</option>
+                        <option value="80">1`20</option>
+                        <option value="100">1`40</option>
+                        <option value="120">2`</option>
+                        <option value="140">2`20</option>
+                        <option value="160">2`40</option>
+                    </datalist>
+                </div>
+            </div>
+
+
+
+
+      <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-grid"
+                  RowDoubleClick="OnRowDoubleClick"
+                  IsExportDocEnabled=false
+                  IsExportImageEnabled=false
+                  IsExportPDFEnabled=false
+                  IsExportXlsxEnabled=false
+                  ExportFileName="1분 주기 증기 공급 현황"
+                  IsExportAllColumn=true
+                  SwapColumns="COM_NAME|COM_NAME2,MC_NAME|MC_NAME2"
+                  IsShowToolBar=true>
+                <DataColumnsTemplate>
+                    <DxGridDataColumn Width="130" Caption="수용가" FieldName="COM_NAME" Name="COM_NAME" GroupIndex=@CellGroupIndex TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            @* <RepositoryItemTextBox CellContext="context2" ReadOnly="true" /> *@
+                            @(context2.GetRowValue("COM_NAME2").ToString())
+                        </CellDisplayTemplate> 
+                    </DxGridDataColumn>
+                    <DxGridDataColumn Width="100" Caption="구분" FieldName="MC_NAME" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            @* <RepositoryItemTextBox CellContext="context2" ReadOnly="true"/> *@
+                            @* @(context2.GetRowValue("MC_NAME").ToString().Split('_')[1]) *@
+                            @(context2.GetRowValue("MC_NAME2").ToString())
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+
+
+
+
+          @if (Grd1 != null) {
+            int k = 0;
+                    @for (int j = 0; j < 3; j++)
+                    {
+                        @for(int i = 0; i < 60; i++) {
+              k++;
+              @* if (k >= vPoint - 5 && k <= vPoint + 5) { *@
+                                <DxGridDataColumn Width="70" Caption="@(SearchedDateTime.AddHours(j).AddMinutes(i).ToString("`HH:mm"))" Name="@(SearchedDateTime.AddHours(j).AddMinutes(i).ToString("yyyy-MM-dd"))" FieldName="@("VAL_"+j.ToString() + (i+1).ToString("00"))" Visible="@(( k > vPoint-20 && k <= vPoint )? true : false)" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                       @* } *@
+                          }
+                    }
+
+          }
+
+
+
+          <DxGridDataColumn Width="100" Caption="합계" FieldName="COM_TOTAL" TextAlignment="GridTextAlignment.Right" FixedPosition="GridColumnFixedPosition.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+              
+                  
+                  
+                  </DataColumnsTemplate>
+            </CommonGrid>
+
+
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+@code {
+    // 시간 캡션 생성, 하루를 넘어가는 경우 때문에 함수로 따로뺌
+    // string GetTimeString(int hour, int minutes){
+    //     string stringHour = (hour > 23) ? (hour - 24).ToString("D2") : hour.ToString("D2");
+
+    //     return stringHour + ":" + minutes.ToString("00");
+    // }
+
+
+    private void OnRowDoubleClick(GridRowClickEventArgs e)
+    {
+        if (CommonPopupService != null)
+        {
+            // 수용가,구분,합계 열은 눌러도 안나오게..
+            if (e.Column.Name == "COM_NAME" || e.Column.Name == "MC_NAME" || e.Column.Name == "COM_TOTAL") return;
+
+            // 소계 합계는 눌러도 안나오게..
+            var com_name = (e.Grid.GetRowValue(e.VisibleIndex, "COM_NAME") + "");
+            var mc_name = (e.Grid.GetRowValue(e.VisibleIndex, "MC_NAME") + "");
+
+            if (com_name == "30_합계" || mc_name == "99_소계") return;
+
+            // com_id
+            var com_id = (e.Grid.GetRowValue(e.VisibleIndex, "COM_ID") + "");
+
+            // mc_id
+            var mc_id = (e.Grid.GetRowValue(e.VisibleIndex, "MC_ID") + "");
+
+            // 이걸로 구분
+            // e.Column
+
+            // 모든 이름이 날짜형식이므로 따로 검증하지않음 / 하루전과 비교
+            DateTime compDateTime = DateTime.ParseExact(e.Column.Name, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None)
+            .AddDays(-1);
+
+            TrendCode tc = new TrendCode() { ComId = com_id, FdrId = mc_id, CompreDate = compDateTime, TrendType = TrendTypeEnum.Real, GaugeType = GAUGE_TYPE.ST };
+            CommonPopupService.Show(typeof(UH1070QA1_POP), "Trend View", Width: 1280, Height: 740, Parameter: tc, CloseCallback: OnCloseCallback);
+        }
+    }
+
+
+    protected async Task OnCloseCallback(PopupResult result)
+    {
+        if (result.PopupResultType != PopupResultType.OK) return;
+        await Task.Delay(1);
+
+    }
+
+    protected int vPoint { get; set; } = 20;
+
+    protected async Task OnMoveChange2(ChangeEventArgs e)
+    {
+
+
+        int pmoveVal = Convert.ToInt32(e.Value);
+
+        vPoint = pmoveVal;
+
+
+        StateHasChanged();
+    }
+
+
+
+
+protected bool IsGroupCell { get; set; } = true;
+protected int CellGroupIndex {
+get {
+return IsGroupCell ? 0 : -1;
+}
+}
+
+}
+
+
+<style>
+    /* 슬라이더 컨트롤과 레이블을 감싸는 컨테이너로,
+         수평 방향으로 배치합니다. */
+    .control-container {
+        display: flex;
+    }
+
+    /* 레이블과 슬라이더 사이에 적당한 간격을 둡니다 */
+    label + .control {
+        margin-left: 1em;
+    }
+
+    /* datalist 요소에 스타일을 적용해
+         눈금과 레이블을 슬라이더에 맞춰 배치합니다. */
+    datalist {
+        /* display: flex; */
+        /* flex-direction: column; */
+        /* justify-content: space-between; */
+        /* writing-mode: vertical-lr;  */
+        display: grid;
+        grid-auto-flow: column;
+        /* 눈금 레이블의 텍스트를 수직 방향으로 표시 */
+        /* width: 90%; */
+    }
+
+    /* 각 눈금 레이블의 기본 패딩을 제거하고,
+         작은 글씨 크기를 적용합니다. */
+    option {
+        padding: 0; /* 불필요한 패딩을 제거해 레이블 정렬을 개선 */
+        font-size: smaller;
+    }
+
+    /* 슬라이더 너비를 datalist와 일치시켜
+         눈금과 정렬을 맞춥니다. */
+    input[type="range"] {
+        /* width: 90%; */
+        margin: 0;
+    }
+</style>

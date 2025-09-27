@@ -1,0 +1,325 @@
+﻿@{
+  /*
+  * 작성자명 : 김병만
+  * 작성일자 : 25-02-19
+  * 최종수정 : 25-02-19
+  * 화면명 : 동력팀 주간 주요 업무
+        * 프로시저 : P_HMI_PWR_)MAIN_DRV_RST_SELECT
+        *            P_HMI_PWR_)MAIN_DRV_RST_SAVE
+        *
+        */
+}
+
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@inherits UH5100QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+  @{
+    /* search area */
+  }
+  <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="조회일자" ColSpanSm="3"><CommonDateEdit @ref="@SDATE" /></DxFormLayoutItem>
+    <DxFormLayoutItem Caption="비교일자" ColSpanSm="3"><CommonDateEdit @ref="@EDATE" /></DxFormLayoutItem>
+
+  </DxFormLayoutGroup>
+
+  @{
+    /* content area */
+  }
+  <DxFormLayoutGroup Caption="" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem ColSpanSm="12">
+      <DxFormLayoutGroup CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+        <table class="w-100 table border">
+          <tr>
+            <th class="text-center border" style="width:100px" rowspan="7">증기<br />(T/H)</th>
+            <th class="text-center border" style="width:60px" rowspan="4">생산</th>
+            <th class="text-center border td-title-height">#6 BLR</th>
+            <th class="text-center border">#7 BLR</th>
+            <th class="text-center border">#8 BLR</th>
+            <th class="text-center border">#9 BLR</th>
+            <th class="text-center border">#10 BLR</th>
+            <th class="text-center border">소계</th>
+            <th class="text-center border">잉여증기</th>
+            <th class="text-center border">계</th>
+          </tr>
+          <tr>
+            <td class="border">
+              @* <DxTextBox InputCssClass="text-end" Text="@(String.Format("{0:N1}", currentRow?["BLR6_VAL"]))" ReadOnly="true" /> *@
+              @* <p class="mb-0 p-1">/</p> *@
+              @* <DxTextBox InputCssClass="text-end" Text="@(String.Format("{0:N1}", currentRow?["BLR6_COMP_VAL"]))" ReadOnly="true" /> *@
+              @* <p class="mb-0 p-1">@GetArrow(currentRow?["BLR6_COMP_VAL"].ToString() ?? string.Empty)</p> *@
+              @ValComValPair(currentRow?["BLR6_VAL"], currentRow?["BLR6_COMP_VAL"])
+            </td>
+            <td class="border">@ValComValPair(currentRow?["BLR7_VAL"], currentRow?["BLR7_COMP_VAL"])</td>
+            <td class="border">@ValComValPair(currentRow?["BLR8_VAL"], currentRow?["BLR8_COMP_VAL"])</td>
+            <td class="border">@ValComValPair(currentRow?["BLR9_VAL"], currentRow?["BLR9_COMP_VAL"])</td>
+            <td class="border">@ValComValPair(currentRow?["BLR10_VAL"], currentRow?["BLR10_COMP_VAL"])</td>
+            <td class="border" rowspan="3">@ValComValPair(currentRow?["STM_SUM"], currentRow?["STM_COMP_SUM"])</td>
+            <td class="border" rowspan="3">@ValComValPair(currentRow?["SST_FR"], currentRow?["SST_COMP_FR"])</td>
+            <td class="border" rowspan="3">@ValComValPair(currentRow?["TOTAL_VAL"], currentRow?["TOTAL_COMP_VAL"])</td>
+          </tr>
+          <tr>
+            <th class="text-center border td-title-height">#1 HRSG</th>
+            <th class="text-center border">#2 HRSG</th>
+            <td class="text-center border" rowspan="2" colspan="3">-</td>
+          </tr>
+          <tr>
+            <td class="">@ValComValPair(currentRow?["HRSG1_VAL"], currentRow?["HRSG1_COMP_VAL"])</td>
+            <td class="">@ValComValPair(currentRow?["HRSG2_VAL"], currentRow?["HRSG2_COMP_VAL"])</td>
+          </tr>
+          <tr>
+            <th class="text-center border" rowspan="3">공급</th>
+            <th class="text-center border td-title-height">단지내</th>
+            <th class="text-center border">단지외</th>
+            <th class="text-center border">공급계</th>
+            <th class="text-center border">복수</th>
+            <th class="text-center border" colspan="4">입주사변동사항</th>
+          </tr>
+          <tr>
+            <td class=" border" rowspan="2">@ValComValPair(currentRow?["BLCK_IN_VAL"], currentRow?["BLCK_IN_COMP_VAL"])</td>
+            <td class=" border" rowspan="2">@ValComValPair(currentRow?["BLCK_OUT_VAL"], currentRow?["BLCK_OUT_COMP_VAL"])</td>
+            <td class=" border" rowspan="2">@ValComValPair(currentRow?["STM_SRV_SUM"], currentRow?["STM_SRV_COMP_SUM"])</td>
+            <td class=" border" rowspan="2">@ValComValPair(currentRow?["STM_DBL_VAL"], currentRow?["STM_DBL_COMP_VAL"])</td>
+            <th class="text-center border">증기</th>
+            <td class="border"><div class="bg-transparent"><DxTextBox InputCssClass="text-end" Text="25[데이터 컬럼 확인 필요]" ReadOnly="true" /></div></td>
+            <th class="text-center border">잉여</th>
+            <td class="border"><div class="bg-transparent"><DxTextBox InputCssClass="text-end" Text="5[데이터 컬럼 확인 필요]" ReadOnly="true" /></div></td>
+          </tr>
+          <tr>
+            <td class="border" colspan="2">
+              <div class="bg-transparent">
+                <DxMemo CssClass="w-100" rows="3" Text="@(currentRow?["STM_CUST_CHG_COMMENT"].ToString())" ReadOnly="true" />
+              </div>
+            </td>
+            <td class="border" colspan="2">
+              <div class="bg-transparent">
+                <DxMemo CssClass="w-100" rows="3" Text="@(currentRow?["SST_STM_CUST_COMMENT"].ToString())" ReadOnly="true" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th class="text-center border" rowspan="4">전기(MW)</th>
+            <th class="text-center border" rowspan="2">생산</th>
+            <th class="text-center border td-title-height">#1 ST</th>
+            <th class="text-center border">#2 ST</th>
+            <th class="text-center border">#3 ST</th>
+            <th class="text-center border">#4 ST</th>
+            <th class="text-center border">#5 ST</th>
+            <th class="text-center border">#1 GT</th>
+            <th class="text-center border">#2 GT</th>
+            <th class="text-center border">계</th>
+          </tr>
+          <tr>
+            <td class="border">@ValComValPair(currentRow?["G1_VAL"], currentRow?["G1_COMP_VAL"])</td>
+            <td class="border">@ValComValPair(currentRow?["G2_VAL"], currentRow?["G2_COMP_VAL"])</td>
+            <td class="border">@ValComValPair(currentRow?["G3_VAL"], currentRow?["G3_COMP_VAL"])</td>
+            <td class="border">@ValComValPair(currentRow?["G4_VAL"], currentRow?["G4_COMP_VAL"])</td>
+            <td class="border">@ValComValPair(currentRow?["G5_VAL"], currentRow?["G5_COMP_VAL"])</td>
+            <td class="border">@ValComValPair(currentRow?["STG4_VAL"], currentRow?["STG4_COMP_VAL"])</td>
+            <td class="border">@ValComValPair(currentRow?["STG5_VAL"], currentRow?["STG5_COMP_VAL"])</td>
+            <td class="border">@ValComValPair(currentRow?["GEN_SUM_VAL"], currentRow?["GEN_SUM_COMP_VAL"])</td>
+          </tr>
+          <tr>
+            <th class="text-center border">수전</th>
+            <td class="border" colspan="4">@ValComValPair(currentRow?["WATER_GEN_VAL"], currentRow?["WATER_GEN_COMP_VAL"])</td>
+            <th class="text-center border" rowspan="2">입주사<br />변동사항</th>
+            <td class="border" rowspan="2" colspan="3">
+              <div class="bg-transparent">
+                <DxMemo CssClass="w-100" rows="3" Text="@(currentRow?["PWR_CUST_COMMENT"].ToString())" ReadOnly="true" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th class="text-center border">공급</th>
+            <td class="text-center border" colspan="4">@BeforeAfterValComp(currentRow?["SPW_VAL_BEF"], currentRow?["SPW_VAL"], currentRow?["SPW_COMP_VAL"])</td>
+          </tr>
+          <tr>
+            <th class="text-center border">입주사<br />특이사항</th>
+            <td class="border" colspan="2">
+              <div class="bg-transparent">
+                <DxMemo CssClass="w-100" rows="3" BindValueMode=BindValueMode.OnLostFocus @bind-Text=@CUST_COMMNET1 ReadOnly="false" />
+              </div>
+            </td>
+            <td class="border" colspan="2">
+              <div class="bg-transparent">
+                <DxMemo CssClass="w-100" rows="3" BindValueMode=BindValueMode.OnLostFocus @bind-Text=@CUST_COMMNET2 ReadOnly="false" />
+              </div>
+            </td>
+            <td class="border" colspan="5">
+              <div class="bg-transparent">
+                <DxMemo CssClass="w-100" rows="3" BindValueMode=BindValueMode.OnLostFocus @bind-Text=@CUST_COMMNET3 ReadOnly="false" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th class="text-center">잉여증기<br />특이사항</th>
+            <td class="border" colspan="2">
+              <div class="bg-transparent">
+                <DxMemo CssClass="w-100" rows="3" BindValueMode=BindValueMode.OnLostFocus @bind-Text=@SST_STM_CUST_REMARK1 ReadOnly="false" />
+              </div>
+            </td>
+            <td class="border" colspan="2">
+              <div class="bg-transparent">
+                <DxMemo CssClass="w-100" rows="3" BindValueMode=BindValueMode.OnLostFocus @bind-Text=@SST_STM_CUST_REMARK2 ReadOnly="false" />
+              </div>
+            </td>
+            <td class="border" colspan="5">
+              <div class="bg-transparent">
+                <DxMemo CssClass="w-100" rows="3" BindValueMode=BindValueMode.OnLostFocus @bind-Text=@SST_STM_CUST_REMARK3 ReadOnly="false" />
+              </div>
+            </td>
+          </tr>
+        </table>
+      </DxFormLayoutGroup>
+    </DxFormLayoutItem>
+
+    <DxFormLayoutItem ColSpanSm="12">
+      <DxFormLayoutGroup CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+        <table class="w-100 table border">
+          <tr>
+            <th class="text-center border td-title-height" colspan="2">Coal 재고(Ton)</th>
+            <th class="text-center border" colspan="2">Ash Silo Level(%)</th>
+            <th class="text-center border" colspan="2">Gas 사용량(일/월누적)</th>
+            <th class="text-center border" colspan="4">순수 Tank Level(%)</th>
+          </tr>
+          <tr>
+            <td class="text-center border  td-title-height">Silo</td>
+            <td class="text-center border">부두(11/14)</td>
+            <td class="text-center border">#6</td>
+            <td class="text-center border">#8</td>
+            <td class="text-center border">LNG(N㎥)</td>
+            <td class="text-center border">LPG(Ton)</td>
+            <td class="text-center border">WT107</td>
+            <td class="text-center border">WT207</td>
+            <td class="text-center border">WT307</td>
+            <td class="text-center border">WT407</td>
+          </tr>
+          <tr>
+            <td class="text-center border"><div class="bg-transparent"><DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["SILO_VAL"].ToString(), out float tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="SILO_VAL" /></div></td>
+            <td class="text-center border"><div class="bg-transparent"><DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["PORT_VAL"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="PORT_VAL" /></div></td>
+            <td class="text-center border"><div class="bg-transparent"><DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["ASH_SILO_6VAL"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="ASH_SILO_6VAL" /></div></td>
+            <td class="text-center border"><div class="bg-transparent"><DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["ASH_SILO_8VAL"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="ASH_SILO_8VAL" /></div></td>
+            <td class="text-center border">
+              <div class="d-flex flex-row justify-content-center bg-transparent">
+                <DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["LNG_DAY_USE_QTY"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="LNG_DAY_USE_QTY" />
+                <p class="mb-0 p-1">/</p>
+                <DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["LNG_MON_USE_QTY"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="LNG_MON_USE_QTY" />
+              </div>
+            </td>
+            <td class="text-center border">
+              <div class="d-flex flex-row justify-content-center bg-transparent">
+                <DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["LPG_DAY_USE_QTY"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="LPG_DAY_USE_QTY" />
+                <p class="mb-0 p-1">/</p>
+                <DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["LPG_MON_USE_QTY"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="LPG_MON_USE_QTY" />
+              </div>
+            </td>
+            <td class="text-center border"><div class="bg-transparent"><DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["PURE_WAT_TANK_QT107"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="PURE_WAT_TANK_QT107" /></div></td>
+            <td class="text-center border"><div class="bg-transparent"><DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["PURE_WAT_TANK_QT207"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="PURE_WAT_TANK_QT207" /></div></td>
+            <td class="text-center border"><div class="bg-transparent"><DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["PURE_WAT_TANK_QT307"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="PURE_WAT_TANK_QT307" /></div></td>
+            <td class="text-center border"><div class="bg-transparent"><DxSpinEdit InputCssClass="text-end" Value="@(float.TryParse(currentRow?["PURE_WAT_TANK_QT407"].ToString(), out tmp) ? tmp : (float?)null)" DisplayFormat="N1" @ref="PURE_WAT_TANK_QT407" /></div></td>
+          </tr>
+        </table>
+      </DxFormLayoutGroup>
+    </DxFormLayoutItem>
+  </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style scoped>
+  .td-title-height {
+    height: 40px;
+  }
+</style>
+
+
+@functions {
+  public string GetArrow(object? val)
+  {
+    string paramVal = val?.ToString() ?? "";
+    string result = "";
+
+    float parseVal = 0f;
+
+    if (!string.IsNullOrEmpty(paramVal.Trim()) && float.TryParse(paramVal.Trim(), out parseVal))
+    {
+      if (parseVal > 0f)
+      {
+        result = "↑";
+      }
+      else if (parseVal < 0f)
+      {
+        result = "↓";
+      }
+    }
+
+    return result;
+  }
+}
+
+  @code {
+
+  RenderFragment ValComValPair(object? val, object? comVal, bool readOnly = true)
+  {
+    return builder =>
+    {
+      builder.OpenElement(0, "div");
+      builder.AddAttribute(1, "class", "d-flex flex-row justify-content-center bg-transparent");
+      builder.OpenComponent<DxTextBox>(2);
+      builder.AddAttribute(3, "InputCssClass", "text-end");
+      builder.AddAttribute(4, "Text", string.Format("{0:N1}", val ?? ""));
+      builder.AddAttribute(5, "ReadOnly", readOnly);
+      builder.CloseComponent();
+      builder.AddMarkupContent(6, "<p class=\"mb-0 p-1\">/</p>");
+      builder.OpenComponent<DxTextBox>(7);
+      builder.AddAttribute(8, "InputCssClass", "text-end");
+      builder.AddAttribute(9, "Text", string.Format("{0:N1}", comVal ?? ""));
+      builder.AddAttribute(10, "ReadOnly", readOnly);
+      builder.CloseComponent();
+      if (!string.IsNullOrEmpty(comVal?.ToString()))
+      {
+        builder.AddMarkupContent(11, "<p class=\"mb-0 p-1\">" + @GetArrow(comVal) + "</p>");
+      }
+      builder.CloseElement();
+    };
+  }
+
+  RenderFragment BeforeAfterValComp(object? beforeVal, object? afterVal, object? upDnVal, bool readOnly = true)
+  {
+    return builder =>
+    {
+      builder.OpenElement(0, "div");
+      builder.AddAttribute(1, "class", "d-flex flex-row justify-content-center bg-transparent");
+      builder.AddMarkupContent(3, "<p class=\"mb-0 p-1\">( </p> ");
+      builder.OpenComponent<DxTextBox>(4);
+      builder.AddAttribute(5, "InputCssClass", "text-end");
+      builder.AddAttribute(6, "Text", string.Format("{0:N1}", beforeVal ?? ""));
+      builder.AddAttribute(7, "ReadOnly", readOnly);
+      builder.CloseComponent();
+      builder.AddMarkupContent(8, "<p class=\"mb-0 p-1\">→</p>");
+      builder.OpenComponent<DxTextBox>(9);
+      builder.AddAttribute(10, "InputCssClass", "text-end");
+      builder.AddAttribute(11, "Text", string.Format("{0:N1}", afterVal ?? ""));
+      builder.AddAttribute(12, "ReadOnly", readOnly);
+      builder.CloseComponent();
+      builder.AddMarkupContent(13, "<p class=\"mb-0 p-1\"> ) </p> ");
+      builder.OpenComponent<DxTextBox>(14);
+      builder.AddAttribute(15, "InputCssClass", "text-end");
+      builder.AddAttribute(16, "Text", string.Format("{0:N1}", upDnVal ?? ""));
+      builder.AddAttribute(17, "ReadOnly", readOnly);
+      builder.CloseComponent();
+      if (!string.IsNullOrEmpty(upDnVal?.ToString()))
+      {
+        builder.AddMarkupContent(18, "<p class=\"mb-0 p-1\">" + @GetArrow(upDnVal) + "</p>");
+      }
+      builder.CloseElement();
+    };
+  }
+}
+
+<script>
+
+
+
+</script>

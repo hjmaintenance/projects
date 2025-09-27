@@ -1,0 +1,45 @@
+﻿@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-02-07
+     * 최종수정 : 25-02-17
+     * 화면명 : 검침표 확인 조회
+     * 프로시저 : P_HMI_CHECKLIST_SELECT01
+    */
+}
+
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@inherits UM5110QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="조회년월" ColSpanSm="4"><CommonDateEdit @ref="@YYMM" DisplayFormat="yyyy-MM-dd"/></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="구분" ColSpanSm="4"><MitCombo CodeId="MR" @bind-Value="@MeterReadingId" NullText="중간검침"/></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="수용가" ColSpanSm="4"><MitCombo CodeId="company" @bind-Value="@COM_ID" IsAll="true" SearchMode="ListSearchMode.AutoSearch" SearchFilterCondition="ListSearchFilterCondition.Contains" /></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="검침표 확인 조회" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-grid">
+                <DataColumnsTemplate> 
+                    <DxGridDataColumn Caption="년도"  FieldName="YYYY" Width="70" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" ><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true"/></CellDisplayTemplate ></DxGridDataColumn>
+                    <DxGridDataColumn Caption="월" FieldName="MM" Width="50" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="구분" FieldName="KIND" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="고객코드" FieldName="COM_CODE" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="고객" FieldName="COM_NAME" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="확인자" FieldName="CUST_NAME" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="확인일자" FieldName="CF_DATE" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style>
+
+</style>

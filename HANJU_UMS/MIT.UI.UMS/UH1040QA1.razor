@@ -1,0 +1,75 @@
+﻿@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-01-22
+     * 최종수정 : 25-02-11
+     * 화면명 : 유틸리티 EVENT 조회
+     * 프로시저 : P_HMI_EVENT_SELECT01
+    */
+}
+
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.Data
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using System.Data
+@inherits UH1040QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="EVENT 일자" ColSpanSm="3"><CommonDateEdit @ref="@EventDate" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="~" ColSpanSm="3"><CommonDateEdit @ref="@CompDate" /></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="유틸리티 EVENT 조회" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+      <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-grid" IsExportDocEnabled=false
+                  IsExportImageEnabled=false
+                  IsExportPDFEnabled=false
+                  IsExportXlsxEnabled=false
+                  IsCheckBox=true
+                        ExportFileName="유틸리티 EVENT 조회"
+                  IsShowToolBar=true
+                  IsAddButtonEnabled="true"
+                  InitNewRowChanging="NewRowEventCall">
+                <DataColumnsTemplate>
+                    @* <DxGridDataColumn Caption="수용가" FieldName="COM_NAME" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="150"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" /></CellDisplayTemplate></DxGridDataColumn> *@
+                    <DxGridDataColumn Caption="수용가" FieldName="COM_ID" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="150">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemImageComboBox DisplayFieldName="CM_NAME"
+                                                         ValueFieldName="CM_ID"
+                                                         DataSource="@CompanyList"
+                                                         CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn Caption="Event 일자" FieldName="START_DT" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="120"><CellDisplayTemplate Context="context2"><RepositoryItemDateEdit CellContext="context2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="Event 시간" FieldName="START_TM" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="100"><CellDisplayTemplate Context="context2"><RepositoryItemTimeEdit CellContext="context2" DisplayFormat="HH:mm" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="비교 일자" FieldName="END_DT" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="120"><CellDisplayTemplate Context="context2"><RepositoryItemDateEdit CellContext="context2" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="비교 시간" FieldName="END_TM" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" Width="100"><CellDisplayTemplate Context="context2"><RepositoryItemTimeEdit CellContext="context2" DisplayFormat="HH:mm" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="내용" FieldName="REMARK" TextAlignment="GridTextAlignment.Left" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" /></CellDisplayTemplate></DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+@code{
+    protected async void NewRowEventCall(CommonGridInitNewRowEventArgs e)
+    {
+
+        DataRow dr = e.Row;
+        DateTime dttm = DateTime.Now;
+        string dt_str = dttm.ToString("yyyy-MM-dd");
+        string tm_str = dttm.ToString("HH:mm");
+        dr["START_DT"] = dt_str;
+        dr["START_TM"] = tm_str;
+        dr["END_DT"] = dt_str;
+        dr["END_TM"] = tm_str;
+
+        await Grd1.PostEditorAsync();
+    }
+}

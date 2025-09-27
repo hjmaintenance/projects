@@ -1,0 +1,36 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+
+@inherits CPB00002Base
+
+<DxFormLayout CssClass="w-100">
+
+    <DxFormLayoutGroup Caption="조회조건" ColSpanSm="12">
+        <Items>
+
+            <DxFormLayoutItem Caption="거래처" ColSpanSm="3">
+                <CommonCustSearchLookup @ref="@cbo_CUST_CODE" />
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="품명" ColSpanSm="2">
+                <CommonTextBox @ref="@txt_ITEM" />
+            </DxFormLayoutItem>
+
+
+        </Items>
+    </DxFormLayoutGroup>
+
+    <DxFormLayoutGroup Caption="업체 보유재고" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+
+            <CommonGridDynamic @ref="Grd1"
+                               ControlHeight="500"
+                               InputSearchParameter="@Grd1_OnInputSearchParameter"
+                               SearchQueryName="SP_CPB002_MMB500_SELECT" />
+
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+
+</DxFormLayout>

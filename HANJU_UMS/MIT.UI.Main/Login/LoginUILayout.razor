@@ -1,0 +1,41 @@
+﻿@using MIT.Razor.Pages.Component.MessageBox
+@using MIT.Razor.Pages.Component.LoadingPanel
+@inherits LayoutComponentBase
+
+<LoadingPanel>
+    <LoadingTemplate>
+        <div class="col-12" style="border:none; height:100%">            
+            @* <img src="@randomImageUrl" id="RandomBackground" alt="random Image" style="width: 100%; height: 100%; opacity: 0.4; position: absolute;" /> *@
+            @Body
+        </div>
+    </LoadingTemplate>
+</LoadingPanel>
+
+ @code {
+    // 이미지 파일 이름을 수정하고 필요에 따라 파일 경로를 수정합니다.   
+    private string[] images = { "Background_img_1.jpg", "Background_img_2.jpg", "Background_img_3.jpg", "Background_img_4.jpg", "Background_img_5.jpg", "Background_img_6.jpg" };
+
+    // 이미지 경로를 담을 변수를 선언합니다. Nullable로 변경합니다.
+    private string? randomImageUrl;
+
+    // 페이지가 초기화될 때 랜덤 이미지로 설정합니다.
+    protected override void OnInitialized()
+    {
+        SetRandomImage();
+    }
+
+    // 이미지를 랜덤으로 변경하는 메서드를 정의합니다.
+    private void SetRandomImage()
+    {
+        var randomIndex = new Random().Next(0, images.Length);
+        randomImageUrl = $"/images/Background/{images[randomIndex]}";
+    }
+
+    // 클릭 이벤트 대신 버튼 클릭으로 이미지를 변경하는 메서드를 호출합니다.
+    private void ChangeImage()
+    {
+        SetRandomImage();
+    }
+}
+ 
+<CommonMessageBox></CommonMessageBox>

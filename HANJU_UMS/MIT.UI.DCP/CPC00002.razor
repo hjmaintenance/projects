@@ -1,0 +1,31 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+
+@inherits CPC00002Base
+
+<DxFormLayout CssClass="w-100">
+
+    <DxFormLayoutGroup Caption="조회조건" ColSpanSm="12">
+        <Items>
+
+            <DxFormLayoutItem Caption="품명" ColSpanSm="2">
+                <CommonTextBox @ref="@txt_ITEM" />
+            </DxFormLayoutItem>
+
+        </Items>
+    </DxFormLayoutGroup>
+
+    <DxFormLayoutGroup Caption="검사기준" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+
+            <CommonGridDynamic @ref="Grd1"
+                               ControlHeight="500"
+                               InputSearchParameter="@Grd1_OnInputSearchParameter"
+                               SearchQueryName="SP_CPC002_QMA200_SELECT" />
+
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+
+</DxFormLayout>

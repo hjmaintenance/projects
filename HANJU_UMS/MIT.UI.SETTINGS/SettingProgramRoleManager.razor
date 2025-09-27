@@ -1,0 +1,145 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.TreeView
+@inherits SettingProgramRoleManagerBase
+
+<DxFormLayout CssClass="w-100">
+    @if (!IsMainMenuUIMode)
+    {
+        <DxFormLayoutGroup CssClass="card-search-layout-group" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+            <DxFormLayoutItem ColSpanSm="1">
+                <DxButton RenderStyle="ButtonRenderStyle.Primary"
+                          RenderStyleMode="ButtonRenderStyleMode.Contained"
+                          IconCssClass="main-toolbar-btn-icon-search"
+                          Text="조회"
+                          Click="btn_Search"
+                          CssClass="w-100 main-toolbar-btn" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem ColSpanSm="1">
+                <DxButton RenderStyle="ButtonRenderStyle.Primary"
+                          RenderStyleMode="ButtonRenderStyleMode.Contained"
+                          IconCssClass="main-toolbar-btn-icon-save"
+                          Text="저장"
+                          Click="btn_Save"
+                          CssClass="w-100 main-toolbar-btn" />
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    }
+    
+    <DxFormLayoutGroup Caption="권한목록" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="3">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                        
+                            FocusedRowChanged="@OnFocusedRowChangedAsync"
+                        ControlHeight="@(IsMainMenuUIMode ? 520 : 430)"
+                        IsShowToolBar="false"
+                             IsCheckBox="false">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn FieldName="ROLE_GRP_ID" Caption="권한ID" Width="100px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" >
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="ROLE_GRP_NAME" Caption="권한명" Width="" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="메뉴목록" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="3">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonTreeView CssClass="@(IsMainMenuUIMode ? "ch-520" : "ch-430")"
+                            KeyFieldName="MENU_ID"
+                            ParentFieldName="PARENT_MENU_ID"
+                            TextFieldName="MENU_NAME"
+                            LevelFiledName="MENU_LEVEL"
+                            SortFiledName="SORT"
+                            IconUrlFieldName="ICON_URI"
+                            IconCssClassFiledName="ICON_CSS_CLASS"
+                            CssClassFiledName="CSS_CLASS"
+                            RootID="ROOT"
+                            SelectionChanged="@OnSelectionChangedAsync"
+                            @ref="@TreeView" />
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="버튼권한목록" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="6">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd2"
+                        ControlHeight="@(IsMainMenuUIMode ? 520 : 430)"
+                        IsShowToolBar="false"
+                            IsCheckBox="true">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn FieldName="ROLE_GRP_ID" Caption="권한ID" Width="100px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="MENU_NAME" Caption="메뉴명" Width="150px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="BUTTONID" Caption="버튼ID" Width="100px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="USE_YN" Caption="사용유무" Width="100px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemCheckBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="REMARK" Caption="비고" Width="200px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style>
+    .ch-430 {
+        height: 430px;
+    }
+
+    .ch-520 {
+        height: 520px;
+    }
+
+    /* .tree-color-text-black {
+        color: black;
+    }
+
+    .tree-color-text-blue {
+        color: blue;
+    } */
+
+    .setting-menu-treelist-icon {
+        margin: 0 10px 0 0;
+    }
+
+    .card-search-layout-group {
+        margin: 20px 0 0 0;
+    }
+
+    .main-toolbar-btn-icon-search,
+    .main-toolbar-btn-icon-save,
+    .main-toolbar-btn-icon-delete,
+    .main-toolbar-btn-icon-print,
+    .main-toolbar-btn-icon-close,
+    .main-toolbar-btn-icon-fav {
+        background-size: auto;
+        -webkit-mask-repeat: round;
+        background-position: center center;
+        height: 16px;
+        width: 16px;
+    }
+
+</style>

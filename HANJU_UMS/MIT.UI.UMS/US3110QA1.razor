@@ -1,0 +1,59 @@
+﻿@{
+    /*
+    * 작성자명 : 김지수
+    * 작성일자 : 25-03-10
+    * 최종수정 : 25-03-10
+    * 화면명 : 유틸리티별 매출현황
+    * 프로시저 : P_HMI_CHARGE_MONTH_SELECT01
+    */
+}
+
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@inherits US3110QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="조회년도" ColSpanSm="4"><CommonDateEdit @ref="@YYYY" DisplayFormat="yyyy"/></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="수용가" ColSpanSm="4">
+            @if(isHanju)
+            {
+                <MitCombo CodeId="company" @bind-Value="@COM_ID" SearchMode="ListSearchMode.AutoSearch" SearchFilterCondition="ListSearchFilterCondition.Contains" IsAll="true"/>
+            }
+            else
+            {
+                <CommonTextBox @ref=@ComText ReadOnly="true" />
+            }
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="월별 요금현황" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"CssClass="setting-program-grid mit-grid">
+                <DataColumnsTemplate> 
+                    <DxGridDataColumn Caption="구분1"  FieldName="setKind01" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" ><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext = "context2" ReadOnly="true"/></CellDisplayTemplate ></DxGridDataColumn>
+                    <DxGridDataColumn Caption="구분2"  FieldName="setKind02" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" ><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext = "context2" ReadOnly="true"/></CellDisplayTemplate ></DxGridDataColumn>
+                    @for(int i = 0; i < 12; i++)
+                    {
+                        <DxGridDataColumn Caption=@($"{i+1}월") FieldName=@($"M{(i+1).ToString("00")}") TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0"/></CellDisplayTemplate></DxGridDataColumn>
+                    }
+                    <DxGridDataColumn Caption="소계" FieldName="MT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+
+@code{
+
+
+
+
+
+                        }

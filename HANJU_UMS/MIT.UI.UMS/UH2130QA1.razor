@@ -1,0 +1,102 @@
+﻿@{
+     /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-01-23
+     * 최종수정 : 25-02-14
+     * 화면명 : 증기 일자별 공급현황
+    * 프로시저 : P_HMI_STM_MONTH_SRV_RST
+    */
+}
+
+@using MIT.Razor.Pages.Common
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@inherits UH2130QA1Base
+
+@{
+    string dateFormat = "yyyy-MM-dd";
+}
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="공급월" ColSpanSm="3"><CommonDateEdit @ref="@YYMM" DisplayFormat=@(dateFormat) /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="수용가" ColSpanSm="9"><MitTagBox CodeId="company3" @bind-Values="ComValues" /></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="증기 일자별 공급현황" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+      <CommonGrid @ref="Grd1" CssClass="setting-program-grid mit-grid" IsExportDocEnabled=false
+                  RowDoubleClick="OnRowDoubleClick"
+                  IsExportImageEnabled=false
+                  IsExportPDFEnabled=false
+                  IsExportXlsxEnabled=false
+                  ExportFileName="증기 일자별 공급현황"
+                  IsExportAllColumn=true
+                  SwapColumns="com_name2|com_name,mc_id2|mc_id"
+                  IsShowToolBar=true>
+                <DataColumnsTemplate> 
+                    <DxGridDataColumn Caption="수용가" MinWidth="150" FieldName="com_name2" GroupIndex="0" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="구분" MinWidth="80" FieldName="mc_id2" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            @(context2.GetRowValue("mc_id").ToString())
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    @{
+                        DateTime sm = DateTime.ParseExact(SearchedYYMM ?? DateTime.Today.ToString(), dateFormat, null);
+                        int daysInMonth = DateTime.DaysInMonth(sm.Year, sm.Month);
+                    }
+                    @for (int i = 0; i < 31; i++)
+                    {
+                        <DxGridDataColumn Caption="@( '`' + sm.ToString("MM") + "-" + (i+1).ToString("00"))" MinWidth="85" FieldName="@("VAL_" + (i+1).ToString("000"))" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center" Visible="@(daysInMonth > i)"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                    }
+                    <DxGridDataColumn Caption="합계" MinWidth="100" FieldName="COM_TOTAL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N2" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+
+
+@code {
+  private void OnRowDoubleClick(GridRowClickEventArgs e) {
+    if (CommonPopupService != null) {
+
+      try {
+
+        // 수용가..
+        var COM_ID = (e.Grid.GetRowValue(e.VisibleIndex, "COM_ID") + "").Trim().Replace(" ", "");      // com_id 로 바꿔야 함.
+        if (string.IsNullOrEmpty(COM_ID)
+      || COM_ID == "소계"
+          || COM_ID == "합계"
+      ) {
+
+          return;
+        }
+
+        // 이걸로 구분
+        // e.Column
+
+
+        TrendCode tc = new TrendCode() {
+            ComId = COM_ID,
+            FdrId = "",
+            GaugeType = TrendCode.GAUGE_TYPE.ST
+          };
+
+        CommonPopupService.Show(typeof(UH1070QA1_POP), "Trend View", Width: 1280, Height: 740, Parameter: tc, CloseCallback: OnCloseCallback);
+      }
+      catch (Exception ee) {
+      }
+    }
+  }
+  protected async Task OnCloseCallback(PopupResult result) {
+    if (result.PopupResultType != PopupResultType.OK) return;
+    await Task.Delay(1);
+
+  }
+
+}

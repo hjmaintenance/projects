@@ -1,0 +1,185 @@
+﻿@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-02-05
+     * 최종수정 : 25-02-11
+     * 화면명 : 메인화면
+     * 프로시저 :   P_HMI_COMMUNITY_BOARDLIST_SELECT01, P_HMI_USE_NOWLIST02STM_SELECT01, P_HMI_USE_NOWLIST02ELC_SELECT01, 
+     *              P_HMI_USE_NOWLIST02WAR_SELECT01, P_HMI_USE_NOWLIST02WAR_SELECT02, P_HMI_USE_NOWLIST02WAR_FR_SELECT01
+    */
+}
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.Popup
+
+@inherits US1000MA1Base
+
+
+<style>
+  .container {
+    max-width: unset;
+  }
+
+  .h-hhh{
+    height: 360px !important;
+  }
+
+  .h-hhh2{
+    height: 155px !important;
+  }
+
+</style>
+
+<DxFormLayout CssClass="w-100">
+    @{ /* content area */ }
+
+
+    
+<DxFormLayoutGroup Caption="" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+  <div class="container w-100">
+
+      <div class="row">
+      <div class="col-12 col-md-6" style="padding: 10px 1.3rem;">
+          <img src="/images/main/main_customer.gif" style="width:100%;height:100%;border-radius:15px;" />
+      </div>
+        <div class="col-12 col-md-6">
+          <DxFormLayoutGroup Caption="한주 공지사항" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+              <DxFormLayoutItem ColSpanSm="12">
+              <CommonGrid @ref="Grd1" CssClass="h-hhh" RowDoubleClick="OnRowClick">
+                  <DataColumnsTemplate>
+                    <DxGridDataColumn Caption="제목" FieldName="BOARD_TITLE" TextAlignment="GridTextAlignment.Left" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="작성일" FieldName="DATE_WRITE" Width="120" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                  </DataColumnsTemplate>
+                </CommonGrid>
+              </DxFormLayoutItem>
+          </DxFormLayoutGroup>
+        </div>
+      </div>
+
+    <div class="row">
+      <div class="col-md-6 col-12">
+
+          <DxFormLayoutGroup Caption="실시간 증기 사용 현황" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+            <DxFormLayoutItem ColSpanSm="12">
+              <CommonGrid @ref="Grd2" CssClass="h-hhh">
+                <DataColumnsTemplate>
+                  <DxGridDataColumn Width="90" Caption="구분" FieldName="MeasurementType" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SPRI" FieldName="SPRI" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SHP" FieldName="SHP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SMP" FieldName="SMP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SLP" FieldName="SLP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SFR" FieldName="SFR" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SCL" FieldName="SCL" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SKPCa" FieldName="SKPCa" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SKPCb" FieldName="SKPCb" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SKPCc" FieldName="SKPCc" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SAALP" FieldName="SAALP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SAAMP" FieldName="SAAMP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SHJ" FieldName="SHJ" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SSF1" FieldName="SSF1" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SSF2" FieldName="SSF2" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SMP1" FieldName="SMP1" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SMP2" FieldName="SMP2" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SFCHP" FieldName="SFCHP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SBKMP" FieldName="SBKMP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SAAA" FieldName="SAAA" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SAAB" FieldName="SAAB" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SAAC" FieldName="SAAC" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SAAD" FieldName="SAAD" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="PAFRLP" FieldName="PAFRLP" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="HCC2_MP" FieldName="HCC2_MP_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="TPA_FR_MP2" FieldName="TPA_FR_MP2_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="TPA_FR_MP3" FieldName="TPA_FR_MP3_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="TPA_FR_MP4" FieldName="TPA_FR_MP4_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="UNID_HP" FieldName="UNID_HP_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SBR_LP1" FieldName="SBR_LP1_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SBR_LP2" FieldName="SBR_LP2_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SBR_LP3" FieldName="SBR_LP3_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SBR_MP" FieldName="SBR_MP_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="SBR_MP2" FieldName="SBR_MP2_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="EPS_MP" FieldName="EPS_MP_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Width="70" Caption="EPS_MP2" FieldName="EPS_MP2_" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+
+                </DataColumnsTemplate>
+              </CommonGrid>
+            </DxFormLayoutItem>
+          </DxFormLayoutGroup>
+
+
+
+        </div>
+
+        <div class="col-12 col-md-3">
+          <DxFormLayoutGroup Caption="실시간 전기 사용 현황" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+            <DxFormLayoutItem ColSpanSm="12">
+              <CommonGrid @ref="Grd3" CssClass="h-hhh">
+                <DataColumnsTemplate>
+                  <DxGridDataColumn Caption="구분" FieldName="Types" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Caption="사용량(kW)" FieldName="Usages" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+              </CommonGrid>
+            </DxFormLayoutItem>
+          </DxFormLayoutGroup>
+        </div>
+
+        <div class="col-12 col-md-3">
+
+          <DxFormLayoutGroup Caption="실시간 용수 사용현황" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+            <DxFormLayoutItem Caption="사용량" ColSpanSm="12" CaptionPosition="CaptionPosition.Vertical">
+              <CommonGrid @ref="Grd4" CssClass="h-hhh2">
+                <DataColumnsTemplate>
+                  <DxGridDataColumn Caption="구분" FieldName="Type" Width="80" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Caption="유량(T/H)" FieldName="S01" Width="150" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Caption="사용량(Ton)" FieldName="S02" Width="150" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+              </CommonGrid>
+            </DxFormLayoutItem>
+
+            <DxFormLayoutItem Caption="응축수 사용량" ColSpanSm="12" CaptionPosition="CaptionPosition.Vertical">
+              <CommonGrid @ref="Grd5" CssClass="h-hhh2">
+                <DataColumnsTemplate>
+                  <DxGridDataColumn Caption="구분" FieldName="Type" Width="80" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Caption="유량(T/H)" FieldName="S01" Width="150" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N1" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Caption="사용량(Ton)" FieldName="S02" Width="150" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                  <DxGridDataColumn Caption="전도도" FieldName="S03" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+              </CommonGrid>
+            </DxFormLayoutItem>
+          </DxFormLayoutGroup>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    </DxFormLayoutGroup>
+
+  <MitNotiBoardSingle @ref="NotiPop" />
+
+</DxFormLayout>
+
+
+
+
+
+
+@code {
+    private void OnRowClick(GridRowClickEventArgs e)
+    {
+    var chk_str = (e.Grid.GetRowValue(e.VisibleIndex, "THREAD_NUM") + "");
+
+    NotiPop.IsVisible = true;
+    NotiPop.ThreadNum = chk_str;
+    }
+}
+
+
+                <style>
+  .board_box {
+    top: 47%;
+    left: 46%;
+  }
+
+
+                  </style>

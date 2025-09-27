@@ -1,0 +1,17 @@
+﻿@using DevExpress.Blazor
+@using MIT.DataUtil.Common;
+@using System.Data;
+
+@namespace MIT.Razor.Pages.Component.DataEdits
+
+@inherits CommonCheckBoxBase
+
+<DxCheckBox Enabled="@_enable" ReadOnly="@_readOnly"
+            Checked="@_value"
+            ValueChecked="@ValueChecked"
+            ValueUnchecked="@ValueUnchecked"
+            
+            CheckedChanged="@((string value) => OnCheckedChanged(value))"
+            CheckType="@CheckType">
+</DxCheckBox>
+

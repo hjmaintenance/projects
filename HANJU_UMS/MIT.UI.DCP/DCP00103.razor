@@ -1,0 +1,117 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+
+@inherits DCP00103Base
+
+
+<DxFormLayout CssClass="w-100">
+    <DxFormLayoutGroup Caption="조회조건" ColSpanSm="12" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start">
+        <DxFormLayoutItem Caption="메시지ID" ColSpanSm="2">
+            <CommonTextBox @ref="@txt_MSG_ID" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="테이블명" ColSpanSm="2">
+            <CommonTextBox @ref="@txt_TB_NAME" />
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="테이블 정보" ColSpanSm="6" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1"
+                            IsCheckBox="true"
+                            IsShowToolBar="false"
+                          IsSearchButtonEnabled="false"
+                        IsAddButtonEnabled="this.MainCommonButtonData == null ? false : MainCommonButtonData.IsButtonSave || MainCommonButtonData.IsButtonDelete"
+                        IsSaveButtonEnabled="false"
+                        IsDeleteButtonEnabled="false"
+                        FocusedRowChanged="@Grd1_FocusedRowChanged"
+                        ControlHeight="480">
+                <DataColumnsTemplate>
+                    <DxGridDataColumn FieldName="MSG_ID" Caption="메시지ID" Width="100px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" FixedPosition="GridColumnFixedPosition.Left">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" IsPrimaryKey="true"  />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="TB_NAME" Caption="테이블명" Width="150px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" TextChanged="@reptxt_TB_NAME_1_TextChanged" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="TB_HIS_NAME" Caption="히스토리 테이블명" Width="200px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="TB_PRC_NAME" Caption="가공 테이블명" Width="200px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="COMMENT" Caption="테이블 설명" Width="200px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="테이블 상세 정보" ColSpanSm="6" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd2"
+                            IsCheckBox="true"
+                            IsShowToolBar="true"
+                          IsSearchButtonEnabled="false"
+                        IsAddButtonEnabled="this.MainCommonButtonData == null ? false : MainCommonButtonData.IsButtonSave || MainCommonButtonData.IsButtonDelete"
+                        IsSaveButtonEnabled="false"
+                        IsDeleteButtonEnabled="false"
+                        InitNewRowChanging="@Grd2_InitNewRowChanging"
+                        ControlHeight="480">
+                <AfterToolbarTemplate>
+                    <DxToolbarItem Text="기본키 지정" Click="@OnPrimaryKeyUpdateButtonClick" IconCssClass="custom-grid-popup-toolbar-search" Visible="true" />
+                    <DxToolbarItem Text="기본키 삭제" Click="@OnPrimaryKeyDeleteButtonClick" IconCssClass="custom-grid-popup-toolbar-search" Visible="true" />
+                </AfterToolbarTemplate>
+                <DataColumnsTemplate>
+                    <DxGridDataColumn FieldName="COL_NAME" Caption="컬럼명" Width="150px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" IsPrimaryKey="true" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="COL_DP_NAME" Caption="컬럼표시명" Width="150px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="DATA_TYPE" Caption="컬럼타입" Width="100px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" AllowEdit="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="DATA_LEN" Caption="컬럼길이" Width="100px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemSpinEdit CellContext="context2" DisplayFormat="N0" EditFormat="N0"  />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="NOTNULL_YN" Caption="Not Null 유무" Width="120px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemCheckBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="PK_YN" Caption="PK 유무" Width="80px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemCheckBox CellContext="context2" Enable="false" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn FieldName="COMMENT" Caption="컬럼 설명" Width="200px" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center">
+                        <CellDisplayTemplate Context="context2">
+                            <RepositoryItemTextBox CellContext="context2" />
+                        </CellDisplayTemplate>
+                    </DxGridDataColumn>
+
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>

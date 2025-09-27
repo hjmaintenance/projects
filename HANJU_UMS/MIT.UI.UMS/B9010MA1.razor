@@ -1,0 +1,169 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.Charts
+@using MIT.UI.UMS
+@using System.Data
+@using System.Linq
+
+
+@using Microsoft.JSInterop
+
+
+@inherits B9010MA1Base
+@{/*
+  * 작성자명 : quristyle
+  * 작성일자 : 25-02-18
+  * 최종수정 : 25-02-18   
+  * 화면ID : B9010MA1
+  * 화면명 : 프로그램제목을입력하세요
+  * 프로시저 : P_POWER_FAC_BASE_SELECT
+  */}
+
+
+      <DxFormLayout CssClass="w-100">    
+        @{ /* search area */ }
+  <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="업체코드" ColSpanSm="3"><MitCombo CodeId="company" @bind-Value="@COM_ID" IsAll="true" /></DxFormLayoutItem>
+  </DxFormLayoutGroup>
+  @{ /* content area */ }
+  <DxFormLayoutGroup Caption="" CssClass="mit-content-area mit-cont-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+
+
+
+    <DxFormLayoutGroup Caption="역률정보" CssClass="" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+
+      <DxFormLayoutItem Caption="역률정보" CssClass="mit-half" ColSpanSm="12" CaptionPosition="CaptionPosition.Vertical">
+
+        <CommonGrid @ref="Grd1"
+        RowClick="OnRowClick"
+        IsCheckBox="true"
+
+        SelectedChange="OnSeletedChange"
+
+        CssClass="mit-grd"
+
+
+        >
+          <DataColumnsTemplate> 
+            <DxGridDataColumn Caption="업체ID"  FieldName="COM_ID"  Width="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" />
+            <DxGridDataColumn Caption="업체명" FieldName="COM_NAME" Width="300" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" />
+            <DxGridDataColumn Caption="시작일"  FieldName="START_DT"  Width="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" ><CellDisplayTemplate Context="context2"><RepositoryItemDateEdit CellContext = "context2"  /></CellDisplayTemplate ></DxGridDataColumn>
+            <DxGridDataColumn Caption="기준값"  FieldName="PF_BASE_VAL"  Width="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" ><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext = "context2"  /></CellDisplayTemplate ></DxGridDataColumn>
+            <DxGridDataColumn Caption="종료일" FieldName="END_DT" Width="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemDateEdit CellContext="context2" /></CellDisplayTemplate></DxGridDataColumn>
+          </DataColumnsTemplate>
+        </CommonGrid>
+      </DxFormLayoutItem>
+
+    </DxFormLayoutGroup>
+
+
+    <DxFormLayoutGroup Caption="히스토리" CssClass="" Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+
+
+      <DxFormLayoutItem Caption="히스토리" ColSpanSm="12" CssClass="mit-half" CaptionPosition="CaptionPosition.Vertical">
+        <CommonGrid @ref="Grd2"    CssClass="mit-grd"
+        >
+          <DataColumnsTemplate>
+            <DxGridDataColumn Caption="업체ID" FieldName="COM_ID" Width="200" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" />
+            <DxGridDataColumn Caption="업체명" FieldName="COM_NAME" Width="300" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" />
+            <DxGridDataColumn Caption="시작일" FieldName="START_DT" Width="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" />
+            <DxGridDataColumn Caption="기준값" FieldName="PF_BASE_VAL" Width="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" />
+            <DxGridDataColumn Caption="종료일" FieldName="END_DT" Width="150" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center" />
+          </DataColumnsTemplate>
+
+        </CommonGrid>
+      </DxFormLayoutItem>
+
+    </DxFormLayoutGroup>
+
+  </DxFormLayoutGroup>
+</DxFormLayout>
+
+@code{
+  protected async Task OnRowClick(GridRowClickEventArgs e )  {
+
+    DataRow dr = Grd1.GetRowValue(e.VisibleIndex);
+    try{
+
+
+      if (string.IsNullOrEmpty(dr["START_DT"] + "")) {
+        dr["START_DT"] = DateTime.Now.ToString("yyyy-MM-dd");
+      }
+      else {
+        DateTime dateTime = (DateTime)dr["START_DT"];
+        if (dateTime != null && dateTime == DateTime.MinValue) {
+          dr["START_DT"] = DateTime.Now;
+        }
+      }
+
+
+
+
+      if (string.IsNullOrEmpty(dr["END_DT"] + "")) {
+        dr["END_DT"] = DateTime.Now.ToString("yyyy-MM-dd");
+      }
+      else {
+        DateTime dateTime = (DateTime)dr["END_DT"];
+        if (dateTime != null && dateTime == DateTime.MinValue) {
+          dr["END_DT"] = DateTime.Now;
+        }
+      }
+
+
+
+
+    }
+    catch{
+
+    }
+
+    StateHasChanged();
+
+    await SearchDetail(dr["COM_ID"]+"");
+    // 여기서 detail 보여 준다.
+  }
+
+  private async Task OnSeletedChange(object args) {
+
+  }   
+  
+}
+
+@if (!IsMobileMode) {
+
+<style>
+
+
+  .mit-cont-area .dxbl-group > .dxbl-group-body {
+    height: calc(100vh - 16rem);
+  }
+  
+  .mit-half {
+    height: calc(50vh - 8.5rem) !important;
+  }
+
+  .mit-grd {
+    height: calc(100% - 1.5rem) !important;
+  }
+
+  .mit-half .dxbl-fl-ctrl {
+    height: 100% !important;
+  }
+
+  .mit-half .common-control-page-height {
+    height: 100% !important;
+  }
+
+  .mit-half .common-layout-grid {
+    height: 100% !important;
+  }
+
+}
+
+</style>
+
+    
+}

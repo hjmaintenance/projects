@@ -1,0 +1,295 @@
+﻿.page {
+    height: 100%;
+    overflow: hidden;
+    background-color: inherit;
+}
+::deep .page-layout,
+::deep .page-layout > .dxbl-gridlayout-root,
+::deep .layout-item {
+    background-color: var(--bs-body-bg, var(--dxbl-body-bg, #fff));
+}
+
+::deep .content {
+    padding: 1.1rem 2rem 0 2rem;
+    overflow: auto;
+}
+
+@media (max-width: 1199.98px) {
+    ::deep .page-layout > .dxbl-gridlayout-root {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+}
+
+::deep .fit-width {
+    max-width: 100%;
+}
+
+::deep .mw-1100 {
+    max-width: 1100px;
+}
+
+
+::deep .user-btn-img {
+    mask: url(../../images/main/user.png) center no-repeat;
+}
+
+
+::deep .header-navbar .navbar-logo .navbar-logo-img {
+    background-image: url(https://www.hanjucorp.co.kr/images/common/logo.png) !important;
+    width: 155px;
+    background-size: 90px;
+    margin-top: 15px;
+}
+
+
+::deep .header-navbar .navbar-toggler .navbar-toggler-icon {
+    height: 20px;
+}
+
+
+
+
+::deep .header-navbar .navbar-logo .navbar-logo-text-img {
+    background-image: unset;
+}
+
+
+::deep .navbar.header-navbar {
+    height: 3rem;
+}
+
+::deep .main-nav-treelist-icon img {
+    width: 24px;
+}
+
+::deep .sidebar {
+    min-width: 270px;
+    color: white;
+    max-width: 270px;
+    box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.16);
+    transition: transform 0.3s ease-out;
+    height: 100%;
+    max-height: 100%;
+    overflow: auto;
+    background-color: #314050;
+}
+
+::deep .content {
+    padding: 0px 0.5rem ;
+}
+
+::deep .main-ui-size .dxbl-scroll-viewer-content li .dxbl-tabs-item {
+    height: 38px;
+}
+
+::deep .sidebar .dxbl-text span {
+    font-size: 13px;
+}
+
+::deep .sidebar .dxbl-text {
+    height: 36px;
+}
+
+::deep .header-navbar .navbar-toggler {
+    background-color: #314050 !important;
+}
+
+::deep .main-ui-size {
+    height: 100%;
+}
+
+
+::deep .dxbl-group {
+    border-radius: unset;
+}
+
+::deep .dxbl-tabs > .dxbl-tabs-tablist > .dxbl-scroll-viewer > .dxbl-scroll-viewer-content > ul > li > .dxbl-tabs-item:not(.dxbl-tabs-tmpl):not(.dxbl-disabled):not(:disabled).dxbl-active::after, .dxbl-tabs > .dxbl-tabs-tablist > ul > li > .dxbl-tabs-item:not(.dxbl-tabs-tmpl):not(.dxbl-disabled):not(:disabled).dxbl-active::after {
+    background-color: #314050 !important;
+}
+
+
+::deep .main-ui-size .dxbl-scroll-viewer-content li .dxbl-tabs-item {
+    border-radius: 5px 0px 0px 0px !important;
+}
+
+
+::deep .dxbl-fl .dxbl-fl-group > .dxbl-group > .dxbl-group-header:not(.dxbl-fl-group-header-tmpl) {
+    display: none;
+}
+
+
+::deep .sidebar .dxbl-text {
+    border-radius: unset;
+    background-color: unset;
+    border: unset;
+}
+
+::deep .sidebar .dxbl-text {
+    height: 28px;
+    overflow: hidden;
+}
+
+    ::deep .sidebar .dxbl-text span {
+        margin: auto;
+        padding: 0px 0.4rem;
+    }
+
+::deep .main-nav-treelist-icon {
+    position: absolute;
+}
+
+
+::deep .dxbl-treeview .dxbl-treeview-item > .dxbl-treeview-item-content > .dxbl-treeview-item-container {
+    border-radius: unset;
+}
+
+::deep .sidebar .dxbl-text span {
+    margin-left: 20px;    
+}
+
+::deep .dxbl-treeview .dxbl-treeview-item > .dxbl-treeview-item-content {
+    --dxbl-treeview-item-indent: 0;
+}
+
+/*
+::deep .dxbl-treeview-item {
+    border-bottom: solid 1px #38495b;
+}
+
+*/
+
+::deep .sidebar {
+    border-radius: unset;
+}
+
+::deep .navbar-logo-sep {
+    display: none;
+}
+
+::deep .sidebar .dxbl-text {
+    width: unset;
+}
+
+::deep .navbar.header-navbar {
+    min-height: 2.2rem;
+    max-height: 2.2rem;
+}
+
+::deep .header-navbar .navbar-logo {
+    padding-left: 6px;
+}
+
+::deep .dxbl-btn-standalone.dxbl-btn-secondary.dxbl-sm.dxbl-btn-icon-only {
+    --dxbl-btn-padding-x: unset;
+    --dxbl-btn-padding-y: unset;
+}
+
+::deep .user-btn-img {
+    width: 32px;
+    height: 32px;
+    mask-size: 28px;
+}
+
+::deep #flyout-overview-target-container {
+    height: 34px;
+}
+
+::deep .ms-3.fw-bold.title.pe-4 {
+    padding-right: 3px !important;
+}
+
+::deep .header-navbar .navbar-logo {
+    padding-bottom: 0px;
+}
+
+::deep .sidebar .dxbl-text {
+    width: 100% !important;
+}
+
+::deep .main-toolbar-body {
+    border-radius: unset;
+    border: 1px solid #e7e3e3;
+    border-top: 0px solid #e7e3e3;
+    border-bottom: 0px solid #e7e3e3;
+    margin: 0px;
+}
+
+
+::deep .dxbl-toolbar-placeholder{
+    display:none;
+}
+
+
+
+::deep .p_fave {
+    /* display: none !important; */
+}
+
+
+
+
+::deep .sidebar {
+    overflow-x: hidden;
+}
+
+
+::deep .Top-Btn-nav {
+    height: 100%;
+}
+
+
+
+::deep ::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+
+::deep ::-webkit-scrollbar-thumb {
+    outline: none;
+    border-radius: 10px;
+    border: 4px solid transparent;
+    box-shadow: inset 6px 6px 0 rgba(34, 34, 34, 0.15);
+}
+
+::deep ::-webkit-scrollbar-thumb:hover {
+        border: 4px solid transparent;
+        box-shadow: inset 6px 6px 0 rgba(34, 34, 34, 0.3);
+    }
+
+::deep ::-webkit-scrollbar-track {
+    box-shadow: none;
+    background-color: transparent;
+}
+
+
+::deep .main-toolbar-body .dxbl-btn span {
+    font-size: 12px;
+}
+
+
+::deep .sidebar::-webkit-scrollbar-thumb {
+    background-color: #707070;
+}
+
+
+::deep .home_sample {
+    background-color: #314050 !important;
+}
+
+::deep .dxbl-tabs-content-panel.dxbl-tabs-render-default.dxbl-loaded {
+    overflow-y: visible;
+    height: calc(100vh - 111px);
+    overflow-x: hidden;
+}
+
+
+::deep .dxbl-grid-table {
+  min-height: 24px;
+  height: 24px;
+}
+
+  ::deep .dxbl-grid-table tbody tr {
+    min-height: 24px;
+    height: 24px;
+  }
+

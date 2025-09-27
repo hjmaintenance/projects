@@ -1,0 +1,71 @@
+﻿@layout MainUILayoutFinal
+@page "/"
+@using MIT.Razor.Pages.Common
+@using MIT.UI.Main.Main
+@using MIT.UI.Main.MainFrame
+@using System.Diagnostics
+
+@inject AppData _appData
+
+
+<DxLayoutBreakpoint MaxWidth="1200" @bind-IsActive="@IsMobileLayout" />
+
+
+
+@if (IsMobileLayout)
+{
+  <link href="/css/app_mobile.css" rel="stylesheet" />
+}
+else
+{
+    <link href="/css/app_desktop.css" rel="stylesheet" />
+}
+
+<div class="@(IsMobileLayout ? "main-ui-size-mobile" : "main-ui-size")">
+
+  
+
+  <MainFrameFinal MaxTabCount="20"></MainFrameFinal>
+</div>
+
+@code {
+
+    bool _isMobileLayout;
+    bool IsMobileLayout
+    {
+        get => _isMobileLayout;
+        set
+        {
+            _isMobileLayout = value;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _appData.OnChange += MyEventHandler;
+    }
+
+    private void MyEventHandler()
+    {
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

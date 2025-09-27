@@ -1,0 +1,72 @@
+﻿@using MIT.DataUtil.Common
+@namespace MIT.Razor.Pages.Component.DataEdits
+<DxTimeEdit Time="@_time" DisplayFormat="@DisplayFormat"
+            Format="@DisplayFormat"
+            ScrollPickerFormat="@DisplayFormat"
+            Enabled="@_enable"
+            ReadOnly="@_readOnly"
+            TimeChanged="@((TimeSpan newValue) => OnTimeChanged(newValue))"
+            ShowValidationIcon="@ShowValidationIcon"
+            CssClass="txt_center" />
+
+@code {
+    [Parameter]
+    public bool Enabled
+    {
+        get { return _enable; }
+        set { _enable = value; StateHasChanged(); }
+    }
+    [Parameter]
+    public bool ReadOnly
+    {
+        get { return _readOnly; }
+        set { _readOnly = value; StateHasChanged(); }
+    }
+    [Parameter]
+    public string? DisplayFormat { get; set; } = "HH:mm";
+    [Parameter]
+    public string? StringFormat { get; set; } = "hh\\:mm";
+    [Parameter]
+    public bool? ShowValidationIcon { get; set; } = false;
+    [Parameter]
+    public string? EditValue
+    {
+        get
+        {
+            return _time.ToString(StringFormat);
+        }
+        set
+        {
+            _time = TimeSpan.Parse(value);
+            StateHasChanged();
+        }
+    }
+    [Parameter]
+    public EventCallback<TimeSpan> TimeChanged { get; set; }
+
+    protected void OnTimeChanged(TimeSpan time)
+    {
+        _time = time;
+
+        TimeChanged.InvokeAsync(time);
+        StateHasChanged();
+    }
+
+    protected bool _enable = true;
+    protected bool _readOnly = false;
+
+    protected TimeSpan _time = GetNowTime();
+
+    protected static TimeSpan GetNowTime()
+    {
+        return DateTime.Now.TimeOfDay;
+    }
+
+    public void SetNowTime()
+    {
+        _time = GetNowTime();
+        TimeChanged.InvokeAsync(_time);
+        StateHasChanged();
+
+    }
+}

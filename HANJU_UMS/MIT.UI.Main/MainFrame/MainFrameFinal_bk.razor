@@ -1,0 +1,139 @@
+﻿@using MIT.DataUtil.Common;
+@using MIT.Razor.Pages.Common
+@using Microsoft.AspNetCore.Components.Routing;
+@implements IDisposable
+
+@inject AppData _appData
+@inherits MainFrameFinal_bkBase
+
+
+
+
+<DxTabs ActiveTabIndex="@ActiveTabIndex" 
+  SizeMode="_appData.Sizemode"
+        CssClass="Top-Btn-nav mit-main-cont-tab"
+ActiveTabIndexChanged="@OnActiveTabIndexChanged"
+ScrollMode="TabsScrollMode.NavButtons"
+RenderMode="TabsRenderMode.Default">
+  <DxTabPage CssClass="custom-tab-style" >
+    <TextTemplate>
+      <div class="top-btn-text">
+        @("홈")
+      </div>
+      <div class="close-ico">
+        <DxButton IconCssClass="oi oi-circle-x"
+        RenderStyle="ButtonRenderStyle.Link"
+        RenderStyleMode="ButtonRenderStyleMode.Text"
+        CssClass="shadow-none remove-padding " />
+      </div>
+    </TextTemplate>
+    <ChildContent>
+
+      @* <div class="card w-100 main-toolbar"> *@
+      @* </div> *@
+      <div class="mit-crr-page">
+        @BuildHomePage()
+      </div>
+    </ChildContent>
+  </DxTabPage>
+  @foreach (var pg in Pages)  {
+
+
+    <span>@Pages.Count</span>
+    <span>@pg.ClassType.ToString()</span>
+
+    <DxTabPage>
+      <TextTemplate>
+        <div class="top-btn-text">
+          @pg.MENU_NAME
+        </div>
+        <div class="close-ico">
+          <DxButton IconCssClass="oi oi-circle-x"
+          RenderStyle="ButtonRenderStyle.Link"
+          RenderStyleMode="ButtonRenderStyleMode.Text"
+          CssClass="shadow-none remove-padding"
+          Click="() => RemovePage(pg)" />
+        </div>
+      </TextTemplate>
+      <ChildContent>
+        <div class="card w-100 main-toolbar">
+          <div class="card-body main-toolbar-body">
+            <DxToolbar ItemRenderStyleMode="@ToolbarRenderStyleMode.Contained">
+              <Items>
+                <DxToolbarItem Text="조회" Click="@(() => OnButtonClick(pg, pg.MainCommonButtonData.SearchButtonClick))" 
+                Visible="@pg.MainCommonButtonData.IsButtonSearch" 
+                CssClass="main-toolbar-btn " 
+                IconCssClass="main-toolbar-btn-icon-search" 
+                BeginGroup="true" 
+                Alignment="ToolbarItemAlignment.Right" >
+                  <i class="bi bi-search "></i><span class="">조회</span>
+                </DxToolbarItem>
+                <DxToolbarItem Text="저장" Click="@(() => OnButtonClick(pg, pg.MainCommonButtonData.SaveButtonClick))" Visible="@pg.MainCommonButtonData.IsButtonSave" CssClass="main-toolbar-btn" IconCssClass="main-toolbar-btn-icon-save" BeginGroup="true" Alignment="ToolbarItemAlignment.Right" >
+
+
+                  <i class="bi bi-floppy "></i><span class="">저장</span>
+
+
+                </DxToolbarItem>
+                <DxToolbarItem Text="삭제" Click="@(() => OnButtonClick(pg, pg.MainCommonButtonData.DeleteButtonClick))" Visible="@pg.MainCommonButtonData.IsButtonDelete" CssClass="main-toolbar-btn" IconCssClass="main-toolbar-btn-icon-delete" BeginGroup="true" Alignment="ToolbarItemAlignment.Right">
+
+                  <i class="bi bi-trash "></i><span class="">삭제</span>
+
+                </DxToolbarItem>
+                <DxToolbarItem Text="출력" Click="@(() => OnButtonClick(pg, pg.MainCommonButtonData.PrintButtonClick))" Visible="@pg.MainCommonButtonData.IsButtonPrint" CssClass="main-toolbar-btn" IconCssClass="main-toolbar-btn-icon-print" BeginGroup="true" Alignment="ToolbarItemAlignment.Right">
+
+                  <i class="bi bi-printer "></i><span class="">출력</span>
+
+                </DxToolbarItem>
+                <DxToolbarItem Text="닫기" Click="@(() => OnButtonClick(pg, pg.MainCommonButtonData.CloseButtonClick, true))" CssClass="main-toolbar-btn" IconCssClass="main-toolbar-btn-icon-close" BeginGroup="true" Alignment="ToolbarItemAlignment.Right">
+
+
+                  <i class="bi bi-x-lg"></i><span class="">닫기</span>
+
+
+                </DxToolbarItem>
+
+
+                <span>@Pages.Count</span>
+
+
+                <DxToolbarItem Text="즐겨찾기" 
+                Click="@(() => OnButtonClick(pg, pg.MainCommonButtonData.FavoritesButtonClick))" 
+                CssClass="main-toolbar-btn p_fave" 
+                IconCssClass="main-toolbar-btn-icon-fav" 
+                BeginGroup="true" 
+                Alignment="ToolbarItemAlignment.Left">
+
+                  <i class="bi bi-star "></i><span class="">즐겨찾기</span>
+
+                </DxToolbarItem>
+
+              </Items>
+            </DxToolbar>
+          </div>
+        </div>
+        <div class="mit-crr-page">
+
+          <span>@pg.ClassType.ToString()</span>
+
+
+        </div>
+      </ChildContent>
+    </DxTabPage>
+  }
+  <div class="custom-toast-background d-flex align-items-center">
+    <DxToastProvider Name="Positioning"
+                     MaxToastCount="3"
+                     DisplayTime="@TimeSpan.FromSeconds(5)"
+                     FreezeOnClick="true"
+                     HorizontalAlignment="HorizontalAlignment.Center"
+                     VerticalAlignment=" VerticalEdge.Top"
+                     Width="450px"
+                     ShowCloseButton="true" />
+  </div>
+</DxTabs>
+@code {
+  protected override void OnInitialized()  {
+    _appData.OnChange += StateHasChanged;
+  }
+}

@@ -1,0 +1,214 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.Charts
+@using MIT.UI.UMS
+@using System.Data
+@using System.Linq
+@using Microsoft.JSInterop
+@using System.Linq.Expressions
+@inherits UH2020QA1Base
+@{/*
+    * 작성자명 : quristyle
+    * 작성일자 : 25-02-19
+    * 최종수정 : 25-02-19   
+    * 화면ID : UH2020QA1
+    * 화면명 : 
+   * 프로시저 : P_HMI_ELEC_ACTUAL_VAL_ALL
+*/}
+<DxFormLayout CssClass="w-100">    
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="구분" ColSpanSm="2"><MitCombo2 CodeId="st_grp" @bind-Value="@P_ST_GRP" SelectedItemChanged="Typ_Change" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="기간선택" ColSpanSm="2"><CommonDateEdit @ref="P_SDATE" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="-" ColSpanSm="2"><CommonDateEdit @ref="P_EDATE" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="수용가" ColSpanSm="3"><MitCombo 
+            CodeId="company2" Etc0="PW"
+            @ref="@P_COM_ID"
+            @bind-Value=@P_COM_VAL
+            SelectedItemChanged="COM_Chnage" 
+            IsAll=true /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="계량기" ColSpanSm="3">
+            <MitCombo CodeId="FDR_PW" @ref="@P_MC_ID" IsDataFixed="false"
+            IsAll=true Etc0=@P_COM_VAL />
+        </DxFormLayoutItem>
+
+
+    </DxFormLayoutGroup>
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+
+            <DxRangeSelector Width="100%" ValueChanged="@OnValueChanged" AllowSliderSwap ="true"
+            SelectedRangeStartValue=@sval SelectedRangeEndValue=@eval
+            Data="@ChartDt1.AsEnumerable()">
+
+                @*                <DxRangeSelectorChart> *@
+                @*    <DxChartAreaSeries T="DataRow" TArgument="string" TValue="object" ArgumentField='@(dr => dr["RUM"].ToString())' ValueField='@(dr => dr["VAL1"])'></DxChartAreaSeries> *@
+                @*   <DxChartAreaSeries T="DataRow" TArgument="string" TValue="object" ArgumentField='@(dr => dr["RUM"].ToString())' ValueField='@(dr => dr["VAL2"])'></DxChartAreaSeries> *@
+                @*   <DxChartAreaSeries T="DataRow" TArgument="string" TValue="object" ArgumentField='@(dr => dr["RUM"].ToString())' ValueField='@(dr => dr["VAL3"])'></DxChartAreaSeries> *@
+                @*   <DxChartAreaSeries T="DataRow" TArgument="string" TValue="object" ArgumentField='@(dr => dr["RUM"].ToString())' ValueField='@(dr => dr["VAL4"])'></DxChartAreaSeries> *@
+                @*   <DxChartAreaSeries T="DataRow" TArgument="string" TValue="object" ArgumentField='@(dr => dr["RUM"].ToString())' ValueField='@(dr => dr["VAL5"])'></DxChartAreaSeries> *@
+
+                @* </DxRangeSelectorChart> *@
+
+                <DxRangeSelectorScale  StartValue="1" EndValue=@(mc_num+1) TickInterval="1" MinRange="gapval" MaxRange="gapval" ValueType="ChartAxisDataType.Numeric">
+                </DxRangeSelectorScale>
+            </DxRangeSelector>
+
+
+
+            <CommonGrid @ref="Grd1" CssClass="mit-grid" 
+            IsShowToolBar="true" 
+            ExportFileName="전기 사용량 조회"
+            IsExportAllColumn="true"
+            IsExportDocEnabled="false" 
+            IsExportPdfEnabled="false"
+            IsExportXlsxEnabled="false"
+            IsExportImageEnabled=false
+            >
+                <DataColumnsTemplate>
+                    <DxGridDataColumn Caption="구분1" FieldName="GAUGE_DATE"  Width="80" FixedPosition="GridColumnFixedPosition.Left" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridDataColumn Caption="구분2" FieldName="GAUGE_MIN"  Width="80" FixedPosition="GridColumnFixedPosition.Left" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+
+                    @* @for (int i = sval; i <= eval; i++) { *@
+
+
+                    @for (int i = 1; i <= mc_num; i++) {
+                        var k = i;
+
+
+                        <DxGridBandColumn Caption=@BandCaption[i - 1] CaptionAlignment="GridTextAlignment.Center" Visible=@(( k >= sval && k <= eval ))>
+                            <Columns>
+
+                                <DxGridDataColumn Caption='경(유)' FieldName="@( ReVal("REC_AC_KWH_C_", k) )" Width="80" CaptionAlignment="GridTextAlignment.Center" />
+                                <DxGridDataColumn Caption='중(유)' FieldName="@( ReVal("REC_AC_KWH_A_", k) )" Width="80" CaptionAlignment="GridTextAlignment.Center" />
+                                <DxGridDataColumn Caption='최대(유)' FieldName="@( ReVal("REC_AC_KWH_B_", k) )" Width="80" CaptionAlignment="GridTextAlignment.Center" />
+                                <DxGridDataColumn Caption='중(무)' FieldName="@( ReVal("REC_AC_KVARH_A_", k) )" Width="80" CaptionAlignment="GridTextAlignment.Center" />
+                                <DxGridDataColumn Caption='최대(무)' FieldName="@( ReVal("REC_AC_KVARH_B_", k) )" Width="80" CaptionAlignment="GridTextAlignment.Center" />
+
+                            </Columns>
+                        </DxGridBandColumn>
+
+                        if (k == mc_num)
+                        {
+                            var val = k;
+                            var val2 = 50;
+                            <DxGridBandColumn Caption='합계' CaptionAlignment="GridTextAlignment.Center" Visible=@(( (val+1) >= sval && (val+1) <= eval ))>
+                                <Columns>
+                                    <DxGridDataColumn Caption='경(유)' FieldName="@( ReVal("REC_AC_KWH_C_", val2) )" Width="80" CaptionAlignment="GridTextAlignment.Center" />
+                                    <DxGridDataColumn Caption='중(유)' FieldName="@( ReVal("REC_AC_KWH_A_", val2) )" Width="80" CaptionAlignment="GridTextAlignment.Center" />
+                                    <DxGridDataColumn Caption='최대(유)' FieldName="@( ReVal("REC_AC_KWH_B_", val2) )" Width="80" CaptionAlignment="GridTextAlignment.Center" />
+                                    <DxGridDataColumn Caption='중(무)' FieldName="@( ReVal("REC_AC_KVARH_A_", val2) )" Width="80" CaptionAlignment="GridTextAlignment.Center" />
+                                    <DxGridDataColumn Caption='최대(무)' FieldName="@( ReVal("REC_AC_KVARH_B_", val2) )" Width="80" CaptionAlignment="GridTextAlignment.Center" />
+
+                                </Columns>
+                            </DxGridBandColumn>
+                        }
+                    }
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+                  @code{
+
+  private RenderFragment CreateChartAreaSeries(Expression<Func<DataRow>> dr) =>
+  @<DxChartAreaSeries T="DataRow"
+                        TArgument="string"
+                        TValue="object"
+                        ArgumentField='@(dr => dr["REC_AC_KWH_C_1"].ToString())'
+                        ValueField='@(dr => dr["REC_AC_KWH_A_1"])'>
+  </DxChartAreaSeries>;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  protected async void OnValueChanged(RangeSelectorValueChangedEventArgs info)
+  {
+    
+    sval = int.Parse((info.CurrentRange[0] + "").Split('.')[0]);
+    eval = int.Parse((info.CurrentRange[1] + "").Split('.')[0]);
+
+    StateHasChanged();
+  }
+
+
+
+  
+  private async void COM_Chnage(Razor.Pages.CommCode args)  {
+    P_MC_ID.Etc0 = args.Name;
+  }
+
+
+  private async void Typ_Change(Razor.Pages.CommCode args) {
+    if(args.Value == "HH") {
+      P_EDATE.EditValue = P_SDATE.EditValue;
+      P_EDATE.ReadOnly = true;
+      //cdy test 필요
+    }
+    else {
+      P_EDATE.ReadOnly = false;
+    }
+    await InvokeAsync(StateHasChanged);
+  }
+
+
+
+                  }
+
+
+    <style>
+  .crr-pg-UH2020QA1 .common-control-page-height {
+    top: -113px;
+    position: relative;
+    height: calc(100vh - 300px);
+  }
+
+
+  .crr-pg-UH2020QA1 .dxbl-toolbar.dxbl-toolbar-adaptive > .dxbl-btn-toolbar {
+    background-color: var(--bg-main) !important;
+  }
+
+  .crr-pg-UH2020QA1.mit-crr-page {
+    height: calc(100vh - 200px) !important;
+    overflow: hidden !important;
+  }
+
+  .crr-pg-UH2020QA1 .common-layout-grid {
+    height: calc(100vh - 381px) !important;
+  }
+
+    .crr-pg-UH2020QA1 .mit-grid{
+        height: calc(100vh - 24rem) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+      </style>
+

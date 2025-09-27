@@ -1,0 +1,132 @@
+﻿@{
+    /*
+    * 작성자명 : 김지수
+    * 작성일자 : 25-03-10
+    * 최종수정 : 25-03-10
+    * 화면명   : 유틸리티별 세부 매출액 현황
+    * 프로시저 :P_HMI_CHARGE_MONTHDETAIL_SELECT01, P_HMI_CHARGE_MONTHDETAIL_SELECT02, P_HMI_CHARGE_MONTHDETAIL_SELECT03
+    */
+}
+
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@inherits US3130QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+    @{
+        /* search area */
+    }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="조회년월" ColSpanSm="4"><CommonDateEdit @ref="@YYMM" DisplayFormat="yyyy-MM-dd" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="수용가" ColSpanSm="4">
+            @if (isHanju)
+            {
+                <MitCombo CodeId="company" @bind-Value="@COM_ID" SearchMode="ListSearchMode.AutoSearch" SearchFilterCondition="ListSearchFilterCondition.Contains" IsAll="true" />
+            }
+            else
+            {
+                <CommonTextBox @ref=@ComText ReadOnly="true" />
+            }
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{
+        /* content area */
+    }
+    <DxFormLayoutGroup Caption="유틸리티 세부 매출액 현황" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutGroup Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+            <DxFormLayoutGroup Caption="전기-중간검침" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="6">
+                <CommonGrid @ref="Grd1" CssClass="setting-program-grid">
+                    <DataColumnsTemplate>
+                        <DxGridDataColumn Width="50" Caption="구분" FieldName="setKind01" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="기본요금" FieldName="BLMAX" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="경부하" FieldName="BLLTLD" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="중부하" FieldName="BLHVLD" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="최대부하" FieldName="BLMXLD" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Width="85" Caption="역률금액" FieldName="BLADJRAT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="전력기반기금" FieldName="BLADJGIG" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="사용량*0.66" FieldName="BLFXDCST" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn MinWidth="115" Caption="합계" FieldName="BLTOT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                    </DataColumnsTemplate>
+                </CommonGrid>
+            </DxFormLayoutGroup>
+            <DxFormLayoutGroup Caption="전기-정기검침" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="6">
+                <CommonGrid @ref="Grd4" CssClass="setting-program-grid">
+                    <DataColumnsTemplate>
+                        <DxGridDataColumn Width="50" Caption="구분" FieldName="setKind01" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="기본요금" FieldName="BLMAX" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="경부하" FieldName="BLLTLD" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="중부하" FieldName="BLHVLD" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="최대부하" FieldName="BLMXLD" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Width="85" Caption="역률금액" FieldName="BLADJRAT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="전력기반기금" FieldName="BLADJGIG" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="사용량*0.66" FieldName="BLFXDCST" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn MinWidth="115" Caption="합계" FieldName="BLTOT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                    </DataColumnsTemplate>
+                </CommonGrid>
+            </DxFormLayoutGroup>
+        </DxFormLayoutGroup>
+        <DxFormLayoutGroup Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+            <DxFormLayoutGroup Caption="증기-중간검침" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="6">
+                <CommonGrid @ref="Grd2" CssClass="setting-program-grid">
+                    <DataColumnsTemplate>
+                        <DxGridDataColumn Caption="구분" FieldName="setKind01" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="기본요금" FieldName="BLBAS" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="수용요금" FieldName="BLMAX" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="사용요금" FieldName="BLUSE" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="소계" FieldName="BLSUM" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="정산요금" FieldName="BLADJ" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="합계" FieldName="BLTOT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                    </DataColumnsTemplate>
+                </CommonGrid>
+            </DxFormLayoutGroup>
+            <DxFormLayoutGroup Caption="증기-정기검침" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="6">
+                <CommonGrid @ref="Grd5" CssClass="setting-program-grid">
+                    <DataColumnsTemplate>
+                        <DxGridDataColumn Caption="구분" FieldName="setKind01" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="기본요금" FieldName="BLBAS" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="수용요금" FieldName="BLMAX" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="사용요금" FieldName="BLUSE" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="소계" FieldName="BLSUM" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="정산요금" FieldName="BLADJ" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="합계" FieldName="BLTOT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                    </DataColumnsTemplate>
+                </CommonGrid>
+            </DxFormLayoutGroup>
+        </DxFormLayoutGroup>
+        <DxFormLayoutGroup Decoration="FormLayoutGroupDecoration.None" ColSpanSm="12">
+            <DxFormLayoutGroup Caption="용수-중간검침" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="6">
+                <CommonGrid @ref="Grd3" CssClass="setting-program-grid">
+                    <DataColumnsTemplate>
+                        <DxGridDataColumn Caption="구분" FieldName="setKind01" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="기본요금" FieldName="BLBAS" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="수용요금" FieldName="BLMAX" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="사용요금" FieldName="BLUSE" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="소계" FieldName="BLSUM" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="정산요금" FieldName="BLADJ" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="합계" FieldName="BLTOT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                    </DataColumnsTemplate>
+                </CommonGrid>
+            </DxFormLayoutGroup>
+            <DxFormLayoutGroup Caption="용수-정기검침" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="6">
+                <CommonGrid @ref="Grd6" CssClass="setting-program-grid">
+                    <DataColumnsTemplate>
+                        <DxGridDataColumn Caption="구분" FieldName="setKind01" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="기본요금" FieldName="BLBAS" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="수용요금" FieldName="BLMAX" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="사용요금" FieldName="BLUSE" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="소계" FieldName="BLSUM" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="정산요금" FieldName="BLADJ" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                        <DxGridDataColumn Caption="합계" FieldName="BLTOT" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemSpinEdit CellContext="context2" ReadOnly="true" DisplayFormat="N0" /></CellDisplayTemplate></DxGridDataColumn>
+                    </DataColumnsTemplate>
+                </CommonGrid>
+            </DxFormLayoutGroup>
+        </DxFormLayoutGroup>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+<style>
+
+</style>

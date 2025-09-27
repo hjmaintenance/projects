@@ -1,0 +1,65 @@
+﻿@{
+    /*
+     * 작성자명 : 김지수
+     * 작성일자 : 25-02-07
+     * 최종수정 : 25-02-07
+     * 화면명 : 용수 년별 사용량 현황
+     * 프로시저 : P_HMI_USE_YEARWATYEAR_SELECT01
+    */
+}
+
+@using MIT.Razor.Pages.Component.Charts
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@inherits US2240QA1Base
+
+
+<DxFormLayout CssClass="w-100">
+    @{ /* search area */ }
+    <DxFormLayoutGroup Caption="조회조건" CssClass="mit-search-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem Caption="조회년도" ColSpanSm="3"><CommonDateEdit @ref="@SYYYY" DisplayFormat="yyyy"/></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="~" ColSpanSm="3"><CommonDateEdit @ref="@EYYYY" DisplayFormat="yyyy" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="수용가" ColSpanSm="3">
+            @if (isHanju)
+            {
+                <MitCombo CodeId="company2" etc0="WA" @bind-Value="@COM_ID" SearchMode="ListSearchMode.AutoSearch" SearchFilterCondition="ListSearchFilterCondition.Contains" IsAll="true" />
+            }
+            else
+            {
+                <CommonTextBox @ref=@ComText ReadOnly="true" />
+            }
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="용수구분" ColSpanSm="3"><MitCombo CodeId="water" @bind-Value="@WATER_TYPE" IsAll="true" /></DxFormLayoutItem>
+    </DxFormLayoutGroup>
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="용수 년별 사용량 현황" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+        <DxFormLayoutItem ColSpanSm="12">
+            <CommonGrid @ref="Grd1" CssClass="setting-program-grid">
+                <DataColumnsTemplate> 
+                    <DxGridDataColumn Caption="구분" FieldName="GAUGE_YEAR" TextAlignment="GridTextAlignment.Center" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                    <DxGridBandColumn Caption="당해년도 사용량" CaptionAlignment="GridTextAlignment.Center">
+                        <Columns>
+                            <DxGridDataColumn Caption="TON" FieldName="MI_USEQTY" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="T/D" FieldName="M_USEQTY" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                        </Columns>
+                    </DxGridBandColumn>
+                    <DxGridBandColumn Caption="전년도 사용량" CaptionAlignment="GridTextAlignment.Center">
+                        <Columns>
+                            <DxGridDataColumn Caption="TON" FieldName="Y_MI_USEQTY" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                            <DxGridDataColumn Caption="T/D" FieldName="Y_M_USEQTY" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true" /></CellDisplayTemplate></DxGridDataColumn>
+                        </Columns>
+                    </DxGridBandColumn>
+                    <DxGridDataColumn Caption="전년도 대비(%)" FieldName="PROC_RATE" TextAlignment="GridTextAlignment.Right" CaptionAlignment="GridTextAlignment.Center"><CellDisplayTemplate Context="context2"><RepositoryItemTextBox CellContext="context2" ReadOnly="true"/></CellDisplayTemplate></DxGridDataColumn>
+                </DataColumnsTemplate>
+            </CommonGrid>
+        </DxFormLayoutItem>
+        <MitChartLine HeightStr="200px" XName="GAUGE_YEAR" YTitles="당해 년간사용량(TON), 당해 년사용량(T/D), 전년 년간사용량(TON), 전년 년사용량(T/D), 전년대비(%)" YNames="MI_USEQTY,M_USEQTY,Y_MI_USEQTY,Y_M_USEQTY,PROC_RATE" IsShowToolTip="true" IsShowLegend="true" @ref="Chart1"></MitChartLine>
+    </DxFormLayoutGroup>
+    
+</DxFormLayout>
+
+<style>
+
+</style>

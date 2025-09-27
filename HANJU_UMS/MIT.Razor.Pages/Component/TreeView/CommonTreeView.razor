@@ -1,0 +1,523 @@
+﻿@using System.Collections.ObjectModel
+@using System.Linq.Expressions;
+@using System.Data;
+@using DevExpress.Blazor
+@using MIT.DataUtil.Common;
+@* @using MIT.Devexp *@
+@using MIT.Razor.Pages.Common
+@using MIT.Razor.Pages.Component.TreeView.Data;
+
+@inject AppData _appData
+
+@* FilterMode="NavigationFilterMode.Nodes" *@
+@* LoadChildNodesOnDemand="true" *@
+
+
+<DxTreeView AllowSelectNodes="@AllowSelectNodes"
+
+  SizeMode="_appData.Sizemode"
+
+
+Data="@_dataSource"
+CssClass="@CssClass"
+CheckMode="CheckMode"
+CheckAllVisible="false"
+SelectionChanged="@OnSelectionChanged"
+NodeClick="@OnNodeClick"
+AnimationType="LayoutAnimationType.Slide"
+@bind-FilterString=@FilterString
+FilterMinLength="1"
+            ShowFilterPanel="ShowFilter"
+            CustomFilter="SearchFilter"
+
+
+
+@ref="TreeView">
+
+
+
+
+
+
+
+
+
+
+
+  <DataMappings>
+    <DxTreeViewDataMapping Children="Child"
+    Checked="Checked"
+    Text="TName"
+    Key="TValue" ParentKey="PValue"
+
+    AllowSelection="" />
+  </DataMappings>
+  <NodeTextTemplate>
+    @{
+      var dataItem = ((TreeViewNodeData)context.DataItem).Row;
+    }
+    <span class="@(string.IsNullOrEmpty(CssClassFiledName) ? string.Empty : @dataItem?[CssClassFiledName].ToStringTrim())">
+      @dataItem?[TextFieldName].ToStringTrim()
+    </span>
+  </NodeTextTemplate>
+</DxTreeView>
+
+
+               
+@code {
+    protected override void OnInitialized()
+    {
+        _appData.OnChange += StateHasChanged;
+    }
+
+
+  /// <summary>
+  /// 트리에서 루트노트에 PARENT 아이디 변수
+  /// </summary>
+  [Parameter]
+  public string RootID { get; set; } = "ROOT";
+
+  private bool _shwoFilter = false;
+  [Parameter]
+  public bool ShowFilter
+  {
+    get { return _shwoFilter; }
+    set
+    {
+      _shwoFilter = value;
+      //if( value == true){
+      //  TreeView.CustomFilter = SearchFilter;
+      //}
+    }
+  }
+
+
+  public bool SearchFilter(ITreeViewNodeInfo n)
+  {
+
+    TreeViewNodeData tmp = n.DataItem as TreeViewNodeData;
+
+    
+    if ( 
+    n.Text.ToStringTrim().IndexOf(FilterString.ToUpper().ToStringTrim()) >= 0
+    || n.Text.ToStringTrim().IndexOf(FilterString.ToLower().ToStringTrim()) >= 0
+    || tmp.TValue.ToStringTrim().IndexOf(FilterString.ToUpper().ToStringTrim()) >= 0
+    || tmp.TValue.ToStringTrim().IndexOf(FilterString.ToLower().ToStringTrim()) >= 0
+ 
+    )
+    {
+      return true;
+    }
+    else { return false; }
+
+  }
+
+
+  /// <summary>
+  /// 트리 CssClass 변수
+  /// </summary>
+  [Parameter]
+  public string? CssClass { get; set; }
+
+  /// <summary>
+  /// DataSource 정보 변수
+  /// </summary>
+  //[Parameter]
+  public DataTable? DataSource
+  {
+    get
+    {
+      return _datatable;
+    }
+    set
+    {
+      SelectedNodeData = null;
+
+      _dataSource = ConvertDataSourceToObservableCollection(value);
+      _datatable = value;
+      StateHasChanged();
+    }
+  }
+
+  /// <summary>
+  /// 트리 리스트 노드에 적용될 Diplay정보 Datatable의 컬럼 필드이름
+  /// </summary>
+  [Parameter]
+  public string TextFieldName { get; set; } = string.Empty;
+  /// <summary>
+  /// 트리 리스트 노드에 적용될 Key정보 Datatable의 컬럼 필드이름
+  /// </summary>
+  [Parameter]
+  public string KeyFieldName { get; set; } = string.Empty;
+  /// <summary>
+  /// 트리 리스트 노드에 적용될 ParentKey정보 Datatable의 컬럼 필드이름
+  /// </summary>
+  [Parameter]
+  public string ParentFieldName { get; set; } = string.Empty;
+  /// <summary>
+  /// 트리 리스트 노드에 적용될 IconUrl(Image경로)정보 Datatable의 컬럼 필드이름
+  /// </summary>
+  [Parameter]
+  public string IconUrlFieldName { get; set; } = string.Empty;
+  /// <summary>
+  /// 트리 리스트 노드에 적용될 CssClass정보 Datatable의 컬럼 필드이름
+  /// </summary>
+  [Parameter]
+  public string CssClassFiledName { get; set; } = string.Empty;
+  /// <summary>
+  /// 트리 리스트 노드에 적용될 IconCssClass정보 Datatable의 컬럼 필드이름
+  /// </summary>
+  [Parameter]
+  public string IconCssClassFiledName { get; set; } = string.Empty;
+  /// <summary>
+  /// 트리 리스트 노드에 적용될 Level정보 Datatable의 컬럼 필드이름
+  /// </summary>
+  [Parameter]
+  public string LevelFiledName { get; set; } = string.Empty;
+  /// <summary>
+  /// 트리 리스트 노드에 적용될 Sort정보 Datatable의 컬럼 필드이름
+  /// </summary>
+  [Parameter]
+  public string SortFiledName { get; set; } = string.Empty;
+  /// <summary>
+  /// 트리 리스트에 체크 버튼 유무 타입
+  /// </summary>
+  [Parameter]
+  public TreeViewCheckMode CheckMode { get; set; } = TreeViewCheckMode.Disabled;
+
+  /// <summary>
+  /// 트리 리스트 노드에 선택 가능 여부
+  /// </summary>
+  [Parameter]
+  public bool AllowSelectNodes { get; set; } = true;
+  /// <summary>
+  /// 트리 리스트 선택 체인지된 노드 이벤트
+  /// </summary>
+  [Parameter]
+  public EventCallback<TreeViewNodeEventArgs> SelectionChanged { get; set; }
+  /// <summary>
+  /// 트리 리스트 클릭한 노드 이벤트
+  /// </summary>
+  [Parameter]
+  public EventCallback<TreeViewNodeClickExEventArgs> NodeClick { get; set; }
+
+  /// <summary>
+  /// 원본 데이터 테이블 정보
+  /// </summary>
+  private DataTable? _datatable;
+  /// <summary>
+  /// 원본에서 트리뷰에 적용가능한 변환된 데이터 정보
+  /// </summary>
+  ObservableCollection<TreeViewNodeData> _dataSource = new ObservableCollection<TreeViewNodeData>();
+  /// <summary>
+  /// 선택된 노드 데이터
+  /// </summary>
+  public TreeViewNodeData? SelectedNodeData { get; protected set; }
+  /// <summary>
+  /// 트리뷰 원본 클래스 변수
+  /// </summary>
+  public DxTreeView? TreeView { get; set; }
+
+  protected string FilterString { get; set; } = string.Empty;
+
+  /// <summary>
+  /// 원본 Datatable에서 트리뷰에 적용가능한 ObservableCollection 데이터로 변환하는 함수
+  /// </summary>
+  /// <param name="dt"></param>
+  /// <returns></returns>
+  private ObservableCollection<TreeViewNodeData> ConvertDataSourceToObservableCollection(DataTable? dt)
+  {
+    var list = CreateTreeNodeDataList(dt
+        , TextFieldName
+        , KeyFieldName
+        , ParentFieldName
+        , IconUrlFieldName
+        , CssClassFiledName
+        , LevelFiledName
+        , SortFiledName);
+
+    return list;
+  }
+
+  /// <summary>
+  /// 원본 데이터테이블에서 TreeNode 데이터생성
+  /// </summary>
+  /// <param name="datatable"></param>
+  /// <param name="textFieldName"></param>
+  /// <param name="keyFieldName"></param>
+  /// <param name="parentIdFieldName"></param>
+  /// <param name="iconUriFieldName"></param>
+  /// <param name="cssClassFiledName"></param>
+  /// <param name="levelFiledName"></param>
+  /// <param name="sortFiledName"></param>
+  /// <returns></returns>
+  protected ObservableCollection<TreeViewNodeData> CreateTreeNodeDataList(DataTable? datatable,
+          string textFieldName,
+          string keyFieldName,
+          string parentIdFieldName,
+          string iconUriFieldName,
+          string cssClassFiledName,
+          string levelFiledName,
+          string sortFiledName)
+  {
+    ObservableCollection<TreeViewNodeData> list = new ObservableCollection<TreeViewNodeData>();
+
+    if (datatable == null)
+      return list;
+
+    foreach (DataRow row in datatable.Rows)
+    {
+      var item = new TreeViewNodeData();
+      item.Row = row;
+      item.TName = row[textFieldName] + "";
+      item.TValue = row[keyFieldName] + "";
+      item.PValue = row[parentIdFieldName] + "";
+
+            var node = SearchNode(list, keyFieldName, row[parentIdFieldName].ToStringTrim());
+
+            if (node == null)
+            {
+                list.Add(item);
+            }
+            else
+            {
+                item.ParentGUID = node.GUID;
+                node.Child.Add(item);
+            }
+        }
+
+        return list;
+    }
+
+    /// <summary>
+    /// 자식 노드 검색 함수
+    /// </summary>
+    /// <param name="childNodes"></param>
+    /// <param name="keyFieldName"></param>
+    /// <param name="Id"></param>
+    /// <returns></returns>
+    protected TreeViewNodeData? SearchNode(ObservableCollection<TreeViewNodeData> childNodes, string keyFieldName, string Id)
+    {
+        TreeViewNodeData? node = null;
+
+        foreach (var childNode in childNodes)
+        {
+            if (childNode.Row == null)
+                continue;
+
+            if (childNode.Row[keyFieldName].ToStringTrim().Equals(Id))
+                return childNode;
+
+            node = SearchNode(childNode.Child, keyFieldName, Id);
+
+            if (node != null)
+                break;
+        }
+
+        return node;
+    }
+
+    /// <summary>
+    /// 체크된 데이터 정보 
+    /// </summary>
+    /// <returns></returns>
+    public DataRow[] GetCheckedRows()
+    {
+        if (TreeView == null || _datatable == null)
+            return new DataRow[0];
+
+        var checkedNodes = TreeView.GetCheckedNodeInfo();
+
+        if (checkedNodes == null || checkedNodes.Count() == 0)
+            return new DataRow[0];
+
+        var rows = new List<DataRow>();
+
+        foreach (var node in checkedNodes)
+        {
+            var item = node.DataItem as TreeViewNodeData;
+            if (item?.Row != null)
+                rows.Add(item.Row);
+        }
+
+        return rows.ToArray();
+    }
+
+    /// <summary>
+    /// 체크된 데이터가 있는지 확인
+    /// </summary>
+    /// <returns></returns>
+    public bool IsCheckedRows()
+    {
+        var checkedNodes = TreeView?.GetCheckedNodeInfo();
+
+        return checkedNodes == null ? false : checkedNodes.Count() > 0;
+    }
+
+    /// <summary>
+    /// 루트 노트에 노드 추가 함수
+    /// </summary>
+    /// <returns></returns>
+    public TreeViewNodeData? AddNewRootNode()
+    {
+        if (_dataSource == null || _datatable == null)
+            return null;
+
+        var node = new TreeViewNodeData();
+        var newRow = _datatable.NewRow();
+        node.Row = newRow;
+        if (!string.IsNullOrEmpty(LevelFiledName))
+            node.Row[LevelFiledName] = 0;
+        if (!string.IsNullOrEmpty(ParentFieldName))
+            node.Row[ParentFieldName] = RootID;
+
+        node.Checked = true;
+
+        int sort = 0;
+
+        if (_dataSource.Count > 0)
+        {
+            if (!string.IsNullOrEmpty(SortFiledName))
+                sort = _dataSource.Max(s => s.Row != null ? s.Row[SortFiledName].ToInt() : 0);
+        }
+        if (!string.IsNullOrEmpty(SortFiledName))
+            node.Row[SortFiledName] = sort + 1;
+
+        _dataSource.Add(node);
+
+        _datatable.Rows.Add(newRow);
+
+        TreeView?.SelectNode(s => ((TreeViewNodeData)s.DataItem).GUID.Equals(node.GUID));
+
+        return node;
+    }
+
+    public void InitSelection()
+    {
+        SelectedNodeData = null;
+        TreeView?.ClearSelection();
+    }
+
+    /// <summary>
+    /// 선택된 노드에 대한 자식 노드 추가
+    /// </summary>
+    /// <returns></returns>
+    public TreeViewNodeData? AddNewSelectedChildNode()
+    {
+        if (_dataSource == null || _datatable == null)
+            return null;
+
+        var selecteNode = TreeView?.GetSelectedNodeInfo();
+
+        if (selecteNode == null)
+            return null;
+
+        var data = selecteNode.DataItem as TreeViewNodeData;
+
+        if (data == null)
+            return null;
+
+        if (data.Row == null || string.IsNullOrEmpty(data.Row[KeyFieldName].ToStringTrim()))
+            return null;
+
+        var searchNode = SearchNode(_dataSource, KeyFieldName, data.Row[KeyFieldName].ToStringTrim());
+
+        if (searchNode == null)
+            return null;
+
+        int sort = 0;
+
+        if (searchNode.Child.Count > 0 && !string.IsNullOrEmpty(SortFiledName))
+        {
+            sort = searchNode.Child.Max(s => s.Row != null ? s.Row[SortFiledName].ToInt() : 0);
+        }
+
+
+        var node = new TreeViewNodeData();
+        node.ParentGUID = searchNode.GUID;
+        node.Checked = true;
+        var newRow = _datatable.NewRow();
+        node.Row = newRow;
+        if (node.Row != null)
+        {
+            node.Row[ParentFieldName] = data.Row[KeyFieldName];
+
+            if (!string.IsNullOrEmpty(LevelFiledName))
+                node.Row[LevelFiledName] = selecteNode.Level + 1;
+
+            if (!string.IsNullOrEmpty(SortFiledName))
+                node.Row[SortFiledName] = sort + 1;
+        }
+
+        data.Child.Add(node);
+        _datatable.Rows.Add(newRow);
+
+        TreeView?.SetNodeExpanded(s => ((TreeViewNodeData)s.DataItem).GUID.Equals(node.ParentGUID), true);
+        //StateHasChanged();
+        TreeView?.SelectNode(s => ((TreeViewNodeData)s.DataItem).GUID.Equals(node.GUID));
+
+        return node;
+    }
+
+    /// <summary>
+    /// 노드 전체 펼치기
+    /// </summary>
+    public void ExpandAll()
+    {
+        TreeView?.ExpandAll();
+    }
+
+    /// <summary>
+    /// 노드 전체 접기
+    /// </summary>
+    public void CollapseAll()
+    {
+        TreeView?.CollapseAll();
+    }
+
+    /// <summary>
+    /// 노드 클릭시 호출 이벤트
+    /// </summary>
+    /// <param name="e"></param>
+    protected void OnNodeClick(TreeViewNodeClickEventArgs e)
+    {
+        if (_datatable == null)
+            return;
+
+        var item = e.NodeInfo.DataItem as TreeViewNodeData;
+
+        if (item == null)
+            return;
+
+        TreeViewNodeClickExEventArgs arg = new TreeViewNodeClickExEventArgs();
+        arg.e = e;
+        arg.itemRow = item.Row;
+
+        NodeClick.InvokeAsync(arg);
+    }
+
+    /// <summary>
+    /// 노드 선택이 바꼇을때 호출 이벤트
+    /// </summary>
+    /// <param name="e"></param>
+    protected void OnSelectionChanged(TreeViewNodeEventArgs e)
+    {
+        SelectedNodeData = e.NodeInfo.DataItem as TreeViewNodeData;
+
+        SelectionChanged.InvokeAsync(e);
+    }
+}
+
+<style>
+    .dxbl-treeview-item .dxbl-text {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .dxbl-tabs 
+    {
+        --dxbl-treeview-item-selection-bg: #033266 !important;
+    }
+</style>

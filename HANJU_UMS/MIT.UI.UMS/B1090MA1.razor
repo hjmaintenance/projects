@@ -1,0 +1,36 @@
+﻿@using MIT.Razor.Pages.Component.Grid
+@using MIT.Razor.Pages.Component.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.DataEdits
+@using MIT.UI.LIB.DataEdits
+@using MIT.UI.LIB.Grid.RepositoryItem
+@using MIT.Razor.Pages.Component.Charts
+@using MIT.UI.UMS
+@using System.Data
+@using System.Linq
+
+
+@inherits B1090MA1Base
+@{/*
+   * 작성자명 : quristyle
+   * 작성일자 : 25-02-26
+   * 최종수정 : 25-02-26   
+   * 화면ID : B1090MA1
+   * 화면명 : 프로그램제목을입력하세요
+   * 프로시저 : P_HMI_MC_INSP_RST_SELECT
+*/}
+<DxFormLayout CssClass="w-100">    
+    @{ /* search area */ }
+
+    @{ /* content area */ }
+    <DxFormLayoutGroup Caption="메일 발송 정보" CssClass="mit-content-area" Decoration="FormLayoutGroupDecoration.Card" ColSpanSm="12">
+    <DxFormLayoutItem Caption="발송자 메일 주소" ColSpanSm="9">
+      <DxTextBox @bind-Text="@Mail_Addr" />
+    </DxFormLayoutItem>
+    <DxFormLayoutItem Caption="" ColSpanSm="3">
+      <p>&#64;hanjucrop.co.kr</p>
+    </DxFormLayoutItem>
+    <DxFormLayoutItem Caption="발송자 이름" ColSpanSm="9">
+      <DxTextBox @bind-Text="@Mail_Name" />
+    </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
