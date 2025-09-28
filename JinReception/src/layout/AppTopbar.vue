@@ -158,7 +158,7 @@
           <button type="button" class="layout-topbar-action" :title="loginUser.name" @click="toggle" aria-haspopup="true" aria-controls="overlay_tmenu">
             <i class="pi pi-user"></i>
             <span>{{ loginUser.name }}</span>
-          </button>
+          </button><span>{{ loginUser.name }}</span>
           <TieredMenu ref="menu" id="overlay_tmenu" :model="tieredMenuItems" popup />
         </div>
       </div>
