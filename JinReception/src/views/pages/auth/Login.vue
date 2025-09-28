@@ -1,5 +1,6 @@
 <script setup>
   import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
+  import { AuthService } from '@/service/AuthService';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
   import { useLayout } from '@/layout/composables/layout';
@@ -18,24 +19,16 @@
     e.preventDefault();
     errorMsg.value = '';
 
-    console.log(loginType.value);
-
     try {
-      const res = await fetch('/api/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ LoginId: userid.value, Password: password.value, LoginType: loginType.value })
-      });
-
-      if (!res.ok) throw new Error('로그인 실패');
-
-      const odata = await res.json();
-      const data = odata.data;
+      const data = await AuthService.login({ LoginId: userid.value, Password: password.value, LoginType: loginType.value });
       localStorage.setItem('jwt_token', data.token);
-      // 전역 상태와 localStorage에 사용자 정보를 저장합니다.
       setLoginUser(data.user);
 
-      router.push('/');
+      if (data.user.mustChangePassword) {
+        router.push('/auth/change-password');
+      } else {
+        router.push('/');
+      }
     } catch (err) {
       errorMsg.value = err.message;
     }
@@ -43,12 +36,11 @@
 
   // 테스트용 로그인 함수
   const submit2 = async (event) => {
-    // event.currentTarget은 이벤트 리스너가 부착된 요소를 가리킵니다.
-    // 이 경우 <Button> 컴포넌트가 렌더링한 <button> 엘리먼트입니다.
     const id = event.currentTarget.getAttribute('id');
     const pw = event.currentTarget.getAttribute('pw');
+    const utype = event.currentTarget.getAttribute('utype');
 
-    if (id === 'admin' || id === 'manager') {
+    if ( utype != undefined && utype != '') {
       loginType.value = 'admin';
     } else {
       loginType.value = '';
@@ -56,21 +48,15 @@
 
     errorMsg.value = '';
     try {
-      const res = await fetch('/api/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ LoginId: id, Password: pw, LoginType: loginType.value })
-      });
-
-      if (!res.ok) throw new Error('로그인 실패');
-
-      const odata = await res.json();
-      const data = odata.data;
+      const data = await AuthService.login({ LoginId: id, Password: pw, LoginType: loginType.value });
       localStorage.setItem('jwt_token', data.token);
-      // 전역 상태와 localStorage에 사용자 정보를 저장합니다.
       setLoginUser(data.user);
 
-      router.push('/');
+      if (data.user.mustChangePassword) {
+        router.push('/auth/change-password');
+      } else {
+        router.push('/');
+      }
     } catch (err) {
       errorMsg.value = err.message;
     }
@@ -128,8 +114,10 @@
 
             <Button label="김고객" id="bbb" pw="cccc" class="mr-2" @click="submit2"></Button>
             <Button label="박고객" id="aaa" pw="cccc" class="mr-2" @click="submit2"></Button>
-            <Button label="메니저" id="manager" pw="cccc" @click="submit2"></Button>
-            <Button label="관리자" id="admin" pw="cccc" @click="submit2"></Button>
+
+            <Button label="운영자" id="manager" pw="cccc" utype="admin" @click="submit2"></Button>
+            <Button label="강대현" id="kdh" pw="cccc" utype="admin" @click="submit2"></Button>
+            <Button label="관리자" id="admin" pw="cccc" utype="admin" @click="submit2"></Button>
           </div>
         </div>
       </div>

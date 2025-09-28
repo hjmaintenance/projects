@@ -20,6 +20,9 @@ namespace JinRestApi.Models
         /// <summary>비밀번호 해시</summary>
         public string PasswordHash { get; set; } = string.Empty;
 
+        /// <summary>최초 로그인시 암호 변경 필요 여부</summary>
+        public bool MustChangePassword { get; set; } = true;
+
         /// <summary>팀 ID</summary>
         public int TeamId { get; set; }
 

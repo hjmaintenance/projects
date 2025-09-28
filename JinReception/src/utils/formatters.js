@@ -21,9 +21,21 @@ export function formatDate(value) {
     }
 }
 
+/*
 export const STATUS = Object.freeze({
     PENDING: 0,
     IN_PROGRESS: 1,
     COMPLETED: 2,
-    REJECTED: 3
+    REJECTED: 3,
+    DELETE: 4
 });
+*/
+
+
+export const STATUS = Object.freeze([
+     { name: 'PENDING', code: 0 },
+    { name: 'IN_PROGRESS', code: 1 },
+     { name: 'REJECTED', code: 2 },
+     { name: 'COMPLETED', code: 3 },
+     { name: 'DELETE', code: 4 },
+]);

@@ -65,12 +65,30 @@ public static class RegisterEndpoints
                 string login_type = "";
                 string Photo = "";
                 string email = "";
+                bool mustChangePassword = false;
+
+
+                Console.WriteLine($"req.LoginType : {req.LoginType}");
+                Console.WriteLine($"req.LoginId : {req.LoginId}");
+                Console.WriteLine($"req.Password : {req.Password}");    
+
 
                 if (req.LoginType == "admin")
                 {
                     var admin = await db.Admins.FirstOrDefaultAsync(a => a.LoginId == req.LoginId);
+
+                    
+                    Console.WriteLine($"admin is null : {(admin is null)}");    
+                    Console.WriteLine($"admin password : {req.Password}");    
+                    Console.WriteLine($"admin password check  : {(passwordService.VerifyPassword<Admin>(admin, req.Password))}");    
+
                     if (admin is null || !passwordService.VerifyPassword<Admin>(admin, req.Password))
                     {
+
+
+                        Console.WriteLine($"admin not : {(admin is null)}");
+
+
                         return null;
                     }
                     user_name = admin.UserName;
@@ -79,6 +97,7 @@ public static class RegisterEndpoints
                     Photo = "";
                     email = admin.Email;
                     user_uid = admin.Id.ToString();
+                    mustChangePassword = admin.MustChangePassword;
                 }
                 else
                 {
@@ -135,7 +154,8 @@ public static class RegisterEndpoints
                         login_id,
                         login_type,
                         Photo,
-                        email
+                        email,
+                        mustChangePassword
                     }
                 };
             }, "Login successful.");

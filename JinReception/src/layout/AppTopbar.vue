@@ -93,9 +93,7 @@
           </g>
         </svg>
 
-        <span>Reception</span><span style="ont-size: 0.8rem;
-  width: 17rem;
-  padding-top: 0.3rem;"> - 열린화면의 메뉴명 : description</span>
+        <span>Reception</span><span style="font-size: 0.8rem; width: 17rem; padding-top: 0.3rem;"> - 열린화면의 메뉴명 : description</span>
       </router-link>
     </div>
 

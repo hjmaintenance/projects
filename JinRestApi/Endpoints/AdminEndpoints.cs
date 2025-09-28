@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using JinRestApi.Data;
 using JinRestApi.Services;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using JinRestApi.Dtos;
 
 namespace JinRestApi.Endpoints;
@@ -27,6 +28,7 @@ public static class AdminEndpoints
         group.MapPost("/", (AppDbContext db, AdminCreateDto adminDto) => ApiResponseBuilder.CreateAsync(async () =>
         {
             var passwordService = new PasswordService();
+            var tempPassword = Guid.NewGuid().ToString().Substring(0, 8);
             var admin = new Admin
             {
                 LoginId = adminDto.LoginId,
@@ -34,14 +36,48 @@ public static class AdminEndpoints
                 Email = adminDto.Email,
                 TeamId = adminDto.TeamId,
                 CreatedBy = adminDto.CreatedBy ?? "system",
-                MenuContext = adminDto.MenuContext
+                MenuContext = adminDto.MenuContext,
+                MustChangePassword = true
             };
-            admin.PasswordHash = passwordService.HashPassword<Admin>(admin, adminDto.Password);
+            admin.PasswordHash = passwordService.HashPassword<Admin>(admin, tempPassword);
 
             db.Admins.Add(admin);
             await db.SaveChangesAsync();
-            return admin;
+            return new { admin, tempPassword };
         }, "Admin created successfully.", 201));
+
+        group.MapPost("/change-password", async (HttpContext http, AppDbContext db, AdminChangePasswordDto changePasswordDto) =>
+        {
+            var passwordService = new PasswordService();
+            var loginId = http.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+
+            Console.WriteLine($"change-password loginId : {loginId}");
+            
+
+
+            if (loginId == null)
+            {
+                return Results.Unauthorized();
+            }
+
+            var admin = await db.Admins.FirstOrDefaultAsync(a => a.LoginId == loginId);
+            if (admin == null)
+            {
+                return Results.NotFound("Admin not found.");
+            }
+
+            if (!passwordService.VerifyPassword(admin, changePasswordDto.OldPassword))
+            {
+                return Results.BadRequest("Invalid old password.");
+            }
+
+            admin.PasswordHash = passwordService.HashPassword<Admin>(admin, changePasswordDto.NewPassword);
+            admin.MustChangePassword = false;
+            await db.SaveChangesAsync();
+
+            return Results.Ok("Password changed successfully.");
+        }).RequireAuthorization();
 
         group.MapPut("/{id}", (AppDbContext db, int id, Admin input) => ApiResponseBuilder.CreateAsync(async () =>
         {

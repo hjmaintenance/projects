@@ -75,7 +75,10 @@ namespace JinRestApi.Models
         Completed,
 
         [System.ComponentModel.DataAnnotations.Display(Name = "반려")]
-        Rejected
+        Rejected,
+
+        [System.ComponentModel.DataAnnotations.Display(Name = "삭제")]
+        Delete
     }
 
     /// <summary>개선 요청 덧글</summary>

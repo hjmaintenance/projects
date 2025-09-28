@@ -10,25 +10,42 @@ const router = createRouter({
       component: AppLayout,
       children: [
         {
+          path: '/request_detail',
+          name: 'request_detail',
+          component: () => import('@/views/pages/reqs/RequestDetail.vue')
+        },
+        {
           path: '/mng_request',
           name: 'mng_request',
-          component: () => import('@/views/pages/MngRequest.vue')
+          component: () => import('@/views/pages/reqs/MngRequest.vue')
         },
         {
           path: '/user_request',
           name: 'user_request',
-          component: () => import('@/views/pages/UserRequest.vue')
+          component: () => import('@/views/pages/reqs/UserRequest.vue')
         },
         {
           path: '/request',
           name: 'request',
-          component: () => import('@/views/pages/Request.vue')
+          component: () => import('@/views/pages/reqs/Request.vue')
         },
         {
           path: '/company',
           name: 'company',
           meta: { menuName: 'Company Management' },
           component: () => import('@/views/pages/Company.vue')
+        },
+        {
+          path: '/teams',
+          name: 'teams',
+          meta: { menuName: 'Team Management' },
+          component: () => import('@/views/pages/Teams.vue')
+        },
+        {
+          path: '/admins',
+          name: 'admins',
+          meta: { menuName: 'Admin Management' },
+          component: () => import('@/views/pages/Admins.vue')
         },
         {
           path: '/customer',
@@ -163,6 +180,11 @@ const router = createRouter({
       path: '/auth/error',
       name: 'error',
       component: () => import('@/views/pages/auth/Error.vue')
+    },
+    {
+      path: '/auth/change-password',
+      name: 'change-password',
+      component: () => import('@/views/pages/auth/ChangePassword.vue')
     }
   ]
 });

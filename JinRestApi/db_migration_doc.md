@@ -52,6 +52,11 @@ dotnet ef migrations add InitialCreate
         }  
 ```
 
+3.1 up 을 지우는게 부담된다면 아래 쿼리를 실행후 up 그대로 두고 아래 절차를 따른다.
+```
+ DELETE FROM jsini."__EFMigrationsHistory";
+```
+
 4. 껍데기 마이그레이션을 한다.
 ```
 dotnet ef database update

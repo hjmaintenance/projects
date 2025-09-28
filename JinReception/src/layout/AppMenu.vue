@@ -15,7 +15,8 @@
       items: [
         { label: '공지', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
         { label: '접수목록', icon: 'pi pi-fw pi-check-square', to: '/user_request' },
-        { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/request', class: 'rotated-icon' }
+        { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/request', class: 'rotated-icon' },
+        { label: '비밀번호변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' }
       ]
     };
 
@@ -24,10 +25,11 @@
       items: [
         { label: '회사관리', icon: 'pi pi-fw pi-id-card', to: '/company' },
         { label: '고객관리', icon: 'pi pi-fw pi-id-card', to: '/customer' },
-        { label: '팀관리', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
-        { label: '사용자관리', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
+        { label: '팀관리', icon: 'pi pi-fw pi-check-square', to: '/teams' },
+        { label: '관리자관리', icon: 'pi pi-fw pi-mobile', to: '/admins', class: 'rotated-icon' },
         { label: '접수관리', icon: 'pi pi-fw pi-table', to: '/mng_request' },
-        { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' }
+        { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
+        { label: '비밀번호변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' }
       ]
     };
 

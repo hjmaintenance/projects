@@ -13,20 +13,17 @@
 </div>
 
 ## 시스템
-
-- 박부장 제공 서버로 이관 ![Badge](https://img.shields.io/badge/jwp-red) ![Badge](https://img.shields.io/badge/quri-red)
+- jin 기존 home, remote manager 연결
+- 한주 system 기초 데이터 생성.
 
 ## 공통
 
-- 암호변경 ![Badge](https://img.shields.io/badge/puni-red)
-- <p>flow, layout <img src="https://img.shields.io/badge/quristyle-red" style="vertical-align: middle;"/></p>
 - 권한 ![Badge](https://img.shields.io/badge/quri-red)
 - 메뉴 네비 상단어느곳 적당히
 - 페이지 열리면 페이지 어딘가에서 어떤 메뉴의 창인지 인지.
 
 ## 인증전
 
-- 비번 재설정
 - contact us
 
 ## 고객사
@@ -37,11 +34,8 @@
 
 ## 관리자
 
-- 관리자 관리 ![Badge](https://img.shields.io/badge/quri-red)
 - 고객 관리 ![Badge](https://img.shields.io/badge/frogtok-red)
 - 나의 정보 수정
 - 권한 관리
-- 접수리스트 화면 ![Badge](https://img.shields.io/badge/quri-red)
-- 접수 내용 확인 및 담당자 accept 화면
 - 공지관리 ![Badge](https://img.shields.io/badge/SuJiMOON-red)
-- 관리자 모니터링
+- 관리자 모니터링 ![Badge](https://img.shields.io/badge/quri-red)
