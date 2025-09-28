@@ -13,14 +13,14 @@
 </div>
 
 ## 시스템
-- jin 기존 home, remote manager 연결
+- jin 기존 home, remote manager 연결 ![Badge](https://img.shields.io/badge/강-red)
 - 한주 system 기초 데이터 생성.
 
 ## 공통
 
 - 권한 ![Badge](https://img.shields.io/badge/quri-red)
 - 메뉴 네비 상단어느곳 적당히
-- 페이지 열리면 페이지 어딘가에서 어떤 메뉴의 창인지 인지.
+- page infomation & help page ![Badge](https://img.shields.io/badge/강-red)
 
 ## 인증전
 
