@@ -109,6 +109,12 @@
               <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
             </div>
             <Button label="Sign In" class="w-full" @click="submit"></Button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
 
           </div>
         </div>
@@ -123,6 +129,9 @@
             <Button label="운영자" id="manager" pw="cccc" utype="admin" @click="submit2"></Button>
             <Button label="강대현" id="kdh" pw="cccc" utype="admin" @click="submit2"></Button>
             <Button label="관리자" id="admin" pw="cccc" utype="admin" @click="submit2"></Button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
