@@ -40,17 +40,6 @@ namespace JinRestApi.Models
     }
 
 
-    /// <summary>팀</summary>
-    public class Team : BaseEntity
-    {
-        /// <summary>팀 명</summary>
-        public string Name { get; set; } = string.Empty;
-
-        public ICollection<Admin> Admins { get; set; } = new List<Admin>();
-        public ICollection<TeamCompany> TeamCompanies { get; set; } = new List<TeamCompany>();
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
-    }
-
     /// <summary>팀-회사 관계 (N:N)</summary>
     public class TeamCompany
     {
@@ -79,35 +68,6 @@ namespace JinRestApi.Models
 
         [System.ComponentModel.DataAnnotations.Display(Name = "삭제")]
         Delete
-    }
-
-    /// <summary>개선 요청 덧글</summary>
-    public class ImprovementComment : BaseEntity
-    {
-        /// <summary>개선 요청 ID</summary>
-        public int RequestId { get; set; }
-
-        public ImprovementRequest? Request { get; set; }
-
-        /// <summary>덧글 내용</summary>
-        public string CommentText { get; set; } = string.Empty;
-
-        /// <summary>작성자 구분</summary>
-        public string AuthorType { get; set; } = "Customer"; // "Customer" or "Admin"
-
-        /// <summary>작성자 ID</summary>
-        public int AuthorId { get; set; }
-
-        /// <summary>부모 덧글 ID</summary>
-        public int? ParentCommentId { get; set; }
-        
-        /// <summary>부모 덧글</summary>
-        public ImprovementComment? ParentComment { get; set; }
-
-        /// <summary>자식 덧글들</summary>
-        public ICollection<ImprovementComment> Children { get; set; } = new List<ImprovementComment>();
-
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
     }
 
 }

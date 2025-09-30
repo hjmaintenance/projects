@@ -1,4 +1,4 @@
-<script setup>
+1<script setup>
   import { RequestService } from '@/service/RequestService';
   import { buildQueryPayload } from '@/utils/apiUtils';
   import { formatDate } from '@/utils/formatters';
@@ -40,6 +40,17 @@
   const requests = ref([]);
   const selectedRequest = ref(null);
 
+  const search = async () => {
+    console.log('loginUser', loginUser);
+    // customerId를 검색 조건에 동적으로 추가합니다.
+    const dynamicSearchConfig = [...searchConfig];
+    //if (searchs.customerId) dynamicSearchConfig.push({ model: 'customerId', fields: ['customerId'], operator: '' });
+
+    // 검색 조건과 페이징/정렬 옵션을 합쳐 최종 페이로드를 생성합니다.
+    const finalPayload = buildQueryPayload(searchs, dynamicSearchConfig, queryOptions);
+    requests.value = await RequestService.search(finalPayload, loading);
+  };
+
   watch(selectedRequest, async (newValue, oldValue) => {
     if (newValue) {
       visible.value = true;
@@ -61,16 +72,6 @@
   const initData = async () => {};
 
   //조회
-  const search = async () => {
-    console.log('loginUser', loginUser);
-    // customerId를 검색 조건에 동적으로 추가합니다.
-    const dynamicSearchConfig = [...searchConfig];
-    //if (searchs.customerId) dynamicSearchConfig.push({ model: 'customerId', fields: ['customerId'], operator: '' });
-
-    // 검색 조건과 페이징/정렬 옵션을 합쳐 최종 페이로드를 생성합니다.
-    const finalPayload = buildQueryPayload(searchs, dynamicSearchConfig, queryOptions);
-    requests.value = await RequestService.search(finalPayload, loading);
-  };
 
   const getItem = async () => {
     //requests.value = await requests.get('1', loading);

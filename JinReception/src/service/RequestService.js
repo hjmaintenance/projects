@@ -10,6 +10,14 @@ const _RequestService = {
     const res = await apiClient.post('/requests', request);
     return res.data.data;
   },
+  async addWithAttachments(formData) {
+    const res = await apiClient.post('/requests', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return res.data.data;
+  },
   async get(id) {
     //const res = await apiClient.get(`/requests/${id}`);
 

@@ -110,6 +110,7 @@
             </div>
             <Button label="Sign In" class="w-full" @click="submit"></Button>
           </div>
+            <div v-if="errorMsg" style="color: red">{{ errorMsg }}</div>
         </div>
       </div>
     </div>
@@ -117,7 +118,6 @@
     
 
       
-            <div v-if="errorMsg" style="color: red">{{ errorMsg }}</div>
 
 <div>
 

@@ -22,7 +22,7 @@ IConnection? connection = null;
 try
 {
     var rabbitMqHostName = builder.Configuration["RabbitMQ:HostName"] ?? "localhost";
-    Console.WriteLine($"[ERROR] 111111111.");
+  
 
     IConnectionFactory factory = new ConnectionFactory()
     {
@@ -30,11 +30,11 @@ try
         DispatchConsumersAsync = true
     };
 
-    Console.WriteLine($"[ERROR] 22222.");
+   
 
     connection = factory.CreateConnection();
 
-    Console.WriteLine($"[ERROR] 333333.");
+  
 }
 catch (BrokerUnreachableException ex)
 {
@@ -50,7 +50,7 @@ builder.Services.AddSingleton<IRabbitMqConnectionProvider>(
     new RabbitMqConnectionProvider(connection)
 );
 
-Console.WriteLine($"[ERROR] 444444.");
+
 
 /*
 
@@ -143,6 +143,7 @@ app.MapCommentEndpoints();
 app.MapAttachmentEndpoints();
 app.MapDashboardEndpoints();
 app.MapNoticeEndpoints();
+app.MapFileUploadEndpoints();
 
 
 
