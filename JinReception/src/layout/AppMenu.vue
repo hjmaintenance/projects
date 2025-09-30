@@ -28,6 +28,7 @@
         { label: '팀관리', icon: 'pi pi-fw pi-check-square', to: '/teams' },
         { label: '관리자관리', icon: 'pi pi-fw pi-mobile', to: '/admins', class: 'rotated-icon' },
         { label: '접수관리', icon: 'pi pi-fw pi-table', to: '/mng_request' },
+        { label: '공지관리', icon: 'pi pi-fw pi-id-card', to: '/notice' },
         { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
         { label: '비밀번호변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' }
       ]

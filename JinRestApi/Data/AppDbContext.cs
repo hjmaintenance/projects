@@ -45,6 +45,8 @@ public class AppDbContext : DbContext
     /// <summary>첨부파일 테이블</summary>
     public DbSet<Attachment> Attachments { get; set; }
 
+    /// <summary>공지사항 테이블</summary>
+    public DbSet<Notice> Notices { get; set; }
 
 
 

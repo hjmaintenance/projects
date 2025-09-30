@@ -53,6 +53,21 @@ const router = createRouter({
           component: () => import('@/views/pages/Customer.vue')
         },
         {
+          path: '/notice',
+          name: 'list_notice',
+          component: () => import('@/views/pages/noti/NoticeList.vue')
+        },
+        {
+          path: '/notice/form/:id',
+          name: 'form_notice',
+          component: () => import('@/views/pages/noti/NoticeForm.vue')
+        },
+        {
+          path: '/notive/view/:id',
+          name: 'view_notice',
+          component: () => import('@/views/pages/noti/NoticeView.vue')
+        },
+        {
           path: '/dashboard',
           name: 'dashboard',
           component: () => import('@/views/Dashboard.vue')

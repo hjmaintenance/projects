@@ -135,6 +135,7 @@ app.MapRequestEndpoints();
 app.MapCommentEndpoints();
 app.MapAttachmentEndpoints();
 app.MapDashboardEndpoints();
+app.MapNoticeEndpoints();
 
 
 
