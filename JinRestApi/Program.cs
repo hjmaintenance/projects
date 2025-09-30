@@ -81,6 +81,13 @@ catch (RabbitMQ.Client.Exceptions.BrokerUnreachableException ex)
 // IHttpContextAccessor를 등록하여 서비스 내에서 HttpContext에 접근할 수 있도록 합니다.
 builder.Services.AddHttpContextAccessor();
 
+// JSON 직렬화 시 순환 참조 문제를 해결하기 위한 설정
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+{
+    //options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

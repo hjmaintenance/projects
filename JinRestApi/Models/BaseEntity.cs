@@ -98,25 +98,16 @@ namespace JinRestApi.Models
         /// <summary>작성자 ID</summary>
         public int AuthorId { get; set; }
 
+        /// <summary>부모 덧글 ID</summary>
+        public int? ParentCommentId { get; set; }
+        
+        /// <summary>부모 덧글</summary>
+        public ImprovementComment? ParentComment { get; set; }
+
+        /// <summary>자식 덧글들</summary>
+        public ICollection<ImprovementComment> Children { get; set; } = new List<ImprovementComment>();
+
         public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
     }
 
-    /// <summary>공통 첨부파일</summary>
-    public class Attachment : BaseEntity
-    {
-        /// <summary>연결된 엔티티 타입</summary>
-        public string EntityType { get; set; } = string.Empty;  // "ImprovementRequest", "Team", "Company", "Comment"
-
-        /// <summary>연결된 엔티티 PK</summary>
-        public int EntityId { get; set; }
-
-        /// <summary>파일명</summary>
-        public string FileName { get; set; } = string.Empty;
-
-        /// <summary>파일 경로</summary>
-        public string FilePath { get; set; } = string.Empty;
-
-        /// <summary>업로드 일시</summary>
-        public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
-    }
 }

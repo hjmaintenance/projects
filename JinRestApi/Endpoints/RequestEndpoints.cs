@@ -42,6 +42,16 @@ public static class RequestEndpoints
             .FirstOrDefaultAsync(r => r.Id == id)
         ));
 
+        // 특정 요청에 대한 덧글 목록 조회
+        group.MapGet("/{id}/comments", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(async () =>
+        {
+            var comments = await db.Comments
+                .Where(c => c.RequestId == id)
+                .OrderBy(c => c.CreatedAt)
+                .ToListAsync();
+            return comments;
+        }, "Comments retrieved successfully."));
+
 
 
 

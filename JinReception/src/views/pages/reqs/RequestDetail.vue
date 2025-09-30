@@ -8,6 +8,7 @@
 
   import DataTable from 'primevue/datatable';
   import Column from 'primevue/column';
+  import CommentList from './CommentList.vue';
 
   const route = useRoute();
   const router = useRouter();
@@ -107,10 +108,18 @@
 
     <div class="flex justify-end gap-2">
       <Button type="button" label="reload" severity="primary" @click="getDetail"></Button>
-      <Button type="button" :label="`이거 ${loginUser?.user_name} 접수 할께요`" severity="primary" @click="updateRequestStatus('IN_PROGRESS')"></Button>
-      <Button type="button" label="반려" severity="secondary" @click="updateRequestStatus('REJECTED')"></Button>
-      <Button type="button" label="삭제" severity="danger" @click="updateRequestStatus('DELETE')"></Button>
-      <Button type="button" label="완료" severity="success" @click="updateRequestStatus('COMPLETED')"></Button>
+      
+      <!-- Show buttons based on current status -->
+      <template v-if="selectedRequest">
+        <!-- Status 0 (Pending): Can move to In Progress (1) or Delete (4) -->
+        <Button v-if="selectedRequest.status === 0" type="button" :label="`이거 ${loginUser?.user_name} 접수 할께요`" severity="primary" @click="updateRequestStatus('IN_PROGRESS')"></Button>
+        <Button v-if="selectedRequest.status === 0" type="button" label="삭제" severity="danger" @click="updateRequestStatus('DELETE')"></Button>
+
+        <!-- Status 1 (In Progress): Can move to Completed (2) or Rejected (3) -->
+        <Button v-if="selectedRequest.status === 1" type="button" label="완료" severity="success" @click="updateRequestStatus('COMPLETED')"></Button>
+        <Button v-if="selectedRequest.status === 1" type="button" label="반려" severity="secondary" @click="updateRequestStatus('REJECTED')"></Button>
+      </template>
+
       <Button type="button" label="Close" severity="secondary" @click="prev_vue"></Button>
     </div>
 
@@ -121,8 +130,8 @@
       <ul>
         <li><span>{{ selectedRequest?.createdAt ? formatDate(new Date(selectedRequest.createdAt)) : ''    }}</span></li>
         <li><span>{{ selectedRequest?.statusName  }}</span></li>
-        <li><span>{{ selectedRequest?.admin.userName    }}</span></li>
-        <li><span>{{ selectedRequest?.customer.userName  }}</span></li>
+        <li><span>{{ selectedRequest?.admin?.userName    }}</span></li>
+        <li><span>{{ selectedRequest?.customer?.userName  }}</span></li>
       </ul>
 
 
@@ -135,6 +144,9 @@
       </div>  
 
     </div>
+
+    <!-- Comments Section -->
+    <CommentList :request-id="selectedRequest.id" v-if="selectedRequest" />
 
     
 

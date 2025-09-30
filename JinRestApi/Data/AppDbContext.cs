@@ -135,6 +135,13 @@ public class AppDbContext : DbContext
             .WithMany(r => r.Comments)
             .HasForeignKey(c => c.RequestId);
 
+        // 덧글의 계층 구조(대댓글)를 위한 자체 참조 관계 설정
+        modelBuilder.Entity<ImprovementComment>()
+            .HasOne(c => c.ParentComment) // 각 덧글은 하나의 부모를 가질 수 있음
+            .WithMany(c => c.Children)    // 각 덧글은 여러 자식 덧글을 가질 수 있음
+            .HasForeignKey(c => c.ParentCommentId) // 외래 키는 ParentCommentId
+            .OnDelete(DeleteBehavior.Restrict); // 순환 참조 또는 다중 캐스케이드 경로 문제를 방지하기 위해 Restrict 사용
+
         // 개선요청과 관리자 관계
         modelBuilder.Entity<ImprovementRequest>()
             .HasOne(r => r.Admin)

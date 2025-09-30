@@ -21,6 +21,16 @@ const _RequestService = {
     const res = await apiClient.put(`/requests/${request.id}`, request);
     return res.data.data;
   },
+
+  async getComments(requestId) {
+    const res = await apiClient.get(`/requests/${requestId}/comments`);
+    return res.data.data;
+  },
+
+  async addComment(comment) {
+    const res = await apiClient.post('/comments', comment);
+    return res.data.data;
+  },
 };
 
 export const RequestService = serviceWrapper('RequestService', _RequestService);

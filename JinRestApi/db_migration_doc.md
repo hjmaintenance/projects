@@ -52,7 +52,7 @@ dotnet ef migrations add InitialCreate
         }  
 ```
 
-3.1 up 을 지우는게 부담된다면 아래 쿼리를 실행후 up 그대로 두고 아래 절차를 따른다.
+3.1 up 내용은 지우시는게 좋겠어요 . 아래 쿼리를 실행후 up 그대로 두고 아래 절차를 따른다.
 ```
  DELETE FROM jsini."__EFMigrationsHistory";
 ```
