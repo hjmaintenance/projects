@@ -1,0 +1,3 @@
+DSN 설정 : https://m.blog.naver.com/okcharles/223100400111
+
+설치 파일 링크 : https://www.postgresql.org/ftp/odbc/releases/REL-17_00_0006/
