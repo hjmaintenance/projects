@@ -1,0 +1,2529 @@
+-- hanju.dbo.CSTCDEPF definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.CSTCDEPF;
+
+CREATE TABLE hanju.dbo.CSTCDEPF (
+	CSTEXTCDE varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	CSTINTCDE varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	CSTNAME varchar(40) COLLATE Korean_Wansung_CI_AS NULL,
+	CUINIDNO varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	USED char(1) COLLATE Korean_Wansung_CI_AS DEFAULT 'Y' NOT NULL
+);
+
+
+-- hanju.dbo.CSTCDEPF_BK definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.CSTCDEPF_BK;
+
+CREATE TABLE hanju.dbo.CSTCDEPF_BK (
+	CSTEXTCDE varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	CSTINTCDE varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	CSTNAME varchar(40) COLLATE Korean_Wansung_CI_AS NULL,
+	CUINIDNO varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	USED char(1) COLLATE Korean_Wansung_CI_AS DEFAULT 'Y' NOT NULL
+);
+
+
+-- hanju.dbo.ERR_LOG definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.ERR_LOG;
+
+CREATE TABLE hanju.dbo.ERR_LOG (
+	ERR_TIME datetime NULL,
+	ERR_TABLE varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	ERR_DESC varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	ERR_PROCEDURE varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	KEY_VALUE varchar(500) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.ETCOPRPF definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.ETCOPRPF;
+
+CREATE TABLE hanju.dbo.ETCOPRPF (
+	CURYEAR numeric(4,0) NOT NULL,
+	CURMONTH numeric(2,0) NOT NULL,
+	CURDAY numeric(2,0) NOT NULL,
+	ETOPM2GAGE decimal(18,3) NULL,
+	ETOPK1GAGE decimal(18,3) NULL,
+	ETOPK2GAGE decimal(18,3) NULL,
+	ETOPA2GAGE decimal(18,3) NULL,
+	ETOPPAGAGE decimal(18,3) NULL,
+	SAVE_DTIME datetime NULL,
+	ETOPANGAGE decimal(18,3) NULL,
+	ETOPKPGAGE decimal(18,3) NULL,
+	ETSLT1GAGE decimal(18,3) NULL,
+	ETOTPA1GAGE decimal(18,3) NULL,
+	ETOTPA2GAGE decimal(18,3) NULL,
+	ETOTPA3GAGE decimal(18,3) NULL,
+	ETOTPA4GAGE decimal(18,3) NULL,
+	ETOTPA5GAGE decimal(18,3) NULL,
+	ETOTPA6GAGE decimal(18,3) NULL,
+	ETOTPA7GAGE decimal(18,3) NULL,
+	ETOTPA8GAGE decimal(18,3) NULL,
+	ETAA1GAGE decimal(18,3) NULL,
+	ETAA2GAGE decimal(18,3) NULL,
+	ETOPE2GAGE decimal(18,3) NULL,
+	ETOSBRGAGE decimal(18,3) NULL,
+	ETOPKPGAGE_ decimal(18,3) NULL,
+	CONSTRAINT PK_ETCOPRPF PRIMARY KEY (CURYEAR,CURMONTH,CURDAY)
+);
+
+
+-- hanju.dbo.HMI_MoneyTABLE definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.HMI_MoneyTABLE;
+
+CREATE TABLE hanju.dbo.HMI_MoneyTABLE (
+	CSTINTCDE varchar(3) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CSTEXTCDE varchar(5) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	EVDTYY numeric(4,0) NOT NULL,
+	EVDTMM numeric(2,0) NOT NULL,
+	EVKIND varchar(1) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	BL11BAS decimal(12,0) NOT NULL,
+	BL11MAX decimal(12,0) NOT NULL,
+	BL11USE decimal(12,0) NOT NULL,
+	BL11TOT decimal(12,0) NOT NULL,
+	BL11ADJ decimal(12,0) NOT NULL,
+	BL11ADJBIL decimal(12,0) NOT NULL,
+	BL11RATE decimal(12,0) NOT NULL,
+	BL11ADJRAT decimal(12,0) NOT NULL,
+	BL11USEGIG decimal(12,0) NOT NULL,
+	BL11MAXGIG decimal(12,0) NOT NULL,
+	BL11ADJGIG decimal(12,0) NOT NULL,
+	BL11LTLD decimal(12,0) NOT NULL,
+	BL11LTLDJS decimal(12,0) NOT NULL,
+	BL11HVLD decimal(12,0) NOT NULL,
+	BL11HVLDJS decimal(12,0) NOT NULL,
+	BL11MXLD decimal(12,0) NOT NULL,
+	BL11MXLDJS decimal(12,0) NOT NULL,
+	BL11FXDCST decimal(12,0) NOT NULL,
+	BL11WTFEE decimal(12,0) NULL,
+	BL11FUADJ decimal(12,0) NULL,
+	BL22BAS decimal(12,0) NOT NULL,
+	BL22MAX decimal(12,0) NOT NULL,
+	BL22USE decimal(12,0) NOT NULL,
+	BL22TOT decimal(12,0) NOT NULL,
+	BL22ADJ decimal(12,0) NOT NULL,
+	BL22ADJBIL decimal(12,0) NOT NULL,
+	BL22RATE decimal(12,0) NOT NULL,
+	BL22ADJRAT decimal(12,0) NOT NULL,
+	BL22USEGIG decimal(12,0) NOT NULL,
+	BL22MAXGIG decimal(12,0) NOT NULL,
+	BL22ADJGIG decimal(12,0) NOT NULL,
+	BL22LTLD decimal(12,0) NOT NULL,
+	BL22LTLDJS decimal(12,0) NOT NULL,
+	BL22HVLD decimal(12,0) NOT NULL,
+	BL22HVLDJS decimal(12,0) NOT NULL,
+	BL22MXLD decimal(12,0) NOT NULL,
+	BL22MXLDJS decimal(12,0) NOT NULL,
+	BL22FXDCST decimal(12,0) NOT NULL,
+	BL22WTFEE decimal(12,0) NULL,
+	BL22FUADJ decimal(12,0) NULL,
+	BLPPBAS decimal(12,0) NOT NULL,
+	BLPPMAX decimal(12,0) NOT NULL,
+	BLPPUSE decimal(12,0) NOT NULL,
+	BLPPADJ decimal(12,0) NOT NULL,
+	BLPPADJBIL decimal(12,0) NOT NULL,
+	BLPPTOT decimal(12,0) NOT NULL,
+	BLHPBAS decimal(12,0) NOT NULL,
+	BLHPMAX decimal(12,0) NOT NULL,
+	BLHPUSE decimal(12,0) NOT NULL,
+	BLHPADJ decimal(12,0) NOT NULL,
+	BLHPADJBIL decimal(12,0) NOT NULL,
+	BLHPTOT decimal(12,0) NOT NULL,
+	BLMPBAS decimal(12,0) NOT NULL,
+	BLMPMAX decimal(12,0) NOT NULL,
+	BLMPUSE decimal(12,0) NOT NULL,
+	BLMPADJ decimal(12,0) NOT NULL,
+	BLMPADJBIL decimal(12,0) NOT NULL,
+	BLMPTOT decimal(12,0) NOT NULL,
+	BLLPBAS decimal(12,0) NOT NULL,
+	BLLPMAX decimal(12,0) NOT NULL,
+	BLLPUSE decimal(12,0) NOT NULL,
+	BLLPADJ decimal(12,0) NOT NULL,
+	BLLPADJBIL decimal(12,0) NOT NULL,
+	BLLPTOT decimal(12,0) NOT NULL,
+	BLDWBAS decimal(12,0) NOT NULL,
+	BLDWMAX decimal(12,0) NOT NULL,
+	BLDWUSE decimal(12,0) NOT NULL,
+	BLDWADJ decimal(12,0) NOT NULL,
+	BLDWADJBIL decimal(12,0) NOT NULL,
+	BLDWTOT decimal(12,0) NOT NULL,
+	BLFWBAS decimal(12,0) NOT NULL,
+	BLFWMAX decimal(12,0) NOT NULL,
+	BLFWUSE decimal(12,0) NOT NULL,
+	BLFWADJ decimal(12,0) NOT NULL,
+	BLFWADJBIL decimal(12,0) NOT NULL,
+	BLFWTOT decimal(12,0) NOT NULL,
+	BLRWBAS decimal(12,0) NOT NULL,
+	BLRWMAX decimal(12,0) NOT NULL,
+	BLRWUSE decimal(12,0) NOT NULL,
+	BLRWADJ decimal(12,0) NOT NULL,
+	BLRWADJBIL decimal(12,0) NOT NULL,
+	BLRWTOT decimal(12,0) NOT NULL,
+	BLTLTOT decimal(12,0) NOT NULL,
+	BLTLVAT decimal(12,0) NOT NULL,
+	BLTLGRD decimal(12,0) NOT NULL,
+	BLREPP decimal(9,0) NOT NULL,
+	BLRESB decimal(9,0) NOT NULL,
+	BLREGG11 decimal(9,0) NOT NULL,
+	BLREGG22 decimal(9,0) NOT NULL,
+	BLREGGPP decimal(9,0) NOT NULL,
+	BLREGGHP decimal(9,0) NOT NULL,
+	BLREGGMP decimal(9,0) NOT NULL,
+	BLREGGLP decimal(9,0) NOT NULL,
+	BLREGGDW decimal(9,0) NOT NULL,
+	BLREGGFW decimal(9,0) NOT NULL,
+	BLREGGRW decimal(9,0) NOT NULL,
+	BLSTFLAG varchar(1) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	BLWTUSTX decimal(12,0) NOT NULL,
+	BLWTUSTXPP decimal(12,0) NOT NULL,
+	BLWTUSTXHP decimal(12,0) NOT NULL,
+	BLWTUSTXMP decimal(12,0) NOT NULL,
+	BLWTUSTXLP decimal(12,0) NOT NULL,
+	BLWTUSTXDW decimal(12,0) NOT NULL,
+	BLWTUSTXFW decimal(12,0) NOT NULL,
+	BLWTUSTXRW decimal(12,0) NOT NULL,
+	BLTVMNY decimal(9,0) NOT NULL,
+	BLCONBAMT decimal(12,0) NULL,
+	BLELEVAT decimal(12,0) NULL,
+	BLSTMVAT decimal(12,0) NULL,
+	BLWRTVAT decimal(12,0) NULL
+);
+
+
+-- hanju.dbo.HMI_SALETABLE definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.HMI_SALETABLE;
+
+CREATE TABLE hanju.dbo.HMI_SALETABLE (
+	CSTINTCDE varchar(3) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CSTEXTCDE varchar(5) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	EVDTYY numeric(4,0) NOT NULL,
+	EVDTMM numeric(2,0) NOT NULL,
+	EVKIND varchar(1) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	EV11APP decimal(7,1) NOT NULL,
+	EV11MAX decimal(6,0) NOT NULL,
+	EV11NMAX decimal(6,0) NOT NULL,
+	EV11NOW11 decimal(8,2) NOT NULL,
+	EV11NOW12 decimal(8,2) NOT NULL,
+	EV11NOW21 decimal(8,2) NOT NULL,
+	EV11NOW22 decimal(8,2) NOT NULL,
+	EV11NOW23 decimal(8,2) NOT NULL,
+	EV11NOW24 decimal(8,2) NOT NULL,
+	EV11BEF11 decimal(8,2) NOT NULL,
+	EV11BEF12 decimal(8,2) NOT NULL,
+	EV11BEF21 decimal(8,2) NOT NULL,
+	EV11BEF22 decimal(8,2) NOT NULL,
+	EV11BEF23 decimal(8,2) NOT NULL,
+	EV11BEF24 decimal(8,2) NOT NULL,
+	EV11BAL11 decimal(8,2) NOT NULL,
+	EV11BAL12 decimal(8,2) NOT NULL,
+	EV11BAL21 decimal(8,2) NOT NULL,
+	EV11BAL22 decimal(8,2) NOT NULL,
+	EV11BAL23 decimal(8,2) NOT NULL,
+	EV11BAL24 decimal(8,2) NOT NULL,
+	EV11USE11 decimal(9,1) NOT NULL,
+	EV11USE12 decimal(9,1) NOT NULL,
+	EV11USE21 decimal(9,1) NOT NULL,
+	EV11USE22 decimal(9,1) NOT NULL,
+	EV11USE23 decimal(9,1) NOT NULL,
+	EV11USE24 decimal(9,1) NOT NULL,
+	EV11ADJ1 decimal(6,1) NOT NULL,
+	EV11ADJ2 decimal(9,1) NOT NULL,
+	EV11ADJ3 decimal(9,1) NOT NULL,
+	EV11BEFM decimal(2,1) NOT NULL,
+	EV11NUSE decimal(9,0) NOT NULL,
+	EV11MUSE decimal(9,0) NOT NULL,
+	EV11NOWM decimal(2,1) NOT NULL,
+	EV11RATE decimal(3,0) NOT NULL,
+	EV11NOW11L decimal(8,2) NOT NULL,
+	EV11NOW12L decimal(8,2) NOT NULL,
+	EV11NOW21L decimal(8,2) NOT NULL,
+	EV11NOW22L decimal(8,2) NOT NULL,
+	EV11NOW23L decimal(8,2) NOT NULL,
+	EV11NOW24L decimal(8,2) NOT NULL,
+	EV11BEF11L decimal(8,2) NOT NULL,
+	EV11BEF12L decimal(8,2) NOT NULL,
+	EV11BEF21L decimal(8,2) NOT NULL,
+	EV11BEF22L decimal(8,2) NOT NULL,
+	EV11BEF23L decimal(8,2) NOT NULL,
+	EV11BEF24L decimal(8,2) NOT NULL,
+	EV11BAL11L decimal(8,2) NOT NULL,
+	EV11BAL12L decimal(8,2) NOT NULL,
+	EV11BAL21L decimal(8,2) NOT NULL,
+	EV11BAL22L decimal(8,2) NOT NULL,
+	EV11BAL23L decimal(8,2) NOT NULL,
+	EV11BAL24L decimal(8,2) NOT NULL,
+	EV11USE11L decimal(9,1) NOT NULL,
+	EV11USE12L decimal(9,1) NOT NULL,
+	EV11USE21L decimal(9,1) NOT NULL,
+	EV11USE22L decimal(9,1) NOT NULL,
+	EV11USE23L decimal(9,1) NOT NULL,
+	EV11USE24L decimal(9,1) NOT NULL,
+	EV11ADJ1L decimal(6,1) NOT NULL,
+	EV11ADJ2L decimal(9,1) NOT NULL,
+	EV11ADJ3L decimal(9,1) NOT NULL,
+	EV11BEFML decimal(2,1) NOT NULL,
+	EV11NUSEL decimal(9,0) NOT NULL,
+	EV11MUSEL decimal(9,0) NOT NULL,
+	EV11NOWML decimal(2,1) NOT NULL,
+	EV11RATEL decimal(3,0) NOT NULL,
+	EV11NOW11H decimal(8,2) NOT NULL,
+	EV11NOW12H decimal(8,2) NOT NULL,
+	EV11NOW21H decimal(8,2) NOT NULL,
+	EV11NOW22H decimal(8,2) NOT NULL,
+	EV11NOW23H decimal(8,2) NOT NULL,
+	EV11NOW24H decimal(8,2) NOT NULL,
+	EV11BEF11H decimal(8,2) NOT NULL,
+	EV11BEF12H decimal(8,2) NOT NULL,
+	EV11BEF21H decimal(8,2) NOT NULL,
+	EV11BEF22H decimal(8,2) NOT NULL,
+	EV11BEF23H decimal(8,2) NOT NULL,
+	EV11BEF24H decimal(8,2) NOT NULL,
+	EV11BAL11H decimal(8,2) NOT NULL,
+	EV11BAL12H decimal(8,2) NOT NULL,
+	EV11BAL21H decimal(8,2) NOT NULL,
+	EV11BAL22H decimal(8,2) NOT NULL,
+	EV11BAL23H decimal(8,2) NOT NULL,
+	EV11BAL24H decimal(8,2) NOT NULL,
+	EV11USE11H decimal(9,1) NOT NULL,
+	EV11USE12H decimal(9,1) NOT NULL,
+	EV11USE21H decimal(9,1) NOT NULL,
+	EV11USE22H decimal(9,1) NOT NULL,
+	EV11USE23H decimal(9,1) NOT NULL,
+	EV11USE24H decimal(9,1) NOT NULL,
+	EV11ADJ1H decimal(6,1) NOT NULL,
+	EV11ADJ2H decimal(9,1) NOT NULL,
+	EV11ADJ3H decimal(9,1) NOT NULL,
+	EV11BEFMH decimal(2,1) NOT NULL,
+	EV11NUSEH decimal(9,0) NOT NULL,
+	EV11MUSEH decimal(9,0) NOT NULL,
+	EV11NOWMH decimal(2,1) NOT NULL,
+	EV11RATEH decimal(3,0) NOT NULL,
+	EV11NOW11M decimal(8,2) NOT NULL,
+	EV11NOW12M decimal(8,2) NOT NULL,
+	EV11NOW21M decimal(8,2) NOT NULL,
+	EV11NOW22M decimal(8,2) NOT NULL,
+	EV11NOW23M decimal(8,2) NOT NULL,
+	EV11NOW24M decimal(8,2) NOT NULL,
+	EV11BEF11M decimal(8,2) NOT NULL,
+	EV11BEF12M decimal(8,2) NOT NULL,
+	EV11BEF21M decimal(8,2) NOT NULL,
+	EV11BEF22M decimal(8,2) NOT NULL,
+	EV11BEF23M decimal(8,2) NOT NULL,
+	EV11BEF24M decimal(8,2) NOT NULL,
+	EV11BAL11M decimal(8,2) NOT NULL,
+	EV11BAL12M decimal(8,2) NOT NULL,
+	EV11BAL21M decimal(8,2) NOT NULL,
+	EV11BAL22M decimal(8,2) NOT NULL,
+	EV11BAL23M decimal(8,2) NOT NULL,
+	EV11BAL24M decimal(8,2) NOT NULL,
+	EV11USE11M decimal(9,1) NOT NULL,
+	EV11USE12M decimal(9,1) NOT NULL,
+	EV11USE21M decimal(9,1) NOT NULL,
+	EV11USE22M decimal(9,1) NOT NULL,
+	EV11USE23M decimal(9,1) NOT NULL,
+	EV11USE24M decimal(9,1) NOT NULL,
+	EV11ADJ1M decimal(6,1) NOT NULL,
+	EV11ADJ2M decimal(9,1) NOT NULL,
+	EV11ADJ3M decimal(9,1) NOT NULL,
+	EV11BEFMM decimal(2,1) NOT NULL,
+	EV11NUSEM decimal(9,0) NOT NULL,
+	EV11MUSEM decimal(9,0) NOT NULL,
+	EV11NOWMM decimal(2,1) NOT NULL,
+	EV11RATEM decimal(3,0) NOT NULL,
+	EV22APP decimal(7,1) NOT NULL,
+	EV22MAX decimal(6,0) NOT NULL,
+	EV22NMAX decimal(6,0) NOT NULL,
+	EV22NOW11 decimal(8,2) NOT NULL,
+	EV22NOW12 decimal(8,2) NOT NULL,
+	EV22NOW21 decimal(8,2) NOT NULL,
+	EV22NOW22 decimal(8,2) NOT NULL,
+	EV22NOW23 decimal(8,2) NOT NULL,
+	EV22NOW24 decimal(8,2) NOT NULL,
+	EV22BEF11 decimal(8,2) NOT NULL,
+	EV22BEF12 decimal(8,2) NOT NULL,
+	EV22BEF21 decimal(8,2) NOT NULL,
+	EV22BEF22 decimal(8,2) NOT NULL,
+	EV22BEF23 decimal(8,2) NOT NULL,
+	EV22BEF24 decimal(8,2) NOT NULL,
+	EV22BAL11 decimal(8,2) NOT NULL,
+	EV22BAL12 decimal(8,2) NOT NULL,
+	EV22BAL21 decimal(8,2) NOT NULL,
+	EV22BAL22 decimal(8,2) NOT NULL,
+	EV22BAL23 decimal(8,2) NOT NULL,
+	EV22BAL24 decimal(8,2) NOT NULL,
+	EV22USE11 decimal(9,1) NOT NULL,
+	EV22USE12 decimal(9,1) NOT NULL,
+	EV22USE21 decimal(9,1) NOT NULL,
+	EV22USE22 decimal(9,1) NOT NULL,
+	EV22USE23 decimal(9,1) NOT NULL,
+	EV22USE24 decimal(9,1) NOT NULL,
+	EV22ADJ1 decimal(6,1) NOT NULL,
+	EV22ADJ2 decimal(9,1) NOT NULL,
+	EV22ADJ3 decimal(9,1) NOT NULL,
+	EV22BEFM decimal(2,1) NOT NULL,
+	EV22NUSE decimal(9,0) NOT NULL,
+	EV22MUSE decimal(9,0) NOT NULL,
+	EV22NOWM decimal(2,1) NOT NULL,
+	EV22RATE decimal(3,0) NOT NULL,
+	EV22NOW11L decimal(8,2) NOT NULL,
+	EV22NOW12L decimal(8,2) NOT NULL,
+	EV22NOW21L decimal(8,2) NOT NULL,
+	EV22NOW22L decimal(8,2) NOT NULL,
+	EV22NOW23L decimal(8,2) NOT NULL,
+	EV22NOW24L decimal(8,2) NOT NULL,
+	EV22BEF11L decimal(8,2) NOT NULL,
+	EV22BEF12L decimal(8,2) NOT NULL,
+	EV22BEF21L decimal(8,2) NOT NULL,
+	EV22BEF22L decimal(8,2) NOT NULL,
+	EV22BEF23L decimal(8,2) NOT NULL,
+	EV22BEF24L decimal(8,2) NOT NULL,
+	EV22BAL11L decimal(8,2) NOT NULL,
+	EV22BAL12L decimal(8,2) NOT NULL,
+	EV22BAL21L decimal(8,2) NOT NULL,
+	EV22BAL22L decimal(8,2) NOT NULL,
+	EV22BAL23L decimal(8,2) NOT NULL,
+	EV22BAL24L decimal(8,2) NOT NULL,
+	EV22USE11L decimal(9,1) NOT NULL,
+	EV22USE12L decimal(9,1) NOT NULL,
+	EV22USE21L decimal(9,1) NOT NULL,
+	EV22USE22L decimal(9,1) NOT NULL,
+	EV22USE23L decimal(9,1) NOT NULL,
+	EV22USE24L decimal(9,1) NOT NULL,
+	EV22ADJ1L decimal(6,1) NOT NULL,
+	EV22ADJ2L decimal(9,1) NOT NULL,
+	EV22ADJ3L decimal(9,1) NOT NULL,
+	EV22BEFML decimal(2,1) NOT NULL,
+	EV22NUSEL decimal(9,0) NOT NULL,
+	EV22MUSEL decimal(9,0) NOT NULL,
+	EV22NOWML decimal(2,1) NOT NULL,
+	EV22RATEL decimal(3,0) NOT NULL,
+	EV22NOW11H decimal(8,2) NOT NULL,
+	EV22NOW12H decimal(8,2) NOT NULL,
+	EV22NOW21H decimal(8,2) NOT NULL,
+	EV22NOW22H decimal(8,2) NOT NULL,
+	EV22NOW23H decimal(8,2) NOT NULL,
+	EV22NOW24H decimal(8,2) NOT NULL,
+	EV22BEF11H decimal(8,2) NOT NULL,
+	EV22BEF12H decimal(8,2) NOT NULL,
+	EV22BEF21H decimal(8,2) NOT NULL,
+	EV22BEF22H decimal(8,2) NOT NULL,
+	EV22BEF23H decimal(8,2) NOT NULL,
+	EV22BEF24H decimal(8,2) NOT NULL,
+	EV22BAL11H decimal(8,2) NOT NULL,
+	EV22BAL12H decimal(8,2) NOT NULL,
+	EV22BAL21H decimal(8,2) NOT NULL,
+	EV22BAL22H decimal(8,2) NOT NULL,
+	EV22BAL23H decimal(8,2) NOT NULL,
+	EV22BAL24H decimal(8,2) NOT NULL,
+	EV22USE11H decimal(9,1) NOT NULL,
+	EV22USE12H decimal(9,1) NOT NULL,
+	EV22USE21H decimal(9,1) NOT NULL,
+	EV22USE22H decimal(9,1) NOT NULL,
+	EV22USE23H decimal(9,1) NOT NULL,
+	EV22USE24H decimal(9,1) NOT NULL,
+	EV22ADJ1H decimal(6,1) NOT NULL,
+	EV22ADJ2H decimal(9,1) NOT NULL,
+	EV22ADJ3H decimal(9,1) NOT NULL,
+	EV22BEFMH decimal(2,1) NOT NULL,
+	EV22NUSEH decimal(9,0) NOT NULL,
+	EV22MUSEH decimal(9,0) NOT NULL,
+	EV22NOWMH decimal(2,1) NOT NULL,
+	EV22RATEH decimal(3,0) NOT NULL,
+	EV22NOW11M decimal(8,2) NOT NULL,
+	EV22NOW12M decimal(8,2) NOT NULL,
+	EV22NOW21M decimal(8,2) NOT NULL,
+	EV22NOW22M decimal(8,2) NOT NULL,
+	EV22NOW23M decimal(8,2) NOT NULL,
+	EV22NOW24M decimal(8,2) NOT NULL,
+	EV22BEF11M decimal(8,2) NOT NULL,
+	EV22BEF12M decimal(8,2) NOT NULL,
+	EV22BEF21M decimal(8,2) NOT NULL,
+	EV22BEF22M decimal(8,2) NOT NULL,
+	EV22BEF23M decimal(8,2) NOT NULL,
+	EV22BEF24M decimal(8,2) NOT NULL,
+	EV22BAL11M decimal(8,2) NOT NULL,
+	EV22BAL12M decimal(8,2) NOT NULL,
+	EV22BAL21M decimal(8,2) NOT NULL,
+	EV22BAL22M decimal(8,2) NOT NULL,
+	EV22BAL23M decimal(8,2) NOT NULL,
+	EV22BAL24M decimal(8,2) NOT NULL,
+	EV22USE11M decimal(9,1) NOT NULL,
+	EV22USE12M decimal(9,1) NOT NULL,
+	EV22USE21M decimal(9,1) NOT NULL,
+	EV22USE22M decimal(9,1) NOT NULL,
+	EV22USE23M decimal(9,1) NOT NULL,
+	EV22USE24M decimal(9,1) NOT NULL,
+	EV22ADJ1M decimal(6,1) NOT NULL,
+	EV22ADJ2M decimal(9,1) NOT NULL,
+	EV22ADJ3M decimal(9,1) NOT NULL,
+	EV22BEFMM decimal(2,1) NOT NULL,
+	EV22NUSEM decimal(9,0) NOT NULL,
+	EV22MUSEM decimal(9,0) NOT NULL,
+	EV22NOWMM decimal(2,1) NOT NULL,
+	EV22RATEM decimal(3,0) NOT NULL,
+	EVPPAPP decimal(7,1) NOT NULL,
+	EVPPMAX decimal(4,1) NOT NULL,
+	EVPPNMAX decimal(4,1) NOT NULL,
+	EVPPNOW decimal(6,0) NOT NULL,
+	EVPPBEF decimal(6,0) NOT NULL,
+	EVPPBAL decimal(6,0) NOT NULL,
+	EVPPUSE decimal(9,1) NOT NULL,
+	EVPPADJ1 decimal(6,1) NOT NULL,
+	EVPPADJ2 decimal(6,1) NOT NULL,
+	EVPPBEFM decimal(2,1) NOT NULL,
+	EVPPNUSE decimal(8,0) NOT NULL,
+	EVPPNOWM decimal(2,1) NOT NULL,
+	EVHPAPP decimal(7,1) NOT NULL,
+	EVHPMAX decimal(4,1) NOT NULL,
+	EVHPNMAX decimal(4,1) NOT NULL,
+	EVHPNOW decimal(6,0) NOT NULL,
+	EVHPBEF decimal(6,0) NOT NULL,
+	EVHPBAL decimal(6,0) NOT NULL,
+	EVHPUSE decimal(9,1) NOT NULL,
+	EVHPADJ1 decimal(6,1) NOT NULL,
+	EVHPADJ2 decimal(6,1) NOT NULL,
+	EVHPBEFM decimal(2,1) NOT NULL,
+	EVHPNUSE decimal(8,0) NOT NULL,
+	EVHPNOWM decimal(2,1) NOT NULL,
+	EVMPAPP decimal(7,1) NOT NULL,
+	EVMPMAX decimal(4,1) NOT NULL,
+	EVMPNMAX decimal(4,1) NOT NULL,
+	EVMPNOW decimal(6,0) NOT NULL,
+	EVMPBEF decimal(6,0) NOT NULL,
+	EVMPBAL decimal(6,0) NOT NULL,
+	EVMPUSE decimal(9,1) NOT NULL,
+	EVMPADJ1 decimal(6,1) NOT NULL,
+	EVMPADJ2 decimal(6,1) NOT NULL,
+	EVMPBEFM decimal(2,1) NOT NULL,
+	EVMPNUSE decimal(8,0) NOT NULL,
+	EVMPNOWM decimal(2,1) NOT NULL,
+	EVLPAPP decimal(7,1) NOT NULL,
+	EVLPMAX decimal(4,1) NOT NULL,
+	EVLPNMAX decimal(4,1) NOT NULL,
+	EVLPNOW decimal(6,0) NOT NULL,
+	EVLPBEF decimal(6,0) NOT NULL,
+	EVLPBAL decimal(6,0) NOT NULL,
+	EVLPUSE decimal(9,1) NOT NULL,
+	EVLPADJ1 decimal(6,1) NOT NULL,
+	EVLPADJ2 decimal(6,1) NOT NULL,
+	EVLPBEFM decimal(2,1) NOT NULL,
+	EVLPNUSE decimal(8,0) NOT NULL,
+	EVLPNOWM decimal(2,1) NOT NULL,
+	EVDWAPP decimal(7,1) NOT NULL,
+	EVDWMAX decimal(6,0) NOT NULL,
+	EVDWNMAX decimal(6,0) NOT NULL,
+	EVDWNOW decimal(7,0) NOT NULL,
+	EVDWBEF decimal(7,0) NOT NULL,
+	EVDWBAL decimal(7,0) NOT NULL,
+	EVDWUSE decimal(9,1) NOT NULL,
+	EVDWADJ1 decimal(6,1) NOT NULL,
+	EVDWADJ2 decimal(6,1) NOT NULL,
+	EVDWBEFM decimal(2,1) NOT NULL,
+	EVDWNUSE decimal(8,0) NOT NULL,
+	EVDWNOWM decimal(2,1) NOT NULL,
+	EVFWAPP decimal(7,1) NOT NULL,
+	EVFWMAX decimal(6,0) NOT NULL,
+	EVFWNMAX decimal(6,0) NOT NULL,
+	EVFWNOW decimal(7,0) NOT NULL,
+	EVFWBEF decimal(7,0) NOT NULL,
+	EVFWBAL decimal(7,0) NOT NULL,
+	EVFWUSE decimal(9,1) NOT NULL,
+	EVFWADJ1 decimal(6,1) NOT NULL,
+	EVFWADJ2 decimal(6,1) NOT NULL,
+	EVFWBEFM decimal(2,1) NOT NULL,
+	EVFWNUSE decimal(8,0) NOT NULL,
+	EVFWNOWM decimal(2,1) NOT NULL,
+	EVRWAPP decimal(7,1) NOT NULL,
+	EVRWMAX decimal(6,0) NOT NULL,
+	EVRWNMAX decimal(6,0) NOT NULL,
+	EVRWNOW decimal(8,0) NOT NULL,
+	EVRWBEF decimal(8,0) NOT NULL,
+	EVRWBAL decimal(7,0) NOT NULL,
+	EVRWUSE decimal(9,1) NOT NULL,
+	EVRWADJ1 decimal(6,1) NOT NULL,
+	EVRWADJ2 decimal(7,1) NOT NULL,
+	EVRWBEFM decimal(2,1) NOT NULL,
+	EVRWNUSE decimal(8,0) NOT NULL,
+	EVRWNOWM decimal(2,1) NOT NULL,
+	EVSTFLAG varchar(1) COLLATE Korean_Wansung_CI_AS NOT NULL
+);
+
+
+-- hanju.dbo.MSreplication_options definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.MSreplication_options;
+
+CREATE TABLE hanju.dbo.MSreplication_options (
+	optname sysname COLLATE Korean_Wansung_CI_AS NOT NULL,
+	value bit NOT NULL,
+	major_version int NOT NULL,
+	minor_version int NOT NULL,
+	revision int NOT NULL,
+	install_failures int NOT NULL
+);
+
+
+-- hanju.dbo.Numbers definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.Numbers;
+
+CREATE TABLE hanju.dbo.Numbers (
+	n int NOT NULL,
+	CONSTRAINT PK__Numbers__3BD01993BD2BA857 PRIMARY KEY (n)
+);
+
+
+-- hanju.dbo.SALEEVNTPF definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.SALEEVNTPF;
+
+CREATE TABLE hanju.dbo.SALEEVNTPF (
+	CSTEXTCDE varchar(5) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	EVDTYY numeric(4,0) NOT NULL,
+	EVDTMM numeric(2,0) NOT NULL,
+	EVKIND varchar(1) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	EV11MAX decimal(18,3) NULL,
+	EV11NOW11L decimal(18,3) NULL,
+	EV11NOW12L decimal(18,3) NULL,
+	EV11NOW21L decimal(18,3) NULL,
+	EV11NOW22L decimal(18,3) NULL,
+	EV11NOW23L decimal(18,3) NULL,
+	EV11NOW24L decimal(18,3) NULL,
+	EV11ADJ1L decimal(18,3) NULL,
+	EV11ADJ2L decimal(18,3) NULL,
+	EV11ADJ3L decimal(18,3) NULL,
+	EV11NOW11H decimal(18,3) NULL,
+	EV11NOW12H decimal(18,3) NULL,
+	EV11NOW21H decimal(18,3) NULL,
+	EV11NOW22H decimal(18,3) NULL,
+	EV11NOW23H decimal(18,3) NULL,
+	EV11NOW24H decimal(18,3) NULL,
+	EV11ADJ1H decimal(18,3) NULL,
+	EV11ADJ2H decimal(18,3) NULL,
+	EV11ADJ3H decimal(18,3) NULL,
+	EV11NOW11M decimal(18,3) NULL,
+	EV11NOW12M decimal(18,3) NULL,
+	EV11NOW21M decimal(18,3) NULL,
+	EV11NOW22M decimal(18,3) NULL,
+	EV11NOW23M decimal(18,3) NULL,
+	EV11NOW24M decimal(18,3) NULL,
+	EV11ADJ1M decimal(18,3) NULL,
+	EV11ADJ2M decimal(18,3) NULL,
+	EV11ADJ3M decimal(18,3) NULL,
+	EV22MAX decimal(18,3) NULL,
+	EV22NOW11L decimal(18,3) NULL,
+	EV22NOW12L decimal(18,3) NULL,
+	EV22NOW21L decimal(18,3) NULL,
+	EV22NOW22L decimal(18,3) NULL,
+	EV22NOW23L decimal(18,3) NULL,
+	EV22NOW24L decimal(18,3) NULL,
+	EV22ADJ1L decimal(18,3) NULL,
+	EV22ADJ2L decimal(18,3) NULL,
+	EV22ADJ3L decimal(18,3) NULL,
+	EV22NOW11H decimal(18,3) NULL,
+	EV22NOW12H decimal(18,3) NULL,
+	EV22NOW21H decimal(18,3) NULL,
+	EV22NOW22H decimal(18,3) NULL,
+	EV22NOW23H decimal(18,3) NULL,
+	EV22NOW24H decimal(18,3) NULL,
+	EV22ADJ1H decimal(18,3) NULL,
+	EV22ADJ2H decimal(18,3) NULL,
+	EV22ADJ3H decimal(18,3) NULL,
+	EV22NOW11M decimal(18,3) NULL,
+	EV22NOW12M decimal(18,3) NULL,
+	EV22NOW21M decimal(18,3) NULL,
+	EV22NOW22M decimal(18,3) NULL,
+	EV22NOW23M decimal(18,3) NULL,
+	EV22NOW24M decimal(18,3) NULL,
+	EV22ADJ1M decimal(18,3) NULL,
+	EV22ADJ2M decimal(18,3) NULL,
+	EV22ADJ3M decimal(18,3) NULL,
+	EVPPMAX decimal(18,3) NULL,
+	EVPPNOW decimal(18,3) NULL,
+	EVPPADJ1 decimal(18,3) NULL,
+	EVPPADJ2 decimal(18,3) NULL,
+	EVHPMAX decimal(18,3) NULL,
+	EVHPNOW decimal(18,3) NULL,
+	EVHPADJ1 decimal(18,3) NULL,
+	EVHPADJ2 decimal(18,3) NULL,
+	EVMPMAX decimal(18,3) NULL,
+	EVMPNOW decimal(18,3) NULL,
+	EVMPADJ1 decimal(18,3) NULL,
+	EVMPADJ2 decimal(18,3) NULL,
+	EVLPMAX decimal(18,3) NULL,
+	EVLPNOW decimal(18,3) NULL,
+	EVLPADJ1 decimal(18,3) NULL,
+	EVLPADJ2 decimal(18,3) NULL,
+	EVDWMAX decimal(18,3) NULL,
+	EVDWNOW decimal(18,3) NULL,
+	EVDWADJ1 decimal(18,3) NULL,
+	EVDWADJ2 decimal(18,3) NULL,
+	EVFWAPP decimal(18,3) NULL,
+	EVFWMAX decimal(18,3) NULL,
+	EVFWNOW decimal(18,3) NULL,
+	EVFWADJ1 decimal(18,3) NULL,
+	EVFWADJ2 decimal(18,3) NULL,
+	SAVE_DTIME datetime NULL,
+	CONSTRAINT PK_SALEEVNTPF PRIMARY KEY (CSTEXTCDE,EVDTYY,EVDTMM,EVKIND)
+);
+
+
+-- hanju.dbo.TB_COM_CODE definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_COM_CODE;
+
+CREATE TABLE hanju.dbo.TB_COM_CODE (
+	CODE varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PARENT_CODE varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CODE_NAME varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_NAME_ENG varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	SORT int NULL,
+	USE_YN varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	OPT01 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	OPT02 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	OPT03 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	OPT04 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	OPT05 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_DT datetime NULL,
+	UPT_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	UPT_DT datetime NULL,
+	CONSTRAINT PK_TB_COM_CODE PRIMARY KEY (CODE,PARENT_CODE)
+);
+
+
+-- hanju.dbo.TB_COM_CUST definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_COM_CUST;
+
+CREATE TABLE hanju.dbo.TB_COM_CUST (
+	CUST_CODE varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CUST_DIV varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	REQ_ID varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	CUST_NAME varchar(400) COLLATE Korean_Wansung_CI_AS NULL,
+	TEL varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	EXPO varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	BUSINESS_NO varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	ADDRESS varchar(400) COLLATE Korean_Wansung_CI_AS NULL,
+	BIS_TYPE varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	KIND varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	EMAIL varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	REMARK varchar(400) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_DT datetime NULL,
+	UPT_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	UPT_DT datetime NULL,
+	USE_YN varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT PK_TB_COM_CUST PRIMARY KEY (CUST_CODE)
+);
+
+
+-- hanju.dbo.TB_COM_FAVORITES_MENU definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_COM_FAVORITES_MENU;
+
+CREATE TABLE hanju.dbo.TB_COM_FAVORITES_MENU (
+	USER_ID varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MENU_ID varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	REG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_DT datetime NULL,
+	UPT_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	UPT_DT datetime NULL,
+	CONSTRAINT PK_TB_COM_FAVORITES_MENU PRIMARY KEY (USER_ID,MENU_ID)
+);
+
+
+-- hanju.dbo.TB_COM_MENU definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_COM_MENU;
+
+CREATE TABLE hanju.dbo.TB_COM_MENU (
+	MENU_ID varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PARENT_MENU_ID varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PGM_ID varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	MENU_NAME varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	MENU_NAME_ENG varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	MENU_TYPE varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	MENU_LEVEL int NULL,
+	SORT int NULL,
+	USE_YN varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	REMARK varchar(400) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_DT datetime NULL,
+	UPT_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	UPT_DT datetime NULL,
+	CONSTRAINT PK_TB_COM_MENU PRIMARY KEY (MENU_ID)
+);
+
+
+-- hanju.dbo.TB_COM_PROGRAM definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_COM_PROGRAM;
+
+CREATE TABLE hanju.dbo.TB_COM_PROGRAM (
+	PGM_ID varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PGM_NAME varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PGM_NAME_ENG varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	PGM_CLASS varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	PGM_PATH varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	REMARK varchar(400) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_DT datetime NULL,
+	UPT_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	UPT_DT datetime NULL,
+	CONSTRAINT PK_TB_COM_PROGRAM PRIMARY KEY (PGM_ID)
+);
+
+
+-- hanju.dbo.TB_ROLE_GRP definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_ROLE_GRP;
+
+CREATE TABLE hanju.dbo.TB_ROLE_GRP (
+	ROLE_GRP_ID varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	ROLE_GRP_NAME varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	SORT int NULL,
+	USE_YN varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	REMARK varchar(400) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_DT datetime NULL,
+	UPT_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	UPT_DT datetime NULL,
+	CONSTRAINT PK_TB_ROLE_GRP PRIMARY KEY (ROLE_GRP_ID)
+);
+
+
+-- hanju.dbo.TB_ROLE_GRP_MENU definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_ROLE_GRP_MENU;
+
+CREATE TABLE hanju.dbo.TB_ROLE_GRP_MENU (
+	ROLE_GRP_ID varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MENU_ID varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	BUTTONID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	USE_YN varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	REMARK varchar(400) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_DT datetime NULL,
+	UPT_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	UPT_DT datetime NULL,
+	CONSTRAINT PK_role_menu_info PRIMARY KEY (ROLE_GRP_ID,MENU_ID,BUTTONID)
+);
+
+
+-- hanju.dbo.TB_USER definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_USER;
+
+CREATE TABLE hanju.dbo.TB_USER (
+	USER_ID varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PASSWORD varchar(2000) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	ROLE_GRP_ID varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	USER_NAME varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	USER_NAME_ENG varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	EMP_NO varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	CUST_CODE varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	DEPT_CODE varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	OFFICE_NUM varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	PHONE_NUM varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	ADDRESS_1 varchar(400) COLLATE Korean_Wansung_CI_AS NULL,
+	ADDRESS_2 varchar(400) COLLATE Korean_Wansung_CI_AS NULL,
+	COUNTRY varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	USE_YN varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	REMARK varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	REG_DT datetime NULL,
+	UPT_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	UPT_DT datetime NULL,
+	USER_TYPE varchar(100) COLLATE Korean_Wansung_CI_AS DEFAULT 'C' NULL,
+	CONSTRAINT PK_TB_USER PRIMARY KEY (USER_ID)
+);
+
+
+-- hanju.dbo.TB_USER_PROP definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_USER_PROP;
+
+CREATE TABLE hanju.dbo.TB_USER_PROP (
+	USER_ID varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PROP_CD varchar(512) COLLATE Korean_Wansung_CI_AS NULL,
+	PROP_VAL varchar(4000) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.TB_USER_THEME definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_USER_THEME;
+
+CREATE TABLE hanju.dbo.TB_USER_THEME (
+	USER_ID varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	THEME varchar(512) COLLATE Korean_Wansung_CI_AS NULL,
+	BSIZE varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	PHOTO varchar(100) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.TB_USER_TOKEN definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.TB_USER_TOKEN;
+
+CREATE TABLE hanju.dbo.TB_USER_TOKEN (
+	USER_ID varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	ACCESS_TOKEN_ID varchar(36) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	REFRESH_TOKEN varchar(36) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	EXPIRES_DATE datetime NULL,
+	CREATE_IP varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_DATE datetime NULL,
+	REVOKE_IP varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	REVOKE_DATE datetime NULL,
+	CONSTRAINT PK_TB_USER_TOKEN PRIMARY KEY (USER_ID)
+);
+
+
+-- hanju.dbo.T_AS400_HMI_MAP definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_AS400_HMI_MAP;
+
+CREATE TABLE hanju.dbo.T_AS400_HMI_MAP (
+	D_TYPE varchar(50) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	AS400_ID varchar(50) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	HMI_ID varchar(50) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	AS400_COL varchar(50) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	HMI_COL varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	DESCRIPT varchar(250) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_AS400_HMI_MAP_PK PRIMARY KEY (D_TYPE,AS400_ID,HMI_ID,AS400_COL)
+);
+
+
+-- hanju.dbo.T_EVENT_REMARK definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_EVENT_REMARK;
+
+CREATE TABLE hanju.dbo.T_EVENT_REMARK (
+	COM_ID varchar(25) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	START_DT varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	START_TM varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	END_DT varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	END_TM varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	REMARK varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	UPDATE_DTIME datetime NULL,
+	CONSTRAINT T_EVENT_REMARK_PK PRIMARY KEY (COM_ID,START_DT,START_TM,END_DT,END_TM)
+);
+
+
+-- hanju.dbo.T_EXCL_RST_DT definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_EXCL_RST_DT;
+
+CREATE TABLE hanju.dbo.T_EXCL_RST_DT (
+	MC_ID varchar(25) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	EXCL_SDATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	EXCL_STIME varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	EXCL_EDATE varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	EXCL_ETIME varchar(8) COLLATE Korean_Wansung_CI_AS NULL,
+	EXCL_REMARK varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	s_gaudt datetime NULL,
+	e_gaudt datetime NULL,
+	CONSTRAINT T_EXCL_RST_DT_PK PRIMARY KEY (MC_ID,EXCL_SDATE,EXCL_STIME)
+);
+ CREATE NONCLUSTERED INDEX T_EXCL_RST_DT_s_gaudt_IDX ON hanju.dbo.T_EXCL_RST_DT (  s_gaudt ASC  , e_gaudt ASC  )  
+	 WITH (  PAD_INDEX = OFF ,FILLFACTOR = 100  ,SORT_IN_TEMPDB = OFF , IGNORE_DUP_KEY = OFF , STATISTICS_NORECOMPUTE = OFF , ONLINE = OFF , ALLOW_ROW_LOCKS = ON , ALLOW_PAGE_LOCKS = ON  )
+	 ON [PRIMARY ] ;
+
+
+-- hanju.dbo.T_FILE definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FILE;
+
+CREATE TABLE hanju.dbo.T_FILE (
+	FILE_GID varchar(1000) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	FILE_ID varchar(1000) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	FILE_SIZE varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	FILE_NAME varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	FILE_REAL_NAME varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	CRE_DT datetime DEFAULT getdate() NULL,
+	CRE_ID varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	PWD varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	USE_YN varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	IN_PROG varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	COMM varchar(1000) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.T_FILE_GRP definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FILE_GRP;
+
+CREATE TABLE hanju.dbo.T_FILE_GRP (
+	FILE_GID varchar(1000) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	IN_PROG varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	CRE_DT datetime DEFAULT getdate() NULL,
+	CRE_ID varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	COMM varchar(1000) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.T_FILE_LOG definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FILE_LOG;
+
+CREATE TABLE hanju.dbo.T_FILE_LOG (
+	FILE_ID varchar(1000) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CRE_DT datetime DEFAULT getdate() NULL,
+	CRE_ID varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	IN_PROG varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	IP varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	COMM varchar(1000) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.T_FMS_DAY definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FMS_DAY;
+
+CREATE TABLE hanju.dbo.T_FMS_DAY (
+	GAUGE_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_HOUR varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	AVG_QTY decimal(18,3) NULL,
+	MAX_PEAK decimal(18,3) NULL,
+	AVG_INTV decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	DATA_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_FMS_DAY_PK PRIMARY KEY (GAUGE_DATE,GAUGE_HOUR,MC_ID)
+);
+
+
+-- hanju.dbo.T_FMS_HOUR definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FMS_HOUR;
+
+CREATE TABLE hanju.dbo.T_FMS_HOUR (
+	GAUGE_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_MIN varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	TAG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	TAG_VALUE decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	DATA_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_FMS_HOUR_PK PRIMARY KEY (GAUGE_DATE,GAUGE_MIN,MC_ID,TAG_ID)
+);
+
+
+-- hanju.dbo.T_FMS_HOUR_TEMP definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FMS_HOUR_TEMP;
+
+CREATE TABLE hanju.dbo.T_FMS_HOUR_TEMP (
+	GAUGE_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_MIN varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	TAG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	TAG_VALUE decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	DATA_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_FMS_HOUR_TEMP_PK PRIMARY KEY (GAUGE_DATE,GAUGE_MIN,MC_ID,TAG_ID)
+);
+
+
+-- hanju.dbo.T_FMS_MCMASTER definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FMS_MCMASTER;
+
+CREATE TABLE hanju.dbo.T_FMS_MCMASTER (
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	TAG_ID varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	TAG_NAME varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	DESCRIPT varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_DATE datetime NULL,
+	CONSTRAINT T_FMS_MCMASTER_PK PRIMARY KEY (MC_ID,TAG_ID)
+);
+
+
+-- hanju.dbo.T_FMS_MONTH definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FMS_MONTH;
+
+CREATE TABLE hanju.dbo.T_FMS_MONTH (
+	GAUGE_YYMM varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_DAY varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	AVG_QTY decimal(18,3) NULL,
+	MAX_PEAK decimal(18,3) NULL,
+	AVG_INTV decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	DATA_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_FMS_MONTH_PK PRIMARY KEY (GAUGE_YYMM,GAUGE_DAY,MC_ID)
+);
+
+
+-- hanju.dbo.T_FMS_POWER definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FMS_POWER;
+
+CREATE TABLE hanju.dbo.T_FMS_POWER (
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	TAG_ID varchar(50) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	TAG_VALUE decimal(18,3) NULL,
+	SAVE_DTIME datetime NOT NULL,
+	CONSTRAINT T_FMS_POWER_PK PRIMARY KEY (MC_ID,TAG_ID)
+);
+
+
+-- hanju.dbo.T_FMS_REAL definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FMS_REAL;
+
+CREATE TABLE hanju.dbo.T_FMS_REAL (
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	TAG_ID varchar(50) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	TAG_VALUE decimal(18,3) NULL,
+	SAVE_DTIME datetime NOT NULL,
+	CRE_DT datetime NULL,
+	CONSTRAINT T_FMS_REAL_PK PRIMARY KEY (MC_ID,TAG_ID)
+);
+
+
+-- hanju.dbo.T_FMS_YEAR definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_FMS_YEAR;
+
+CREATE TABLE hanju.dbo.T_FMS_YEAR (
+	GAUGE_YEAR varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_YYMM varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	AVG_QTY decimal(18,3) NULL,
+	MAX_PEAK decimal(18,3) NULL,
+	AVG_INTV decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	DATA_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_FMS_YEAR_PK PRIMARY KEY (GAUGE_YEAR,GAUGE_YYMM,MC_ID)
+);
+
+
+-- hanju.dbo.T_HMI_BOARD definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_BOARD;
+
+CREATE TABLE hanju.dbo.T_HMI_BOARD (
+	BOARD_NUM int NOT NULL,
+	THREAD_NUM int NULL,
+	REF_LEVEL int NULL,
+	BOARD_ID varchar(25) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	USER_ID varchar(25) COLLATE Korean_Wansung_CI_AS NULL,
+	USER_NAME varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	BOARD_TITLE varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	BOARD_CONTENT varchar(MAX) COLLATE Korean_Wansung_CI_AS NULL,
+	FILE_SIZE int NULL,
+	FILE_NAME varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	HTML_YN char(1) COLLATE Korean_Wansung_CI_AS NULL,
+	USER_EMAIL varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	READ_NUM int DEFAULT 0 NOT NULL,
+	DATE_WRITE datetime DEFAULT getdate() NOT NULL,
+	PWD varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	IP varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	USE_POP varchar(100) COLLATE Korean_Wansung_CI_AS DEFAULT 'N' NULL,
+	FILE_ID varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	POP_EXPIRE_DATE datetime NULL,
+	CONSTRAINT PK_T_HMI_BOARD PRIMARY KEY (BOARD_NUM)
+);
+
+
+-- hanju.dbo.T_HMI_CHECKLIST_CONFIRM definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_CHECKLIST_CONFIRM;
+
+CREATE TABLE hanju.dbo.T_HMI_CHECKLIST_CONFIRM (
+	YYYY int NULL,
+	MM int NULL,
+	KIND char(1) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_CODE varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	CUST_NAME varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	CF_DATE varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_ID varchar(25) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.T_HMI_COMMON definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_COMMON;
+
+CREATE TABLE hanju.dbo.T_HMI_COMMON (
+	CODE_ID varchar(50) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CODE_VALUE varchar(200) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CODE_DESC varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_NAME varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_SORT int NULL,
+	UPPER_CODE_ID varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	UPPER_CODE_VALUE varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_USE_YN char(1) COLLATE Korean_Wansung_CI_AS NULL,
+	DATE_START varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	DATE_END varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_ATTR01 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_ATTR01_DESC varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_ATTR02 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_ATTR02_DESC varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_ATTR03 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_ATTR03_DESC varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_ATTR04 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_ATTR04_DESC varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_ATTR05 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CODE_ATTR05_DESC varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_ID varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	UPDATE_ID varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_HMI_COMMON_PK PRIMARY KEY (CODE_ID,CODE_VALUE)
+);
+
+
+-- hanju.dbo.T_HMI_COM_INFO definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_COM_INFO;
+
+CREATE TABLE hanju.dbo.T_HMI_COM_INFO (
+	COM_ID varchar(25) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	COM_PASS varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_NAME varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_DIV char(1) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_EMAIL1 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_EMAIL2 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_EMAIL3 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_EMAIL4 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_EMAIL5 varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_NUM varchar(17) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_CHIEF varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_KIND char(1) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_COND varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_ITEM varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_PHONE varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_FAX varchar(50) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_ZIP1 varchar(8) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_ZIP2 varchar(8) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_ADDR varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_AREA varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_CITY varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_LANDING varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_LANDING_ETC varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_ETC varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	USE_YN varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	BY_X01 char(1) COLLATE Korean_Wansung_CI_AS NULL,
+	BY_X02 char(1) COLLATE Korean_Wansung_CI_AS NULL,
+	DATE_ELI varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	SET_APP varchar(3) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_NUM_S varchar(255) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_CODE varchar(255) COLLATE Korean_Wansung_CI_AS NULL,
+	COM_CODE1 varchar(255) COLLATE Korean_Wansung_CI_AS NULL,
+	ORDERBY int NULL,
+	P_COM_ID varchar(25) COLLATE Korean_Wansung_CI_AS NULL,
+	MID_CHECK_YN varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	REGULAT_CHECK_YN varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	ORDERBY_STM int NULL,
+	ORDERBY_WTR int NULL,
+	IN_OUT_TYP int NULL,
+	COMMENT varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_HMI_COM_INFO_PK PRIMARY KEY (COM_ID)
+);
+
+
+-- hanju.dbo.T_HMI_DAY definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_DAY;
+
+CREATE TABLE hanju.dbo.T_HMI_DAY (
+	GAUGE_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_HOUR varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	H_USEQTY decimal(18,3) NULL,
+	HI_USEQTY decimal(18,3) NULL,
+	HI_USEQTY_C decimal(18,3) NULL,
+	HI_USEQTY_A decimal(18,3) NULL,
+	HI_USEQTY_B decimal(18,3) NULL,
+	AV_TEMPER decimal(4,1) NULL,
+	AV_PRESS decimal(6,2) NULL,
+	R_PEAK_A decimal(18,3) NULL,
+	R_PEAK_B decimal(18,3) NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	H_INTV decimal(6,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	DATA_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CUM_FRKW_B2_A decimal(18,3) NULL,
+	CUM_FRKW_B2_B decimal(18,3) NULL,
+	CUM_FRKW_B1_A decimal(18,3) NULL,
+	CUM_FRKW_B1_B decimal(18,3) NULL,
+	FOR_KWH_B1_C decimal(18,3) NULL,
+	FOR_KWH_B1_A decimal(18,3) NULL,
+	FOR_KWH_B1_B decimal(18,3) NULL,
+	LAG_KVARH_B1_A decimal(18,3) NULL,
+	LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_AC_KWH_C decimal(18,3) NULL,
+	REC_AC_KWH_A decimal(18,3) NULL,
+	REC_AC_KWH_B decimal(18,3) NULL,
+	REC_AC_KVARH_A decimal(18,3) NULL,
+	REC_AC_KVARH_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_B decimal(18,3) NULL,
+	REC_FOR_KWH_B1_C decimal(18,3) NULL,
+	REC_FOR_KWH_B1_A decimal(18,3) NULL,
+	REC_FOR_KWH_B1_B decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_A decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_PEAK_A decimal(18,3) NULL,
+	REC_PEAK_B decimal(18,3) NULL,
+	OQ_TON decimal(18,3) NULL,
+	OQ_KWH_C decimal(18,3) NULL,
+	OQ_KWH_A decimal(18,3) NULL,
+	OQ_KWH_B decimal(18,3) NULL,
+	OQ_KVARH_A decimal(18,3) NULL,
+	OQ_KVARH_B decimal(18,3) NULL,
+	MD_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_HMI_DAY_PK PRIMARY KEY (GAUGE_DATE,GAUGE_HOUR,MC_ID)
+);
+ CREATE NONCLUSTERED INDEX T_HMI_DAY_GAUGE_DATE_IDX ON hanju.dbo.T_HMI_DAY (  GAUGE_DATE ASC  )  
+	 WITH (  PAD_INDEX = OFF ,FILLFACTOR = 100  ,SORT_IN_TEMPDB = OFF , IGNORE_DUP_KEY = OFF , STATISTICS_NORECOMPUTE = OFF , ONLINE = OFF , ALLOW_ROW_LOCKS = ON , ALLOW_PAGE_LOCKS = ON  )
+	 ON [PRIMARY ] ;
+
+
+-- hanju.dbo.T_HMI_HOUR definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_HOUR;
+
+CREATE TABLE hanju.dbo.T_HMI_HOUR (
+	GAUGE_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_MIN varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	R_USEQTY decimal(18,3) NULL,
+	NI_USEQTY decimal(18,3) NULL,
+	NI_USEQTY_C decimal(18,3) NULL,
+	NI_USEQTY_A decimal(18,3) NULL,
+	NI_USEQTY_B decimal(18,3) NULL,
+	AV_TEMPER decimal(4,1) NULL,
+	AV_PRESS decimal(6,2) NULL,
+	R_PEAK_A decimal(18,3) NULL,
+	R_PEAK_B decimal(18,3) NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	CUM_FRKW_B2_A decimal(18,3) NULL,
+	CUM_FRKW_B2_B decimal(18,3) NULL,
+	CUM_FRKW_B1_A decimal(18,3) NULL,
+	CUM_FRKW_B1_B decimal(18,3) NULL,
+	FOR_KWH_B1_C decimal(18,3) NULL,
+	FOR_KWH_B1_A decimal(18,3) NULL,
+	FOR_KWH_B1_B decimal(18,3) NULL,
+	LAG_KVARH_B1_A decimal(18,3) NULL,
+	LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_AC_KWH_C decimal(18,3) NULL,
+	REC_AC_KWH_A decimal(18,3) NULL,
+	REC_AC_KWH_B decimal(18,3) NULL,
+	REC_AC_KVARH_A decimal(18,3) NULL,
+	REC_AC_KVARH_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_B decimal(18,3) NULL,
+	REC_FOR_KWH_B1_C decimal(18,3) NULL,
+	REC_FOR_KWH_B1_A decimal(18,3) NULL,
+	REC_FOR_KWH_B1_B decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_A decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_PEAK_A decimal(18,3) NULL,
+	REC_PEAK_B decimal(18,3) NULL,
+	FACTOR decimal(18,3) NULL,
+	GAUDT datetime NULL,
+	CONSTRAINT T_HMI_HOUR_PK PRIMARY KEY (GAUGE_DATE,GAUGE_MIN,MC_ID)
+);
+ CREATE NONCLUSTERED INDEX T_HMI_HOUR_GAUDT_IDX ON hanju.dbo.T_HMI_HOUR (  GAUDT ASC  )  
+	 WITH (  PAD_INDEX = OFF ,FILLFACTOR = 100  ,SORT_IN_TEMPDB = OFF , IGNORE_DUP_KEY = OFF , STATISTICS_NORECOMPUTE = OFF , ONLINE = OFF , ALLOW_ROW_LOCKS = ON , ALLOW_PAGE_LOCKS = ON  )
+	 ON [PRIMARY ] ;
+ CREATE NONCLUSTERED INDEX T_HMI_HOUR_MC_ID_IDX ON hanju.dbo.T_HMI_HOUR (  MC_ID ASC  , GAUGE_DATE ASC  , GAUDT ASC  )  
+	 WITH (  PAD_INDEX = OFF ,FILLFACTOR = 100  ,SORT_IN_TEMPDB = OFF , IGNORE_DUP_KEY = OFF , STATISTICS_NORECOMPUTE = OFF , ONLINE = OFF , ALLOW_ROW_LOCKS = ON , ALLOW_PAGE_LOCKS = ON  )
+	 ON [PRIMARY ] ;
+ CREATE NONCLUSTERED INDEX T_HMI_HOUR_MGG_INDEX ON hanju.dbo.T_HMI_HOUR (  MC_ID ASC  , GAUGE_DATE ASC  , GAUDT ASC  )  
+	 INCLUDE ( REC_AC_KVARH_A , REC_AC_KVARH_B , REC_AC_KWH_A , REC_AC_KWH_B , REC_AC_KWH_C ) 
+	 WITH (  PAD_INDEX = OFF ,FILLFACTOR = 100  ,SORT_IN_TEMPDB = OFF , IGNORE_DUP_KEY = OFF , STATISTICS_NORECOMPUTE = OFF , ONLINE = OFF , ALLOW_ROW_LOCKS = ON , ALLOW_PAGE_LOCKS = ON  )
+	 ON [PRIMARY ] ;
+
+
+-- hanju.dbo.T_HMI_HOUR_ARCHVE definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_HOUR_ARCHVE;
+
+CREATE TABLE hanju.dbo.T_HMI_HOUR_ARCHVE (
+	GAUGE_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_MIN varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	R_USEQTY decimal(18,3) NULL,
+	NI_USEQTY decimal(18,3) NULL,
+	NI_USEQTY_C decimal(18,3) NULL,
+	NI_USEQTY_A decimal(18,3) NULL,
+	NI_USEQTY_B decimal(18,3) NULL,
+	AV_TEMPER decimal(4,1) NULL,
+	AV_PRESS decimal(6,2) NULL,
+	R_PEAK_A decimal(18,3) NULL,
+	R_PEAK_B decimal(18,3) NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	CUM_FRKW_B2_A decimal(18,3) NULL,
+	CUM_FRKW_B2_B decimal(18,3) NULL,
+	CUM_FRKW_B1_A decimal(18,3) NULL,
+	CUM_FRKW_B1_B decimal(18,3) NULL,
+	FOR_KWH_B1_C decimal(18,3) NULL,
+	FOR_KWH_B1_A decimal(18,3) NULL,
+	FOR_KWH_B1_B decimal(18,3) NULL,
+	LAG_KVARH_B1_A decimal(18,3) NULL,
+	LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_AC_KWH_C decimal(18,3) NULL,
+	REC_AC_KWH_A decimal(18,3) NULL,
+	REC_AC_KWH_B decimal(18,3) NULL,
+	REC_AC_KVARH_A decimal(18,3) NULL,
+	REC_AC_KVARH_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_B decimal(18,3) NULL,
+	REC_FOR_KWH_B1_C decimal(18,3) NULL,
+	REC_FOR_KWH_B1_A decimal(18,3) NULL,
+	REC_FOR_KWH_B1_B decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_A decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_PEAK_A decimal(18,3) NULL,
+	REC_PEAK_B decimal(18,3) NULL,
+	FACTOR decimal(18,3) NULL,
+	CONSTRAINT T_HMI_HOUR_ARCHVE_PK PRIMARY KEY (GAUGE_DATE,GAUGE_MIN,MC_ID)
+);
+
+
+-- hanju.dbo.T_HMI_HOUR_SENSOR definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_HOUR_SENSOR;
+
+CREATE TABLE hanju.dbo.T_HMI_HOUR_SENSOR (
+	GAUGE_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_MIN varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	R_USEQTY decimal(18,3) NULL,
+	NI_USEQTY decimal(18,3) NULL,
+	NI_USEQTY_C decimal(18,3) NULL,
+	NI_USEQTY_A decimal(18,3) NULL,
+	NI_USEQTY_B decimal(18,3) NULL,
+	AV_TEMPER decimal(4,1) NULL,
+	AV_PRESS decimal(6,2) NULL,
+	R_PEAK_A decimal(18,3) NULL,
+	R_PEAK_B decimal(18,3) NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	CUM_FRKW_B2_A decimal(18,3) NULL,
+	CUM_FRKW_B2_B decimal(18,3) NULL,
+	CUM_FRKW_B1_A decimal(18,3) NULL,
+	CUM_FRKW_B1_B decimal(18,3) NULL,
+	FOR_KWH_B1_C decimal(18,3) NULL,
+	FOR_KWH_B1_A decimal(18,3) NULL,
+	FOR_KWH_B1_B decimal(18,3) NULL,
+	LAG_KVARH_B1_A decimal(18,3) NULL,
+	LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_AC_KWH_C decimal(18,3) NULL,
+	REC_AC_KWH_A decimal(18,3) NULL,
+	REC_AC_KWH_B decimal(18,3) NULL,
+	REC_AC_KVARH_A decimal(18,3) NULL,
+	REC_AC_KVARH_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_B decimal(18,3) NULL,
+	REC_FOR_KWH_B1_C decimal(18,3) NULL,
+	REC_FOR_KWH_B1_A decimal(18,3) NULL,
+	REC_FOR_KWH_B1_B decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_A decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_PEAK_A decimal(18,3) NULL,
+	REC_PEAK_B decimal(18,3) NULL,
+	FACTOR decimal(18,3) NULL,
+	GAUDT datetime NULL,
+	CONSTRAINT T_HMI_HOUR_SENSOR_PK PRIMARY KEY (GAUGE_DATE,GAUGE_MIN,MC_ID)
+);
+
+
+-- hanju.dbo.T_HMI_HOUR_TEST definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_HOUR_TEST;
+
+CREATE TABLE hanju.dbo.T_HMI_HOUR_TEST (
+	GAUGE_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_MIN varchar(8) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	R_USEQTY decimal(18,3) NULL,
+	NI_USEQTY decimal(18,3) NULL,
+	NI_USEQTY_C decimal(18,3) NULL,
+	NI_USEQTY_A decimal(18,3) NULL,
+	NI_USEQTY_B decimal(18,3) NULL,
+	AV_TEMPER decimal(4,1) NULL,
+	AV_PRESS decimal(6,2) NULL,
+	R_PEAK_A decimal(18,3) NULL,
+	R_PEAK_B decimal(18,3) NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	CUM_FRKW_B2_A decimal(18,3) NULL,
+	CUM_FRKW_B2_B decimal(18,3) NULL,
+	CUM_FRKW_B1_A decimal(18,3) NULL,
+	CUM_FRKW_B1_B decimal(18,3) NULL,
+	FOR_KWH_B1_C decimal(18,3) NULL,
+	FOR_KWH_B1_A decimal(18,3) NULL,
+	FOR_KWH_B1_B decimal(18,3) NULL,
+	LAG_KVARH_B1_A decimal(18,3) NULL,
+	LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_AC_KWH_C decimal(18,3) NULL,
+	REC_AC_KWH_A decimal(18,3) NULL,
+	REC_AC_KWH_B decimal(18,3) NULL,
+	REC_AC_KVARH_A decimal(18,3) NULL,
+	REC_AC_KVARH_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_B decimal(18,3) NULL,
+	REC_FOR_KWH_B1_C decimal(18,3) NULL,
+	REC_FOR_KWH_B1_A decimal(18,3) NULL,
+	REC_FOR_KWH_B1_B decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_A decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_PEAK_A decimal(18,3) NULL,
+	REC_PEAK_B decimal(18,3) NULL,
+	FACTOR decimal(18,3) NULL,
+	CONSTRAINT T_HMI_HOUR_TEST_PK PRIMARY KEY (GAUGE_DATE,GAUGE_MIN,MC_ID)
+);
+
+
+-- hanju.dbo.T_HMI_MCMASTER definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_MCMASTER;
+
+CREATE TABLE hanju.dbo.T_HMI_MCMASTER (
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	DESCRIPT varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	GAUGE_SECTION varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	GAUGE_TYPE varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	GAUGE_TYPE2 varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	GAUGE_TYPE3 varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	MAKER varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	MODEL varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	CUST_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	REMARK varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	USE_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_DATE datetime NULL,
+	C_WORKER varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	UPDATE_DATE datetime NULL,
+	U_WORKER varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	FACTOR decimal(8,0) NULL,
+	INT_DIGIT int NULL,
+	DIGIT_UNIT varchar(20) COLLATE Korean_Wansung_CI_AS NULL,
+	DESCRIPT2 varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	Maintenance_YN varchar(4) COLLATE Korean_Wansung_CI_AS DEFAULT 'N' NOT NULL,
+	chart_range_min decimal(38,0) DEFAULT 0 NULL,
+	chart_range_max decimal(38,0) DEFAULT 100 NULL,
+	chart_range_gap varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	chart_range_min_press decimal(38,0) DEFAULT 0 NOT NULL,
+	chart_range_max_press decimal(38,0) DEFAULT 100 NOT NULL,
+	chart_range_gap_press varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	chart_range_max_temper decimal(38,0) DEFAULT 100 NOT NULL,
+	chart_range_min_temper decimal(38,0) DEFAULT 0 NOT NULL,
+	chart_range_gap_temper varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	com_port varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	tag_id varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_HMI_MCMASTER_PK PRIMARY KEY (MC_ID)
+);
+
+
+-- hanju.dbo.T_HMI_MC_NUMID_VS_MCID definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_MC_NUMID_VS_MCID;
+
+CREATE TABLE hanju.dbo.T_HMI_MC_NUMID_VS_MCID (
+	MC_NUM_ID varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(30) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_HMI_MC_NUMID_VS_MCID_PK PRIMARY KEY (MC_NUM_ID)
+);
+
+
+-- hanju.dbo.T_HMI_MC_SENSOR_STATE definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_MC_SENSOR_STATE;
+
+CREATE TABLE hanju.dbo.T_HMI_MC_SENSOR_STATE (
+	ACTION_DT datetime NULL,
+	GAUGE_SECTION varchar(2) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	START_DT datetime NULL,
+	END_DT datetime NULL,
+	CONSTRAINT T_HMI_MC_SENSOR_STATE_PK PRIMARY KEY (GAUGE_SECTION)
+);
+
+
+-- hanju.dbo.T_HMI_MONTH definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_MONTH;
+
+CREATE TABLE hanju.dbo.T_HMI_MONTH (
+	GAUGE_YYMM varchar(7) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_DAY varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	D_USEQTY decimal(18,3) NULL,
+	DI_USEQTY decimal(18,3) NULL,
+	DI_USEQTY_C decimal(18,3) NULL,
+	DI_USEQTY_A decimal(18,3) NULL,
+	DI_USEQTY_B decimal(18,3) NULL,
+	R_PEAK_A decimal(18,3) NULL,
+	R_PEAK_B decimal(18,3) NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	D_INTV decimal(6,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	CUM_FRKW_B2_A decimal(18,3) NULL,
+	CUM_FRKW_B2_B decimal(18,3) NULL,
+	CUM_FRKW_B1_A decimal(18,3) NULL,
+	CUM_FRKW_B1_B decimal(18,3) NULL,
+	FOR_KWH_B1_C decimal(18,3) NULL,
+	FOR_KWH_B1_A decimal(18,3) NULL,
+	FOR_KWH_B1_B decimal(18,3) NULL,
+	LAG_KVARH_B1_A decimal(18,3) NULL,
+	LAG_KVARH_B1_B decimal(18,3) NULL,
+	AV_TEMPER decimal(4,1) NULL,
+	AV_PRESS decimal(6,2) NULL,
+	DATA_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	REC_AC_KWH_C decimal(18,3) NULL,
+	REC_AC_KWH_A decimal(18,3) NULL,
+	REC_AC_KWH_B decimal(18,3) NULL,
+	REC_AC_KVARH_A decimal(18,3) NULL,
+	REC_AC_KVARH_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_B decimal(18,3) NULL,
+	REC_FOR_KWH_B1_C decimal(18,3) NULL,
+	REC_FOR_KWH_B1_A decimal(18,3) NULL,
+	REC_FOR_KWH_B1_B decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_A decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_PEAK_A decimal(18,3) NULL,
+	REC_PEAK_B decimal(18,3) NULL,
+	MQ_TON decimal(18,3) NULL,
+	MQ_KWH_C decimal(18,3) NULL,
+	MQ_KWH_A decimal(18,3) NULL,
+	MQ_KWH_B decimal(18,3) NULL,
+	MQ_KVARH_A decimal(18,3) NULL,
+	MQ_KVARH_B decimal(18,3) NULL,
+	MD_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_HMI_MONTH_PK PRIMARY KEY (GAUGE_YYMM,GAUGE_DAY,MC_ID)
+);
+
+
+-- hanju.dbo.T_HMI_MON_GAUGE definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_MON_GAUGE;
+
+CREATE TABLE hanju.dbo.T_HMI_MON_GAUGE (
+	GAUGE_YYMM varchar(7) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_DAY varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	M_PEAK decimal(18,3) NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	ACCEPT_QTY decimal(18,3) NULL,
+	H2A_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	MQ_TON decimal(18,3) NULL,
+	MQ_KWH_B decimal(18,3) NULL,
+	MQ_KWH_A decimal(18,3) NULL,
+	MQ_KWH_C decimal(18,3) NULL,
+	MQ_KVARH_A decimal(18,3) NULL,
+	MQ_KVARH_B decimal(18,3) NULL,
+	REC_M_PEAK_A decimal(18,3) NULL,
+	REC_M_PEAK_B decimal(18,3) NULL,
+	M_PEAK_A decimal(18,3) NULL,
+	M_PEAK_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_B decimal(18,3) NULL,
+	CONSTRAINT T_HMI_MON_GAUGE_PK PRIMARY KEY (GAUGE_YYMM,GAUGE_DAY,MC_ID)
+);
+
+
+-- hanju.dbo.T_HMI_PW15MIN definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_PW15MIN;
+
+CREATE TABLE hanju.dbo.T_HMI_PW15MIN (
+	GAUGE_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_FRHOUR varchar(2) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_TOMIN varchar(2) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	NI_USEQTY decimal(18,3) NULL,
+	NI_USEQTY_C decimal(18,3) NULL,
+	NI_USEQTY_A decimal(18,3) NULL,
+	NI_USEQTY_B decimal(18,3) NULL,
+	R_PEAK_A decimal(18,3) NULL,
+	R_PEAK_B decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	CUM_FRKW_B2_A decimal(18,3) NULL,
+	CUM_FRKW_B2_B decimal(18,3) NULL,
+	CUM_FRKW_B1_A decimal(18,3) NULL,
+	CUM_FRKW_B1_B decimal(18,3) NULL,
+	FOR_KWH_B1_C decimal(18,3) NULL,
+	FOR_KWH_B1_A decimal(18,3) NULL,
+	FOR_KWH_B1_B decimal(18,3) NULL,
+	LAG_KVARH_B1_A decimal(18,3) NULL,
+	LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_AC_KWH_C decimal(18,3) NULL,
+	REC_AC_KWH_A decimal(18,3) NULL,
+	REC_AC_KWH_B decimal(18,3) NULL,
+	REC_AC_KVARH_A decimal(18,3) NULL,
+	REC_AC_KVARH_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_B decimal(18,3) NULL,
+	REC_FOR_KWH_B1_C decimal(18,3) NULL,
+	REC_FOR_KWH_B1_A decimal(18,3) NULL,
+	REC_FOR_KWH_B1_B decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_A decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_PEAK_A decimal(18,3) NULL,
+	REC_PEAK_B decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	PRV_FORKW decimal(18,3) NULL,
+	CONSTRAINT T_HMI_PW15MIN_PK PRIMARY KEY (GAUGE_DATE,GAUGE_FRHOUR,GAUGE_TOMIN,MC_ID)
+);
+
+
+-- hanju.dbo.T_HMI_REAL definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_REAL;
+
+CREATE TABLE hanju.dbo.T_HMI_REAL (
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	R_USEQTY decimal(18,3) NULL,
+	D_USEQTY decimal(18,3) NULL,
+	DI_USEQTY decimal(18,3) NULL,
+	DI_USEQTY_C decimal(18,3) NULL,
+	DI_USEQTY_A decimal(18,3) NULL,
+	DI_USEQTY_B decimal(18,3) NULL,
+	R_TEMPER decimal(4,1) NULL,
+	R_PRESS decimal(6,2) NULL,
+	M_PEAK_A decimal(18,3) NULL,
+	M_PEAK_B decimal(18,3) NULL,
+	M_INTV decimal(4,1) NULL,
+	PRV_FORKW decimal(18,3) NULL,
+	PRV_INTV decimal(6,3) NULL,
+	M_USEQTY decimal(18,3) NULL,
+	MI_USEQTY decimal(18,3) NULL,
+	MI_USEQTY_C decimal(18,3) NULL,
+	MI_USEQTY_A decimal(18,3) NULL,
+	MI_USEQTY_B decimal(18,3) NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	CUM_FRKW_B2_A decimal(18,3) NULL,
+	CUM_FRKW_B2_B decimal(18,3) NULL,
+	CUM_FRKW_B1_A decimal(18,3) NULL,
+	CUM_FRKW_B1_B decimal(18,3) NULL,
+	FOR_KWH_B1_C decimal(18,3) NULL,
+	FOR_KWH_B1_A decimal(18,3) NULL,
+	FOR_KWH_B1_B decimal(18,3) NULL,
+	LAG_KVARH_B1_A decimal(18,3) NULL,
+	LAG_KVARH_B1_B decimal(18,3) NULL,
+	READ_DTIME datetime NULL,
+	ALIVE_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	VALVE decimal(18,3) NULL,
+	CONSTRAINT T_HMI_REAL_PK PRIMARY KEY (MC_ID)
+);
+
+
+-- hanju.dbo.T_HMI_REAL_TEST definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_REAL_TEST;
+
+CREATE TABLE hanju.dbo.T_HMI_REAL_TEST (
+	MC_ID varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	R_USEQTY decimal(18,3) NULL,
+	D_USEQTY decimal(18,3) NULL,
+	DI_USEQTY decimal(18,3) NULL,
+	DI_USEQTY_C decimal(18,3) NULL,
+	DI_USEQTY_A decimal(18,3) NULL,
+	DI_USEQTY_B decimal(18,3) NULL,
+	R_TEMPER decimal(4,1) NULL,
+	R_PRESS decimal(6,2) NULL,
+	M_PEAK_A decimal(18,3) NULL,
+	M_PEAK_B decimal(18,3) NULL,
+	M_INTV decimal(4,1) NULL,
+	PRV_FORKW decimal(18,3) NULL,
+	PRV_INTV decimal(6,3) NULL,
+	M_USEQTY decimal(18,3) NULL,
+	MI_USEQTY decimal(18,3) NULL,
+	MI_USEQTY_C decimal(18,3) NULL,
+	MI_USEQTY_A decimal(18,3) NULL,
+	MI_USEQTY_B decimal(18,3) NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	CUM_FRKW_B2_A decimal(18,3) NULL,
+	CUM_FRKW_B2_B decimal(18,3) NULL,
+	CUM_FRKW_B1_A decimal(18,3) NULL,
+	CUM_FRKW_B1_B decimal(18,3) NULL,
+	FOR_KWH_B1_C decimal(18,3) NULL,
+	FOR_KWH_B1_A decimal(18,3) NULL,
+	FOR_KWH_B1_B decimal(18,3) NULL,
+	LAG_KVARH_B1_A decimal(18,3) NULL,
+	LAG_KVARH_B1_B decimal(18,3) NULL,
+	READ_DTIME datetime NULL,
+	ALIVE_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	VALVE decimal(18,3) NULL
+);
+
+
+-- hanju.dbo.T_HMI_SHEET definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_SHEET;
+
+CREATE TABLE hanju.dbo.T_HMI_SHEET (
+	GAUGE_DAY varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_HOUR varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	H2A_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	CONSTRAINT T_HMI_SHEET_PK PRIMARY KEY (GAUGE_DAY,GAUGE_HOUR,MC_ID)
+);
+
+
+-- hanju.dbo.T_HMI_YEAR definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_HMI_YEAR;
+
+CREATE TABLE hanju.dbo.T_HMI_YEAR (
+	GAUGE_YEAR varchar(4) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	GAUGE_YYMM varchar(7) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	MC_ID varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	M_USEQTY decimal(18,3) NULL,
+	MI_USEQTY decimal(18,3) NULL,
+	MI_USEQTY_C decimal(18,3) NULL,
+	MI_USEQTY_A decimal(18,3) NULL,
+	MI_USEQTY_B decimal(18,3) NULL,
+	M_PEAK_A decimal(18,3) NULL,
+	M_PEAK_B decimal(18,3) NULL,
+	AC_TON decimal(18,3) NULL,
+	AC_KWH_C decimal(18,3) NULL,
+	AC_KWH_A decimal(18,3) NULL,
+	AC_KWH_B decimal(18,3) NULL,
+	AC_KVARH_A decimal(18,3) NULL,
+	AC_KVARH_B decimal(18,3) NULL,
+	M_INTV decimal(6,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	CUM_FRKW_B2_A decimal(18,3) NULL,
+	CUM_FRKW_B2_B decimal(18,3) NULL,
+	CUM_FRKW_B1_A decimal(18,3) NULL,
+	CUM_FRKW_B1_B decimal(18,3) NULL,
+	FOR_KWH_B1_C decimal(18,3) NULL,
+	FOR_KWH_B1_A decimal(18,3) NULL,
+	FOR_KWH_B1_B decimal(18,3) NULL,
+	LAG_KVARH_B1_A decimal(18,3) NULL,
+	LAG_KVARH_B1_B decimal(18,3) NULL,
+	AV_TEMPER decimal(4,1) NULL,
+	AV_PRESS decimal(6,2) NULL,
+	DATA_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	REC_AC_KWH_C decimal(18,3) NULL,
+	REC_AC_KWH_A decimal(18,3) NULL,
+	REC_AC_KWH_B decimal(18,3) NULL,
+	REC_AC_KVARH_A decimal(18,3) NULL,
+	REC_AC_KVARH_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B2_B decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_A decimal(18,3) NULL,
+	REC_CUM_FRKW_B1_B decimal(18,3) NULL,
+	REC_FOR_KWH_B1_C decimal(18,3) NULL,
+	REC_FOR_KWH_B1_A decimal(18,3) NULL,
+	REC_FOR_KWH_B1_B decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_A decimal(18,3) NULL,
+	REC_LAG_KVARH_B1_B decimal(18,3) NULL,
+	REC_PEAK_A decimal(18,3) NULL,
+	REC_PEAK_B decimal(18,3) NULL,
+	MQ_TON decimal(18,3) NULL,
+	MQ_KWH_C decimal(18,3) NULL,
+	MQ_KWH_A decimal(18,3) NULL,
+	MQ_KWH_B decimal(18,3) NULL,
+	MQ_KVARH_A decimal(18,3) NULL,
+	MQ_KVARH_B decimal(18,3) NULL,
+	MD_FLAG varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_HMI_YEAR_PK PRIMARY KEY (GAUGE_YEAR,GAUGE_YYMM,MC_ID)
+);
+
+
+-- hanju.dbo.T_MC_CHK_RST definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_MC_CHK_RST;
+
+CREATE TABLE hanju.dbo.T_MC_CHK_RST (
+	MC_ID varchar(25) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CHK_STRT_DT varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CHK_STRT_TM varchar(5) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CHK_END_DT varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	CHK_END_TM varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	CHK_STRT_TYP varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CHK_END_TYP varchar(1) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	CONSTRAINT T_MC_CHK_RST_PK PRIMARY KEY (MC_ID,CHK_STRT_DT,CHK_STRT_TM)
+);
+
+
+-- hanju.dbo.T_MailRepository definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_MailRepository;
+
+CREATE TABLE hanju.dbo.T_MailRepository (
+	FromUser varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	FromName varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	ToUser varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	Subject varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	Body varchar(MAX) COLLATE Korean_Wansung_CI_AS NULL,
+	IsLoad varchar(2000) COLLATE Korean_Wansung_CI_AS DEFAULT 'N' NULL,
+	IsSucess varchar(2000) COLLATE Korean_Wansung_CI_AS DEFAULT 'N' NULL,
+	credt date NULL,
+	moddt date NULL,
+	creid varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	modid varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	ID int NOT NULL
+);
+
+
+-- hanju.dbo.T_MailTemp definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_MailTemp;
+
+CREATE TABLE hanju.dbo.T_MailTemp (
+	ID int NOT NULL,
+	Temp varchar(MAX) COLLATE Korean_Wansung_CI_AS NULL,
+	Comm varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	credt date NULL,
+	moddt date NULL,
+	creid varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	modid varchar(2000) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.T_PEAK_VALUE_RST definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_PEAK_VALUE_RST;
+
+CREATE TABLE hanju.dbo.T_PEAK_VALUE_RST (
+	MC_ID varchar(25) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PEAK_SDATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PEAK_STIME varchar(5) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PEAK_EDATE varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	PEAK_ETIME varchar(5) COLLATE Korean_Wansung_CI_AS NULL,
+	PEAK_VAL decimal(18,3) NULL,
+	CONSTRAINT T_PEAK_VALUE_RST_PK PRIMARY KEY (MC_ID,PEAK_SDATE,PEAK_STIME)
+);
+
+
+-- hanju.dbo.T_POWER_FACT_BASE definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_POWER_FACT_BASE;
+
+CREATE TABLE hanju.dbo.T_POWER_FACT_BASE (
+	COM_ID varchar(25) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	START_DT varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	PF_BASE_VAL decimal(18,3) NOT NULL,
+	END_DT varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	CONSTRAINT T_POWER_FACT_BASE_PK PRIMARY KEY (COM_ID)
+);
+
+
+-- hanju.dbo.T_POWER_FACT_BASE_HST definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_POWER_FACT_BASE_HST;
+
+CREATE TABLE hanju.dbo.T_POWER_FACT_BASE_HST (
+	COM_ID varchar(25) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	START_DT varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PF_BASE_VAL decimal(18,3) NOT NULL,
+	END_DT varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT T_POWER_FACT_BASE_HST_PK PRIMARY KEY (COM_ID,START_DT)
+);
+
+
+-- hanju.dbo.T_PWR_MAIN_DRV_RST definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_PWR_MAIN_DRV_RST;
+
+CREATE TABLE hanju.dbo.T_PWR_MAIN_DRV_RST (
+	DRV_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CMP_DATE varchar(10) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	BLR6_VAL decimal(18,3) NULL,
+	BLR6_COMP_VAL decimal(18,3) NULL,
+	BLR7_VAL decimal(18,3) NULL,
+	BLR7_COMP_VAL decimal(18,3) NULL,
+	BLR8_VAL decimal(18,3) NULL,
+	BLR8_COMP_VAL decimal(18,3) NULL,
+	BLR9_VAL decimal(18,3) NULL,
+	BLR9_COMP_VAL decimal(18,3) NULL,
+	BLR10_VAL decimal(18,3) NULL,
+	BLR10_COMP_VAL decimal(18,3) NULL,
+	HRSG1_VAL decimal(18,3) NULL,
+	HRSG1_COMP_VAL decimal(18,3) NULL,
+	HRSG2_VAL decimal(18,3) NULL,
+	HRSG2_COMP_VAL decimal(18,3) NULL,
+	STM_SUM decimal(18,3) NULL,
+	STM_COMP_SUM decimal(18,3) NULL,
+	SST_FR decimal(18,3) NULL,
+	SST_COMP_FR decimal(18,3) NULL,
+	BLCK_IN_VAL decimal(18,3) NULL,
+	BLCK_IN_COMP_VAL decimal(18,3) NULL,
+	BLCK_OUT_VAL decimal(18,3) NULL,
+	BLCK_OUT_COMP_VAL decimal(18,3) NULL,
+	STM_SRV_SUM decimal(18,3) NULL,
+	STM_SRV_COMP_SUM decimal(18,3) NULL,
+	STM_DBL_VAL decimal(18,3) NULL,
+	STM_DBL_COMP_VAL decimal(18,3) NULL,
+	STM_CUST_CHG_COMMENT varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	SST_STM_CUST_COMMENT varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	G1_VAL decimal(18,3) NULL,
+	G1_COMP_VAL decimal(18,3) NULL,
+	G2_VAL decimal(18,3) NULL,
+	G2_COMP_VAL decimal(18,3) NULL,
+	G3_VAL decimal(18,3) NULL,
+	G3_COMP_VAL decimal(18,3) NULL,
+	G4_VAL decimal(18,3) NULL,
+	G4_COMP_VAL decimal(18,3) NULL,
+	G5_VAL decimal(18,3) NULL,
+	G5_COMP_VAL decimal(18,3) NULL,
+	STG4_VAL decimal(18,3) NULL,
+	STG4_COMP_VAL decimal(18,3) NULL,
+	STG5_VAL decimal(18,3) NULL,
+	STG5_COMP_VAL decimal(18,3) NULL,
+	GEN_SUM_VAL decimal(18,3) NULL,
+	GEN_SUM_COMP_VAL decimal(18,3) NULL,
+	WATER_GEN_VAL decimal(18,3) NULL,
+	WATER_GEN_COMP_VAL decimal(18,3) NULL,
+	SPW_VAL_BEF decimal(18,3) NULL,
+	SPW_VAL decimal(18,3) NULL,
+	SPW_COMP_VAL decimal(18,3) NULL,
+	PWR_CUST_COMMENT varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	CUST_COMMNET1 varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	CUST_COMMNET2 varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	CUST_COMMNET3 varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	SST_STM_CUST_REMARK1 varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	SST_STM_CUST_REMARK2 varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	SST_STM_CUST_REMARK3 varchar(500) COLLATE Korean_Wansung_CI_AS NULL,
+	SILO_VAL decimal(18,3) NULL,
+	PORT_VAL decimal(18,3) NULL,
+	ASH_SILO_6VAL decimal(18,3) NULL,
+	ASH_SILO_8VAL decimal(18,3) NULL,
+	LNG_DAY_USE_QTY decimal(18,3) NULL,
+	LNG_MON_USE_QTY decimal(18,3) NULL,
+	LPG_DAY_USE_QTY decimal(18,3) NULL,
+	LPG_MON_USE_QTY decimal(18,3) NULL,
+	PURE_WAT_TANK_QT107 decimal(18,3) NULL,
+	PURE_WAT_TANK_QT207 decimal(18,3) NULL,
+	PURE_WAT_TANK_QT307 decimal(18,3) NULL,
+	PURE_WAT_TANK_QT407 decimal(18,3) NULL,
+	CREATE_DTIME datetime NULL,
+	UPDATE_DTIME datetime NULL,
+	CONSTRAINT T_PWR_MAIN_DRV_RST_PK PRIMARY KEY (DRV_DATE,CMP_DATE)
+);
+
+
+-- hanju.dbo.T_SYS_PROP definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_SYS_PROP;
+
+CREATE TABLE hanju.dbo.T_SYS_PROP (
+	Code varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	Value varchar(MAX) COLLATE Korean_Wansung_CI_AS NULL,
+	credt date NULL,
+	moddt date NULL,
+	creid varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	modid varchar(2000) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.T_TEST definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_TEST;
+
+CREATE TABLE hanju.dbo.T_TEST (
+	SDT varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	EDT varchar(100) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.T_WORK definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_WORK;
+
+CREATE TABLE hanju.dbo.T_WORK (
+	a varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	b varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	c varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	d varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	e varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	f varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	g varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	h varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	i varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	j varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	k varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	l varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	m varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	n varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	o varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	p varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	q varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	r varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	s varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	t varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	u varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	v varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	w varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	x varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	y varchar(1000) COLLATE Korean_Wansung_CI_AS NULL,
+	z varchar(1000) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.T_hmi_sss definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.T_hmi_sss;
+
+CREATE TABLE hanju.dbo.T_hmi_sss (
+	MC_ID varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	aa varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	ttt varchar(2000) COLLATE Korean_Wansung_CI_AS NULL
+);
+ CREATE NONCLUSTERED INDEX T_hmi_sss_MC_ID_IDX ON hanju.dbo.T_hmi_sss (  MC_ID ASC  , aa ASC  )  
+	 WITH (  PAD_INDEX = OFF ,FILLFACTOR = 100  ,SORT_IN_TEMPDB = OFF , IGNORE_DUP_KEY = OFF , STATISTICS_NORECOMPUTE = OFF , ONLINE = OFF , ALLOW_ROW_LOCKS = ON , ALLOW_PAGE_LOCKS = ON  )
+	 ON [PRIMARY ] ;
+
+
+-- hanju.dbo.UTLSUPPF definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.UTLSUPPF;
+
+CREATE TABLE hanju.dbo.UTLSUPPF (
+	CSTEXTCDE varchar(5) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	CURYEAR numeric(4,0) NOT NULL,
+	CURMONTH numeric(2,0) NOT NULL,
+	CURDAY numeric(2,0) NOT NULL,
+	EL11EVNT1 decimal(18,3) NULL,
+	EL11EVNT2 decimal(18,3) NULL,
+	EL11EVNT3 decimal(18,3) NULL,
+	EL11READJ1 decimal(18,3) NULL,
+	EL11READJ2 decimal(18,3) NULL,
+	EL11READJ3 decimal(18,3) NULL,
+	EL22EVNT1 decimal(18,3) NULL,
+	EL22EVNT2 decimal(18,3) NULL,
+	EL22EVNT3 decimal(18,3) NULL,
+	EL22READJ1 decimal(18,3) NULL,
+	EL22READJ2 decimal(18,3) NULL,
+	EL22READJ3 decimal(18,3) NULL,
+	SWPPEVENT decimal(18,3) NULL,
+	SWPPADJ decimal(18,3) NULL,
+	SWHPEVENT decimal(18,3) NULL,
+	SWHPADJ decimal(18,3) NULL,
+	SWMPEVENT decimal(18,3) NULL,
+	SWMPADJ decimal(18,3) NULL,
+	SWLPEVENT decimal(18,3) NULL,
+	SWLPADJ decimal(18,3) NULL,
+	SWDWEVENT decimal(18,3) NULL,
+	SWDWADJ decimal(18,3) NULL,
+	SWFWEVENT decimal(18,3) NULL,
+	SWFWADJ decimal(18,3) NULL,
+	SAVE_DTIME datetime NULL,
+	CONSTRAINT PK_UTLSUPPF PRIMARY KEY (CSTEXTCDE,CURYEAR,CURMONTH,CURDAY)
+);
+
+
+-- hanju.dbo.Z_PROC_HIST definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.Z_PROC_HIST;
+
+CREATE TABLE hanju.dbo.Z_PROC_HIST (
+	EventType nvarchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PostTime datetime NOT NULL,
+	ObjectName nvarchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	DatabaseName nvarchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	ObjectType nvarchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	CommandText nvarchar(MAX) COLLATE Korean_Wansung_CI_AS NULL,
+	ClientIp sql_variant NULL,
+	ClientName nvarchar(128) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT PK_Z_PROC_HIST PRIMARY KEY (EventType,PostTime,ObjectName)
+);
+
+
+-- hanju.dbo.dateDummyTable definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.dateDummyTable;
+
+CREATE TABLE hanju.dbo.dateDummyTable (
+	idx int NOT NULL,
+	dummyDate varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	dw int NULL
+);
+
+
+-- hanju.dbo.spt_fallback_db definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.spt_fallback_db;
+
+CREATE TABLE hanju.dbo.spt_fallback_db (
+	xserver_name varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	xdttm_ins datetime NOT NULL,
+	xdttm_last_ins_upd datetime NOT NULL,
+	xfallback_dbid smallint NULL,
+	name varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	dbid smallint NOT NULL,
+	status smallint NOT NULL,
+	version smallint NOT NULL
+);
+
+
+-- hanju.dbo.spt_fallback_dev definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.spt_fallback_dev;
+
+CREATE TABLE hanju.dbo.spt_fallback_dev (
+	xserver_name varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	xdttm_ins datetime NOT NULL,
+	xdttm_last_ins_upd datetime NOT NULL,
+	xfallback_low int NULL,
+	xfallback_drive char(2) COLLATE Korean_Wansung_CI_AS NULL,
+	low int NOT NULL,
+	high int NOT NULL,
+	status smallint NOT NULL,
+	name varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	phyname varchar(127) COLLATE Korean_Wansung_CI_AS NOT NULL
+);
+
+
+-- hanju.dbo.spt_fallback_usg definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.spt_fallback_usg;
+
+CREATE TABLE hanju.dbo.spt_fallback_usg (
+	xserver_name varchar(30) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	xdttm_ins datetime NOT NULL,
+	xdttm_last_ins_upd datetime NOT NULL,
+	xfallback_vstart int NULL,
+	dbid smallint NOT NULL,
+	segmap int NOT NULL,
+	lstart int NOT NULL,
+	sizepg int NOT NULL,
+	vstart int NOT NULL
+);
+
+
+-- hanju.dbo.spt_monitor definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.spt_monitor;
+
+CREATE TABLE hanju.dbo.spt_monitor (
+	lastrun datetime NOT NULL,
+	cpu_busy int NOT NULL,
+	io_busy int NOT NULL,
+	idle int NOT NULL,
+	pack_received int NOT NULL,
+	pack_sent int NOT NULL,
+	connections int NOT NULL,
+	pack_errors int NOT NULL,
+	total_read int NOT NULL,
+	total_write int NOT NULL,
+	total_errors int NOT NULL
+);
+
+
+-- hanju.dbo.t_daily_peak definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.t_daily_peak;
+
+CREATE TABLE hanju.dbo.t_daily_peak (
+	InstrumentId varchar(20) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PeakDate datetime NOT NULL,
+	DailyPeakValue decimal(18,3) NOT NULL,
+	ExtendedPeakValue decimal(18,3) NOT NULL,
+	dt_type varchar(100) COLLATE Korean_Wansung_CI_AS DEFAULT 'D' NULL,
+	CONSTRAINT t_daily_peak_pk PRIMARY KEY (InstrumentId,PeakDate)
+);
+
+
+-- hanju.dbo.t_hmi_correction definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.t_hmi_correction;
+
+CREATE TABLE hanju.dbo.t_hmi_correction (
+	corr_seq int NOT NULL,
+	corr_mc_id varchar(100) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	corr_dt datetime NULL,
+	corr_reason varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	process_complete varchar(4) COLLATE Korean_Wansung_CI_AS DEFAULT 'S' NULL,
+	cre_dt datetime NULL,
+	cre_id varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	proc_start_dt datetime NULL,
+	proc_end_dt datetime NULL,
+	mod_dt datetime NULL,
+	mod_id varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	CONSTRAINT t_hmi_correction_pk PRIMARY KEY (corr_seq)
+);
+
+
+-- hanju.dbo.t_log definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.t_log;
+
+CREATE TABLE hanju.dbo.t_log (
+	LOG_KEY varchar(500) COLLATE Korean_Wansung_CI_AS NOT NULL,
+	PROC_NM varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	PRAMS varchar(4000) COLLATE Korean_Wansung_CI_AS NULL,
+	IsSuccess varchar(10) COLLATE Korean_Wansung_CI_AS NULL,
+	Message varchar(4000) COLLATE Korean_Wansung_CI_AS NULL,
+	ReturnCnt varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	S_DT datetime NULL,
+	E_DT datetime NULL,
+	SS_USER_ID varchar(100) COLLATE Korean_Wansung_CI_AS NULL,
+	SS_TOKEN varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	SS_ACCESS_TOKEN_ID varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	SS_REFRESH_TOKEN varchar(2000) COLLATE Korean_Wansung_CI_AS NULL,
+	Client_ip varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	ComponentName varchar(200) COLLATE Korean_Wansung_CI_AS NULL,
+	WEB_IP varchar(100) COLLATE Korean_Wansung_CI_AS NULL
+);
+
+
+-- hanju.dbo.timeDummyTable definition
+
+-- Drop table
+
+-- DROP TABLE hanju.dbo.timeDummyTable;
+
+CREATE TABLE hanju.dbo.timeDummyTable (
+	idx int NOT NULL,
+	dummyTime char(5) COLLATE Korean_Wansung_CI_AS NULL,
+	dw int NULL
+);
