@@ -1,4 +1,5 @@
-1<script setup>
+1
+<script setup>
   import { RequestService } from '@/service/RequestService';
   import { buildQueryPayload } from '@/utils/apiUtils';
   import { formatDate } from '@/utils/formatters';
@@ -104,6 +105,11 @@
     <DataTable :value="requests" dataKey="id" selectionMode="single" paginator :rows="10" :rowsPerPageOptions="[10, 20, 50]" :loading="loading" v-model:selection="selectedRequest">
       <template #empty> not found </template>
 
+      <Column header="" style="width: 3rem">
+        <template #body="{ data }">
+          <i v-if="data.attachmentCount > 0" class="pi pi-file"></i>
+        </template>
+      </Column>
       <Column header="ID" field="id"> </Column>
       <Column header="작성일" filterField="createdAt" dataType="date" style="min-width: 8rem">
         <template #body="{ data }">

@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.ComponentModel;
 
 namespace JinRestApi.Endpoints;
 
@@ -92,12 +93,9 @@ public static class RequestEndpoints
             // 2) GET QueryString 과 병합
             var finalQuery = QueryCollectionMerger.Merge(http.Request.Query, bodyQuery);
 
-            // 3) DynamicFilterHelper 재사용
-
             var baseQuery = db.Requests.AsQueryable();
 
-            // 포함 관계 필요하면 Include 이후 ApplyAll 호출
-            var queryWithIncludes = baseQuery.Include(c => c.Attachments)
+            var queryWithIncludes = baseQuery
             .Include(c => c.Comments)
             .Include(r => r.Customer)
             .Include(r => r.Admin)
@@ -106,10 +104,85 @@ public static class RequestEndpoints
             // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
             var resultQuery = queryWithIncludes.ApplyAll(finalQuery);
 
+
+            Console.WriteLine($"resultQuery : {resultQuery}");
+
+// 필요한 모든 첨부파일을 한 번에 가져오기
+
+/*
+var attachments = await db.Attachments
+    .Where(a => a.EntityType == "ImprovementRequest" && requestIds.Contains(a.EntityId))
+    .ToListAsync();
+
+*/
+/*
+// 매핑
+var requests = tempRequests.Select(r => new {
+    Request = r,
+    Attachments = attachments.Where(a => a.EntityId == r.Id).ToList()
+}).ToList();
+
+*/
+            
+
     
             // ToListAsync 은 dynamic IQueryable 에서도 작동
             var requests = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
-            return requests;
+
+            // 모든 ImprovementRequest에 대한 첨부파일 수를 한 번에 조회
+            var attachmentCounts = await db.Attachments
+                .Where(a => a.EntityType == "ImprovementRequest")
+                .GroupBy(a => a.EntityId)
+                .Select(g => new { RequestId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            var attachmentCountMap = attachmentCounts.ToDictionary(x => x.RequestId, x => x.Count);
+
+            // 요청 목록에 AttachmentCount 추가
+            /*
+            var requestsWithAttachmentCount = requests.Select(r => {
+                var expando = new ExpandoObject() as IDictionary<string, object>;
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(r))
+                {
+                    expando.Add(property.Name, property.GetValue(r));
+                }
+                var requestId = (int)expando["Id"];
+                expando.TryAdd("AttachmentCount", attachmentCountMap.GetValueOrDefault(requestId, 0));
+
+
+                return expando;
+            })
+            .ToList();
+            ;
+            */
+            var requestsWithAttachmentCount = requests
+    //.Cast<object>()
+    .Select(r => {
+        var expando = new ExpandoObject() as IDictionary<string, object>;
+
+        //foreach (var prop in r.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(r))
+        {
+             expando.Add(property.Name, property.GetValue(r));
+        }
+
+        var requestId = (int)expando["Id"];
+        expando["AttachmentCount"] = attachmentCountMap.GetValueOrDefault(requestId, 0);
+
+        return expando;
+    })
+    .ToList();
+
+
+    Console.WriteLine($"requests : {requests}");
+    Console.WriteLine($"requestsWithAttachmentCount : {requestsWithAttachmentCount}");
+
+            return requestsWithAttachmentCount; //.ToDynamicListAsync()
+
+
+
+
+
         }, "Request srch successfully.", 201));
 
 

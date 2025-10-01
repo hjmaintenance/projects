@@ -3,6 +3,7 @@
   import { RequestService } from '@/service/RequestService';
   import { reactive, ref, onMounted, onBeforeUnmount } from 'vue';
   import { Editor, EditorContent, useEditor } from '@tiptap/vue-3';
+  import { useRouter } from 'vue-router';
 
   import StarterKit from '@tiptap/starter-kit';
   import { TextStyle } from '@tiptap/extension-text-style';
@@ -11,6 +12,7 @@
   import Image from '@tiptap/extension-image';
 
   const { loginUser } = useLayout();
+  const router = useRouter();
 
   const editor = useEditor({
     extensions: [Color.configure({ types: [TextStyle.name, ListItem.name] }), TextStyle.configure({ types: [ListItem.name] }), StarterKit, Image],
@@ -55,12 +57,13 @@
     formData.append('title', request.title);
     formData.append('description', request.description);
     formData.append('customerId', loginUser.value.user_uid);
-    
-    filesToUpload.value.forEach(file => {
+
+    filesToUpload.value.forEach((file) => {
       formData.append('files', file);
     });
 
     await RequestService.addWithAttachments(formData);
+    router.push('/user_request');
   };
 
   const handlePaste = (event) => {
@@ -97,20 +100,15 @@
     </div>
   </div>
 
-  <!-- 테스트를 위해 로그인 유저 정보를 찍어 본다. -->
-  <div>aaaaa{{ loginUser }}bbbb</div>
-
   <div class="card">
-
     <!-- 본문 작성 editor -->
     <editor-content :editor="editor" />
 
-
-<!-- 첨부파일 업로드 -->
-     <FileUpload name="files[]" @select="onFileSelect" :multiple="true" :maxFileSize="10000000" :showUploadButton="false" :showCancelButton="false">
-        <template #empty>
-            <p>이곳을 클릭하거나 파일을 드래그하여 첨부하세요.</p>
-        </template>
+    <!-- 첨부파일 업로드 -->
+    <FileUpload name="files[]" @select="onFileSelect" :multiple="true" :maxFileSize="10000000" :showUploadButton="false" :showCancelButton="false">
+      <template #empty>
+        <p>이곳을 클릭하거나 파일을 드래그하여 첨부하세요.</p>
+      </template>
     </FileUpload>
   </div>
 </template>

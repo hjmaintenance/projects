@@ -65,6 +65,7 @@ public static class RegisterEndpoints
                 string login_type = "";
                 string Photo = "";
                 string email = "";
+                string affiliation = ""; // 소속
                 bool mustChangePassword = false;
 
 
@@ -75,7 +76,7 @@ public static class RegisterEndpoints
 
                 if (req.LoginType == "admin")
                 {
-                    var admin = await db.Admins.FirstOrDefaultAsync(a => a.LoginId == req.LoginId);
+                    var admin = await db.Admins.Include(a => a.Team).FirstOrDefaultAsync(a => a.LoginId == req.LoginId);
 
                     
                     Console.WriteLine($"admin is null : {(admin is null)}");    
@@ -98,11 +99,12 @@ public static class RegisterEndpoints
                     email = admin.Email;
                     user_uid = admin.Id.ToString();
                     mustChangePassword = admin.MustChangePassword;
+                    affiliation = admin.Team?.Name ?? "";
                 }
                 else
                 {
 
-                    var user = await db.Customers.FirstOrDefaultAsync(u => u.LoginId == req.LoginId);
+                    var user = await db.Customers.Include(u => u.Company).FirstOrDefaultAsync(u => u.LoginId == req.LoginId);
                     if (user is null || !passwordService.VerifyPassword<Customer>(user, req.Password))
                     {
                         // 성공 경로가 아니므로 예외를 발생시켜 Builder의 catch 블록에서 처리하도록 합니다.
@@ -117,6 +119,7 @@ public static class RegisterEndpoints
                     Photo = user.Photo;
                     email = user.Email;
                     user_uid = user.Id.ToString();
+                    affiliation = user.Company?.Name ?? "";
 
                 }       
 
@@ -155,6 +158,7 @@ public static class RegisterEndpoints
                         login_type,
                         Photo,
                         email,
+                        affiliation, // 소속
                         mustChangePassword
                     }
                 };

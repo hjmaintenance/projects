@@ -1,22 +1,41 @@
+## 어럽다.. 잘 안된다는 사람이 있어
+
+가장 쉬운 방법은로.
+
+```
+1.
+DROP TABLE "__EFMigrationsHistory";
+
+
+2.
+dotnet ef migrations add InitTable
+dotnet ef database update
+
+
+```
+
+잘 될껍니다.
+
+문제는 항상 저렇게 해야함 ^^;
+
+아래는 이제 무시...
+
 ## 설명서
 
-
-
-
-
 마이그레이션 도구 dotnet-ef 설치
+
 ```
 dotnet tool install --global dotnet-ef
 
 ```
 
 마이그레이션 실행
+
 ```
 dotnet ef migrations add InitTable
 dotnet ef database update
 
 ```
-
 
 - 이게 잘 안되시는 분이 계실텐데.. 아무도 문의가 없긴 하군요.. ^^
 
@@ -26,62 +45,61 @@ dotnet ef database update
 
 - 마이그레이션의 설정을 아래와 같이 준비 합니다.
 
-
-
-
-
 ## Step by step
-
 
 1. Migrations 폴더 삭제
 
-
 2. 마이그레이션 초기 명령으로 최초 파일들을 생성
+
 ```
 dotnet ef migrations add InitialCreate
 ```
 
-3. Migrations 폴더 안에   날짜시간..._InitialCreate.cs 파일의 UP method 의 내용물 모두 삭제.. up 껍데기만 남겨 둔다.
-아래와 같은 모습으로.
+3. Migrations 폴더 안에 날짜시간...\_InitialCreate.cs 파일의 UP method 의 내용물 모두 삭제.. up 껍데기만 남겨 둔다.
+   아래와 같은 모습으로.
+
 ```
 
 /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
 
-        }  
+        }
 ```
 
 3.1 up 내용은 지우시는게 좋겠어요 . 아래 쿼리를 실행후 up 그대로 두고 아래 절차를 따른다.
+
 ```
  DELETE FROM jsini."__EFMigrationsHistory";
 ```
 
 4. 껍데기 마이그레이션을 한다.
+
 ```
 dotnet ef database update
 ```
 
-5. 실제 마이그레이션을 한다. 
+5. 실제 마이그레이션을 한다.
+
 ```
 dotnet ef migrations add 영문과숫자를이용한제목정도
 ```
 
-6. db 에 반영. 
+6. db 에 반영.
+
 ```
 dotnet ef database update
 ```
 
 7. 이후 부터는 JinRestApi 폴더에서 아래 명령을 이용하여 사용한다.
+
 ```
 dotnet ef migrations add 영문과숫자를이용한제목정도
 dotnet ef database update
 
 ```
 
-
 ## step by step 2
-
 
 ```
 
@@ -89,50 +107,50 @@ TRUNCATE table "__EFMigrationsHistory"
 
 ```
 
-  1. 모든 마이그레이션과 AppDbContextModelSnapshot.cs 파일을 삭제합니다.
-   2. 새 Initial 마이그레이션을 생성합니다.
-   ```
-   dotnet ef migrations add InitialCreate
-   ```
-   3. dotnet ef database update를 실행합니다(실패 예상).
-   
+1. 모든 마이그레이션과 AppDbContextModelSnapshot.cs 파일을 삭제합니다.
+2. 새 Initial 마이그레이션을 생성합니다.
+
+```
+dotnet ef migrations add InitialCreate
+```
+
+3.  dotnet ef database update를 실행합니다(실패 예상).
+
 ```
 dotnet ef database update
 ```
 
-   4. Initial 마이그레이션 파일의 Up 메서드 내용을 수동으로 삭제합니다.
+4.  Initial 마이그레이션 파일의 Up 메서드 내용을 수동으로 삭제합니다.
 
-   ```
-
-/// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-
-        }  
 ```
 
+/// <inheritdoc />
+     protected override void Up(MigrationBuilder migrationBuilder)
+     {
 
-   5. dotnet ef database update를 다시 실행하여 마이그레이션을 기록합니다.
+     }
+```
 
-   ```
+5.  dotnet ef database update를 다시 실행하여 마이그레이션을 기록합니다.
+
+```
 dotnet ef database update
 ```
 
+6.  Up 메서드 내용을 복원합니다.
 
-   6. Up 메서드 내용을 복원합니다.   
-   ```
+```
 
 /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+     protected override void Up(MigrationBuilder migrationBuilder)
+     {
 기존꺼 복구
-        }  
+     }
 ```
-   7. 모델에서 FileSize 속성을 제거하고 RemoveFileSize 마이그레이션을 생성합니다.
-   8. FileSize 속성을 다시 추가하고 AddFileSize 마이그레이션을 생성합니다.
-   9. dotnet ef database update를 실행합니다.
 
-
+7.  모델에서 FileSize 속성을 제거하고 RemoveFileSize 마이그레이션을 생성합니다.
+8.  FileSize 속성을 다시 추가하고 AddFileSize 마이그레이션을 생성합니다.
+9.  dotnet ef database update를 실행합니다.
 
 ```
 
@@ -200,4 +218,3 @@ dotnet ef database update
 
 
 ```
-
