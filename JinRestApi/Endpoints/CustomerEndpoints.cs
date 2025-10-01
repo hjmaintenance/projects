@@ -17,7 +17,7 @@ public static class CustomerEndpoints
         var group = routes.MapGroup("/api/customers");
 
         group.MapGet("/", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
-            () => db.Customers.Include(c => c.Attachments).Select(u => new { u.Id, u.UserName, u.LoginId, u.Sex, u.Photo, u.Email, u.CompanyId }).ToListAsync()
+            () => db.Customers.Select(u => new { u.Id, u.UserName, u.LoginId, u.Sex, u.Photo, u.Email, u.CompanyId }).ToListAsync()
         ));
 
         group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(

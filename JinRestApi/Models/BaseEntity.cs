@@ -36,7 +36,7 @@ namespace JinRestApi.Models
 
         public ICollection<Customer> Customers { get; set; } = new List<Customer>();
         public ICollection<TeamCompany> TeamCompanies { get; set; } = new List<TeamCompany>();
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
+        // public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
     }
 
 

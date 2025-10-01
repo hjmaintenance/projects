@@ -26,7 +26,8 @@ public static class RequestEndpoints
         // 요청 목록 (필터링 포함)
         group.MapGet("/", (AppDbContext db, ImprovementStatus? status) => ApiResponseBuilder.CreateAsync(() =>
         {
-            var query = db.Requests.Include(r => r.Comments).Include(r => r.Attachments).AsQueryable();
+            var query = db.Requests.Include(r => r.Comments)
+            .AsQueryable();
             if (status.HasValue)
                 query = query.Where(r => r.Status == status.Value);
             return query.ToListAsync();
@@ -36,10 +37,9 @@ public static class RequestEndpoints
         // 요청 상세
         group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
             () => db.Requests
-            //.Include(r => r.Comments)
-            //.Include(r => r.Customer)
-            //.Include(r => r.Admin)
-            //.Include(r => r.Attachments)
+            .Include(r => r.Comments)
+            .Include(r => r.Customer)
+            .Include(r => r.Admin)
             .FirstOrDefaultAsync(r => r.Id == id)
         ));
 
@@ -56,30 +56,10 @@ public static class RequestEndpoints
 
 
 
-        /*
-                // 검색
-                group.MapGet("/srch", (AppDbContext db, HttpContext http) => ApiResponseBuilder.CreateAsync(async () =>
-                {
-                    var baseQuery = db.Requests.AsQueryable();
-
-                    // 포함 관계 필요하면 Include 이후 ApplyAll 호출
-                    baseQuery = baseQuery.Include(c => c.Attachments).Include(r => r.Customer);
-
-                    // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
-                    var resultQuery = baseQuery.ApplyAll(http.Request.Query);
-
-                    // ToListAsync 은 dynamic IQueryable 에서도 작동
-                    var list = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
-                    return list;
-                }, "Request srch successfully.", 201));
-
-        */
-
 
         // 검색
         group.MapPost("/srch", (AppDbContext db, HttpContext http) => ApiResponseBuilder.CreateAsync(async () =>
         {
-
             // 1) JSON Body 읽기
             using var reader = new StreamReader(http.Request.Body);
             var body = await reader.ReadToEndAsync();
@@ -104,30 +84,10 @@ public static class RequestEndpoints
             // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
             var resultQuery = queryWithIncludes.ApplyAll(finalQuery);
 
-
-            Console.WriteLine($"resultQuery : {resultQuery}");
-
-// 필요한 모든 첨부파일을 한 번에 가져오기
-
-/*
-var attachments = await db.Attachments
-    .Where(a => a.EntityType == "ImprovementRequest" && requestIds.Contains(a.EntityId))
-    .ToListAsync();
-
-*/
-/*
-// 매핑
-var requests = tempRequests.Select(r => new {
-    Request = r,
-    Attachments = attachments.Where(a => a.EntityId == r.Id).ToList()
-}).ToList();
-
-*/
-            
-
-    
             // ToListAsync 은 dynamic IQueryable 에서도 작동
             var requests = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
+
+
 
             // 모든 ImprovementRequest에 대한 첨부파일 수를 한 번에 조회
             var attachmentCounts = await db.Attachments
@@ -138,57 +98,31 @@ var requests = tempRequests.Select(r => new {
 
             var attachmentCountMap = attachmentCounts.ToDictionary(x => x.RequestId, x => x.Count);
 
-            // 요청 목록에 AttachmentCount 추가
-            /*
-            var requestsWithAttachmentCount = requests.Select(r => {
-                var expando = new ExpandoObject() as IDictionary<string, object>;
-                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(r))
-                {
-                    expando.Add(property.Name, property.GetValue(r));
-                }
-                var requestId = (int)expando["Id"];
-                expando.TryAdd("AttachmentCount", attachmentCountMap.GetValueOrDefault(requestId, 0));
-
-
-                return expando;
-            })
-            .ToList();
-            ;
-            */
             var requestsWithAttachmentCount = requests
-    //.Cast<object>()
-    .Select(r => {
-        var expando = new ExpandoObject() as IDictionary<string, object>;
+                .Select(r =>
+                {
+                    var expando = new ExpandoObject() as IDictionary<string, object>;
+                    foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(r))
+                    {
+                        var camelCaseName = char.ToLowerInvariant(property.Name[0]) + property.Name[1..];
+                        expando.Add(camelCaseName, property.GetValue(r));
+                    }
 
-        //foreach (var prop in r.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-        foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(r))
-        {
-             expando.Add(property.Name, property.GetValue(r));
-        }
+                    var requestId = (int)expando["id"];
+                    expando["attachmentCount"] = attachmentCountMap.GetValueOrDefault(requestId, 0);
 
-        var requestId = (int)expando["Id"];
-        expando["AttachmentCount"] = attachmentCountMap.GetValueOrDefault(requestId, 0);
+                    if (attachmentCountMap.ContainsKey(requestId))
+                    { expando["attachments"] = db.Attachments.Where(a => a.EntityType == "ImprovementRequest" && a.EntityId == requestId).ToList(); 
+                    }
 
-        return expando;
-    })
-    .ToList();
+                    return expando;
+                })
+                .ToList()
+                ;
 
-
-    Console.WriteLine($"requests : {requests}");
-    Console.WriteLine($"requestsWithAttachmentCount : {requestsWithAttachmentCount}");
-
-            return requestsWithAttachmentCount; //.ToDynamicListAsync()
-
-
-
-
+            return requestsWithAttachmentCount;
 
         }, "Request srch successfully.", 201));
-
-
-
-
-
 
 
         group.MapPost("/", async (HttpRequest httpRequest, AppDbContext db, IRabbitMqConnectionProvider provider, ILoggerFactory loggerFactory) =>
@@ -203,7 +137,7 @@ var requests = tempRequests.Select(r => new {
             );
             var files = form.Files;
 
-            var result = await ApiResponseBuilder.CreateAsync(async () => 
+            var result = await ApiResponseBuilder.CreateAsync(async () =>
             {
                 // 1. ImprovementRequest 생성 및 저장
                 var request = new ImprovementRequest

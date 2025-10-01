@@ -9,6 +9,15 @@
   import DataTable from 'primevue/datatable';
   import Column from 'primevue/column';
 
+
+
+  import { useRouter } from 'vue-router';
+
+  const router = useRouter();
+
+
+
+
   const { loginUser } = useLayout();
 
   const loading = ref(null);
@@ -54,6 +63,8 @@
 
   watch(selectedRequest, async (newValue, oldValue) => {
     if (newValue) {
+
+      router.push(`/request_detail?id=${newValue.id}`);
       visible.value = true;
       const fullRequestData = await RequestService.get(newValue.id);
       selectedRequest.value.description = fullRequestData.description;

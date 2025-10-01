@@ -101,6 +101,31 @@
   };
 
 
+  const getIconForFile = (fileName) => {
+    if (!fileName) return 'pi-file';
+    const extension = fileName.split('.').pop().toLowerCase();
+    switch (extension) {
+      case 'pdf':
+        return 'pi-file-pdf';
+      case 'png':
+      case 'jpg':
+      case 'jpeg':
+      case 'gif':
+        return 'pi-image';
+      case 'doc':
+      case 'docx':
+        return 'pi-file-word';
+      case 'xls':
+      case 'xlsx':
+        return 'pi-file-excel';
+      case 'zip':
+      case 'rar':
+        return 'pi-file-zip';
+      default:
+        return 'pi-file';
+    }
+  };
+
 
 </script>
 
@@ -110,7 +135,7 @@
       <Button type="button" label="reload" severity="primary" @click="getDetail"></Button>
       
       <!-- Show buttons based on current status -->
-      <template v-if="selectedRequest">
+      <template v-if="selectedRequest && loginUser?.loginType === 'admin'">
         <!-- Status 0 (Pending): Can move to In Progress (1) or Delete (4) -->
         <Button v-if="selectedRequest.status === 0" type="button" :label="`이거 ${loginUser?.user_name} 접수 할께요`" severity="primary" @click="updateRequestStatus('IN_PROGRESS')"></Button>
         <Button v-if="selectedRequest.status === 0" type="button" label="삭제" severity="danger" @click="updateRequestStatus('DELETE')"></Button>
@@ -142,6 +167,17 @@
        v-html="selectedRequest?.description"
       >
       </div>  
+
+      <div v-if="selectedRequest?.attachments?.length > 0" class="mt-4">
+        <hr class=" border-gray-400"/>
+        <h4 class="mt-4">첨부 파일</h4>
+        <ul>
+          <li v-for="attachment in selectedRequest.attachments" :key="attachment.id" class="flex items-center space-x-2">
+            <i :class="['pi', getIconForFile(attachment.originalFileName)]"></i>
+            <a :href="`/api/attachments/download/${attachment.id}`" target="_blank" download>{{ attachment.originalFileName }}</a>
+          </li>
+        </ul>
+      </div>
 
     </div>
 

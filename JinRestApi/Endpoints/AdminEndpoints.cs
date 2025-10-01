@@ -18,11 +18,11 @@ public static class AdminEndpoints
         var group = routes.MapGroup("/api/admins");
 
         group.MapGet("/", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
-            () => db.Admins.Include(a => a.Attachments).ToListAsync()
+            () => db.Admins.ToListAsync()
         ));
 
         group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
-            () => db.Admins.Include(a => a.Attachments).FirstOrDefaultAsync(a => a.Id == id)
+            () => db.Admins.FirstOrDefaultAsync(a => a.Id == id)
         ));
 
         group.MapPost("/", (AppDbContext db, AdminCreateDto adminDto) => ApiResponseBuilder.CreateAsync(async () =>
