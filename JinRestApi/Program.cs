@@ -22,7 +22,7 @@ IConnection? connection = null;
 try
 {
     var rabbitMqHostName = builder.Configuration["RabbitMQ:HostName"] ?? "localhost";
-    Console.WriteLine($"[ERROR] 111111111.");
+  
 
     IConnectionFactory factory = new ConnectionFactory()
     {
@@ -30,11 +30,11 @@ try
         DispatchConsumersAsync = true
     };
 
-    Console.WriteLine($"[ERROR] 22222.");
+   
 
     connection = factory.CreateConnection();
 
-    Console.WriteLine($"[ERROR] 333333.");
+  
 }
 catch (BrokerUnreachableException ex)
 {
@@ -50,7 +50,7 @@ builder.Services.AddSingleton<IRabbitMqConnectionProvider>(
     new RabbitMqConnectionProvider(connection)
 );
 
-Console.WriteLine($"[ERROR] 444444.");
+
 
 /*
 
@@ -80,6 +80,13 @@ catch (RabbitMQ.Client.Exceptions.BrokerUnreachableException ex)
 
 // IHttpContextAccessor를 등록하여 서비스 내에서 HttpContext에 접근할 수 있도록 합니다.
 builder.Services.AddHttpContextAccessor();
+
+// JSON 직렬화 시 순환 참조 문제를 해결하기 위한 설정
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+{
+    //options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -135,6 +142,8 @@ app.MapRequestEndpoints();
 app.MapCommentEndpoints();
 app.MapAttachmentEndpoints();
 app.MapDashboardEndpoints();
+app.MapNoticeEndpoints();
+app.MapFileUploadEndpoints();
 
 
 

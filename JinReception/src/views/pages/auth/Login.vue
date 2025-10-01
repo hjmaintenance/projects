@@ -110,30 +110,39 @@
             </div>
             <Button label="Sign In" class="w-full" @click="submit"></Button>
           </div>
+            <div v-if="errorMsg" style="color: red">{{ errorMsg }}</div>
         </div>
       </div>
     </div>
 
     
 
-          </div>
-        </div>
-      </div>
-
       
-            <div v-if="errorMsg" style="color: red">{{ errorMsg }}</div>
 
-            <Button label="김고객" id="bbb" pw="cccc" class="mr-2" @click="submit2"></Button>
-            <Button label="박고객" id="aaa" pw="cccc" class="mr-2" @click="submit2"></Button>
+<div>
 
-            <Button label="운영자" id="manager" pw="cccc" utype="admin" @click="submit2"></Button>
-            <Button label="강대현" id="kdh" pw="cccc" utype="admin" @click="submit2"></Button>
-            <Button label="관리자" id="admin" pw="cccc" utype="admin" @click="submit2"></Button>
-          </div>
-        </div>
+  
+
+            <h6>접수자</h6><br />
+            <ol>
+            
+            <li><Button label="김고객" id="bbb" pw="cccc" class="mr-2" @click="submit2"></Button>       </li>   
+            <li><Button label="박고객" id="aaa" pw="cccc" class="mr-2" @click="submit2"></Button></li>
+            </ol>
+
+
+            <h6>관리자</h6>
+            <ol>
+            <li><Button label="운영자" id="manager" pw="cccc" utype="admin" @click="submit2"></Button></li>
+            <li><Button label="강대현" id="kdh" pw="cccc" utype="admin" @click="submit2"></Button></li>
+            <li><Button label="관리자" id="admin" pw="cccc" utype="admin" @click="submit2"></Button></li>
+    </ol>
+
+
+</div>
+
+
       </div>
-    </div>
-  </div>
 </template>
 
 <style scoped>

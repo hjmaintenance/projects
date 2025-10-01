@@ -10,6 +10,14 @@ const _RequestService = {
     const res = await apiClient.post('/requests', request);
     return res.data.data;
   },
+  async addWithAttachments(formData) {
+    const res = await apiClient.post('/requests', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return res.data.data;
+  },
   async get(id) {
     //const res = await apiClient.get(`/requests/${id}`);
 
@@ -19,6 +27,16 @@ const _RequestService = {
   },
   async accept(request) {
     const res = await apiClient.put(`/requests/${request.id}`, request);
+    return res.data.data;
+  },
+
+  async getComments(requestId) {
+    const res = await apiClient.get(`/requests/${requestId}/comments`);
+    return res.data.data;
+  },
+
+  async addComment(comment) {
+    const res = await apiClient.post('/comments', comment);
     return res.data.data;
   },
 };

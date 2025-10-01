@@ -40,17 +40,6 @@ namespace JinRestApi.Models
     }
 
 
-    /// <summary>팀</summary>
-    public class Team : BaseEntity
-    {
-        /// <summary>팀 명</summary>
-        public string Name { get; set; } = string.Empty;
-
-        public ICollection<Admin> Admins { get; set; } = new List<Admin>();
-        public ICollection<TeamCompany> TeamCompanies { get; set; } = new List<TeamCompany>();
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
-    }
-
     /// <summary>팀-회사 관계 (N:N)</summary>
     public class TeamCompany
     {
@@ -81,42 +70,4 @@ namespace JinRestApi.Models
         Delete
     }
 
-    /// <summary>개선 요청 덧글</summary>
-    public class ImprovementComment : BaseEntity
-    {
-        /// <summary>개선 요청 ID</summary>
-        public int RequestId { get; set; }
-
-        public ImprovementRequest? Request { get; set; }
-
-        /// <summary>덧글 내용</summary>
-        public string CommentText { get; set; } = string.Empty;
-
-        /// <summary>작성자 구분</summary>
-        public string AuthorType { get; set; } = "Customer"; // "Customer" or "Admin"
-
-        /// <summary>작성자 ID</summary>
-        public int AuthorId { get; set; }
-
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
-    }
-
-    /// <summary>공통 첨부파일</summary>
-    public class Attachment : BaseEntity
-    {
-        /// <summary>연결된 엔티티 타입</summary>
-        public string EntityType { get; set; } = string.Empty;  // "ImprovementRequest", "Team", "Company", "Comment"
-
-        /// <summary>연결된 엔티티 PK</summary>
-        public int EntityId { get; set; }
-
-        /// <summary>파일명</summary>
-        public string FileName { get; set; } = string.Empty;
-
-        /// <summary>파일 경로</summary>
-        public string FilePath { get; set; } = string.Empty;
-
-        /// <summary>업로드 일시</summary>
-        public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
-    }
 }

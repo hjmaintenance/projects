@@ -37,5 +37,6 @@
 - 고객 관리 ![Badge](https://img.shields.io/badge/frogtok-red)
 - 나의 정보 수정
 - 권한 관리
+- 대댓글 ![Badge](https://img.shields.io/badge/puni-skyblue)
 - 공지관리 ![Badge](https://img.shields.io/badge/SuJiMOON-red)
 - 관리자 모니터링 ![Badge](https://img.shields.io/badge/quri-red)

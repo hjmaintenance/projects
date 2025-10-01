@@ -1,6 +1,20 @@
 import { computed, reactive, ref } from 'vue';
 
-const loginUser = ref(null);
+const getInitialUser = () => {
+  const userJSON = localStorage.getItem('loginUser');
+  if (userJSON) {
+    try {
+      return JSON.parse(userJSON);
+    } catch (e) {
+      console.error('Failed to parse loginUser from localStorage', e);
+      localStorage.removeItem('loginUser');
+      return null;
+    }
+  }
+  return null;
+};
+
+const loginUser = ref(getInitialUser());
 
 function setLoginUser(userData) {
   loginUser.value = userData;
@@ -15,18 +29,6 @@ function clearLoginUser() {
   loginUser.value = null;
   localStorage.removeItem('jwt_token');
   localStorage.removeItem('loginUser');
-}
-
-function initLoginUser() {
-  const userJSON = localStorage.getItem('loginUser');
-  if (userJSON) {
-    try {
-      loginUser.value = JSON.parse(userJSON);
-    } catch (e) {
-      console.error('Failed to parse loginUser from localStorage', e);
-      clearLoginUser();
-    }
-  }
 }
 
 const layoutConfig = reactive({
@@ -50,8 +52,6 @@ const layoutState = reactive({
 export function useLayout() {
   const initializeTheme = () => {
     if (layoutConfig.darkTheme) {
-      initLoginUser();
-
       document.documentElement.classList.add('app-dark');
     } else {
       document.documentElement.classList.remove('app-dark');
@@ -112,7 +112,6 @@ export function useLayout() {
     setActiveMenuItem,
     setLoginUser,
     clearLoginUser,
-    initLoginUser,
     toggleDarkMode,
     initializeTheme
   };

@@ -1,4 +1,5 @@
 <script setup>
+  import { useLayout } from '@/layout/composables/layout';
   import { RequestService } from '@/service/RequestService';
   import { reactive, ref, onMounted, onBeforeUnmount } from 'vue';
   import { Editor, EditorContent, useEditor } from '@tiptap/vue-3';
@@ -7,9 +8,9 @@
   import { TextStyle } from '@tiptap/extension-text-style';
   import { Color } from '@tiptap/extension-color';
   import ListItem from '@tiptap/extension-list-item';
-
-  // import StarterKit from '@tiptap/starter-kit';
   import Image from '@tiptap/extension-image';
+
+  const { loginUser } = useLayout();
 
   const editor = useEditor({
     extensions: [Color.configure({ types: [TextStyle.name, ListItem.name] }), TextStyle.configure({ types: [ListItem.name] }), StarterKit, Image],
@@ -21,7 +22,12 @@
 — quristyle</blockquote><p/><p/><p/><p/><p/><p/><p/>`
   });
 
-  // 라이프사이클
+  const filesToUpload = ref([]);
+
+  const onFileSelect = (event) => {
+    filesToUpload.value = event.files;
+  };
+
   onMounted(() => {
     document.addEventListener('paste', handlePaste);
   });
@@ -31,27 +37,30 @@
     editor.value?.destroy();
   });
 
-  // onMounted(() => {
-  //   document.addEventListener('paste', handlePaste)
-  // })
-
-  // onBeforeUnmount(() => {
-  //   document.removeEventListener('paste', handlePaste)
-  // })
-
   const request = reactive({
     title: '',
-    description: '',
-    customerId: localStorage.getItem('user.user_uid')
+    description: ''
   });
 
   const save = async () => {
-    const html = editor.value.getHTML();
-    console.log(html);
+    if (!loginUser.value || !loginUser.value.user_uid) {
+      alert('사용자 정보가 없습니다. 다시 로그인해주세요.');
+      return;
+    }
 
+    const html = editor.value.getHTML();
     request.description = html;
 
-    await RequestService.add(request);
+    const formData = new FormData();
+    formData.append('title', request.title);
+    formData.append('description', request.description);
+    formData.append('customerId', loginUser.value.user_uid);
+    
+    filesToUpload.value.forEach(file => {
+      formData.append('files', file);
+    });
+
+    await RequestService.addWithAttachments(formData);
   };
 
   const handlePaste = (event) => {
@@ -66,15 +75,13 @@
 
         reader.onload = (readerEvent) => {
           const base64 = readerEvent.target.result;
-          //  editor.chain().focus().setImage({ src: base64 }).run();
-
           if (editor && editor.value) {
             editor.value.chain().focus().setImage({ src: base64 }).run();
           }
         };
 
         reader.readAsDataURL(file);
-        event.preventDefault(); // 기본 붙여넣기 방지
+        event.preventDefault();
       }
     }
   };
@@ -90,7 +97,20 @@
     </div>
   </div>
 
+  <!-- 테스트를 위해 로그인 유저 정보를 찍어 본다. -->
+  <div>aaaaa{{ loginUser }}bbbb</div>
+
   <div class="card">
+
+    <!-- 본문 작성 editor -->
     <editor-content :editor="editor" />
+
+
+<!-- 첨부파일 업로드 -->
+     <FileUpload name="files[]" @select="onFileSelect" :multiple="true" :maxFileSize="10000000" :showUploadButton="false" :showCancelButton="false">
+        <template #empty>
+            <p>이곳을 클릭하거나 파일을 드래그하여 첨부하세요.</p>
+        </template>
+    </FileUpload>
   </div>
 </template>

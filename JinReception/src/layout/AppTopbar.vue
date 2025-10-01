@@ -10,7 +10,7 @@
   const confirm = useConfirm();
 
   const toast = useToast();
-  const { toggleMenu, toggleDarkMode, isDarkTheme, loginUser, clearLoginUser } = useLayout();
+  const { toggleMenu, toggleDarkMode, isDarkTheme, loginUser, clearLoginUser,initLoginUser } = useLayout();
   const router = useRouter();
   const menu = ref();
 
@@ -121,6 +121,8 @@
         <i class="pi pi-ellipsis-v"></i>
       </button>
 
+
+      <button @onclick="initLoginUser"></button>
       <!--
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">

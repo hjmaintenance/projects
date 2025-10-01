@@ -52,7 +52,7 @@ dotnet ef migrations add InitialCreate
         }  
 ```
 
-3.1 up 을 지우는게 부담된다면 아래 쿼리를 실행후 up 그대로 두고 아래 절차를 따른다.
+3.1 up 내용은 지우시는게 좋겠어요 . 아래 쿼리를 실행후 up 그대로 두고 아래 절차를 따른다.
 ```
  DELETE FROM jsini."__EFMigrationsHistory";
 ```
@@ -80,5 +80,124 @@ dotnet ef database update
 ```
 
 
+## step by step 2
 
+
+```
+
+TRUNCATE table "__EFMigrationsHistory"
+
+```
+
+  1. 모든 마이그레이션과 AppDbContextModelSnapshot.cs 파일을 삭제합니다.
+   2. 새 Initial 마이그레이션을 생성합니다.
+   ```
+   dotnet ef migrations add InitialCreate
+   ```
+   3. dotnet ef database update를 실행합니다(실패 예상).
+   
+```
+dotnet ef database update
+```
+
+   4. Initial 마이그레이션 파일의 Up 메서드 내용을 수동으로 삭제합니다.
+
+   ```
+
+/// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+
+        }  
+```
+
+
+   5. dotnet ef database update를 다시 실행하여 마이그레이션을 기록합니다.
+
+   ```
+dotnet ef database update
+```
+
+
+   6. Up 메서드 내용을 복원합니다.   
+   ```
+
+/// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+기존꺼 복구
+        }  
+```
+   7. 모델에서 FileSize 속성을 제거하고 RemoveFileSize 마이그레이션을 생성합니다.
+   8. FileSize 속성을 다시 추가하고 AddFileSize 마이그레이션을 생성합니다.
+   9. dotnet ef database update를 실행합니다.
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TRUNCATE table "__EFMigrationsHistory"
+
+
+rm -rf Migrations
+
+dotnet ef migrations add InitialCreate -- --ignore-changes
+
+
+
+
+
+
+
+
+
+
+
+
+using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+#nullable disable
+
+namespace JinRestApi.Migrations
+{
+    /// <inheritdoc />
+    public partial class InitialCreate : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        { }
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        { }
+    }
+}
+
+
+
+
+dotnet ef database update
+
+
+dotnet ef migrations add renew1234
+
+
+dotnet ef database update
+
+
+```
 
