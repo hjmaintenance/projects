@@ -1,33 +1,19 @@
 <script setup>
-  import { useLayout } from '@/layout/composables/layout';
-  import { computed, ref, watch, onMounted } from 'vue';
-
-  import { $t, updatePreset, updateSurfacePalette } from '@primeuix/themes';
-
-  import AppFooter from './AppFooter.vue';
-  import AppSidebar from './AppSidebar.vue';
-  import AppTopbar from './AppTopbar.vue';
-
-  import Aura from '@primeuix/themes/aura';
-  import Lara from '@primeuix/themes/lara';
-  import Nora from '@primeuix/themes/nora';
-
+  import { ref } from 'vue';
+  import { storeToRefs } from 'pinia';
+  import { useBreadcrumbStore } from '@/store/breadcrumb';
 
   const home = ref({
-    icon: 'pi pi-home'
-});
-const items = ref([
-    { label: 'Electronics' },
-    { label: 'Computer' },
-    { label: 'Accessories' },
-    { label: 'Keyboard' },
-    { label: 'Wireless' }
-]);
+    icon: 'pi pi-home',
+    to: '/'
+  });
+
+  const breadcrumbStore = useBreadcrumbStore();
+  const { items } = storeToRefs(breadcrumbStore);
 </script>
 
 <template>
-  
-        <div class="flex justify-start card">
-          <Breadcrumb :home="home" :model="items" />
-        </div>
+  <div class="flex justify-start card">
+    <Breadcrumb :home="home" :model="items" />
+  </div>
 </template>

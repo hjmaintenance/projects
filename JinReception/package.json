@@ -20,6 +20,7 @@
         "axios": "^1.12.2",
         "chart.js": "3.3.2",
         "jwt-decode": "^4.0.0",
+        "pinia": "^3.0.3",
         "primeicons": "^7.0.0",
         "primevue": "^4.3.1",
         "tailwindcss-primeui": "^0.5.0",

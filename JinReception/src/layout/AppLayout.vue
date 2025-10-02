@@ -1,6 +1,8 @@
 <script setup>
   import { useLayout } from '@/layout/composables/layout';
   import { computed, ref, watch, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { useBreadcrumbStore } from '@/store/breadcrumb';
 
   import { $t, updatePreset, updateSurfacePalette } from '@primeuix/themes';
 
@@ -12,6 +14,17 @@
   import Aura from '@primeuix/themes/aura';
   import Lara from '@primeuix/themes/lara';
   import Nora from '@primeuix/themes/nora';
+
+  const route = useRoute();
+  const breadcrumbStore = useBreadcrumbStore();
+
+  watch(
+    route,
+    (newRoute) => {
+      breadcrumbStore.updateBreadcrumbs(newRoute.path);
+    },
+    { immediate: true }
+  );
 
   //import { $t } from '@primeuix/themes';
 
