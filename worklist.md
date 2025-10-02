@@ -13,12 +13,12 @@
 </div>
 
 ## 시스템
-- 한주 system 기초 데이터 생성.
+- 한주 system 기초 데이터 생성. ![Badge](https://img.shields.io/badge/quri-red)
+- 광케이블 - moxa - ip,port - vcom - kepware - datalogger - postgresql 까지의 설정 연결 교육 ![Badge](https://img.shields.io/badge/상기-red)
 
 ## 공통
 
 - 권한 ![Badge](https://img.shields.io/badge/quri-red)
-- 메뉴 네비 상단어느곳 적당히
 - page infomation & help page & 배포관리 ![Badge](https://img.shields.io/badge/강-red)
 
 ## 인증전
