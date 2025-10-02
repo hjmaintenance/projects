@@ -12,11 +12,11 @@ public static class CommentEndpoints
         var group = routes.MapGroup("/api/comments");
 
         group.MapGet("/", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
-            () => db.Comments.Include(c => c.Attachments).ToListAsync()
+            () => db.Comments.ToListAsync()
         ));
 
         group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
-            () => db.Comments.Include(c => c.Attachments).FirstOrDefaultAsync(c => c.Id == id)
+            () => db.Comments.FirstOrDefaultAsync(c => c.Id == id)
         ));
 
         group.MapPost("/", (AppDbContext db, ImprovementComment comment) => ApiResponseBuilder.CreateAsync(async () =>

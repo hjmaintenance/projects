@@ -29,6 +29,6 @@ public class Customer : BaseEntity, IPasswordEnabled
 
     public ICollection<ImprovementRequest> ImprovementRequests { get; set; } = new List<ImprovementRequest>();
 
-    public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
+    //public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
 
 }

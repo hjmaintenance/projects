@@ -33,7 +33,7 @@ namespace JinRestApi.Models
         /// <summary>자식 덧글들</summary>
         public ICollection<ImprovementComment> Children { get; set; } = new List<ImprovementComment>();
 
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
+        //public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
     }
 
 

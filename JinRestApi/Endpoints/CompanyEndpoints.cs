@@ -24,13 +24,13 @@ public static class CompanyEndpoints
 
 
             return ApiResponseBuilder.CreateAsync(
-                () => db.Companies.Include(c => c.Attachments).ToListAsync()
+                () => db.Companies.ToListAsync()
             );
         });
 
         // 상세 조회
         group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
-            () => db.Companies.Include(c => c.Attachments).FirstOrDefaultAsync(c => c.Id == id)
+            () => db.Companies.FirstOrDefaultAsync(c => c.Id == id)
         ));
 
 
@@ -41,7 +41,7 @@ public static class CompanyEndpoints
             var baseQuery = db.Companies.AsQueryable();
 
             // 포함 관계 필요하면 Include 이후 ApplyAll 호출
-            baseQuery = baseQuery.Include(c => c.Attachments);
+            //baseQuery = baseQuery;
 
             // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
             var resultQuery = baseQuery.ApplyAll(http.Request.Query);
@@ -74,7 +74,7 @@ public static class CompanyEndpoints
             var baseQuery = db.Companies.AsQueryable();
 
             // 포함 관계 필요하면 Include 이후 ApplyAll 호출
-            baseQuery = baseQuery.Include(c => c.Attachments);
+            //baseQuery = baseQuery.Include(c => c.Attachments);
 
             // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
             //var resultQuery = baseQuery.ApplyAll(http.Request.Query);

@@ -31,6 +31,6 @@ namespace JinRestApi.Models
         public ImprovementStatus Status { get; set; } = ImprovementStatus.Pending;
 
         public ICollection<ImprovementComment> Comments { get; set; } = new List<ImprovementComment>();
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
+        //public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
     }
 }

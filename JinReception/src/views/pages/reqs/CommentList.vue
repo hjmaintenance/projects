@@ -103,6 +103,14 @@ watch(() => props.requestId, (newId) => {
 
 <template>
   <div class="comments-section card mt-4">
+
+
+      <div class="new-comment-form">
+        <h5 class="mb-3">Add a new comment</h5>
+        <CommentForm @submit-comment="handleCommentSubmitted" />
+      </div>
+
+      
     <h4 class="mb-4">Comments ({{ comments.length }})</h4>
     
     <div v-if="loading">Loading comments...</div>
@@ -120,12 +128,6 @@ watch(() => props.requestId, (newId) => {
         No comments yet. Be the first to comment!
       </div>
 
-      <hr class="my-6"/>
-
-      <div class="new-comment-form">
-        <h5 class="mb-3">Add a new comment</h5>
-        <CommentForm @submit-comment="handleCommentSubmitted" />
-      </div>
     </div>
   </div>
 </template>

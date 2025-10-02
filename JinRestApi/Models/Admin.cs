@@ -29,7 +29,7 @@ namespace JinRestApi.Models
         public Team? Team { get; set; }
 
         public ICollection<ImprovementRequest> AssignedRequests { get; set; } = new List<ImprovementRequest>();
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
+        //public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
 
 
     }

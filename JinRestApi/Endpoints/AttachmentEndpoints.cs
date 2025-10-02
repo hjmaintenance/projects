@@ -35,5 +35,33 @@ public static class AttachmentEndpoints
             await db.SaveChangesAsync();
             return new { DeletedId = id };
         }, "Attachment deleted successfully."));
+
+        group.MapGet("/download/{id}", async (AppDbContext db, int id) =>
+        {
+            var attachment = await db.Attachments.FindAsync(id);
+            if (attachment == null)
+            {
+                return Results.NotFound("Attachment not found.");
+            }
+
+            var filePath = Path.Combine(attachment.FilePath, attachment.StoredFileName);
+
+
+            Console.WriteLine($"filePath : {filePath}");
+
+            if (!File.Exists(filePath))
+            {
+                return Results.NotFound("File not found.");
+            }
+
+            var memory = new MemoryStream();
+            await using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+
+            return Results.File(memory, attachment.FileType, attachment.OriginalFileName);
+        });
     }
 }

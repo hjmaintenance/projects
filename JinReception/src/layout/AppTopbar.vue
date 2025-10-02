@@ -4,55 +4,16 @@
   import { useRouter } from 'vue-router';
   import { useLayout } from '@/layout/composables/layout';
   import AppConfigurator from './AppConfigurator.vue';
+  import UserConfigurator from './UserConfigurator.vue';
 
   import { useConfirm } from 'primevue/useconfirm';
 
   const confirm = useConfirm();
 
   const toast = useToast();
-  const { toggleMenu, toggleDarkMode, isDarkTheme, loginUser, clearLoginUser,initLoginUser } = useLayout();
+  const { toggleMenu, toggleDarkMode, isDarkTheme, loginUser, clearLoginUser, initLoginUser } = useLayout();
   const router = useRouter();
   const menu = ref();
-
-  const tieredMenuItems = ref([
-    {
-      label: 'Settings',
-      icon: 'pi pi-fw pi-cog',
-      command: () => {
-        toast.add({ severity: 'info', summary: 'Info', detail: '준비중', life: 3000 });
-      }
-    },
-    {
-      label: 'Profile',
-      icon: 'pi pi-fw pi-user'
-    },
-    {
-      separator: true
-    },
-    {
-      label: 'Quit',
-      icon: 'pi pi-fw pi-sign-out',
-      command: () => {
-        requireConfirmation();
-      }
-    }
-  ]);
-
-  const requireConfirmation = () => {
-    confirm.require({
-      group: 'headless',
-      header: 'Are you sure?',
-      message: 'want to quit?',
-      accept: () => {
-        toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-
-        logout();
-      },
-      reject: () => {
-        toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-      }
-    });
-  };
 
   const logout = async () => {
     try {
@@ -93,7 +54,7 @@
           </g>
         </svg>
 
-        <span>Reception</span><span style="font-size: 0.8rem; width: 17rem; padding-top: 0.3rem;"> - 열린화면의 메뉴명 : description</span>
+        <span>Reception</span><span style="font-size: 0.8rem; width: 17rem; padding-top: 0.3rem"> - 열린화면의 메뉴명 : description</span>
       </router-link>
     </div>
 
@@ -121,23 +82,18 @@
         <i class="pi pi-ellipsis-v"></i>
       </button>
 
-
-      <button @onclick="initLoginUser"></button>
-      <!--
-            <div class="layout-topbar-menu hidden lg:block">
-                <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-calendar"></i>
-                        <span>Calendar</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-inbox"></i>
-                        <span>Messages</span>
-                    </button>
-                </div>
-            </div>
-
-        -->
+      <div class="layout-topbar-menu hidden lg:block">
+        <div class="layout-topbar-menu-content">
+          <button type="button" class="layout-topbar-action">
+            <i class="pi pi-calendar"></i>
+            <span>Calendar</span>
+          </button>
+          <button type="button" class="layout-topbar-action">
+            <i class="pi pi-inbox"></i>
+            <span>Messages</span>
+          </button>
+        </div>
+      </div>
 
       <div v-if="loginUser" class="layout-config-menu">
         <div class="relative">
@@ -157,11 +113,7 @@
             </template>
           </ConfirmDialog>
 
-          <button type="button" class="layout-topbar-action" :title="loginUser.name" @click="toggle" aria-haspopup="true" aria-controls="overlay_tmenu">
-            <i class="pi pi-user"></i>
-            <span>{{ loginUser.name }}</span>
-          </button><span>{{ loginUser.name }}</span>
-          <TieredMenu ref="menu" id="overlay_tmenu" :model="tieredMenuItems" popup />
+          <UserConfigurator />
         </div>
       </div>
     </div>

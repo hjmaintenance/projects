@@ -159,8 +159,16 @@ namespace JinRestApi.Models
             // 데이터가 컬렉션(List, Array 등)인 경우
             if (data is IEnumerable collection && data is not string)
             {
+                var list = collection.Cast<object>().ToList();
+                
+                // If the collection is already a list of ExpandoObject/Dictionary, don't process it further.
+                if (list.Any() && list.First() is IDictionary<string, object>)
+                {
+                    return list;
+                }
+
                 // 각 항목에 대해 변환 함수를 적용합니다.
-                return collection.Cast<object>().Select(item => item.ToExpandoWithEnumNames()).ToList();
+                return list.Select(item => item.ToExpandoWithEnumNames()).ToList();
             }
 
             // 단일 객체인 경우

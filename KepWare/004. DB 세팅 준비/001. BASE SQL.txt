@@ -1,0 +1,37 @@
+- 당연히 시퀀스 먼저 만들고 테이블 먼저 만들어야 됩니다.
+- STEAM이랑 
+
+===== 시퀀스를 만드는 기본 구조 =====
+
+CREATE SEQUENCE IF NOT EXISTS public."TEST_SEQ"
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9999999999
+    CACHE 1
+    CYCLE;
+
+ALTER SEQUENCE public."TEST_SEQ"
+    OWNER TO postgres;
+
+========= 테이블 만드는 기본 구조 ===========
+
+CREATE TABLE IF NOT EXISTS public."TEST_TABLE"
+(
+    id integer NOT NULL DEFAULT nextval('"TEST_SEQ"'::regclass),
+    num_id integer,
+    name character varying COLLATE pg_catalog."default",
+    value character varying COLLATE pg_catalog."default",
+    "time" timestamp with time zone
+)
+
+TABLESPACE pg_default;
+
+CREATE INDEX idx_kepware_data_time
+    ON public."TEST_TABLE" (time DESC);
+
+ALTER TABLE IF EXISTS public."TEST_TABLE"
+    OWNER TO postgres;
+
+COMMENT ON COLUMN public."TEST_TABLE".id
+    IS 'nextval(''"TEST_SEQ"''::regclass)';

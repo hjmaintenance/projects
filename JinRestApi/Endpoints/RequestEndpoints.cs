@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.ComponentModel;
 
 namespace JinRestApi.Endpoints;
 
@@ -25,7 +26,8 @@ public static class RequestEndpoints
         // 요청 목록 (필터링 포함)
         group.MapGet("/", (AppDbContext db, ImprovementStatus? status) => ApiResponseBuilder.CreateAsync(() =>
         {
-            var query = db.Requests.Include(r => r.Comments).Include(r => r.Attachments).AsQueryable();
+            var query = db.Requests.Include(r => r.Comments)
+            .AsQueryable();
             if (status.HasValue)
                 query = query.Where(r => r.Status == status.Value);
             return query.ToListAsync();
@@ -35,10 +37,9 @@ public static class RequestEndpoints
         // 요청 상세
         group.MapGet("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(
             () => db.Requests
-            //.Include(r => r.Comments)
-            //.Include(r => r.Customer)
-            //.Include(r => r.Admin)
-            //.Include(r => r.Attachments)
+            .Include(r => r.Comments)
+            .Include(r => r.Customer)
+            .Include(r => r.Admin)
             .FirstOrDefaultAsync(r => r.Id == id)
         ));
 
@@ -55,30 +56,10 @@ public static class RequestEndpoints
 
 
 
-        /*
-                // 검색
-                group.MapGet("/srch", (AppDbContext db, HttpContext http) => ApiResponseBuilder.CreateAsync(async () =>
-                {
-                    var baseQuery = db.Requests.AsQueryable();
-
-                    // 포함 관계 필요하면 Include 이후 ApplyAll 호출
-                    baseQuery = baseQuery.Include(c => c.Attachments).Include(r => r.Customer);
-
-                    // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
-                    var resultQuery = baseQuery.ApplyAll(http.Request.Query);
-
-                    // ToListAsync 은 dynamic IQueryable 에서도 작동
-                    var list = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
-                    return list;
-                }, "Request srch successfully.", 201));
-
-        */
-
 
         // 검색
         group.MapPost("/srch", (AppDbContext db, HttpContext http) => ApiResponseBuilder.CreateAsync(async () =>
         {
-
             // 1) JSON Body 읽기
             using var reader = new StreamReader(http.Request.Body);
             var body = await reader.ReadToEndAsync();
@@ -92,12 +73,9 @@ public static class RequestEndpoints
             // 2) GET QueryString 과 병합
             var finalQuery = QueryCollectionMerger.Merge(http.Request.Query, bodyQuery);
 
-            // 3) DynamicFilterHelper 재사용
-
             var baseQuery = db.Requests.AsQueryable();
 
-            // 포함 관계 필요하면 Include 이후 ApplyAll 호출
-            var queryWithIncludes = baseQuery.Include(c => c.Attachments)
+            var queryWithIncludes = baseQuery
             .Include(c => c.Comments)
             .Include(r => r.Customer)
             .Include(r => r.Admin)
@@ -106,16 +84,45 @@ public static class RequestEndpoints
             // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
             var resultQuery = queryWithIncludes.ApplyAll(finalQuery);
 
-    
             // ToListAsync 은 dynamic IQueryable 에서도 작동
             var requests = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
-            return requests;
+
+
+
+            // 모든 ImprovementRequest에 대한 첨부파일 수를 한 번에 조회
+            var attachmentCounts = await db.Attachments
+                .Where(a => a.EntityType == "ImprovementRequest")
+                .GroupBy(a => a.EntityId)
+                .Select(g => new { RequestId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            var attachmentCountMap = attachmentCounts.ToDictionary(x => x.RequestId, x => x.Count);
+
+            var requestsWithAttachmentCount = requests
+                .Select(r =>
+                {
+                    var expando = new ExpandoObject() as IDictionary<string, object>;
+                    foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(r))
+                    {
+                        var camelCaseName = char.ToLowerInvariant(property.Name[0]) + property.Name[1..];
+                        expando.Add(camelCaseName, property.GetValue(r));
+                    }
+
+                    var requestId = (int)expando["id"];
+                    expando["attachmentCount"] = attachmentCountMap.GetValueOrDefault(requestId, 0);
+
+                    if (attachmentCountMap.ContainsKey(requestId))
+                    { expando["attachments"] = db.Attachments.Where(a => a.EntityType == "ImprovementRequest" && a.EntityId == requestId).ToList(); 
+                    }
+
+                    return expando;
+                })
+                .ToList()
+                ;
+
+            return requestsWithAttachmentCount;
+
         }, "Request srch successfully.", 201));
-
-
-
-
-
 
 
         group.MapPost("/", async (HttpRequest httpRequest, AppDbContext db, IRabbitMqConnectionProvider provider, ILoggerFactory loggerFactory) =>
@@ -130,7 +137,7 @@ public static class RequestEndpoints
             );
             var files = form.Files;
 
-            var result = await ApiResponseBuilder.CreateAsync(async () => 
+            var result = await ApiResponseBuilder.CreateAsync(async () =>
             {
                 // 1. ImprovementRequest 생성 및 저장
                 var request = new ImprovementRequest
