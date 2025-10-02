@@ -33,7 +33,7 @@ export const useBreadcrumbStore = defineStore('breadcrumb', () => {
 
         const breadcrumbPath = findPath(menuModel, path, []);
         if (breadcrumbPath) {
-            items.value = breadcrumbPath.map(item => ({ label: item.label, to: item.to }));
+            items.value = breadcrumbPath.map(item => ({ label: item.label, to: item.to, icon: item.icon }));
         } else {
             items.value = [];
         }
