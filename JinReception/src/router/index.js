@@ -14,6 +14,11 @@ const router = createRouter({
           name: 'request_detail',
           component: () => import('@/views/pages/reqs/RequestDetail.vue')
         },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/pages/Profile.vue')
+    },
         {
           path: '/mng_request',
           name: 'mng_request',

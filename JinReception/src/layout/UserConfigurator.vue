@@ -60,6 +60,9 @@
         <a href="/auth/change-password">비번변경</a>
       </div>
       <div>
+        <a href="/profile">프로필</a>
+      </div>
+      <div>
         <button @click="requireConfirmation">logout</button>
       </div>
     </div>

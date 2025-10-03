@@ -25,7 +25,7 @@ const _serviceMethods = {
   },
   async get(id) {
     const res = await apiClient.get(`/admins/${id}`);
-    return [res.data.data];
+    return res.data.data;
   },
   async add(admin) {
     const res = await apiClient.post('/admins', admin);
@@ -33,11 +33,11 @@ const _serviceMethods = {
   },
   async update(admin) {
     const res = await apiClient.put(`/admins/${admin.id}`, admin);
-    return res.data.data;
+    return res.data;
   },
   async delete(admin) {
     const res = await apiClient.delete(`/admins/${admin.id}`);
-    return res.data.data;
+    return res.data;
   }
 };
 

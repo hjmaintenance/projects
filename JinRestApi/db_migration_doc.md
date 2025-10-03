@@ -8,6 +8,8 @@ DROP TABLE "__EFMigrationsHistory";
 
 
 2.
+dotnet ef migrations add InitialCreate  // 경우에 따라.
+
 dotnet ef migrations add InitTable
 dotnet ef database update
 

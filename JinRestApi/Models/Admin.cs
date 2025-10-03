@@ -23,6 +23,12 @@ namespace JinRestApi.Models
         /// <summary>최초 로그인시 암호 변경 필요 여부</summary>
         public bool MustChangePassword { get; set; } = true;
 
+
+    /// <summary>사진 URL</summary>
+        public string Photo { get; set; } = string.Empty;
+
+
+
         /// <summary>팀 ID</summary>
         public int TeamId { get; set; }
 
