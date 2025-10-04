@@ -1,7 +1,7 @@
 <script setup>
   import { TeamService } from '@/service/TeamService';
   import { buildQueryPayload } from '@/utils/apiUtils';
-  import { reactive, ref } from 'vue';
+  import { reactive, ref , watch} from 'vue';
 
   import DataTable from 'primevue/datatable';
   import Column from 'primevue/column';
@@ -61,6 +61,21 @@
     const finalPayload = buildQueryPayload(searchs, searchConfig, queryOptions);
     teams.value = await TeamService.search(finalPayload, loading);
   };
+
+
+
+
+    watch(
+    () => loginUser.value?.user_uid,
+    (newUid) => {
+      if (newUid) search();
+    },
+    { immediate: true }
+  );
+
+
+
+  
 
   const getItem = async () => {
     teams.value = await TeamService.get('1', loading);
