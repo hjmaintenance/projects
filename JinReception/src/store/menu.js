@@ -2,10 +2,12 @@
 import { ref, watch } from 'vue';
 import { defineStore } from 'pinia';
 import { useLayout } from '@/layout/composables/layout';
+import { useUiStore } from '@/store/ui';
 
 export const useMenuStore = defineStore('menu', () => {
     const { loginUser } = useLayout();
-const getBaseMenu = () => [];
+    const uiStore = useUiStore();
+    const getBaseMenu = () => [];
 
     const getBaseMenu_x = () => [
         {
@@ -158,12 +160,21 @@ const getBaseMenu = () => [];
         model.value = getBaseMenu();
 
         var customer = {
-            label: loginUser.value?.user_name || '고객',
+            label: '' ,
             items: [
-                { label: '공지', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
-                { label: '접수목록', icon: 'pi pi-fw pi-check-square', to: '/user_request' },
-                { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/request', class: 'rotated-icon' },
-                { label: '비밀번호변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' }
+                { label: '접수', icon: 'pi pi-fw pi-check-square', to: '/mng_request',
+                  items: [
+                          { label: '접수목록', icon: 'pi pi-fw pi-check-square', to: '/mng_request' },
+                          { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/request', class: 'rotated-icon' }
+                         ]
+                },
+                { label: '설정', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon',
+                  items: [
+                          { label: '프로필 경경', icon: 'pi pi-fw pi-mobile', to: '/profile', class: 'rotated-icon' },
+                          { label: '비밀번호 변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' }
+                         ]
+                },
+                { label: '로그아웃', icon: 'pi pi-fw pi-key', command: () => uiStore.requestLogoutConfirmation() }
             ]
         };
 
@@ -177,7 +188,8 @@ const getBaseMenu = () => [];
                 { label: '접수관리', icon: 'pi pi-fw pi-table', to: '/mng_request' },
                 { label: '공지관리', icon: 'pi pi-fw pi-id-card', to: '/notice' },
                 { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
-                { label: '비밀번호변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' }
+                { label: '비밀번호변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' },
+                { label: '로그아웃', icon: 'pi pi-fw pi-key', command: () => uiStore.requestLogoutConfirmation() }
             ]
         };
 

@@ -1,7 +1,7 @@
 <script setup>
   import { RequestService } from '@/service/RequestService';
   import { buildQueryPayload2 } from '@/utils/apiUtils';
-  import { formatDate, STATUS } from '@/utils/formatters';
+  import { formatDate, STATUS, formatDateSmart } from '@/utils/formatters';
   import { onMounted, reactive, ref, watch, nextTick, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useLayout } from '@/layout/composables/layout';
@@ -184,36 +184,46 @@
   <div class="card">
     <h3>{{ selectedRequest?.title }}</h3>
 
-    <ul>
-      <li>
-        <span>{{ selectedRequest?.createdAt ? formatDate(new Date(selectedRequest.createdAt)) : '' }}</span>
-      </li>
-      <li>
-        <span>{{ selectedRequest?.statusName }}</span>
-      </li>
-      <li>
-        <span>{{ selectedRequest?.admin?.userName }}</span>
-      </li>
-      <li>
-        <span>{{ selectedRequest?.customer?.id }}</span>
-        <span>{{ selectedRequest?.customer?.userName }}</span>
-      </li>
-    </ul>
+    <div class="comment-form flex flex-row items-center gap-2">
 
-    <hr class="border-gray-400" />
+          <span  class="flex-1 resize-none" >
+        {{ selectedRequest?.createdAt ? formatDateSmart(new Date(selectedRequest.createdAt)) : '' }} - {{ selectedRequest?.customer?.userName }}
+        </span>
 
-    <div class="gap-4 mt-8 mb-8" style="align-items: flex-start" v-html="selectedRequest?.description"></div>
 
+
+
+        <div 
+          class="shrink-0"
+        >
+
+
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+          {{ selectedRequest?.statusName }}
+          </span>
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+          {{ selectedRequest?.admin?.userName }}
+          </span>
+
+
+      </div>
+    </div>
+
+<Divider />
     <div v-if="selectedRequest?.attachments?.length > 0" class="mt-4">
-      <hr class="border-gray-400" />
-      <h4 class="mt-4">첨부 파일</h4>
+
       <ul>
         <li v-for="attachment in selectedRequest.attachments" :key="attachment.id" class="flex items-center space-x-2">
           <i :class="['pi', getIconForFile(attachment.originalFileName)]"></i>
           <a :href="`/api/attachments/download/${attachment.id}`" target="_blank" download>{{ attachment.originalFileName }}</a>
         </li>
       </ul>
+<Divider />
     </div>
+
+    <div class="gap-4 mt-8 mb-8 min-h-[25rem] " style="align-items: flex-start" v-html="selectedRequest?.description"></div>
+
+
   </div>
 
   <!-- Comments Section -->

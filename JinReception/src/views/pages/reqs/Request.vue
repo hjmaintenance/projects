@@ -76,7 +76,7 @@
     });
 
     await RequestService.addWithAttachments(formData);
-    router.push('/user_request');
+    router.push('/mng_request');
   };
 
   const handlePaste = (event) => {
@@ -113,7 +113,7 @@
 
         
    <label>제목</label>
-<InputText type="text" v-model="request.title" placeholder="Title..." />
+<InputText type="text" v-model="request.title" placeholder="Title..." class="ml-2" />
 
 
                     <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
@@ -122,7 +122,7 @@
                         <div></div>
                         <div>                          
       <Button label="접수하기" type="button" class="mr-2" @click="save" />
-      <Button label="접수목록보기" type="button" class="mr-2" @click="router.push('/user_request')" />
+      <Button label="접수목록보기" type="button" class="mr-2" @click="router.push('/mng_request')" />
                         </div>
                     </div>
                 </div>

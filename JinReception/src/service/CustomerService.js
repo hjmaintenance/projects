@@ -34,6 +34,10 @@ const _serviceMethods = {
     async delete(customer){
         const res = await apiClient.delete(`/customers/${customer.id}`);
         return res.data;
+    },
+    async register(customer) {
+        const res = await apiClient.post(`/users/singup`, customer);
+        return res.data;
     }
 }
 
@@ -44,6 +48,7 @@ export const CustomerService = {
     get: (id, loading) => callWithLoading(loading, () => _service.get(id)),
     add: (customer, loading) => callWithLoading(loading, () => _service.add(customer)),
     update: (customer, loading) => callWithLoading(loading, () => _service.update(customer)),
+    register: (customer, loading) => callWithLoading(loading, () => _service.register(customer)),
     delete: (customer, loading) => callWithLoading(loading, () => _service.delete(customer, { serviceName: 'CustomerService' })),
     save(customers, loading){
         return callWithLoading(loading, async () => {

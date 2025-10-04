@@ -1,7 +1,7 @@
 <script setup>
   import { RequestService } from '@/service/RequestService';
   import { buildQueryPayload2 } from '@/utils/apiUtils';
-  import { formatDate, STATUS } from '@/utils/formatters';
+  import { formatDate, STATUS , STATUS_ALL} from '@/utils/formatters';
   import { onMounted, reactive, ref, watch, nextTick, computed } from 'vue';
   import { useLayout } from '@/layout/composables/layout';
   import { useRouter } from 'vue-router';
@@ -19,6 +19,7 @@
 
   const searchs = reactive({
     Srch: '',
+    customerId: loginUser.value?.user_uid,
     dropdownItem: ref(null)
   });
 
@@ -28,11 +29,15 @@
   // 필드 구성을 computed 속성으로 변경하여 항상 최신 값을 유지합니다.
   const searchConfig = computed(() => [
     { model: searchs.Srch, fields: ['title'], operator: 'like' },
+    ...(loginUser.value?.login_type !== 'admin'
+      ? [{ model: searchs.customerId, fields: ['customerId'] }]
+      : []),
     //{ model: 'Srch', fields: ['id'], operator: '' },
     { model: searchs.dropdownItem?.code, fields: ['status'], operator: '' }
   ]);
 
   const queryOptions = reactive({
+    select: 'id,title,createdAt,customer,admin,status',
     remove: 'customerId,description',
     sorts: [{ field: 'id', dir: 'desc' }],
     page: 1,
@@ -142,14 +147,6 @@ await nextTick();
   };
 
 
-  /*
-  const dropdownItems = ref([
-      { name: 'PENDING', code: '0' },
-      { name: 'IN_PROGRESS', code: '1' },
-      { name: 'REJECTED', code: '2' },
-      { name: 'COMPLETED', code: '3' },
-  ]);
-*/
 
 </script>
 
@@ -175,7 +172,7 @@ await nextTick();
           <InputIcon class="pi pi-search" />
         </IconField>
 
-        <Select  size="small" id="state" v-model="searchs.dropdownItem" :options="STATUS" optionLabel="name" placeholder="Select One" class="ml-2"></Select>
+        <Select  size="small" id="state" v-model="searchs.dropdownItem" :options="STATUS_ALL" optionLabel="name" placeholder="Select One" class="w-full md:w-56 ml-2"></Select>
 
 
 
@@ -208,42 +205,15 @@ await nextTick();
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <Dialog v-model:visible="visible" modal :header="selectedRequest?.title" :style="{ width: '70rem', height: '90vh' }">
-    <div class="flex justify-end gap-2">
-      <Button type="button" label="이거 내가 접수 할께요" severity="danger" @click="accept_request"></Button>
-    </div>
-    <div class="flex items-center gap-4 mb-8" style="overflow-y: auto;
-  height: calc(81vh - 100px);
-  align-items: flex-start;">
-      <div class="" v-html="selectedRequest?.description"></div>
-    </div>
-    <div class="flex justify-end gap-2">
-      <Button type="button" label="reload" severity="primary" @click="getDetail"></Button>
-      <Button type="button" :label="`이거 ${loginUser?.user_name} 접수 할께요`" severity="primary" @click="accept_request"></Button>
-      <Button type="button" label="반려" severity="secondary" @click="reject_request"></Button>
-      <Button type="button" label="완료" severity="success" @click="complete_request"></Button>
-      <Button type="button" label="Close" severity="secondary" @click="visible = false"></Button>
-    </div>
-  </Dialog>
-
   <div class="card">
     <DataTable :value="requests" dataKey="id" selectionMode="single" paginator :rows="10" :rowsPerPageOptions="[10, 20, 50]" :loading="loading" v-model:selection="selectedRequest">
       <template #empty> not found </template>
 
+      <Column header="" style="width: 3rem">
+        <template #body="{ data }">
+          <i v-if="data.attachmentCount > 0" class="pi pi-file"></i>
+        </template>
+      </Column>
       <Column header="ID" field="id"> </Column>
       <Column header="작성일" filterField="createdAt" dataType="date" style="min-width: 8rem">
         <template #body="{ data }">
@@ -251,7 +221,7 @@ await nextTick();
         </template>
       </Column>
       <Column header="제목" field="title"> </Column>
-      <Column header="상태" field="statusName" style="min-width: 1rem"> </Column>
+      <Column header="상태" field="statusName"> </Column>
       <Column header="작성자" field="customer.userName" style="min-width: 1rem"> </Column>
       <Column header="접수자" field="admin.userName" style="min-width: 1rem"> </Column>
     </DataTable>

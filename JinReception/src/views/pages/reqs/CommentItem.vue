@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, ref, defineEmits } from 'vue';
-import { formatDate } from '@/utils/formatters';
+import { formatDate, formatDateSmart } from '@/utils/formatters';
 import CommentForm from './CommentForm.vue';
 
 const props = defineProps({
@@ -25,18 +25,61 @@ const handleReplySubmitted = (commentText) => {
 
 <template>
   <div class="comment-item py-3">
-    <div class="comment-header flex justify-between items-center mb-2">
-      <span class="font-bold text-sm">{{ comment.createdBy }}</span>
-      <span class="text-xs text-gray-500">{{ formatDate(new Date(comment.createdAt)) }}</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex items-start gap-3">
+  <!-- 아바타 -->
+  <img :src="comment?.author?.photo" :alt="comment?.author?.userName"  class="w-10 h-10 rounded-full" />
+
+  <!-- 내용 영역 -->
+  <div class="flex flex-col">
+    <!-- 작성자 + 말풍선 -->
+    <div class="bg-gray-100 px-4 py-2 max-w-md relative">
+      <p class="text-sm text-gray-900"  v-html="comment?.commentText">
+      </p>
+      <!-- 풍선 꼬리 -->
+      <div class="absolute -left-2 top-3 w-0 h-0 border-t-8 border-t-transparent border-r-8 border-r-gray-100 border-b-8 border-b-transparent"></div>
     </div>
-    <div class="comment-body mb-2">
-      <p class="text-base">{{ comment.commentText }}</p>
-    </div>
+
+    <!-- 작성 시간 -->
+    <span class="text-xs text-gray-500 mt-1">{{ formatDateSmart(new Date(comment.createdAt)) }}</span>
+  </div>
+</div>
+
+
+
+
     <div class="comment-actions">
       <Button 
         type="button" 
         label="Reply" 
-        class="p-button-sm p-button-text" 
+        class="p-button-sm p-button-text " 
         @click="showReplyForm = !showReplyForm"
       ></Button>
     </div>

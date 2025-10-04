@@ -1,16 +1,16 @@
 <script setup>
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   import { useToast } from 'primevue/usetoast';
   import { useRouter } from 'vue-router';
   import { useLayout } from '@/layout/composables/layout';
-
   import { useConfirm } from 'primevue/useconfirm';
+  import { useUiStore } from '@/store/ui';
 
   const confirm = useConfirm();
-
   const toast = useToast();
-  const { toggleMenu, toggleDarkMode, isDarkTheme, loginUser, clearLoginUser, initLoginUser } = useLayout();
   const router = useRouter();
+  const { loginUser, clearLoginUser } = useLayout();
+  const uiStore = useUiStore();
 
   const op = ref();
 
@@ -30,7 +30,6 @@
       message: 'want to quit?',
       accept: () => {
         toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-
         logout();
       },
       reject: () => {
@@ -38,6 +37,14 @@
       }
     });
   };
+
+  watch(() => uiStore.showLogoutConfirmation, (newValue) => {
+    if (newValue) {
+      requireConfirmation();
+      uiStore.clearLogoutConfirmation();
+    }
+  });
+
   const toggle = (event) => {
     op.value.toggle(event);
   };
@@ -57,10 +64,10 @@
         <h6>{{ loginUser?.user_name }}</h6>
       </div>
       <div>
-        <a href="/auth/change-password">비번변경</a>
+        <Button @click="router.push('/auth/change-password');">비번변경</Button>
       </div>
       <div>
-        <a href="/profile">프로필</a>
+        <Button @click="router.push('/profile');">프로필</Button>
       </div>
       <div>
         <button @click="requireConfirmation">logout</button>

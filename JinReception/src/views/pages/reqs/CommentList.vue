@@ -80,8 +80,12 @@ const submitComment = async ({ text, parentId }) => {
     parentCommentId: parentId,
     // Backend should handle AuthorId, AuthorType, CreatedBy from the authenticated user context
     // createdBy: loginUser.value.user_name, 
-    // authorId: loginUser.value.user_uid,
+    authorId: loginUser.value.user_uid,
+    authortype: loginUser.value.login_type,
   };
+
+  console.log('Submitting comment:', commentData);
+
 
   try {
     // This service method needs to be created.
@@ -106,12 +110,11 @@ watch(() => props.requestId, (newId) => {
 
 
       <div class="new-comment-form">
-        <h5 class="mb-3">Add a new comment</h5>
         <CommentForm @submit-comment="handleCommentSubmitted" />
       </div>
 
       
-    <h4 class="mb-4">Comments ({{ comments.length }})</h4>
+    <h4 class="mb-4" @click="fetchComments" >Comments ({{ comments.length }})</h4>
     
     <div v-if="loading">Loading comments...</div>
 

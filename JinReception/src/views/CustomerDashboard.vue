@@ -159,13 +159,53 @@ requests.value = response.data.data;
 
 <template>
 
-<div>
 
 
-<Button @click="aaaaaaaaaaa">reload</Button>
 
 
-</div>
+
+
+<form class="card srcharea" @submit.prevent="search">
+
+<div class="flex flex-col sm:flex-row sm:items-center" >
+                   
+
+
+
+
+                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                        <div></div><div></div>
+                        <div>
+
+
+      <Button  size="small" label="Reload" class="ml-2 mr-2" @click="aaaaaaaaaaa" raised />
+
+                        </div>
+                    </div>
+                </div>
+
+
+  </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <div class="grid grid-cols-12 gap-8">
 

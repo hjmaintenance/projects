@@ -1,7 +1,16 @@
 <script setup>
 import { CustomerService } from '@/service/CustomerService';
 import { CompanyService } from '@/service/CompanyService';
-import { onBeforeMount, reactive, ref , onMounted} from 'vue';
+import { onBeforeMount, reactive, ref , onMounted, watch} from 'vue';
+
+  import { useLayout } from '@/layout/composables/layout';
+
+
+
+  const { loginUser } = useLayout();
+
+
+
  
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -12,7 +21,9 @@ let tempIdCounter = 0;
 const loading = ref(null);
 const columns = ref([
     { field: 'id', header: 'Id' },
+    { field: 'loginId', header: 'loginId' },
     { field: 'userName', header: 'userName' },
+
     { field: 'companyId', header: 'company' }
 ]);
  
@@ -25,6 +36,10 @@ const onRowEditComplete = (event) => {
   console.log('onRowEditComplete', event);
   let{newData, index} = event;
   customers.value[index] = newData;
+
+
+
+
 }
 // 회사정보는 한번만 불러오기 위함
 onMounted(() => {
@@ -42,6 +57,18 @@ const initdata = () => {
 const loadData = async () => {
   customers.value = await CustomerService.getList(loading);
 }
+
+
+  watch(
+    () => loginUser.value?.user_uid,
+    (newUid) => {
+      if (newUid) loadData();
+    },
+    { immediate: true }
+  );
+
+
+
 // 단일 조회
 const getItem = async () => {
   customers.value = await CustomerService.get('1', loading);
@@ -87,9 +114,7 @@ const deleteSelected = async () => {
     <div class="card srcharea">
  
  
-<Button label="초기화" class="mr-2" @click="initdata" />
-<Button label="전체" class="mr-2" @click="loadData" />
-<Button label="단일" class="mr-2" @click="getItem" />
+<Button label="조회" class="mr-2" @click="loadData" />
 <Button label="추가" class="mr-2" icon="pi pi-plus" @click="addData" />
 <Button label="저장" class="mr-2" @click="save" />
 <Button label="삭제" class="mr-2" @click="deleteSelected" />

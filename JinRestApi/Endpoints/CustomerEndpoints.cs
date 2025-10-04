@@ -53,6 +53,7 @@ public static class CustomerEndpoints
             if (customer is null) return null;
 
             customer.UserName = input.UserName;
+            customer.LoginId = input.LoginId;
             customer.Email = input.Email;
             customer.CompanyId = input.CompanyId;
 

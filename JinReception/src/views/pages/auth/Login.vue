@@ -113,6 +113,8 @@
             <div v-if="errorMsg" style="color: red">{{ errorMsg }}</div>
         </div>
       </div>
+
+              <router-link to="/auth/register" class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">회원가입</router-link>
     </div>
 
     

@@ -25,11 +25,6 @@ const router = createRouter({
           component: () => import('@/views/pages/reqs/MngRequest.vue')
         },
         {
-          path: '/user_request',
-          name: 'user_request',
-          component: () => import('@/views/pages/reqs/UserRequest.vue')
-        },
-        {
           path: '/request',
           name: 'request',
           component: () => import('@/views/pages/reqs/Request.vue')
@@ -197,6 +192,11 @@ const router = createRouter({
       component: () => import('@/views/pages/auth/Login.vue')
     },
     {
+      path: '/auth/register',
+      name: 'register',
+      component: () => import('@/views/pages/auth/Register.vue')
+    },
+    {
       path: '/auth/access',
       name: 'accessDenied',
       component: () => import('@/views/pages/auth/Access.vue')
@@ -216,7 +216,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // 'login' 페이지와 같이 인증이 필요 없는 페이지 목록
-  const publicPages = ['login', 'landing', 'notfound', 'accessDenied', 'error'];
+  const publicPages = ['login', 'register', 'landing', 'notfound', 'accessDenied', 'error'];
   const authRequired = !publicPages.includes(to.name);
   const loggedIn = localStorage.getItem('jwt_token');
 

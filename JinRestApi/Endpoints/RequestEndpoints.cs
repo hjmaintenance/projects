@@ -50,17 +50,51 @@ public static class RequestEndpoints
                 .Where(c => c.RequestId == id)
                 .OrderBy(c => c.CreatedAt)
                 .ToListAsync();
-            return comments;
+
+            var adminIds = comments.Where(c => c.AuthorType == "admin").Select(c => c.AuthorId).Distinct().ToList();
+            var customerIds = comments.Where(c => c.AuthorType != "admin").Select(c => c.AuthorId).Distinct().ToList();
+
+            var admins = await db.Admins
+                .Where(a => adminIds.Contains(a.Id))
+                .ToDictionaryAsync(a => a.Id);
+
+            var customers = await db.Customers
+                .Where(c => customerIds.Contains(c.Id))
+                .ToDictionaryAsync(c => c.Id);
+
+            var result = comments.Select(c =>
+            {
+                object? author = null;
+                if (c.AuthorType == "admin" && admins.TryGetValue(c.AuthorId, out var admin))
+                {
+                    author = new { admin.Id, admin.UserName, admin.Photo };
+                }
+                else if (customers.TryGetValue(c.AuthorId, out var customer))
+                {
+                    author = new { customer.Id, customer.UserName, customer.Photo };
+                }
+
+                return new
+                {
+                    c.Id,
+                    c.RequestId,
+                    c.CommentText,
+                    c.AuthorType,
+                    c.AuthorId,
+                    c.ParentCommentId,
+                    c.CreatedAt,
+                    c.CreatedBy,
+                    Author = author
+                };
+            }).ToList();
+
+            return result;
         }, "Comments retrieved successfully."));
-
-
-
 
 
         // 검색
         group.MapPost("/srch", (AppDbContext db, HttpContext http) => ApiResponseBuilder.CreateAsync(async () =>
         {
-            // 1) JSON Body 읽기
             using var reader = new StreamReader(http.Request.Body);
             var body = await reader.ReadToEndAsync();
 
@@ -70,57 +104,18 @@ public static class RequestEndpoints
                 bodyQuery = JsonToQueryHelper.ConvertJsonToQuery(body);
             }
 
-            // 2) GET QueryString 과 병합
             var finalQuery = QueryCollectionMerger.Merge(http.Request.Query, bodyQuery);
 
-            var baseQuery = db.Requests.AsQueryable();
+            var queryWithIncludes = db.Requests
+                .Include(c => c.Comments)
+                .Include(r => r.Customer)
+                .Include(r => r.Admin)
+                .AsQueryable();
 
-            var queryWithIncludes = baseQuery
-            .Include(c => c.Comments)
-            .Include(r => r.Customer)
-            .Include(r => r.Admin)
-            ;
-
-            // ApplyAll 은 IQueryable 반환 (동적 타입 가능)
             var resultQuery = queryWithIncludes.ApplyAll(finalQuery);
-
-            // ToListAsync 은 dynamic IQueryable 에서도 작동
             var requests = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
 
-
-
-            // 모든 ImprovementRequest에 대한 첨부파일 수를 한 번에 조회
-            var attachmentCounts = await db.Attachments
-                .Where(a => a.EntityType == "ImprovementRequest")
-                .GroupBy(a => a.EntityId)
-                .Select(g => new { RequestId = g.Key, Count = g.Count() })
-                .ToListAsync();
-
-            var attachmentCountMap = attachmentCounts.ToDictionary(x => x.RequestId, x => x.Count);
-
-            var requestsWithAttachmentCount = requests
-                .Select(r =>
-                {
-                    var expando = new ExpandoObject() as IDictionary<string, object>;
-                    foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(r))
-                    {
-                        var camelCaseName = char.ToLowerInvariant(property.Name[0]) + property.Name[1..];
-                        expando.Add(camelCaseName, property.GetValue(r));
-                    }
-
-                    var requestId = (int)expando["id"];
-                    expando["attachmentCount"] = attachmentCountMap.GetValueOrDefault(requestId, 0);
-
-                    if (attachmentCountMap.ContainsKey(requestId))
-                    { expando["attachments"] = db.Attachments.Where(a => a.EntityType == "ImprovementRequest" && a.EntityId == requestId).ToList(); 
-                    }
-
-                    return expando;
-                })
-                .ToList()
-                ;
-
-            return requestsWithAttachmentCount;
+            return await AddAttachmentDataAsync(requests, db, "ImprovementRequest");
 
         }, "Request srch successfully.", 201));
 
@@ -139,7 +134,6 @@ public static class RequestEndpoints
 
             var result = await ApiResponseBuilder.CreateAsync(async () =>
             {
-                // 1. ImprovementRequest 생성 및 저장
                 var request = new ImprovementRequest
                 {
                     Title = requestDto.Title,
@@ -151,9 +145,8 @@ public static class RequestEndpoints
                 };
 
                 db.Requests.Add(request);
-                await db.SaveChangesAsync(); // request.Id가 생성됨
+                await db.SaveChangesAsync();
 
-                // 2. 파일 업로드 및 Attachment 생성
                 if (files.Count > 0)
                 {
                     var attachments = new List<Attachment>();
@@ -181,7 +174,7 @@ public static class RequestEndpoints
                                 FileType = file.ContentType,
                                 FileSize = file.Length,
                                 EntityType = "ImprovementRequest",
-                                EntityId = request.Id, // 생성된 요청의 ID 사용
+                                EntityId = request.Id,
                                 UploadedAt = DateTime.UtcNow
                             };
                             attachments.Add(attachment);
@@ -195,31 +188,19 @@ public static class RequestEndpoints
                     }
                 }
 
-                // 3. RabbitMQ 메시지 전송 (기존 로직)
                 var logger = loggerFactory.CreateLogger("RequestEndpoints");
-                logger.LogInformation("Attempting to publish message to RabbitMQ.");
-
-                if (!provider.IsConnected)
-                {
-                    logger.LogWarning("RabbitMQ is not connected. Cannot send message.");
-                }
-                else
+                if (provider.IsConnected)
                 {
                     try
                     {
                         using var channel = provider.Connection!.CreateModel();
                         channel.QueueDeclare(queue: "run_script", durable: false, exclusive: false, autoDelete: false, arguments: null);
-                        logger.LogInformation("RabbitMQ channel created and queue 'run_script' declared.");
-
                         string scriptPath = "/home/quri/projects/wrkScripts/wrkRecept.sh";
-                        string[] args = new[] { requestDto.Title, requestDto.Description };
-
-                        var payload = new { script = scriptPath, args = args };
+                        string[] args = { requestDto.Title, requestDto.Description };
+                        var payload = new { script = scriptPath, args };
                         string json = JsonSerializer.Serialize(payload);
                         var body = Encoding.UTF8.GetBytes(json);
-
                         channel.BasicPublish(exchange: "", routingKey: "run_script", basicProperties: null, body: body);
-                        logger.LogInformation("Successfully published message to RabbitMQ.");
                     }
                     catch (Exception ex)
                     {
@@ -233,9 +214,9 @@ public static class RequestEndpoints
         })
         .DisableAntiforgery();
 
-        // 요청 수정
         group.MapPut("/{id}", (AppDbContext db, int id, ImprovementRequest input) => ApiResponseBuilder.CreateAsync(async () =>
         {
+            //return null;
             var req = await db.Requests.FindAsync(id);
             if (req is null) return null;
 
@@ -247,7 +228,6 @@ public static class RequestEndpoints
             return req;
         }, "Request updated successfully."));
 
-        // 요청 삭제
         group.MapDelete("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(async () =>
         {
             var req = await db.Requests.FindAsync(id);
@@ -257,5 +237,38 @@ public static class RequestEndpoints
             await db.SaveChangesAsync();
             return new { DeletedId = id };
         }, "Request deleted successfully."));
+    }
+
+    private static async Task<List<dynamic>> AddAttachmentDataAsync(List<dynamic> items, AppDbContext db, string entityType)
+    {
+        if (items == null || !items.Any())
+        {
+            return new List<dynamic>();
+        }
+
+        var itemIds = items.Select(x => (int)x.Id).ToList();
+
+        var allAttachments = await db.Attachments
+            .Where(a => a.EntityType == entityType && itemIds.Contains(a.EntityId))
+            .ToListAsync();
+
+        var attachmentsByEntityId = allAttachments.GroupBy(a => a.EntityId)
+                                                  .ToDictionary(g => g.Key, g => g.ToList());
+
+        var result = new List<dynamic>();
+        foreach (var item in items)
+        {
+            var expando = (item as object).ToExpandoWithEnumNames() as IDictionary<string, object>;
+            var entityId = (int)expando["id"];
+
+            var attachments = attachmentsByEntityId.GetValueOrDefault(entityId, new List<Attachment>());
+
+            expando["attachmentCount"] = attachments.Count;
+            expando["attachments"] = attachments;
+
+            result.Add(expando);
+        }
+
+        return result;
     }
 }
