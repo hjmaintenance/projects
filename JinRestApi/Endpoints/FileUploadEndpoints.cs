@@ -19,7 +19,7 @@ public static class FileUploadEndpoints
             AppDbContext db) =>
         {
             var attachments = new List<Attachment>();
-            var storagePath = "/home/quri/jinAttachment";
+            var storagePath = "/home/lee/jinAttachment"; // 나중에 설정으로 빼라
             Directory.CreateDirectory(storagePath);
 
             foreach (var file in files)

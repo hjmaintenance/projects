@@ -195,7 +195,7 @@ public static class RequestEndpoints
                     {
                         using var channel = provider.Connection!.CreateModel();
                         channel.QueueDeclare(queue: "run_script", durable: false, exclusive: false, autoDelete: false, arguments: null);
-                        string scriptPath = "/home/quri/projects/wrkScripts/wrkRecept.sh";
+                        string scriptPath = "/home/lee/projects/wrkScripts/wrkRecept.sh";
                         string[] args = { requestDto.Title, requestDto.Description };
                         var payload = new { script = scriptPath, args };
                         string json = JsonSerializer.Serialize(payload);
