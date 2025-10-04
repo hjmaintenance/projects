@@ -92,15 +92,27 @@
 
 <template>
   <form class="card srcharea" @submit.prevent="search">
-    <div class="flex flex-wrap items-start gap-4">
-      <div class="field">
+
+<div class="flex flex-col sm:flex-row sm:items-center" >
+                   
+
         <IconField iconPosition="left">
           <InputText type="text" v-model="searchs.Srch" placeholder="Search..." />
           <InputIcon class="pi pi-search" />
         </IconField>
-      </div>
+   
+
+
+                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                        <div></div><div></div>
+                        <div>
       <Button label="조회" class="mr-2" @click="search" />
-    </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
   </form>
 
   <Dialog v-model:visible="visible" modal :header="selectedRequest?.title" :style="{ width: '70rem' }">

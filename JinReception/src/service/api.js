@@ -42,12 +42,14 @@ apiClient.interceptors.response.use(
 
     // 성공일때 code 값을 보고 실패이면 에러 메시지 보여줘라...
 
+    /*
     app.config.globalProperties.$toast.add({
       severity: 'success',
       summary: `${serviceName || 'API'} Success`,
       detail: message,
       life: 3000
     });
+*/
 
     //}
 

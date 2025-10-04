@@ -216,8 +216,8 @@ onMounted(() => {
     console.log('layoutConfig.surface', layoutConfig.surface);
 
     setTimeout(() => { initColors(); }, 500);
-    setTimeout(() => { initColors(); }, 1500);
-    setTimeout(() => { initColors(); }, 3000);
+    setTimeout(() => { initColors(); }, 1000);
+    setTimeout(() => { initColors(); }, 2000);
 
     });
 
@@ -228,6 +228,30 @@ const initColors = () => {
         updatePreset(getPresetExt());
 
         updateSurfacePalette(surfaces.value.find((s) => s.name === layoutConfig.surface)?.palette); 
+
+
+    console.log('111111111111111111111111111111.darkTheme', layoutConfig.darkTheme);
+
+
+    console.log('222222222222222222222222222222222222.darkTheme', localStorage.getItem('theme.darkTheme') );
+
+layoutConfig.darkTheme = localStorage.getItem('theme.darkTheme') === 'true';
+
+    console.log('3333333333333333333333333333333333333.darkTheme', layoutConfig.darkTheme);
+
+
+    console.log('useLayout.darkTheme', layoutConfig.darkTheme);
+
+
+    if (layoutConfig.darkTheme) {
+      document.documentElement.classList.add('app-dark');
+    } else {
+      document.documentElement.classList.remove('app-dark');
+    }
+
+
+
+
 };
 
 

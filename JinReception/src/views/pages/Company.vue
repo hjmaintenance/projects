@@ -1,13 +1,15 @@
 <script setup>
   import { CompanyService } from '@/service/CompanyService';
   import { buildQueryPayload } from '@/utils/apiUtils';
-  import { reactive, ref } from 'vue';
+  import { reactive, ref,watch } from 'vue';
+  import { useLayout } from '@/layout/composables/layout';
 
   import DataTable from 'primevue/datatable';
   import Column from 'primevue/column';
 
   let tempIdCounter = 0;
 
+  const { loginUser } = useLayout();
   const loading = ref(null);
   const columns = ref([
     { field: 'id', header: 'Id' },
@@ -61,12 +63,27 @@
     companys.value = await CompanyService.getList(loading);
   };
 
+
+
   //조회
   const search = async () => {
     // 검색 조건과 페이징/정렬 옵션을 합쳐 최종 페이로드를 생성합니다.
     const finalPayload = buildQueryPayload(searchs, searchConfig, queryOptions);
     companys.value = await CompanyService.search(finalPayload, loading);
   };
+
+
+
+    watch(
+    () => loginUser.value?.user_uid,
+    (newUid) => {
+      if (newUid) search();
+    },
+    { immediate: true }
+  );
+
+
+  
 
   const getItem = async () => {
     companys.value = await CompanyService.get('1', loading);
@@ -107,24 +124,107 @@
 </script>
 
 <template>
-  <form class="card srcharea" @submit.prevent="search">
-    <div class="flex flex-col md:flex-row gap-8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<form class="card srcharea" @submit.prevent="search">
+
+<div class="flex flex-col sm:flex-row sm:items-center" >
+                   
+
       <IconField iconPosition="left">
         <InputText type="text" v-model="searchs.Srch" placeholder="Search..." />
         <InputIcon class="pi pi-search" />
       </IconField>
-    </div>
+   
+
+
+                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                        <div></div><div></div>
+                        <div>
+    <Button label="조회" class="mr-2" @click="search" />
+    <Button label="추가" class="mr-2" @click="addData" />
+    <Button label="저장" class="mr-2" @click="save" />
+    <Button label="삭제" class="mr-2" @click="deleteSelected" />
+                        </div>
+                    </div>
+                </div>
+
+
   </form>
 
-  <div class="srchbtnarea mt-2">
-    <Button label="초기화" class="mr-2" @click="initData" />
-    <Button label="전체" class="mr-2" @click="loadData" />
-    <Button label="d 조회" class="mr-2" @click="search" />
-    <Button label="단건" class="mr-2" @click="getItem" />
-    <Button label="저장" class="mr-2" @click="save" />
-    <Button label="추가" class="mr-2" icon="pi pi-plus" @click="addData" />
-    <Button label="삭제" class="mr-2" @click="deleteSelected" />
-  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <div class="card">
     <DataTable

@@ -92,16 +92,84 @@ const deleteSelected = async () => {
  
 <template>
  
-    <div class="card srcharea">
- 
- 
-<Button label="초기화" class="mr-2" @click="initdata" />
+
+
+
+
+
+
+
+
+
+
+
+<form class="card srcharea" @submit.prevent="search">
+
+<div class="flex flex-col sm:flex-row sm:items-center" >
+                   
+
+
+   
+
+
+                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                        <div></div><div></div>
+                        <div>
+
+
 <Button label="전체" class="mr-2" @click="loadData" />
-<Button label="단일" class="mr-2" @click="getItem" />
 <Button label="추가" class="mr-2" icon="pi pi-plus" @click="addData" />
 <Button label="저장" class="mr-2" @click="save" />
 <Button label="삭제" class="mr-2" @click="deleteSelected" />
-    </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+  </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="card">
     
     <DataTable :value="admins" 

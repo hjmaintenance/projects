@@ -101,24 +101,83 @@
 </script>
 
 <template>
-  <form class="card srcharea" @submit.prevent="search">
-    <div class="flex flex-col md:flex-row gap-8">
+
+
+
+
+
+
+
+
+
+<form class="card srcharea" @submit.prevent="search">
+
+<div class="flex flex-col sm:flex-row sm:items-center" >
+                   
+
       <IconField iconPosition="left">
         <InputText type="text" v-model="searchs.Srch" placeholder="Search..." />
         <InputIcon class="pi pi-search" />
       </IconField>
-    </div>
+   
+
+
+                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                        <div></div><div></div>
+                        <div>
+
+    <Button label="조회" class="mr-2" @click="search" />
+    <Button label="추가" class="mr-2" icon="pi pi-plus" @click="addData" />
+    <Button label="저장" class="mr-2" @click="save" />
+    <Button label="삭제" class="mr-2" @click="deleteSelected" />
+
+                        </div>
+                    </div>
+                </div>
+
+
   </form>
 
-  <div class="srchbtnarea mt-2">
-    <Button label="초기화" class="mr-2" @click="initData" />
-    <Button label="전체" class="mr-2" @click="loadData" />
-    <Button label="d 조회" class="mr-2" @click="search" />
-    <Button label="단건" class="mr-2" @click="getItem" />
-    <Button label="저장" class="mr-2" @click="save" />
-    <Button label="추가" class="mr-2" icon="pi pi-plus" @click="addData" />
-    <Button label="삭제" class="mr-2" @click="deleteSelected" />
-  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <div class="card">
     <DataTable

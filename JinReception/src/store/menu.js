@@ -5,11 +5,22 @@ import { useLayout } from '@/layout/composables/layout';
 
 export const useMenuStore = defineStore('menu', () => {
     const { loginUser } = useLayout();
+const getBaseMenu = () => [];
 
-    const getBaseMenu = () => [
+    const getBaseMenu_x = () => [
         {
             label: 'Home',
             items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
+        },
+        {
+            label: 'board',
+            items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home'
+                ,
+                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard' }
+                        , { label: 'customDashboard', icon: 'pi pi-fw pi-home', to: '/custom_dashboard' }
+                    ]
+
+            }]
         },
         {
             label: 'UI Components',

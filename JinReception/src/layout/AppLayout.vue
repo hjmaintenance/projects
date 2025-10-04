@@ -258,7 +258,7 @@ const items = ref([
     <app-sidebar></app-sidebar>
     <div class="layout-main-container">
       <div class="layout-main">
-        <app-menu-navi></app-menu-navi>
+       
         <router-view></router-view>
       </div>
       <app-footer></app-footer>

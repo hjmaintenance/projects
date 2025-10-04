@@ -4,7 +4,8 @@
   import { useRouter } from 'vue-router';
   import { useLayout } from '@/layout/composables/layout';
   import AppConfigurator from './AppConfigurator.vue';
-  import UserConfigurator from './UserConfigurator.vue';
+  import UserConfigurator from './UserConfigurator.vue';  
+  import AppMenuNavi from './AppMenuNavi.vue';
 
   import { useConfirm } from 'primevue/useconfirm';
 
@@ -54,7 +55,11 @@
           </g>
         </svg>
 
-        <span>Reception</span><span style="font-size: 0.8rem; width: 17rem; padding-top: 0.3rem"> - 열린화면의 메뉴명 : description</span>
+        <span>Reception</span><span style="font-size: 0.8rem; width: 77rem; padding-top: 0.3rem"><app-menu-navi></app-menu-navi></span>
+
+         
+
+
       </router-link>
     </div>
 

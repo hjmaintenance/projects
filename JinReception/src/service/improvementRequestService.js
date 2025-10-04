@@ -3,7 +3,7 @@ import { serviceWrapper } from './serviceWrapper';
 
 const improvementRequestService = {
   searchRequests(params) {
-    return apiClient.post('/api/requests/srch', params);
+    return apiClient.post('/requests/srch', params);
   }
 };
 

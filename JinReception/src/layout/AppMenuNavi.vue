@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <div class="flex justify-start card">
+  <div class="flex justify-start ">
     <Breadcrumb :home="home" :model="items" />
   </div>
 </template>

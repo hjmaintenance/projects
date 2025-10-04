@@ -17,11 +17,24 @@
   const editor = useEditor({
     extensions: [Color.configure({ types: [TextStyle.name, ListItem.name] }), TextStyle.configure({ types: [ListItem.name] }), StarterKit, Image],
     content: `
-<h2>요점 내용</h2><p/><p/><p/>
+<h2>요점 제목</h2><p/>
+<ol>
+  <li>요점 1</li>
+  <li>요점 2</li>
+</ol>
+<p/>
+
 <p>상세한 설명을 여기에 작성하세요.</p><p/>
-<p>이미지를 붙여넣기 해보세요.</p><p/>
-<blockquote>programming is fun!<br />
-— quristyle</blockquote><p/><p/><p/><p/><p/><p/><p/>`
+<p>이미지를 붙여넣기 해보세요.</p>
+<p>
+  ctrl+c
+</p>
+<p>ctrl+v</p>
+
+  <p/>
+<blockquote>해당 접수의 처리를 요청드립니다.<br />
+— ${loginUser.value?.user_name} ( ${loginUser.value?.email} )
+</blockquote><p/><p/><p/><p/>`
   });
 
   const filesToUpload = ref([]);
@@ -91,14 +104,39 @@
 </script>
 
 <template>
-  <div class="card srcharea">
-    <div class="flex flex-wrap items-start gap-4">
-      <div class="field">
-        <InputText type="text" v-model="request.title" placeholder="Title..." />
-      </div>
-      <Button label="요청" type="button" class="mr-2" @click="save" />
-    </div>
-  </div>
+
+
+  <form class="card srcharea" @submit.prevent="search">
+
+<div class="flex flex-col sm:flex-row sm:items-center" >
+                   
+
+        
+   <label>제목</label>
+<InputText type="text" v-model="request.title" placeholder="Title..." />
+
+
+                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                        <div class="flex flex-row md:flex-col justify-between items-end gap-2">
+                        </div>
+                        <div></div>
+                        <div>                          
+      <Button label="접수하기" type="button" class="mr-2" @click="save" />
+      <Button label="접수목록보기" type="button" class="mr-2" @click="router.push('/user_request')" />
+                        </div>
+                    </div>
+                </div>
+
+
+  </form>
+
+
+
+
+
+
+
+
 
   <div class="card">
     <!-- 본문 작성 editor -->

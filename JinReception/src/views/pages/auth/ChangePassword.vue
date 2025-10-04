@@ -72,7 +72,10 @@ const submit = async () => {
           <Password id="confirmPassword" v-model="confirmPassword" :feedback="false" toggleMask fluid />
         </div>
         <div class="flex items-center justify-between">
-          <Button label="Change Password" @click="submit" class="w-full"></Button>
+          <Button label="Change Password" @click="submit" class="w-full"  severity="danger"></Button>
+        </div>
+        <div class="flex items-center justify-between  mt-4">
+          <Button label="취소" @click="router.push('/')" class="w-full" severity="secondary"></Button>
         </div>
         <div v-if="errorMsg" class="text-red-500 text-center mt-4">{{ errorMsg }}</div>
         <div v-if="successMsg" class="text-green-500 text-center mt-4">{{ successMsg }}</div>

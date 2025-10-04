@@ -51,6 +51,12 @@ const layoutState = reactive({
 
 export function useLayout() {
   const initializeTheme = () => {
+
+
+    console.log('useLayout', layoutConfig);
+    console.log('useLayout.darkTheme', layoutConfig.darkTheme);
+
+
     if (layoutConfig.darkTheme) {
       document.documentElement.classList.add('app-dark');
     } else {
@@ -73,9 +79,16 @@ export function useLayout() {
   };
 
   const executeDarkModeToggle = () => {
+
+    console.log('executeDarkModeToggle', layoutConfig);
+
+
+
     layoutConfig.darkTheme = !layoutConfig.darkTheme;
 
     localStorage.setItem('theme.darkTheme', layoutConfig.darkTheme);
+
+    console.log('layoutConfig.darkTheme', layoutConfig.darkTheme);
 
     document.documentElement.classList.toggle('app-dark');
   };

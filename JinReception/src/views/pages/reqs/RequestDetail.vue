@@ -114,8 +114,15 @@
 </script>
 
 <template>
+
+
+
+
+
+  <form class="card srcharea" @submit.prevent="search">
   <div class="flex justify-end gap-2">
-    <Button type="button" label="reload" severity="primary" @click="getDetail"></Button>
+      
+    <Button type="button" label="다시로드" severity="primary" @click="getDetail"></Button>
 
     <!-- Show buttons based on current status -->
     <template v-if="selectedRequest && loginUser && loginUser?.login_type === 'admin'">
@@ -132,8 +139,47 @@
       <Button v-if="selectedRequest.status === 0" type="button" label="삭제" severity="danger" @click="updateRequestStatus('DELETE')"></Button>
     </template>
 
-    <Button type="button" label="Close" severity="secondary" @click="prev_vue"></Button>
-  </div>
+    <Button type="button" label="닫기" severity="secondary" @click="prev_vue"></Button>
+    </div>
+  </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <div class="card">
     <h3>{{ selectedRequest?.title }}</h3>

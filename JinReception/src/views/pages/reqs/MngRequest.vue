@@ -154,20 +154,73 @@ await nextTick();
 </script>
 
 <template>
-  <form class="card srcharea" @submit.prevent="search">
-    <div class="flex flex-wrap items-start">
+
+
+
+
+
+
+
+
+
+
+<form class="card srcharea" @submit.prevent="search">
+
+<div class="flex flex-col sm:flex-row sm:items-center" >
+                   
+
+
         <IconField iconPosition="left">
           <InputText type="text" v-model="searchs.Srch" placeholder="Search..."  size="small"/>
           <InputIcon class="pi pi-search" />
         </IconField>
 
         <Select  size="small" id="state" v-model="searchs.dropdownItem" :options="STATUS" optionLabel="name" placeholder="Select One" class="ml-2"></Select>
-                   
+
+
+
+   
+
+
+                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                        <div></div><div></div>
+                        <div>
 
 
       <Button  size="small" label="조회" class="ml-2 mr-2" @click="search" raised />
-    </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
   </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <Dialog v-model:visible="visible" modal :header="selectedRequest?.title" :style="{ width: '70rem', height: '90vh' }">
     <div class="flex justify-end gap-2">
