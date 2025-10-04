@@ -2,12 +2,14 @@
   import { TeamService } from '@/service/TeamService';
   import { buildQueryPayload } from '@/utils/apiUtils';
   import { reactive, ref , watch} from 'vue';
+  import { useLayout } from '@/layout/composables/layout';
 
   import DataTable from 'primevue/datatable';
   import Column from 'primevue/column';
 
   let tempIdCounter = 0;
 
+  const { loginUser } = useLayout();
   const loading = ref(null);
   const columns = ref([
     { field: 'id', header: 'Id' },
@@ -75,7 +77,7 @@
 
 
 
-  
+
 
   const getItem = async () => {
     teams.value = await TeamService.get('1', loading);
