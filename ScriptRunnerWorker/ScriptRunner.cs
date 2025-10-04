@@ -205,7 +205,7 @@ public class ScriptRunner
             string dtname = DateTime.Now.Ticks.ToString() + "_";
 
             string fileName2 = dtname + $"image_{index}{extension}";
-            string fileName = "/home/quri/projects/msgQ/" + dtname + $"image_{index}{extension}";
+            string fileName = "/home/lee/projects/msgQ/" + dtname + $"image_{index}{extension}";
             File.WriteAllBytes(fileName, bytes);
 
             string cid = dtname + $"img{index}@cid";
