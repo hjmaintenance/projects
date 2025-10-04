@@ -3,4 +3,5 @@
 </script>
 
 <template>
+    push test
 </template>
