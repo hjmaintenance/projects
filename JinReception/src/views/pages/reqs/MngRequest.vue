@@ -255,13 +255,13 @@ await nextTick();
 <div class="flex justify-between items-start">
   <!-- 왼쪽: 제목 -->
   <div class="flex-1 min-w-0">
-    <span class="font-medium truncate">
+    <span class="font-medium ">
         <span class="font-medium">{{ req.title }}</span>
     </span>
   </div>
 
   <!-- 오른쪽: 작성일 / 상태 -->
-  <div class="flex flex-col text-right text-sm flex-shrink-0 w-32">
+  <div class="flex flex-col text-right text-sm flex-shrink-0 w-30">
         <span>{{ req.createdAt ? formatDate(new Date(req.createdAt)) : '' }}</span>
         <span>{{ req.statusName }}</span>
   </div>
