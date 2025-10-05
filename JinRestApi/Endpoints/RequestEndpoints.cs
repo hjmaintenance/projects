@@ -233,6 +233,8 @@ public static class RequestEndpoints
             req.Title = input.Title;
             req.Description = input.Description;
             req.Status = input.Status;
+            req.AdminId = input.AdminId;
+
 
             await db.SaveChangesAsync();
             return req;
