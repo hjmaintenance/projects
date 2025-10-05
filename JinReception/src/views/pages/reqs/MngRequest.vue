@@ -250,23 +250,25 @@ await nextTick();
       @click="selectedRequest = req"
     >
 
-    <div 
-      class="flex justify-between  ">
-      <!-- 왼쪽: 제목 + 파일 아이콘 -->
-      <div class="flex items-center">
-        <span class="font-medium">{{ req.title }}</span>
-        <i
-          v-if="req.attachmentCount > 0"
-          class="pi pi-file text-xs  ml-2"
-        ></i>
-      </div>
 
-      <!-- 오른쪽: 작성일 / 상태 / 접수자 (세로) -->
-      <div class="flex flex-col text-right text-sm">
+
+<div class="flex justify-between items-start">
+  <!-- 왼쪽: 제목 -->
+  <div class="flex-1 min-w-0">
+    <span class="font-medium truncate">
+        <span class="font-medium">{{ req.title }}</span>
+    </span>
+  </div>
+
+  <!-- 오른쪽: 작성일 / 상태 -->
+  <div class="flex flex-col text-right text-sm flex-shrink-0 w-32">
         <span>{{ req.createdAt ? formatDate(new Date(req.createdAt)) : '' }}</span>
         <span>{{ req.statusName }}</span>
-      </div>
-    </div>
+  </div>
+</div>
+
+
+
     <Divider />
 
     </div>
