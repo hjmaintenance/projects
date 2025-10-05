@@ -82,18 +82,18 @@ export const STATUS = Object.freeze({
 
 
 export const STATUS = Object.freeze([
-     { name: 'PENDING', code: 0 },
-    { name: 'IN_PROGRESS', code: 1 },
-     { name: 'REJECTED', code: 2 },
-     { name: 'COMPLETED', code: 3 },
-     { name: 'DELETE', code: 4 },
+     { name: 'PENDING', ttl:'접수대기', code: 0 },
+    { name: 'IN_PROGRESS', ttl:'처리중', code: 1 },
+     { name: 'REJECTED', ttl:'반려', code: 2 },
+     { name: 'COMPLETED', ttl:'완료', code: 3 },
+     { name: 'DELETE', ttl:'삭제', code: 4 },
 ]);
 
 export const STATUS_ALL = Object.freeze([
-     { name: 'ALL', code: null },
-     { name: 'PENDING', code: 0 },
-    { name: 'IN_PROGRESS', code: 1 },
-     { name: 'REJECTED', code: 2 },
-     { name: 'COMPLETED', code: 3 },
-     { name: 'DELETE', code: 4 },
+     { name: 'ALL', ttl:'전체', code: null },
+     { name: 'PENDING', ttl:'접수대기', code: 0 },
+    { name: 'IN_PROGRESS', ttl:'처리중', code: 1 },
+     { name: 'REJECTED', ttl:'반려', code: 2 },
+     { name: 'COMPLETED', ttl:'완료', code: 3 },
+     { name: 'DELETE', ttl:'삭제', code: 4 },
 ]);

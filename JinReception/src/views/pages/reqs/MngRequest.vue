@@ -153,43 +153,27 @@ await nextTick();
 <template>
 
 
+  <!-- 조회영역 전체 -->
+<form class="card flex flex-col gap-4 md:flex-row md:items-center md:justify-between" @submit.prevent="search">
+
+    <!-- label + input 묶음 -->
+    <div class="flex flex-col md:flex-row md:items-center gap-4 flex-1">
+      <!-- 첫 번째 -->
+      <div class="flex flex-col md:flex-row md:items-center gap-2 flex-1">
+        <label for="name3" class="w-24 md:text-right shrink-0">검색</label>
+        <InputText id="name3" type="text" v-model="searchs.Srch" placeholder="Search..." />
+        
+        <label for="state" class="w-24 md:text-right shrink-0">상태</label>
+        <Select id="state" v-model="searchs.dropdownItem" :options="STATUS_ALL" optionLabel="ttl" placeholder="Select One" class=""></Select>
+      </div>
+    </div>
 
 
-
-
-
-
-
-
-<form class="card srcharea" @submit.prevent="search">
-
-<div class="flex flex-col sm:flex-row sm:items-center" >
-                   
-
-
-        <IconField iconPosition="left">
-          <InputText type="text" v-model="searchs.Srch" placeholder="Search..."  size="small"/>
-          <InputIcon class="pi pi-search" />
-        </IconField>
-
-        <Select  size="small" id="state" v-model="searchs.dropdownItem" :options="STATUS_ALL" optionLabel="name" placeholder="Select One" class="w-full md:w-56 ml-2"></Select>
-
-
-
-   
-
-
-                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-                        <div></div><div></div>
-                        <div>
-
-
-      <Button  size="small" label="조회" class="ml-2 mr-2" @click="search" raised />
-
-                        </div>
-                    </div>
-                </div>
-
+  <!-- 버튼 그룹 -->
+  <div class="flex gap-2 w-full md:w-auto md:ml-4">
+    <!-- 버튼이 여러 개라면 flex-1 로 균등분할 -->
+    <Button label="조회" class="flex-1 md:flex-none" @click="search" raised />
+  </div>
 
   </form>
 
@@ -206,24 +190,91 @@ await nextTick();
 
 
   <div class="card">
-    <DataTable :value="requests" dataKey="id" selectionMode="single" paginator :rows="10" :rowsPerPageOptions="[10, 20, 50]" :loading="loading" v-model:selection="selectedRequest">
-      <template #empty> not found </template>
+   
+<!-- 데스크탑 전용 -->
+<div class="hidden md:block">
+  <DataTable
+    :value="requests"
+    dataKey="id"
+    selectionMode="single"
+    paginator
+    :rows="10"
+    :rowsPerPageOptions="[10, 20, 50]"
+    :loading="loading"
+    v-model:selection="selectedRequest"
+  >
+    <template #empty> not found </template>
 
-      <Column header="" style="width: 3rem">
-        <template #body="{ data }">
-          <i v-if="data.attachmentCount > 0" class="pi pi-file"></i>
-        </template>
-      </Column>
-      <Column header="ID" field="id"> </Column>
-      <Column header="작성일" filterField="createdAt" dataType="date" style="min-width: 8rem">
-        <template #body="{ data }">
-          {{ data.createdAt ? formatDate(new Date(data.createdAt)) : '' }}
-        </template>
-      </Column>
-      <Column header="제목" field="title"> </Column>
-      <Column header="상태" field="statusName"> </Column>
-      <Column header="작성자" field="customer.userName" style="min-width: 1rem"> </Column>
-      <Column header="접수자" field="admin.userName" style="min-width: 1rem"> </Column>
-    </DataTable>
+    <Column header="ID" field="id"></Column>
+    <Column header="제목" field="title"></Column>
+
+    <Column
+      header="작성일"
+      filterField="createdAt"
+      dataType="date"
+      style="min-width: 8rem"
+    >
+      <template #body="{ data }">
+        {{ data.createdAt ? formatDate(new Date(data.createdAt)) : '' }}
+      </template>
+    </Column>
+
+    <Column header="상태" field="statusName"></Column>
+
+    <Column
+      header="작성자"
+      field="customer.userName"
+      style="min-width: 1rem"
+    ></Column>
+
+    <Column
+      header="접수자"
+      field="admin.userName"
+      style="min-width: 1rem"
+    ></Column>
+
+    <Column header="" style="width: 3rem">
+      <template #body="{ data }">
+        <i v-if="data.attachmentCount > 0" class="pi pi-file"></i>
+      </template>
+    </Column>
+  </DataTable>
+</div>
+
+<!-- 모바일 전용 -->
+<div class="block md:hidden space-y-2">
+  <template v-if="requests.length > 0">
+    <div
+      v-for="req in requests"
+      :key="req.id"
+      @click="selectedRequest = req"
+    >
+
+    <div 
+      class="flex justify-between  ">
+      <!-- 왼쪽: 제목 + 파일 아이콘 -->
+      <div class="flex items-center">
+        <span class="font-medium">{{ req.title }}</span>
+        <i
+          v-if="req.attachmentCount > 0"
+          class="pi pi-file text-xs  ml-2"
+        ></i>
+      </div>
+
+      <!-- 오른쪽: 작성일 / 상태 / 접수자 (세로) -->
+      <div class="flex flex-col text-right text-sm">
+        <span>{{ req.createdAt ? formatDate(new Date(req.createdAt)) : '' }}</span>
+        <span>{{ req.statusName }}</span>
+      </div>
+    </div>
+    <Divider />
+
+    </div>
+  </template>
+  <div v-else class="text-center py-4">
+    not found
+  </div>
+</div>
+
   </div>
 </template>

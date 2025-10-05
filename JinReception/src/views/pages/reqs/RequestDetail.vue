@@ -116,32 +116,51 @@
 <template>
 
 
+  <!-- 조회영역 전체 -->
+<form class="card flex flex-col gap-4 md:flex-row md:items-center md:justify-between" @submit.prevent="search">
+
+    <!-- label + input 묶음 -->
+    <div class="flex flex-col md:flex-row md:items-center gap-4 flex-1">
+
+    </div>
 
 
-
-  <form class="card srcharea" @submit.prevent="search">
-  <div class="flex justify-end gap-2">
-      
-    <Button type="button" label="다시로드" severity="primary" @click="getDetail"></Button>
+  <!-- 버튼 그룹 -->
+  <div class="flex gap-2 w-full md:w-auto md:ml-4">
+    <!-- 버튼이 여러 개라면 flex-1 로 균등분할 -->
+    <Button type="button" label="Reload" severity="primary" class="flex-1 md:flex-none" @click="getDetail"></Button>
 
     <!-- Show buttons based on current status -->
     <template v-if="selectedRequest && loginUser && loginUser?.login_type === 'admin'">
       <!-- Status 0 (Pending): Can move to In Progress (1) or Delete (4) -->
-      <Button v-if="selectedRequest.status === 0" type="button" :label="`이거 ${loginUser?.user_name} 접수 할께요`" severity="primary" @click="updateRequestStatus('IN_PROGRESS')"></Button>
+      <Button v-if="selectedRequest.status === 0" type="button" :label="`${loginUser?.user_name} 접수`" class="flex-1 md:flex-none" severity="primary" @click="updateRequestStatus('IN_PROGRESS')"></Button>
       <!-- <Button v-if="selectedRequest.status === 0" type="button" label="삭제" severity="danger" @click="updateRequestStatus('DELETE')"></Button> -->
 
       <!-- Status 1 (In Progress): Can move to Completed (2) or Rejected (3) -->
-      <Button v-if="selectedRequest.status === 1" type="button" label="완료" severity="success" @click="updateRequestStatus('COMPLETED')"></Button>
-      <Button v-if="selectedRequest.status === 1" type="button" label="반려" severity="secondary" @click="updateRequestStatus('REJECTED')"></Button>
+      <Button v-if="selectedRequest.status === 1" type="button" label="완료" severity="success" class="flex-1 md:flex-none" @click="updateRequestStatus('COMPLETED')"></Button>
+      <Button v-if="selectedRequest.status === 1" type="button" label="반려" severity="secondary" class="flex-1 md:flex-none" @click="updateRequestStatus('REJECTED')"></Button>
     </template>
 
     <template v-if="selectedRequest && loginUser && selectedRequest?.customer?.id === loginUser?.user_uid && loginUser?.login_type != 'admin'">
-      <Button v-if="selectedRequest.status === 0" type="button" label="삭제" severity="danger" @click="updateRequestStatus('DELETE')"></Button>
+      <Button v-if="selectedRequest.status === 0" type="button" label="삭제" severity="danger" class="flex-1 md:flex-none" @click="updateRequestStatus('DELETE')"></Button>
     </template>
 
-    <Button type="button" label="닫기" severity="secondary" @click="prev_vue"></Button>
-    </div>
+    <Button type="button" label="닫기" severity="secondary" class="flex-1 md:flex-none" @click="prev_vue"></Button>
+
+
+
+
+
+  </div>
+
   </form>
+
+
+
+
+
+
+
 
 
 
