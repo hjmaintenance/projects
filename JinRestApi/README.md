@@ -87,7 +87,36 @@ vi /etc/.bashrc
 # 마지막 라인에 추가
 
 Help_JSINI=Host=아이피;Port=포트;Database=데이터데이블명;Username=홍길동;Password=암호;Search Path=스키마
+
+
+
+
 ```
+
+
+파일 처리를 위한 환경 변수
+
+```
+
+# 실제 경로는 자신에게 맞는 경로로...
+
+#Linux/macOS:
+   export FileStorage__BasePath="/home/quri/projects/storage"
+
+#Windows (PowerShell):
+
+   $env:FileStorage__BasePath = "C:\home\quri\projects\storage"
+
+
+
+
+                    var scriptPath = configuration.GetValue<string>("ShellScript:WrkRecept") ?? "/home/lee/projects/wrkScripts/wrkRecept.sh";
+
+
+                    
+```
+
+
 
 EntityFramework 설치
 ```

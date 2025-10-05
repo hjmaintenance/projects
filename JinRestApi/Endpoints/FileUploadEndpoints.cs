@@ -16,10 +16,11 @@ public static class FileUploadEndpoints
             [FromForm] IFormFileCollection files,
             [FromForm] string entityType,
             [FromForm] int entityId,
-            AppDbContext db) =>
+            AppDbContext db,
+            IConfiguration configuration) =>
         {
             var attachments = new List<Attachment>();
-            var storagePath = "/home/lee/jinAttachment"; // 나중에 설정으로 빼라
+            var storagePath = configuration.GetValue<string>("FileStorage:BasePath") ?? "/home/lee/jinAttachment";
             Directory.CreateDirectory(storagePath);
 
             foreach (var file in files)

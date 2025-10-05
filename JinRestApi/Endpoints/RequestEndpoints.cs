@@ -13,6 +13,10 @@ using System.Text.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.ComponentModel;
+using JinRestApi.Data;
+using JinRestApi.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace JinRestApi.Endpoints;
 
@@ -120,7 +124,7 @@ public static class RequestEndpoints
         }, "Request srch successfully.", 201));
 
 
-        group.MapPost("/", async (HttpRequest httpRequest, AppDbContext db, IRabbitMqConnectionProvider provider, ILoggerFactory loggerFactory) =>
+        group.MapPost("/", async (HttpRequest httpRequest, AppDbContext db, IRabbitMqConnectionProvider provider, ILoggerFactory loggerFactory, IConfiguration configuration) =>
         {
             var form = await httpRequest.ReadFormAsync();
             var requestDto = new RequestCreateDto(
@@ -150,7 +154,9 @@ public static class RequestEndpoints
                 if (files.Count > 0)
                 {
                     var attachments = new List<Attachment>();
-                    var storagePath = "/home/lee/jinAttachment";
+                    //var storagePath = "/home/lee/jinAttachment";
+                    var storagePath = configuration.GetValue<string>("FileStorage:BasePath") ?? "/home/lee/jinAttachment";
+           
                     Directory.CreateDirectory(storagePath);
 
                     foreach (var file in files)
@@ -195,7 +201,11 @@ public static class RequestEndpoints
                     {
                         using var channel = provider.Connection!.CreateModel();
                         channel.QueueDeclare(queue: "run_script", durable: false, exclusive: false, autoDelete: false, arguments: null);
-                        string scriptPath = "/home/lee/projects/wrkScripts/wrkRecept.sh";
+                        //string scriptPath = "/home/lee/projects/wrkScripts/wrkRecept.sh";
+
+
+                    var scriptPath = configuration.GetValue<string>("ShellScript:WrkRecept") ?? "/home/lee/projects/wrkScripts/wrkRecept.sh";
+
                         string[] args = { requestDto.Title, requestDto.Description };
                         var payload = new { script = scriptPath, args };
                         string json = JsonSerializer.Serialize(payload);
