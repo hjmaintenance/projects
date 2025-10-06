@@ -14,11 +14,11 @@ namespace JinRestApi.Models;
         [System.ComponentModel.DataAnnotations.Display(Name = "처리중")]
         InProgress,
 
-        [System.ComponentModel.DataAnnotations.Display(Name = "처리완료")]
-        Completed,
-
         [System.ComponentModel.DataAnnotations.Display(Name = "반려")]
         Rejected,
+
+        [System.ComponentModel.DataAnnotations.Display(Name = "처리완료")]
+        Completed,
 
         [System.ComponentModel.DataAnnotations.Display(Name = "삭제")]
         Delete

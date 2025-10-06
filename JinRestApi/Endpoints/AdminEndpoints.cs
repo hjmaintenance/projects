@@ -49,10 +49,23 @@ public static class AdminEndpoints
         group.MapPost("/change-password", async (HttpContext http, AppDbContext db, AdminChangePasswordDto changePasswordDto) =>
         {
             var passwordService = new PasswordService();
+
+/*
+                    new Claim(JwtRegisteredClaimNames.Sub, login_id),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim("uid", user_uid),
+                    new Claim("login_type", login_type)
+                    */
+
             var loginId = http.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var uid = http.User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
+            var loginType = http.User.Claims.FirstOrDefault(c => c.Type == "login_type")?.Value;
 
 
+
+            Console.WriteLine($"change-password uid : {uid}");
             Console.WriteLine($"change-password loginId : {loginId}");
+            Console.WriteLine($"change-password loginType : {loginType}");
             
 
 
@@ -61,22 +74,45 @@ public static class AdminEndpoints
                 return Results.Unauthorized();
             }
 
-            var admin = await db.Admins.FirstOrDefaultAsync(a => a.LoginId == loginId);
-            if (admin == null)
+            if (loginType == "admin")
             {
-                return Results.NotFound("Admin not found.");
-            }
+                var admin = await db.Admins.FirstOrDefaultAsync(a => a.Id+"" == uid);
+                if (admin == null)
+                {
+                    return Results.NotFound("Admin not found.");
+                }
 
-            if (!passwordService.VerifyPassword(admin, changePasswordDto.OldPassword))
+                if (!passwordService.VerifyPassword(admin, changePasswordDto.OldPassword))
+                {
+                    return Results.BadRequest("Invalid old password.");
+                }
+
+                admin.PasswordHash = passwordService.HashPassword<Admin>(admin, changePasswordDto.NewPassword);
+                admin.MustChangePassword = false;
+                await db.SaveChangesAsync();
+
+            }
+            else
             {
-                return Results.BadRequest("Invalid old password.");
+
+
+                var customer = await db.Customers.FirstOrDefaultAsync(a => a.Id+"" == uid);
+                if (customer == null)
+                {
+                    return Results.NotFound("Customer not found.");
+                }
+
+                if (!passwordService.VerifyPassword(customer, changePasswordDto.OldPassword))
+                {
+                    return Results.BadRequest("Invalid old password.");
+                }
+
+                customer.PasswordHash = passwordService.HashPassword<Customer>(customer, changePasswordDto.NewPassword);
+                //customer.MustChangePassword = false;
+                await db.SaveChangesAsync();
+                
             }
-
-            admin.PasswordHash = passwordService.HashPassword<Admin>(admin, changePasswordDto.NewPassword);
-            admin.MustChangePassword = false;
-            await db.SaveChangesAsync();
-
-            return Results.Ok("Password changed successfully.");
+                return Results.Ok("Password changed successfully.");
         }).RequireAuthorization();
 
         group.MapPut("/{id}", (AppDbContext db, int id, Admin input) => ApiResponseBuilder.CreateAsync(async () =>

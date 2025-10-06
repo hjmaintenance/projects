@@ -9,6 +9,7 @@
   const password = ref('');
   const loginType = ref('');
   const checked = ref(false);
+  const passwordInput = ref(null); 
 
   const { setLoginUser } = useLayout();
   const router = useRouter();
@@ -19,6 +20,12 @@
     e.preventDefault();
     errorMsg.value = '';
 
+    if (!password.value) {
+    // password가 비어있으면 focus
+    passwordInput.value?.$el?.querySelector("input")?.focus();
+    return;
+  }
+  
     try {
       const data = await AuthService.login({ LoginId: userid.value, Password: password.value, LoginType: loginType.value });
       localStorage.setItem('jwt_token', data.token);
@@ -30,37 +37,11 @@
         router.push('/');
       }
     } catch (err) {
-      errorMsg.value = err.message;
+      //errorMsg.value = err.message;
+      errorMsg.value = '아이디 암호를 확인해주세요.';
     }
   };
 
-  // 테스트용 로그인 함수
-  const submit2 = async (event) => {
-    const id = event.currentTarget.getAttribute('id');
-    const pw = event.currentTarget.getAttribute('pw');
-    const utype = event.currentTarget.getAttribute('utype');
-
-    if ( utype != undefined && utype != '') {
-      loginType.value = 'admin';
-    } else {
-      loginType.value = '';
-    }
-
-    errorMsg.value = '';
-    try {
-      const data = await AuthService.login({ LoginId: id, Password: pw, LoginType: loginType.value });
-      localStorage.setItem('jwt_token', data.token);
-      setLoginUser(data.user);
-
-      if (data.user.mustChangePassword) {
-        router.push('/auth/change-password');
-      } else {
-        router.push('/');
-      }
-    } catch (err) {
-      errorMsg.value = err.message;
-    }
-  };
 </script>
 
 <template>
@@ -91,7 +72,7 @@
             <span class="text-muted-color font-medium">Sign in to continue</span>
           </div>
 
-          <div>
+          <form  @submit.prevent="submit" >
             <div class="font-semibold text-xl">관리자</div>
             <ToggleSwitch :model-value="loginType === 'admin'" @update:modelValue="(val) => (loginType = val ? 'admin' : '')" value="admin" />
 
@@ -99,7 +80,7 @@
             <InputText id="userid" type="text" placeholder="User Id" class="w-full md:w-[30rem] mb-8" v-model="userid" />
 
             <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-            <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
+            <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false" ref="passwordInput" ></Password>
 
             <div class="flex items-center justify-between mt-2 mb-8 gap-8">
               <div class="flex items-center">
@@ -108,8 +89,8 @@
               </div>
               <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
             </div>
-            <Button label="Sign In" class="w-full" @click="submit"></Button>
-          </div>
+            <Button type="submit" label="Sign In" class="w-full" @click="submit"></Button>
+          </form>
             <div v-if="errorMsg" style="color: red">{{ errorMsg }}</div>
         </div>
       </div>
@@ -120,29 +101,6 @@
     
 
       
-
-<div>
-
-  
-
-            <h6>접수자</h6><br />
-            <ol>
-            
-            <li><Button label="김고객" id="bbb" pw="cccc" class="mr-2" @click="submit2"></Button>       </li>   
-            <li><Button label="박고객" id="aaa" pw="cccc" class="mr-2" @click="submit2"></Button></li>
-            </ol>
-
-
-            <h6>관리자</h6>
-            <ol>
-            <li><Button label="운영자" id="manager" pw="cccc" utype="admin" @click="submit2"></Button></li>
-            <li><Button label="강대현" id="kdh" pw="cccc" utype="admin" @click="submit2"></Button></li>
-            <li><Button label="관리자" id="admin" pw="cccc" utype="admin" @click="submit2"></Button></li>
-    </ol>
-
-
-</div>
-
 
       </div>
 </template>

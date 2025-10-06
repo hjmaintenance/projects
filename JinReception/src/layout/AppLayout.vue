@@ -10,6 +10,7 @@
   import AppMenuNavi from './AppMenuNavi.vue';
   import AppSidebar from './AppSidebar.vue';
   import AppTopbar from './AppTopbar.vue';
+  import MobileWriteFab from './MobileWriteFab.vue';
 
   import Aura from '@primeuix/themes/aura';
   import Lara from '@primeuix/themes/lara';
@@ -259,11 +260,41 @@ const items = ref([
     <div class="layout-main-container">
       <div class="layout-main">
        
-        <router-view></router-view>
+
+
+
+
+
+
+
+
+  <template v-if="$route.meta.keepAlive">
+    <keep-alive>
+      <router-view v-slot="{ Component }">
+        <component :is="Component" />
+      </router-view>
+    </keep-alive>
+  </template>
+
+  <template v-else>
+    <router-view />
+  </template>
+
+
+
+
+
+
+
+
+        <!-- <router-view></router-view> -->
+
+
       </div>
       <app-footer></app-footer>
     </div>
     <div class="layout-mask animate-fadein"></div>
   </div>
   <Toast></Toast>
+  <MobileWriteFab  v-if="!route.meta.hideFab" />
 </template>

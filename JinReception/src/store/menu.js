@@ -162,7 +162,7 @@ export const useMenuStore = defineStore('menu', () => {
         var customer = {
             label: '' ,
             items: [
-                { label: '접수', icon: 'pi pi-fw pi-check-square', to: '/mng_request',
+                { label: '접수', icon: 'pi pi-fw pi-check-square',
                   items: [
                           { label: '접수목록', icon: 'pi pi-fw pi-check-square', to: '/mng_request' },
                           { label: '접수', icon: 'pi pi-fw pi-mobile', to: '/request', class: 'rotated-icon' }
@@ -170,7 +170,7 @@ export const useMenuStore = defineStore('menu', () => {
                 },
                 { label: '설정', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon',
                   items: [
-                          { label: '프로필 경경', icon: 'pi pi-fw pi-mobile', to: '/profile', class: 'rotated-icon' },
+                          { label: '프로필 변경', icon: 'pi pi-fw pi-mobile', to: '/profile', class: 'rotated-icon' },
                           { label: '비밀번호 변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' }
                          ]
                 },

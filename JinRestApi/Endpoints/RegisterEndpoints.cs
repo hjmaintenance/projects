@@ -134,7 +134,8 @@ public static class RegisterEndpoints
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, login_id),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim("uid", user_uid)
+                    new Claim("uid", user_uid),
+                    new Claim("login_type", login_type)
                 };
 
                 var token = new JwtSecurityToken(

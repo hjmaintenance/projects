@@ -22,12 +22,14 @@ const router = createRouter({
         {
           path: '/mng_request',
           name: 'mng_request',
-          component: () => import('@/views/pages/reqs/MngRequest.vue')
+          component: () => import('@/views/pages/reqs/MngRequest.vue'),
+          meta: { keepAlive: true }
         },
         {
           path: '/request',
           name: 'request',
-          component: () => import('@/views/pages/reqs/Request.vue')
+          component: () => import('@/views/pages/reqs/Request.vue'),
+          meta: { hideFab: true }
         },
         {
           path: '/company',

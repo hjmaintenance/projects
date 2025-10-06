@@ -17,21 +17,13 @@
   const editor = useEditor({
     extensions: [Color.configure({ types: [TextStyle.name, ListItem.name] }), TextStyle.configure({ types: [ListItem.name] }), StarterKit, Image],
     content: `
-<h2>요점 제목</h2><p/>
-<ol>
-  <li>요점 1</li>
-  <li>요점 2</li>
-</ol>
-<p/>
+<h2>주요 요구사항을 입력하세요.</h2>
 
-<p>상세한 설명을 여기에 작성하세요.</p><p/>
-<p>이미지를 붙여넣기 해보세요.</p>
 <p>
-  ctrl+c
+  내용을 입력하세요.
 </p>
-<p>ctrl+v</p>
 
-  <p/>
+
 <blockquote>해당 접수의 처리를 요청드립니다.<br />
 — ${loginUser.value?.user_name} ( ${loginUser.value?.email} )
 </blockquote><p/><p/><p/><p/>`
@@ -122,7 +114,7 @@
                         <div></div>
                         <div>                          
       <Button label="접수하기" type="button" class="mr-2" @click="save" />
-      <Button label="접수목록보기" type="button" class="mr-2" @click="router.push('/mng_request')" />
+      <Button label="접수목록보기" type="button" class="mr-2" @click="router.back()" />
                         </div>
                     </div>
                 </div>

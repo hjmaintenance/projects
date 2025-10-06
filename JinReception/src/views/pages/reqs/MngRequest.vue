@@ -6,11 +6,18 @@
   import { useLayout } from '@/layout/composables/layout';
   import { useRouter } from 'vue-router';
 
+
+  import { useRequestStore } from '@/store/requestStore';
+
+
+
+
   import DataTable from 'primevue/datatable';
   import Column from 'primevue/column';
 
   const router = useRouter();
 
+const store = useRequestStore()
 
   const { loginUser } = useLayout();
   const loading = ref(null);
@@ -28,12 +35,12 @@
 
   // 필드 구성을 computed 속성으로 변경하여 항상 최신 값을 유지합니다.
   const searchConfig = computed(() => [
-    { model: searchs.Srch, fields: ['title'], operator: 'like' },
+    { model: store.Srch, fields: ['title'], operator: 'like' },
     ...(loginUser.value?.login_type !== 'admin'
       ? [{ model: searchs.customerId, fields: ['customerId'] }]
       : []),
     //{ model: 'Srch', fields: ['id'], operator: '' },
-    { model: searchs.dropdownItem?.code, fields: ['status'], operator: '' }
+    { model: store.dropdownItem?.code, fields: ['status'], operator: '' }
   ]);
 
   const queryOptions = reactive({
@@ -161,10 +168,10 @@ await nextTick();
       <!-- 첫 번째 -->
       <div class="flex flex-col md:flex-row md:items-center gap-2 flex-1">
         <label for="name3" class="w-24 md:text-right shrink-0">검색</label>
-        <InputText id="name3" type="text" v-model="searchs.Srch" placeholder="Search..." />
+        <InputText id="name3" type="text" v-model="store.Srch" placeholder="Search..." class="md:min-w-[12rem]" />
         
         <label for="state" class="w-24 md:text-right shrink-0">상태</label>
-        <Select id="state" v-model="searchs.dropdownItem" :options="STATUS_ALL" optionLabel="ttl" placeholder="Select One" class=""></Select>
+        <Select id="state" v-model="store.dropdownItem" :options="STATUS_ALL" optionLabel="ttl" placeholder="Select One" class="md:min-w-[12rem]"></Select>
       </div>
     </div>
 
@@ -261,7 +268,7 @@ await nextTick();
   </div>
 
   <!-- 오른쪽: 작성일 / 상태 -->
-  <div class="flex flex-col text-right text-sm flex-shrink-0 w-30">
+  <div class="flex flex-col text-right text-sm flex-shrink-0 w-32">
         <span>{{ req.createdAt ? formatDate(new Date(req.createdAt)) : '' }}</span>
         <span>{{ req.statusName }}</span>
   </div>
