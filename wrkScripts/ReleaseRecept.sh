@@ -20,7 +20,7 @@ Backend_PATH="${Backend__Path:-/home/lee/projects/JinRestApi}"
 
 
 # 공통 버전 생성 (날짜 기반 예시)
-RELEASE_VERSION="0.7.$(date +%y%m%d%H%M)"
+RELEASE_VERSION="0.7.$(date +%y%m%d_%H%M%S)"
 # echo $RELEASE_VERSION > VERSION
 
 echo "=== 릴리즈 버전: $RELEASE_VERSION ==="
