@@ -27,7 +27,7 @@ echo "=== 릴리즈 버전: $RELEASE_VERSION ==="
 ### Frontend 반영 ###
 
 # version.json 경로
-VERSION_FILE="$Front_PATH/src/assets/version.json"
+VERSION_FILE="$Front_PATH/public/version.json"
 
 # 디렉토리 존재 확인, 없으면 생성
 mkdir -p "$(dirname "$VERSION_FILE")"
