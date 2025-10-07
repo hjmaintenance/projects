@@ -6,3 +6,5 @@ obj/
 *.sln
 Migrations/
 HANJU_UMS/packages/
+JinRestApi/publish/
+JinReception/src/assets/version.json

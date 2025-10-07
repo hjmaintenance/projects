@@ -189,6 +189,11 @@ export const useMenuStore = defineStore('menu', () => {
                 { label: '공지관리', icon: 'pi pi-fw pi-id-card', to: '/notice' },
                 { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
                 { label: '비밀번호변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' },
+                { label: '배포처리', icon: 'pi pi-fw pi-key', to: '/buildRelease' },
+
+                
+
+
                 { label: '로그아웃', icon: 'pi pi-fw pi-key', command: () => uiStore.requestLogoutConfirmation() }
             ]
         };

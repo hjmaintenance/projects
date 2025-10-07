@@ -1,11 +1,6 @@
 
 
 
-
-
-
-서버는 우분투 쓸꺼임..
-- (박부장님 감사합니다.)
 ```
 sudo apt update
 sudo apt install rabbitmq-server -y

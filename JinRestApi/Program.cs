@@ -144,6 +144,8 @@ app.MapAttachmentEndpoints();
 app.MapDashboardEndpoints();
 app.MapNoticeEndpoints();
 app.MapFileUploadEndpoints();
+app.MapReleaseEndpoints();
+
 
 
 

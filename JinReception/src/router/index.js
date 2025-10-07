@@ -26,6 +26,12 @@ const router = createRouter({
           meta: { keepAlive: true }
         },
         {
+          path: '/buildRelease',
+          name: 'buildRelease',
+          component: () => import('@/views/pages/sys/ReleseTool.vue'),
+          meta: { keepAlive: true }
+        },
+        {
           path: '/request',
           name: 'request',
           component: () => import('@/views/pages/reqs/Request.vue'),
