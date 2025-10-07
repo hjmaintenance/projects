@@ -55,6 +55,8 @@ public static class CustomerEndpoints
             customer.UserName = input.UserName;
             customer.LoginId = input.LoginId;
             customer.Email = input.Email;
+            customer.Sex = input.Sex;
+            customer.Photo = input.Photo;
             customer.CompanyId = input.CompanyId;
 
             await db.SaveChangesAsync();

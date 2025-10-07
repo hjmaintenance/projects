@@ -178,25 +178,61 @@ export const useMenuStore = defineStore('menu', () => {
             ]
         };
 
+
+
+
+
         var admin = {
-            label: loginUser.value?.user_name || '관리자',
+            label: '' ,
             items: [
-                { label: '회사관리', icon: 'pi pi-fw pi-id-card', to: '/company' },
-                { label: '고객관리', icon: 'pi pi-fw pi-id-card', to: '/customer' },
-                { label: '팀관리', icon: 'pi pi-fw pi-check-square', to: '/teams' },
-                { label: '관리자관리', icon: 'pi pi-fw pi-mobile', to: '/admins', class: 'rotated-icon' },
-                { label: '접수관리', icon: 'pi pi-fw pi-table', to: '/mng_request' },
-                { label: '공지관리', icon: 'pi pi-fw pi-id-card', to: '/notice' },
-                { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
-                { label: '비밀번호변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' },
-                { label: '배포처리', icon: 'pi pi-fw pi-key', to: '/buildRelease' },
-
-                
-
-
+                { label: '모니터링', icon: 'pi pi-fw pi-check-square',
+                  items: [
+                            { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
+                        ]
+                },
+                { label: '고객관리', icon: 'pi pi-fw pi-check-square',
+                  items: [
+                            { label: '회사관리', icon: 'pi pi-fw pi-id-card', to: '/company' },
+                            { label: '고객관리', icon: 'pi pi-fw pi-id-card', to: '/customer' },
+                            { label: '접수관리', icon: 'pi pi-fw pi-table', to: '/mng_request' },
+                        ]
+                },
+                { label: 'Act', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon',
+                  items: [
+                            { label: '팀관리', icon: 'pi pi-fw pi-check-square', to: '/teams' },
+                            { label: '관리자관리', icon: 'pi pi-fw pi-mobile', to: '/admins', class: 'rotated-icon' },
+                            { label: '공지관리', icon: 'pi pi-fw pi-id-card', to: '/notice' },
+                         ]
+                },
+                { label: '시스템', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon',
+                  items: [
+                          { label: '프로필 변경', icon: 'pi pi-fw pi-mobile', to: '/profile', class: 'rotated-icon' },
+                            { label: '배포처리', icon: 'pi pi-fw pi-key', to: '/buildRelease' },
+                         ]
+                },
+                { label: '설정', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon',
+                  items: [
+                          { label: '프로필 변경', icon: 'pi pi-fw pi-mobile', to: '/profile', class: 'rotated-icon' },
+                          { label: '비밀번호 변경', icon: 'pi pi-fw pi-key', to: '/auth/change-password' }
+                         ]
+                },
                 { label: '로그아웃', icon: 'pi pi-fw pi-key', command: () => uiStore.requestLogoutConfirmation() }
             ]
-        };
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         const loginType = loginUser.value?.login_type;
         if (loginType === 'admin') {
