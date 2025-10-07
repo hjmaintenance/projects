@@ -1,6 +1,7 @@
 #!/bin/bash
 
 
+echo " "
 
 # backend 중단
 echo "=== 기존 백엔드 프로세스 중단 ==="
@@ -41,6 +42,9 @@ echo "Frontend version.json 생성/갱신 완료: $VERSION_FILE"
 # projects 디렉토리로 이동
 cd "$ReleseQueue_PATH" || exit 1
 
+
+echo "=== Source Check ==="
+
 # source get 
 git pull
 
@@ -48,6 +52,8 @@ git pull
 cd "$Front_PATH" || exit 1
 
 # 프론트 빌드
+
+echo "=== 프론트 빌드 ==="
 npm run build
 
 sleep 1   # 안전하게 1초 대기
@@ -63,14 +69,17 @@ cd "$Backend_PATH" || exit 1
 # dotnet run
 
 # dotnet publish → 실제 실행파일 생성
+
+echo "=== 백엔드 빌드 ==="
 dotnet publish -c Release -o ./publish
 
+sleep 1   # 안전하게 1초 대기
+
 # 백엔드 재실행 (백그라운드 실행 + 로그 저장)
-echo "=== 새로운 백엔드 시작 ==="
+echo "=== 백엔드 시작 ==="
 LOGFILE="../logs/backend_$(date +%Y%m%d_%H%M).log"
 
 
-sleep 1   # 안전하게 1초 대기
 
 nohup dotnet ./publish/JinRestApi.dll > "$LOGFILE" 2>&1 &
 

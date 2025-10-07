@@ -6,7 +6,7 @@ const releaseVersion = ref('')
 
 const loadVersion = async () => {
   try {
-    const res = await fetch('/src/assets/version.json?_=' + Date.now()) // 캐시 방지
+    const res = await fetch('/version.json?_=' + Date.now()) // 캐시 방지
     const data = await res.json()
     releaseVersion.value = data.version
   } catch (err) {
