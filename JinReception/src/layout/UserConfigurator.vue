@@ -51,7 +51,7 @@
 </script>
 
 <template>
-  <div class="cursor-pointer" @click="toggle">
+  <div class="cursor-pointer hidden md:block" @click="toggle">
     <button type="button" class="layout-topbar-action" :title="loginUser.name" aria-haspopup="true" aria-controls="overlay_tmenu">
       <i class="pi pi-user"></i>
     </button>
