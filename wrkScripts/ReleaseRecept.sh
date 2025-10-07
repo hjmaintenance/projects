@@ -33,10 +33,6 @@ VERSION_FILE="$Front_PATH/dist/version.json"
 # 디렉토리 존재 확인, 없으면 생성
 mkdir -p "$(dirname "$VERSION_FILE")"
 
-# version.json 생성/갱신
-echo "{ \"version\": \"$RELEASE_VERSION\" }" > "$VERSION_FILE"
-
-echo "Frontend version.json 생성/갱신 완료: $VERSION_FILE"
 
 
 # projects 디렉토리로 이동
@@ -85,3 +81,8 @@ nohup dotnet ./publish/JinRestApi.dll > "$LOGFILE" 2>&1 &
 
 
 
+echo "=== Version Update ==="
+# version.json 생성/갱신
+echo "{ \"version\": \"$RELEASE_VERSION\" }" > "$VERSION_FILE"
+
+echo "Frontend version.json 생성/갱신 완료: $VERSION_FILE"
