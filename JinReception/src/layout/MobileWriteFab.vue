@@ -10,7 +10,7 @@
       type="button"
       :title="title"
       aria-label="글 작성"
-      class="fixed right-4 bottom-[calc(env(safe-area-inset-bottom,1rem)+1rem)] md:hidden z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg
+      class="fixed right-4 bottom-[calc(env(safe-area-inset-bottom,1rem)+1rem)]  z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg
              bg-primary-600 hover:bg-primary-700 active:scale-95 transform-gpu transition-all
              focus:outline-none focus:ring-4 focus:ring-primary-300
              text-white"

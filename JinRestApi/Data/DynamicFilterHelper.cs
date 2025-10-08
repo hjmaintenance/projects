@@ -49,6 +49,12 @@ namespace JinRestApi.Data
         public static IQueryable ApplyAll<T>(this IQueryable<T> query, IQueryCollection qs)
         {
             // 1) WHERE 필터 적용
+
+            
+            Console.WriteLine($"Final query: { query.ToString()}");
+
+
+
             query = ApplyWhereFilters(query, qs);
 
             // 2) GROUP BY + AGGREGATE 처리 (있다면)
@@ -141,6 +147,9 @@ namespace JinRestApi.Data
         {
             var whereParts = new List<string>();
             var parameters = new List<object>();
+            
+            var orGroupParts = new List<string>();
+            var orGroupParameters = new List<object>();
 
             int paramIndex = 0;
 
@@ -152,6 +161,14 @@ namespace JinRestApi.Data
 
                 // skip special keys handled elsewhere
                 if (IsSpecialKey(key)) continue;
+
+                // OR 그룹 처리
+                bool isOrGroup = false;
+                if (key.StartsWith("_or_", StringComparison.OrdinalIgnoreCase))
+                {
+                    isOrGroup = true;
+                    key = key[4..];
+                }
 
                 // suffix parsing
                 var op = "eq";
@@ -199,8 +216,17 @@ namespace JinRestApi.Data
                                 _ => "=="
                             };
 
-                            whereParts.Add($"{prop} {symbol} @{paramIndex}");
-                            parameters.Add(conv);
+                            if (isOrGroup)
+                            {
+                                orGroupParts.Add($"{prop} {symbol} @{paramIndex}");
+                                orGroupParameters.Add(conv);
+                            }
+                            else
+                            {
+                                whereParts.Add($"{prop} {symbol} @{paramIndex}");
+                                parameters.Add(conv);
+                            }
+
                             paramIndex++;
                             break;
                         }
@@ -209,23 +235,42 @@ namespace JinRestApi.Data
                         {
                             // string contains
                             if (propInfo.PropertyType != typeof(string)) continue;
-                            whereParts.Add($"{prop} != null AND {prop}.Contains(@{paramIndex})");
-                            parameters.Add(rawVal);
+                            var part = $"{prop} != null AND {prop}.Contains(@{paramIndex})";
+                            if (isOrGroup)
+                            {
+                                orGroupParts.Add(part);
+                                orGroupParameters.Add(rawVal);
+                            }
+                            else
+                            {
+                                whereParts.Add(part);
+                                parameters.Add(rawVal);
+                            }
                             paramIndex++;
                             break;
                         }
                     case "startswith":
                         {
                             if (propInfo.PropertyType != typeof(string)) continue;
-                            whereParts.Add($"{prop} != null AND {prop}.StartsWith(@{paramIndex})");
-                            parameters.Add(rawVal);
+                            var part = $"{prop} != null AND {prop}.StartsWith(@{paramIndex})";
+                            if (isOrGroup)
+                            {
+                                orGroupParts.Add(part);
+                                orGroupParameters.Add(rawVal);
+                            }
+                            else
+                            {
+                                whereParts.Add(part);
+                                parameters.Add(rawVal);
+                            }
                             paramIndex++;
                             break;
                         }
                     case "endswith":
                         {
                             if (propInfo.PropertyType != typeof(string)) continue;
-                            whereParts.Add($"{prop} != null AND {prop}.EndsWith(@{paramIndex})");
+                            var part = $"{prop} != null AND {prop}.EndsWith(@{paramIndex})";
+                            whereParts.Add(part); // OR 그룹에서는 잘 사용되지 않으므로 기본 그룹에만 추가
                             parameters.Add(rawVal);
                             paramIndex++;
                             break;
@@ -233,20 +278,60 @@ namespace JinRestApi.Data
                     case "in":
                     case "nin":
                         {
+
+                         
+
+
                             // split by | and convert elements
                             var parts = rawVal.Split('|', StringSplitOptions.RemoveEmptyEntries);
                             var list = new List<object?>();
                             foreach (var p in parts)
                             {
                                 if (TryConvertToType(p, propInfo.PropertyType, out var cv))
+                                {
+
+                                    Console.WriteLine($" p : {p} , cv : {cv}");
                                     list.Add(cv);
+                                }
                             }
                             if (list.Count == 0) continue;
-                            // Dynamic LINQ supports @0.Contains(field) if reversed, so we use it differently:
-                            // use: @param.Contains(prop) -> need param to be IEnumerable of same type
-                            whereParts.Add(op == "in" ? $"@{paramIndex}.Contains({prop})" : $"!@{paramIndex}.Contains({prop})");
-                            parameters.Add(list);
+                            
+                            var part = op == "in" ? $"@{paramIndex}.Contains({prop})" : $"!@{paramIndex}.Contains({prop})";
+
+
+                                    Console.WriteLine($" part : {part}");
+
+
+
+                            // propInfo.PropertyType 배열 만들기
+                            var typedArray = Array.CreateInstance(propInfo.PropertyType, list.Count);
+for (int i = 0; i < list.Count; i++)
+{
+    typedArray.SetValue(list[i], i);
+}
+
+
+
+                            if (isOrGroup)
+                            {
+                                // OR 그룹 내의 IN은 지원이 복잡하므로, 현재는 기본 AND 그룹만 지원합니다.
+                                // 필요 시 추가 구현이 가능합니다.
+                                whereParts.Add(part);
+                                parameters.Add(typedArray);
+                            }
+                            else
+                            {
+                                whereParts.Add(part);
+
+
+
+
+
+                                parameters.Add(typedArray);
+                            }
                             paramIndex++;
+
+                        
                             break;
                         }
                     case "between":
@@ -255,9 +340,17 @@ namespace JinRestApi.Data
                             if (parts.Length != 2) continue;
                             if (!TryConvertToType(parts[0], propInfo.PropertyType, out var lo)) continue;
                             if (!TryConvertToType(parts[1], propInfo.PropertyType, out var hi)) continue;
-                            whereParts.Add($"{prop} >= @{paramIndex} AND {prop} <= @{paramIndex + 1}");
-                            parameters.Add(lo);
-                            parameters.Add(hi);
+                            var part = $"{prop} >= @{paramIndex} AND {prop} <= @{paramIndex + 1}";
+                            if (isOrGroup)
+                            {
+                                orGroupParts.Add(part);
+                                orGroupParameters.Add(lo);
+                                orGroupParameters.Add(hi);
+                            } else {
+                                whereParts.Add(part);
+                                parameters.Add(lo);
+                                parameters.Add(hi);
+                            }
                             paramIndex += 2;
                             break;
                         }
@@ -265,18 +358,34 @@ namespace JinRestApi.Data
                         {
                             var flag = rawVal.Trim().ToLower();
                             if (flag == "true" || flag == "1")
-                                whereParts.Add($"{prop} == null");
+                            {
+                                if (isOrGroup) orGroupParts.Add($"{prop} == null");
+                                else whereParts.Add($"{prop} == null");
+                            }
                             else
-                                whereParts.Add($"{prop} != null");
+                            {
+                                if (isOrGroup) orGroupParts.Add($"{prop} != null");
+                                else whereParts.Add($"{prop} != null");
+                            }
                             break;
                         }
                 }
             }
 
+            if (orGroupParts.Any())
+            {
+                whereParts.Add($"({string.Join(" OR ", orGroupParts)})");
+                parameters.AddRange(orGroupParameters);
+            }
+
             if (whereParts.Count == 0) return query;
 
             var whereClause = string.Join(" AND ", whereParts);
-            return query.Where(whereClause, parameters.ToArray());
+
+             
+                                    Console.WriteLine($" whereClause : {whereClause} ");
+
+            return query.Where(whereClause, parameters.ToArray()); // ToArray()가 필요할 수 있습니다.
         }
 
         /// <summary>

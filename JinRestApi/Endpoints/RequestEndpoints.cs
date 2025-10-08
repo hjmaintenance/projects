@@ -108,7 +108,15 @@ public static class RequestEndpoints
                 bodyQuery = JsonToQueryHelper.ConvertJsonToQuery(body);
             }
 
+
+
+            Console.WriteLine($"bodyQuery: { bodyQuery.ToString()}");
+
+
             var finalQuery = QueryCollectionMerger.Merge(http.Request.Query, bodyQuery);
+
+            Console.WriteLine($"Final query: { finalQuery.ToString()}");
+
 
             var queryWithIncludes = db.Requests
                 .Include(c => c.Comments)
@@ -117,6 +125,11 @@ public static class RequestEndpoints
                 .AsQueryable();
 
             var resultQuery = queryWithIncludes.ApplyAll(finalQuery);
+
+
+            Console.WriteLine($"result query: { resultQuery.ToString()}");
+
+
             var requests = await (resultQuery is IQueryable<object> q ? q.ToDynamicListAsync() : ((IQueryable)resultQuery).ToDynamicListAsync());
 
             return await AddAttachmentDataAsync(requests, db, "ImprovementRequest");
@@ -223,6 +236,31 @@ public static class RequestEndpoints
             return result;
         })
         .DisableAntiforgery();
+
+        group.MapPut("/accept/{id}", (AppDbContext db, int id, ImprovementRequest input) => ApiResponseBuilder.CreateAsync(async () =>
+        {
+            //return null;
+            var req = await db.Requests.FindAsync(id);
+            if (req is null) return null;
+
+            req.Status = input.Status;
+            req.AdminId = input.AdminId;
+
+            await db.SaveChangesAsync();
+            return req;
+        }, "Request accept successfully."));
+        group.MapPut("/reset/{id}", (AppDbContext db, int id, ImprovementRequest input) => ApiResponseBuilder.CreateAsync(async () =>
+        {
+            //return null;
+            var req = await db.Requests.FindAsync(id);
+            if (req is null) return null;
+
+            req.Status = 0;
+            req.AdminId = null;
+
+            await db.SaveChangesAsync();
+            return req;
+        }, "Request reset successfully."));
 
         group.MapPut("/{id}", (AppDbContext db, int id, ImprovementRequest input) => ApiResponseBuilder.CreateAsync(async () =>
         {

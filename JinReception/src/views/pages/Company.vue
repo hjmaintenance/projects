@@ -139,38 +139,37 @@
 
 
 
+  <!-- 조회영역 전체 -->
+<form class="card flex flex-col gap-4 md:flex-row md:items-center md:justify-between" @submit.prevent="search">
+
+    <!-- label + input 묶음 -->
+    <div class="flex flex-col md:flex-row md:items-center gap-4 flex-1">
+      <!-- 첫 번째 -->
+      <div class="flex flex-col md:flex-row md:items-center gap-2 flex-1">
+        <label for="name3" class="w-24 md:text-right shrink-0">검색</label>
+        <InputText id="name3" type="text" v-model="searchs.Srch" placeholder="Search..." class="md:min-w-[12rem]" />
+        
+      </div>
+    </div>
+
+
+  <!-- 버튼 그룹 -->
+  <div class="flex gap-2 w-full md:w-auto md:ml-4">
+    <!-- 버튼이 여러 개라면 flex-1 로 균등분할 -->
+    <Button label="조회" class="flex-1 md:flex-none" @click="search" raised />
+    <Button label="추가" class="flex-1 md:flex-none" @click="addData" raised />
+    <Button label="저장" class="flex-1 md:flex-none" @click="save" raised />
+    <Button label="삭제" class="flex-1 md:flex-none" @click="deleteSelected" raised />
 
 
 
-
-
-
-
-<form class="card srcharea" @submit.prevent="search">
-
-<div class="flex flex-col sm:flex-row sm:items-center" >
-                   
-
-      <IconField iconPosition="left">
-        <InputText type="text" v-model="searchs.Srch" placeholder="Search..." />
-        <InputIcon class="pi pi-search" />
-      </IconField>
-   
-
-
-                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-                        <div></div><div></div>
-                        <div>
-    <Button label="조회" class="mr-2" @click="search" />
-    <Button label="추가" class="mr-2" @click="addData" />
-    <Button label="저장" class="mr-2" @click="save" />
-    <Button label="삭제" class="mr-2" @click="deleteSelected" />
-                        </div>
-                    </div>
-                </div>
-
+  </div>
 
   </form>
+
+
+
+
 
 
 
@@ -233,21 +232,19 @@
       :loading="loading"
       v-model:selection="selectedCompany"
       editMode="cell"
+      responsiveLayout="stack"
       @cell-edit-complete="onCellEditComplete"
       :pt="{
-        table: { style: 'min-width: 50rem' },
         column: {
-          bodycell: ({ state }) => ({
-            class: [{ '!py-0': state['d_editing'] }]
-          })
+          bodycell: ({ state }) => ({ class: state['d_editing'] ? '!py-0' : 'py-3' })
         }
       }"
     >
       <template #empty> No companys found. </template>
       <template #loading> Loading companys data. Please wait. </template>
 
-      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-      <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">
+      <Column selectionMode="multiple" style="width: 1rem"></Column>
+      <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 65%" :class="{ 'hidden md:table-cell': col.field === 'id' }">
         <template #body="{ data, field }">
           {{ data[field] }}
         </template>

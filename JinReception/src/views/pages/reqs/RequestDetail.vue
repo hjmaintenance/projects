@@ -64,21 +64,29 @@
   const updateRequestStatus = async (statusName) => {
     if (!selectedRequest.value) return;
 
-    const statusObject = STATUS.find((s) => s.name === statusName);
-    if (!statusObject) {
-      console.error(`'${statusName}'에 해당하는 상태를 찾을 수 없습니다.`);
-      return;
-    }
+    if (statusName === 'Reset') {
 
-    selectedRequest.value.status = statusObject.code;
-    selectedRequest.value.adminId = loginUser.value?.user_uid;
-    await RequestService.accept(selectedRequest.value);
-    if (statusName === 'DELETE') {
-      // 삭제 후 이전 페이지로 이동
-      router.back();
-    } else {
-      // 상태 변경 후 상세 정보를 다시 불러와 화면을 갱신합니다.
+      await RequestService.reset(selectedRequest.value.id);
       await getDetail();
+    }
+    else{
+      
+      const statusObject = STATUS.find((s) => s.name === statusName);
+      if (!statusObject) {
+        console.error(`'${statusName}'에 해당하는 상태를 찾을 수 없습니다.`);
+        return;
+      }
+
+      //selectedRequest.value.status = statusObject.code;
+      //selectedRequest.value.adminId = loginUser.value?.user_uid;
+      await RequestService.accept(selectedRequest.value.id, statusObject.code);
+      if (statusName === 'DELETE') {
+        // 삭제 후 이전 페이지로 이동
+        router.back();
+      } else {
+        // 상태 변경 후 상세 정보를 다시 불러와 화면을 갱신합니다.
+        await getDetail();
+      }
     }
   };
 
@@ -139,6 +147,7 @@
       <!-- Status 1 (In Progress): Can move to Completed (2) or Rejected (3) -->
       <Button v-if="selectedRequest.status === 1" type="button" label="완료" severity="success" class="flex-1 md:flex-none" @click="updateRequestStatus('COMPLETED')"></Button>
       <Button v-if="selectedRequest.status === 1" type="button" label="반려" severity="secondary" class="flex-1 md:flex-none" @click="updateRequestStatus('REJECTED')"></Button>
+      <Button v-if="selectedRequest.status === 2 || selectedRequest.status === 3" type="button" label="접수초기화" severity="success" class="flex-1 md:flex-none" @click="updateRequestStatus('Reset')"></Button>
     </template>
 
     <template v-if="selectedRequest && loginUser && selectedRequest?.customer?.id === loginUser?.user_uid && loginUser?.login_type != 'admin'">

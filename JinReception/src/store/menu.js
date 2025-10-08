@@ -187,7 +187,8 @@ export const useMenuStore = defineStore('menu', () => {
             items: [
                 { label: '모니터링', icon: 'pi pi-fw pi-check-square',
                   items: [
-                            { label: '모니터링', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
+                            { label: '접수모니터링', icon: 'pi pi-fw pi-list', to: '/request_monitor' },
+
                         ]
                 },
                 { label: '고객관리', icon: 'pi pi-fw pi-check-square',

@@ -23,7 +23,7 @@
 
 
 <router-link to="/" class="layout-topbar-logo">
-        <span>{{ lastBreadcrumbLabel }}</span>
+        <span class="inline-block whitespace-nowrap">{{ lastBreadcrumbLabel }}</span>
 
 
 

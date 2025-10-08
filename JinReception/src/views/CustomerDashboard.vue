@@ -257,7 +257,7 @@ onMounted(async () => {
             <div class="card mb-0">
                 <div class="flex justify-between mb-4">
                     <div>
-                        <span class="block text-muted-color font-medium mb-4">InProgress</span>
+                        <span class="block text-muted-color font-medium mb-4">진행중</span>
                         <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{ statusCounts.InProgress }}</div>
                         <div class="text-sm">{{ statusPercentages.InProgress }}%</div>
                     </div>

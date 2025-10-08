@@ -1,6 +1,15 @@
 import apiClient from './api';
 import { serviceWrapper } from './serviceWrapper';
 
+
+
+  import { useLayout } from '@/layout/composables/layout';
+  
+  const { loginUser } = useLayout();
+
+
+
+
 const _RequestService = {
   async search(srchobj) {
     const res = await apiClient.post('/requests/srch', srchobj);
@@ -25,7 +34,25 @@ const _RequestService = {
 
     return res.data.data[0];
   },
-  async accept(request) {
+  async accept(id, status) {
+
+    const payload = {
+        status: status,
+        adminId: loginUser.value?.user_uid,
+      };
+
+    const res = await apiClient.put(`/requests/accept/${id}`, payload);
+    return res.data.data;
+  },
+    async reset(id) {
+
+    const payload = {
+        adminId: loginUser.value?.user_uid,
+      };
+    const res = await apiClient.put(`/requests/reset/${id}`, payload);
+    return res.data.data;
+  },
+  async update(request) {
     const res = await apiClient.put(`/requests/${request.id}`, request);
     return res.data.data;
   },
@@ -37,6 +64,10 @@ const _RequestService = {
 
   async addComment(comment) {
     const res = await apiClient.post('/comments', comment);
+    return res.data.data;
+  },
+  async getCompanyStats() {
+    const res = await apiClient.get('/dashboard/company-stats');
     return res.data.data;
   },
 };

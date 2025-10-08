@@ -36,7 +36,19 @@ public static class JsonToQueryHelper
             }
             else
             {
-                dict[prop.Name] = prop.Value.ToString();
+                if (prop.Value.ValueKind == JsonValueKind.Array)
+                {
+                    // JSON 배열 값을 여러 개의 StringValues로 변환합니다.
+                    // 예: "_or_status_eq": ["1", "2"] -> _or_status_eq=1, _or_status_eq=2
+                    var arrayValues = prop.Value.EnumerateArray()
+                                                .Select(e => e.ToString())
+                                                .ToArray();
+                    dict[prop.Name] = new StringValues(arrayValues);
+                }
+                else
+                {
+                    dict[prop.Name] = prop.Value.ToString();
+                }
             }
         }
 

@@ -90,6 +90,16 @@ const router = createRouter({
           name: 'home',
           component: () => import('@/views/Dashboard.vue')
         },
+
+        {
+          path: '/request_monitor',
+          name: 'request_monitor',
+          component: () => import('@/views/pages/reqs/RequestMonitor.vue')
+        },
+
+        
+
+
         {
           path: '/uikit/formlayout',
           name: 'formlayout',

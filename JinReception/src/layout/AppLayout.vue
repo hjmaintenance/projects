@@ -296,5 +296,6 @@ const items = ref([
     <div class="layout-mask animate-fadein"></div>
   </div>
   <Toast></Toast>
+  <!-- <MobileWriteFab  v-if="!route.meta.hideFab && loginUser && loginUser.login_type !== 'admin'" /> -->
   <MobileWriteFab  v-if="!route.meta.hideFab && loginUser && loginUser.login_type !== 'admin'" />
 </template>

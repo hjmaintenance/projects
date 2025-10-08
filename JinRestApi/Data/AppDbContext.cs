@@ -106,6 +106,15 @@ public class AppDbContext : DbContext
 
 
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        // 개발 환경에서만 SQL 쿼리를 콘솔에 로깅합니다.
+        // 실제 운영 환경에서는 성능에 영향을 줄 수 있으므로 주의해야 합니다.
+        optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+        base.OnConfiguring(optionsBuilder);
+    }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // set default schema
