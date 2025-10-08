@@ -207,7 +207,6 @@ export const useMenuStore = defineStore('menu', () => {
                 },
                 { label: '시스템', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon',
                   items: [
-                          { label: '프로필 변경', icon: 'pi pi-fw pi-mobile', to: '/profile', class: 'rotated-icon' },
                             { label: '배포처리', icon: 'pi pi-fw pi-key', to: '/buildRelease' },
                          ]
                 },
