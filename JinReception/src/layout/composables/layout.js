@@ -16,9 +16,17 @@ const getInitialUser = () => {
 
 const loginUser = ref(getInitialUser());
 
-function setLoginUser(userData) {
+function setLoginUser(userData, isremember) {
   loginUser.value = userData;
+  console.log('Setting user data:', userData);
+
   if (userData) {
+    if( isremember == true ){
+    localStorage.setItem('rememberID', userData.login_id );
+    } else {
+      localStorage.removeItem('rememberID');
+    }
+    
     localStorage.setItem('loginUser', JSON.stringify(userData));
   } else {
     localStorage.removeItem('loginUser');
