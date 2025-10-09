@@ -65,6 +65,25 @@ https://github.com/coreybutler/nvm-windows/releases
 
 관리자 권한으로 powershell 실행
 
+
+
+nvm install --lts
+nvm use --lts
+
+
+
+
+Get-ExecutionPolicy
+Restricted 으로 나타나면 아래 명령으로 remote 허용합니다.
+
+
+Set-ExecutionPolicy RemoteSigned
+
+
+
+
+
+
 ```
 
 ```

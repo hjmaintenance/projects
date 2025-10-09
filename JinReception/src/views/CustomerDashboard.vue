@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch,nextTick } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import improvementRequestService from '@/service/improvementRequestService';
 import Chart from 'primevue/chart';
@@ -96,6 +96,51 @@ const dailyChartTitle = computed(() => {
     return `일별 접수 건수 (${monthNames[selectedMonth.value]})`;
 });
 
+
+
+// Chart.js plugin to display text in the center of the doughnut chart
+const DoughnutCenterText = {
+  id: 'doughnutCenterText',
+  beforeDraw: (chart, args, options) => {
+    const { ctx, data } = chart;
+
+    // Calculate the total number of requests
+    const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+
+    // Calculate the completed percentage
+    const completed = data.datasets[0].data[2]; // Assuming '완료' is the third status
+    const percentage = total > 0 ? ((completed / total) * 100).toFixed(0) : 0;
+
+    // Ensure percentage is not NaN
+    const text = `${percentage}%`;
+
+    // 완료율에 따라 텍스트 색상 변경
+    if (percentage > 50) {
+      ctx.fillStyle = 'green';
+    } else {
+      ctx.fillStyle = 'red';
+    }
+
+    ctx.save();
+
+    const x = chart.getDatasetMeta(0).data[0].x;
+    const y = chart.getDatasetMeta(0).data[0].y;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    // 폰트 스타일 명시적으로 설정
+    ctx.font = 'bold 20px Arial';
+
+    ctx.fillText(text, x, y);
+
+    ctx.restore();
+  }
+};
+
+
+
+
+
+
 const onMonthSelect = (event) => {
     if (event.element) {
         selectedMonth.value = event.element.index;
@@ -171,7 +216,7 @@ onMounted(async () => {
       requests.value = response.data.data;
 
       chartData.value = {
-        labels: Object.keys(statusCounts.value),
+        labels: ['접수대기', '진행중', '완료', '반려'],
         datasets: [
           {
             data: Object.values(statusCounts.value),
@@ -183,14 +228,16 @@ onMounted(async () => {
 
       chartOptions.value = {
         plugins: {
+          doughnutCenterText: DoughnutCenterText,
           legend: {
             labels: {
               usePointStyle: true
             }
           }
-        }
+        },
+        
       };
-
+      
       monthlyChartData.value = {
         labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
         datasets: [
@@ -273,7 +320,7 @@ onMounted(async () => {
             <div class="card mb-0">
                 <div class="flex justify-between mb-4">
                     <div>
-                        <span class="block text-muted-color font-medium mb-4">Completed</span>
+                        <span class="block text-muted-color font-medium mb-4">완료</span>
                         <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{ statusCounts.Completed }}</div>
                         <div class="text-sm">{{ statusPercentages.Completed }}%</div>
                     </div>
@@ -289,7 +336,7 @@ onMounted(async () => {
             <div class="card mb-0">
                 <div class="flex justify-between mb-4">
                     <div>
-                        <span class="block text-muted-color font-medium mb-4">Rejected</span>
+                        <span class="block text-muted-color font-medium mb-4">반려</span>
                         <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{ statusCounts.Rejected }}</div>
                         <div class="text-sm">{{ statusPercentages.Rejected }}%</div>
                     </div>
@@ -315,7 +362,7 @@ onMounted(async () => {
         <div class="col-span-12 xl:col-span-4">
             <div class="card">
                 <div class="font-semibold text-xl mb-4">상태별 비율</div>
-                <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-full md:w-[30rem]"></Chart>
+                <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-full"></Chart>
             </div>
         </div>
 
@@ -327,4 +374,5 @@ onMounted(async () => {
         </div>
 
     </div>
+    
 </template>
