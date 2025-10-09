@@ -162,6 +162,17 @@ dotnet ef database update
       );
 ```
 
+nuget 에러나면 아래 경로에서 
+```
+<add key="LocalPackages" value="C:\projects\HANJU_UMS\packages" /> 삭제
+
+
+C:\Users\<사용자명>\AppData\Roaming\NuGet\NuGet.config
+```
+
+
+
+
 ## 🎈 Usage <a name="usage"></a>
 
 - 환경변수에 정보를 입력하여야 한다.

@@ -1,7 +1,7 @@
 <script setup>
   import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
   import { AuthService } from '@/service/AuthService';
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import { useLayout } from '@/layout/composables/layout';
 
@@ -16,6 +16,20 @@
 
   const errorMsg = ref('');
 
+
+  onMounted(() => {
+    const savedId = localStorage.getItem('rememberID');
+    if (savedId) {
+      userid.value = savedId;
+      checked.value = true;
+
+            if ( checked.value == true) {
+   passwordInput.value?.$el?.querySelector("input")?.focus();
+      };
+
+    }
+  });
+
   const submit = async (e) => {
     e.preventDefault();
     errorMsg.value = '';
@@ -29,8 +43,10 @@
     try {
       const data = await AuthService.login({ LoginId: userid.value, Password: password.value, LoginType: loginType.value });
       localStorage.setItem('jwt_token', data.token);
-      setLoginUser(data.user);
+      setLoginUser(data.user, checked.value);
 
+
+      
       if (data.user.mustChangePassword) {
         router.push('/auth/change-password');
       } else {
@@ -78,7 +94,9 @@
             <InputText id="userid" type="text" placeholder="User Id" class="w-full md:w-[30rem] mb-8" v-model="userid" />
 
             <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-            <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false" ref="passwordInput" ></Password>
+            <Password id="password1" v-model="password"
+             placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false"
+              ref="passwordInput" ></Password>
 
             <div class="flex items-center justify-between mt-2 mb-8 gap-8">
               <div class="flex items-center">
