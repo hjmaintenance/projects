@@ -107,18 +107,75 @@ const deleteSelected = async () => {
   loadData();
   selectedCustomer.value = [];
 }
+
+
+
+
+  // 검색영역 반응형 객체
+  const searchs = reactive({
+    Srch: ''
+    // ex) addressSearch: ''
+  });
+
+
 </script>
  
 <template>
  
-    <div class="card srcharea">
- 
- 
-<Button label="조회" class="mr-2" @click="loadData" />
-<Button label="추가" class="mr-2" icon="pi pi-plus" @click="addData" />
-<Button label="저장" class="mr-2" @click="save" />
-<Button label="삭제" class="mr-2" @click="deleteSelected" />
+
+
+
+
+
+
+
+
+
+
+
+  <!-- 조회영역 -->
+<form class="card flex flex-col gap-4 md:flex-row md:items-center md:justify-between" @submit.prevent="search">
+
+    <div class="flex flex-col md:flex-row md:items-center gap-4 flex-1">
+      <!-- 첫 번째 -->
+      <div class="flex flex-col md:flex-row md:items-center gap-2 flex-1">
+        <label for="name3" class="w-24 md:text-right shrink-0">검색</label>
+        <InputText id="name3" type="text" v-model="searchs.Srch" placeholder="Search..." class="md:min-w-[12rem]" />
+        
+       
+      </div>
     </div>
+
+
+  <!-- 버튼 그룹 -->
+  <div class="flex gap-2 w-full md:w-auto md:ml-4">
+    <Button label="조회" class="flex-1 md:flex-none" @click="loadData" raised />
+    <Button label="추가" class="flex-1 md:flex-none" @click="addData" raised />
+    <Button label="저장" class="flex-1 md:flex-none" @click="save" raised />
+    <Button label="삭제" class="flex-1 md:flex-none" @click="deleteSelected" raised />
+
+  </div>
+
+  </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="card">
     
     <!-- editMode="cell" 사용시, select컴포넌트 편집안돼서 editMode="row" 사용 -->
@@ -128,6 +185,7 @@ const deleteSelected = async () => {
                v-model:editingRows="editingCustomer"
                v-model:selection="selectedCustomer"
                editMode="row" 
+      responsiveLayout="stack"
                @row-edit-save="onRowEditComplete"
                :pt="{
                 table: { style: 'min-width: 50rem' },
@@ -143,7 +201,7 @@ const deleteSelected = async () => {
                <template #loading> Loading customers data. Please wait. </template>
  
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-<Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">  
+<Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%"  :class="{ 'hidden md:table-cell': col.field === 'id' }" >  
 
   <template #body="{ data, field }">
     <template v-if="field == 'companyId'">

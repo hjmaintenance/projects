@@ -24,7 +24,7 @@ select: 'id,title,createdAt,customer,admin,status',
 remove: 'customerId,description',
 sorts: [{ field: 'status', dir: 'asc' },{ field: 'createdAt', dir: 'desc' }],
 page: 1,
-pageSize: 10,
+pageSize: 5,
 status_in: '0|1'
 });
 
@@ -82,7 +82,7 @@ const getStatusColor = (status) => {
 <template>
 
   <!-- 조회영역 전체 -->
-<form class="card flex flex-col gap-4 md:flex-row md:items-center md:justify-between" @submit.prevent="search">
+<form class="card hidden md:block flex flex-col gap-4 md:flex-row md:items-center md:justify-between" @submit.prevent="search">
 
 
   <!-- 버튼 그룹 -->
@@ -149,7 +149,7 @@ const getStatusColor = (status) => {
 
 
         <div class="card">
-        <h5 class="text-xl font-semibold mb-4">요청 접수 목록Top10</h5>
+        <h5 class="text-xl font-semibold mb-4">요청 접수 목록Top5</h5>
             <DataView :value="requests" layout="list">
 
                 <template #list="slotProps">

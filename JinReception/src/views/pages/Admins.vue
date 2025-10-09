@@ -11,12 +11,10 @@ let tempIdCounter = 0;
  
 const loading = ref(null);
 const columns = ref([
-    { field: 'id', header: 'Id' },
-    { field: 'loginId', header: 'Login Id' },
-    { field: 'userName', header: 'User Name' },
-    { field: 'email', header: 'Email' },
-    { field: 'teamId', header: 'Team' }
+    { field: 'loginId', header: '로그인 ID' },
+    { field: 'teamId', header: '소속 팀' }
 ]);
+
  
 const admins = ref([])
 const teams = ref([])
@@ -88,6 +86,15 @@ const deleteSelected = async () => {
   loadData();
   selectedAdmin.value = [];
 }
+
+
+  // 검색영역 반응형 객체
+  const searchs = reactive({
+    Srch: ''
+    // ex) addressSearch: ''
+  });
+
+
 </script>
  
 <template>
@@ -96,36 +103,28 @@ const deleteSelected = async () => {
 
 
 
+  <!-- 조회영역 -->
+<form class="card flex flex-col gap-4 md:flex-row md:items-center md:justify-between" @submit.prevent="search">
+
+    <div class="flex flex-col md:flex-row md:items-center gap-4 flex-1">
+      <!-- 첫 번째 -->
+      <div class="flex flex-col md:flex-row md:items-center gap-2 flex-1">
+        <label for="name3" class="w-24 md:text-right shrink-0">검색</label>
+        <InputText id="name3" type="text" v-model="searchs.Srch" placeholder="Search..." class="md:min-w-[12rem]" />
+        
+       
+      </div>
+    </div>
 
 
+  <!-- 버튼 그룹 -->
+  <div class="flex gap-2 w-full md:w-auto md:ml-4">
+    <Button label="조회" class="flex-1 md:flex-none" @click="loadData" raised />
+    <Button label="추가" class="flex-1 md:flex-none" @click="addData" raised />
+    <Button label="저장" class="flex-1 md:flex-none" @click="save" raised />
+    <Button label="삭제" class="flex-1 md:flex-none" @click="deleteSelected" raised />
 
-
-
-
-
-<form class="card srcharea" @submit.prevent="search">
-
-<div class="flex flex-col sm:flex-row sm:items-center" >
-                   
-
-
-   
-
-
-                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-                        <div></div><div></div>
-                        <div>
-
-
-<Button label="전체" class="mr-2" @click="loadData" />
-<Button label="추가" class="mr-2" icon="pi pi-plus" @click="addData" />
-<Button label="저장" class="mr-2" @click="save" />
-<Button label="삭제" class="mr-2" @click="deleteSelected" />
-
-                        </div>
-                    </div>
-                </div>
-
+  </div>
 
   </form>
 
@@ -137,86 +136,50 @@ const deleteSelected = async () => {
 
 
 
+  <div class="card">
+    <DataTable :value="admins" dataKey="id" :loading="loading" v-model:editingRows="editingAdmin" v-model:selection="selectedAdmin" editMode="row" @row-edit-save="onRowEditComplete" :pt="{ table: { style: 'min-width: 50rem' } }">
+      <template #empty> 관리자 정보가 없습니다. </template>
+      <template #loading> 관리자 정보를 불러오는 중입니다. </template>
 
+      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 
+      <Column field="userName" header="사용자" style="min-width: 16rem">
+        <template #body="{ data }">
+          <div class="flex items-center gap-3">
+            <Avatar v-if="data.photo" :image="data.photo" shape="circle" />
+            <Avatar v-else :label="data.userName ? data.userName[0] : 'U'" shape="circle" />
+            <div>
+              <div class="font-semibold">{{ data.userName }}</div>
+              <div class="text-sm text-surface-500 dark:text-surface-400">{{ data.email }}</div>
+            </div>
+          </div>
+        </template>
+        <template #editor="{ data, field }">
+          <InputText v-model="data[field]" autofocus fluid />
+        </template>
+      </Column>
 
+      <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">
+        <template #body="{ data, field }">
+          <template v-if="field === 'teamId'">
+            <Tag severity="info" :value="teams.find((t) => t.id === data[field])?.name || '미지정'"></Tag>
+          </template>
+          <template v-else>
+            {{ data[field] }}
+          </template>
+        </template>
+        <template #editor="{ data, field }">
+          <template v-if="field === 'teamId'">
+            <Select v-model="data[field]" :options="teams" optionLabel="name" optionValue="id" placeholder="팀 선택" fluid />
+          </template>
+          <template v-else>
+            <InputText v-model="data[field]" autofocus fluid />
+          </template>
+        </template>
+      </Column>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="card">
-    
-    <DataTable :value="admins" 
-               dataKey="id" 
-               :loading="loading"
-               v-model:editingRows="editingAdmin"
-               v-model:selection="selectedAdmin"
-               editMode="row" 
-               @row-edit-save="onRowEditComplete"
-               :pt="{
-                table: { style: 'min-width: 50rem' },
-                column: {
-                    bodycell: ({ state }) => ({
-                        class: [{ '!py-0': state['d_editing'] }]
-                    })
-                }
-            }"
- 
-               >
-               <template #empty> No admins found. </template>
-               <template #loading> Loading admins data. Please wait. </template>
- 
-            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-<Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header" style="width: 25%">  
-
-  <template #body="{ data, field }">
-    <template v-if="field == 'teamId'">
-      {{ teams && Array.isArray(teams) && teams.find(team => team.id === data[field]) ? teams.find(team => team.id === data[field]).name : '' }}
-    </template>
-    <template v-else>
-      {{ data[field] }}
-    </template>
-  </template>
-  <template #editor="{ data, field }">
-    <template v-if="field == 'id'">
-      {{ data[field] }}
-    </template>
-    <template v-else-if="field == 'teamId'">
-      <Select v-model="data[field]" :options="teams" optionLabel="name" optionValue="id" fluid />
-    </template>
-    <template v-else>
-      <InputText v-model="data[field]" autofocus fluid />
-    </template>
-  </template>
-            </Column>
-            <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
-        </DataTable>
-    </div>
+      <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
+    </DataTable>
+  </div>
  
 </template>

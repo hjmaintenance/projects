@@ -41,7 +41,7 @@ const router = createRouter({
           path: '/company',
           name: 'company',
           meta: { menuName: 'Company Management' },
-          component: () => import('@/views/pages/Company.vue')
+          component: () => import('@/views/pages/companys/Company.vue')
         },
         {
           path: '/teams',
@@ -58,7 +58,7 @@ const router = createRouter({
         {
           path: '/customer',
           name: 'customer',
-          component: () => import('@/views/pages/Customer.vue')
+          component: () => import('@/views/pages/companys/Customer.vue')
         },
         {
           path: '/notice',

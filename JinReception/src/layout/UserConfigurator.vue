@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, watch } from 'vue';
+  import { ref, watch, computed } from 'vue';
   import { useToast } from 'primevue/usetoast';
   import { useRouter } from 'vue-router';
   import { useLayout } from '@/layout/composables/layout';
@@ -12,7 +12,32 @@
   const { loginUser, clearLoginUser } = useLayout();
   const uiStore = useUiStore();
 
-  const op = ref();
+  const menu = ref();
+
+  const userInitials = computed(() => {
+    if (!loginUser.value?.user_name) return '';
+    return loginUser.value.user_name.charAt(0).toUpperCase();
+  });
+
+  const menuItems = ref([
+    {
+      label: '내 계정',
+      items: [
+        {
+          label: '프로필',
+          icon: 'pi pi-user',
+          command: () => router.push('/profile')
+        },
+        {
+          label: '비밀번호 변경',
+          icon: 'pi pi-key',
+          command: () => router.push('/auth/change-password')
+        }
+      ]
+    },
+    { separator: true },
+    { label: '로그아웃', icon: 'pi pi-sign-out', command: () => requireConfirmation() }
+  ]);
 
   const logout = async () => {
     try {
@@ -29,11 +54,11 @@
       header: 'Are you sure?',
       message: 'want to quit?',
       accept: () => {
-        toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+        //toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
         logout();
       },
       reject: () => {
-        toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        //toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
       }
     });
   };
@@ -46,32 +71,26 @@
   });
 
   const toggle = (event) => {
-    op.value.toggle(event);
+    menu.value.toggle(event);
   };
 </script>
 
 <template>
-  <div class="cursor-pointer hidden md:block" @click="toggle">
-    <button type="button" class="layout-topbar-action" :title="loginUser.name" aria-haspopup="true" aria-controls="overlay_tmenu">
-      <i class="pi pi-user"></i>
-    </button>
-    <span>{{ loginUser?.affiliation }} - {{ loginUser?.user_name }}</span>
+  <div class="cursor-pointer flex items-center gap-3" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu">
+    <Avatar v-if="loginUser?.photo" :image="loginUser.photo" shape="circle" />
+    <Avatar v-else :label="userInitials" shape="circle" />
+    <div class="hidden md:block">
+      <div class="font-semibold text-sm">{{ loginUser?.user_name }}</div>
+      <div class="text-xs text-surface-500 dark:text-surface-400">{{ loginUser?.affiliation }}</div>
+    </div>
   </div>
 
-  <Popover ref="op">
-    <div class="flex flex-col gap-4 w-[25rem]">
-      <div>
-        <h6>{{ loginUser?.user_name }}</h6>
+  <Menu ref="menu" id="overlay_menu" :model="menuItems" :popup="true">
+    <template #start>
+      <div class="p-3">
+        <div class="font-bold">{{ loginUser?.user_name }}</div>
+        <div class="text-sm text-surface-500 dark:text-surface-400">{{ loginUser?.email }}</div>
       </div>
-      <div>
-        <Button @click="router.push('/auth/change-password');">비번변경</Button>
-      </div>
-      <div>
-        <Button @click="router.push('/profile');">프로필</Button>
-      </div>
-      <div>
-        <button @click="requireConfirmation">logout</button>
-      </div>
-    </div>
-  </Popover>
+    </template>
+  </Menu>
 </template>

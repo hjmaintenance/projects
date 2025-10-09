@@ -123,6 +123,8 @@ public static class AdminEndpoints
             admin.UserName = input.UserName;
             admin.Email = input.Email;
             admin.TeamId = input.TeamId;
+            admin.Photo = input.Photo;
+
 
             await db.SaveChangesAsync();
             return admin;

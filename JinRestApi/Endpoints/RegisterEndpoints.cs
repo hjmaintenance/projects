@@ -67,52 +67,31 @@ public static class RegisterEndpoints
                 string email = "";
                 string affiliation = ""; // 소속
                 bool mustChangePassword = false;
+ 
 
-
-                Console.WriteLine($"req.LoginType : {req.LoginType}");
-                Console.WriteLine($"req.LoginId : {req.LoginId}");
-                Console.WriteLine($"req.Password : {req.Password}");    
-
-
-                if (req.LoginType == "admin")
+                var user = await db.Customers.Include(u => u.Company).FirstOrDefaultAsync(u => u.LoginId == req.LoginId);
+                if (user is null || !passwordService.VerifyPassword<Customer>(user, req.Password))
                 {
+
                     var admin = await db.Admins.Include(a => a.Team).FirstOrDefaultAsync(a => a.LoginId == req.LoginId);
 
-                    
-                    Console.WriteLine($"admin is null : {(admin is null)}");    
-                    Console.WriteLine($"admin password : {req.Password}");    
-                    Console.WriteLine($"admin password check  : {(passwordService.VerifyPassword<Admin>(admin, req.Password))}");    
 
                     if (admin is null || !passwordService.VerifyPassword<Admin>(admin, req.Password))
                     {
-
-
-                        Console.WriteLine($"admin not : {(admin is null)}");
-
-
                         return null;
                     }
                     user_name = admin.UserName;
                     login_id = admin.LoginId;
                     login_type = "admin";
-                    Photo = "";
+                    Photo = admin.Photo;
                     email = admin.Email;
                     user_uid = admin.Id.ToString();
                     mustChangePassword = admin.MustChangePassword;
                     affiliation = admin.Team?.Name ?? "";
+
                 }
                 else
                 {
-
-                    var user = await db.Customers.Include(u => u.Company).FirstOrDefaultAsync(u => u.LoginId == req.LoginId);
-                    if (user is null || !passwordService.VerifyPassword<Customer>(user, req.Password))
-                    {
-                        // 성공 경로가 아니므로 예외를 발생시켜 Builder의 catch 블록에서 처리하도록 합니다.
-                        // 또는 여기서 직접 Unauthorized를 반환할 수도 있습니다. 여기서는 null을 반환하여 404처럼 처리합니다.
-                        // 더 나은 방법은 인증 실패에 대한 별도 응답을 만드는 것입니다.
-                        // 여기서는 null을 반환하여 '찾을 수 없음'으로 처리합니다.
-                        return null;
-                    }
                     user_name = user.UserName;
                     login_id = user.LoginId;
                     login_type = "customer";
@@ -120,8 +99,9 @@ public static class RegisterEndpoints
                     email = user.Email;
                     user_uid = user.Id.ToString();
                     affiliation = user.Company?.Name ?? "";
+                }
 
-                }       
+  
 
 
                 // JWT 토큰 생성
@@ -142,7 +122,7 @@ public static class RegisterEndpoints
                     issuer: jwtIssuer,
                     audience: null,
                     claims: claims,
-                    expires: DateTime.UtcNow.AddHours(12),
+                    expires: DateTime.UtcNow.AddHours(72),
                     signingCredentials: credentials
                 );
 

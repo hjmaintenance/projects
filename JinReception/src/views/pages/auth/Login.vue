@@ -73,8 +73,6 @@
           </div>
 
           <form  @submit.prevent="submit" >
-            <div class="font-semibold text-xl">관리자</div>
-            <ToggleSwitch :model-value="loginType === 'admin'" @update:modelValue="(val) => (loginType = val ? 'admin' : '')" value="admin" />
 
             <label for="userid" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">User</label>
             <InputText id="userid" type="text" placeholder="User Id" class="w-full md:w-[30rem] mb-8" v-model="userid" />

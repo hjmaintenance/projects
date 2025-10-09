@@ -3,22 +3,23 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { AuthService } from '@/service/AuthService';
 import { useLayout } from '@/layout/composables/layout';
+import { useToast } from 'primevue/usetoast';
 
 const oldPassword = ref('');
 const newPassword = ref('');
 const confirmPassword = ref('');
-const errorMsg = ref('');
-const successMsg = ref('');
-
 const router = useRouter();
 const { setLoginUser } = useLayout();
+const toast = useToast();
 
 const submit = async () => {
-  errorMsg.value = '';
-  successMsg.value = '';
-
   if (newPassword.value !== confirmPassword.value) {
-    errorMsg.value = 'New passwords do not match.';
+    toast.add({ severity: 'warn', summary: '입력 오류', detail: '새 비밀번호가 일치하지 않습니다.', life: 3000 });
+    return;
+  }
+
+  if (oldPassword.value === newPassword.value) {
+    toast.add({ severity: 'warn', summary: '입력 오류', detail: '새 비밀번호는 이전 비밀번호와 같을 수 없습니다.', life: 3000 });
     return;
   }
 
@@ -28,9 +29,8 @@ const submit = async () => {
       NewPassword: newPassword.value 
     });
 
-    successMsg.value = 'Password changed successfully. Please log in again.';
-    router.push('/');
-/*
+    toast.add({ severity: 'success', summary: '성공', detail: '비밀번호가 변경되었습니다. 다시 로그인해주세요.', life: 3000 });
+
     // Log out user
     localStorage.removeItem('jwt_token');
     setLoginUser(null);
@@ -38,10 +38,10 @@ const submit = async () => {
     setTimeout(() => {
       router.push('/auth/login');
     }, 2000);
-    */
 
   } catch (err) {
-    errorMsg.value = err.response?.data || err.message;
+    const detail = err.response?.data || '비밀번호 변경 중 오류가 발생했습니다.';
+    toast.add({ severity: 'error', summary: '변경 실패', detail: detail, life: 3000 });
   }
 };
 </script>
@@ -77,9 +77,8 @@ const submit = async () => {
         <div class="flex items-center justify-between  mt-4">
           <Button label="취소" @click="router.push('/')" class="w-full" severity="secondary"></Button>
         </div>
-        <div v-if="errorMsg" class="text-red-500 text-center mt-4">{{ errorMsg }}</div>
-        <div v-if="successMsg" class="text-green-500 text-center mt-4">{{ successMsg }}</div>
       </div>
     </div>
   </div>
+  <Toast></Toast>
 </template>
