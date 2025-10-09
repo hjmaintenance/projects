@@ -236,7 +236,7 @@
       @cell-edit-complete="onCellEditComplete"
       :pt="{
         bodyRow: {
-          class: 'h-[6rem] md:h-[auto]'
+          class: 'h-[7rem] md:h-[auto]'
         },
         column: {
           bodycell: ({ state }) => ({ class: state['d_editing'] ? '!py-0' : 'py-3' })

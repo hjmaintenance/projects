@@ -137,7 +137,16 @@ const deleteSelected = async () => {
 
 
   <div class="card">
-    <DataTable :value="admins" dataKey="id" :loading="loading" v-model:editingRows="editingAdmin" v-model:selection="selectedAdmin" editMode="row" @row-edit-save="onRowEditComplete" :pt="{ table: { style: 'min-width: 50rem' } }">
+    <DataTable :value="admins" dataKey="id" :loading="loading" v-model:editingRows="editingAdmin" v-model:selection="selectedAdmin" editMode="row" 
+    @row-edit-save="onRowEditComplete" 
+    :pt="{
+        bodyRow: {
+          class: 'h-[7rem] md:h-[auto]'
+        },
+       table: { style: '' } 
+      }
+    "
+    >
       <template #empty> 관리자 정보가 없습니다. </template>
       <template #loading> 관리자 정보를 불러오는 중입니다. </template>
 

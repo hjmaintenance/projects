@@ -188,7 +188,10 @@ const deleteSelected = async () => {
       responsiveLayout="stack"
                @row-edit-save="onRowEditComplete"
                :pt="{
-                table: { style: 'min-width: 50rem' },
+        bodyRow: {
+          class: 'h-[7rem] md:h-[auto]'
+        },
+                table: { style: '' },
                 column: {
                     bodycell: ({ state }) => ({
                         class: [{ '!py-0': state['d_editing'] }]
