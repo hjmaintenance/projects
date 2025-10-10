@@ -15,6 +15,42 @@ const { loginUser } = useLayout();
 const loading = ref(null);
 
 const companyStats = ref([]);
+const adminStats = ref(null);
+const allAdminStats = ref([]);
+
+const loadAdminStats = async () => {
+    adminStats.value = await RequestService.getAdminStats();
+};
+
+const loadAllAdminStats = async () => {
+    allAdminStats.value = await RequestService.getAllAdminStats();
+};
+
+const adminStatsComputed = computed(() => {
+    if (!adminStats.value) {
+        return {
+            inProgressCount: 0,
+            completedCount: 0,
+            rejectedCount: 0,
+            acceptanceRate: '0.0',
+            completionRate: '0.0',
+            myTotalHandled: 0,
+            totalRequests: 0
+        };
+    }
+
+    const myTotalHandled = adminStats.value.inProgressCount + adminStats.value.completedCount + adminStats.value.rejectedCount;
+    const acceptanceRate = adminStats.value.totalRequests > 0 ? ((myTotalHandled / adminStats.value.totalRequests) * 100).toFixed(1) : '0.0';
+    const completionRate = myTotalHandled > 0 ? ((adminStats.value.completedCount / myTotalHandled) * 100).toFixed(1) : '0.0';
+
+    return {
+        ...adminStats.value,
+        myTotalHandled,
+        acceptanceRate,
+        completionRate
+    };
+});
+
 
 const searchConfig = computed(() => [
 ]);
@@ -37,6 +73,8 @@ const requests = ref([]);
     requests.value = await RequestService.search(queryOptions, loading);
 
     loadCompanyStats();
+    loadAdminStats();
+    loadAllAdminStats();
   };
 
   const loadCompanyStats = async () => {
@@ -92,6 +130,142 @@ const getStatusColor = (status) => {
   </div>
 
   </form>
+
+
+
+    <!-- 나의 접수 진행사항-->
+    <div class="card">
+        <h5 class="text-xl font-semibold mb-4">나의 요청 처리 현황</h5>
+        <div v-if="adminStatsComputed" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- First Column: Stats Cards -->
+            <div class="lg:col-span-1 space-y-4">
+                <Card>
+                    <template #title>
+                        <div class="flex items-center justify-between">
+                            <span>진행중</span>
+                            <i class="pi pi-spin pi-spinner text-orange-500"></i>
+                        </div>
+                    </template>
+                    <template #content>
+                        <p class="text-2xl font-bold">{{ adminStatsComputed.inProgressCount }}건</p>
+                    </template>
+                </Card>
+                <Card>
+                    <template #title>
+                        <div class="flex items-center justify-between">
+                            <span>완료</span>
+                            <i class="pi pi-check-circle text-green-500"></i>
+                        </div>
+                    </template>
+                    <template #content>
+                        <p class="text-2xl font-bold">{{ adminStatsComputed.completedCount }}건</p>
+                    </template>
+                </Card>
+                <Card>
+                    <template #title>
+                        <div class="flex items-center justify-between">
+                            <span>반려</span>
+                            <i class="pi pi-times-circle text-red-500"></i>
+                        </div>
+                    </template>
+                    <template #content>
+                        <p class="text-2xl font-bold">{{ adminStatsComputed.rejectedCount }}건</p>
+                    </template>
+                </Card>
+            </div>
+
+            <!-- Second and Third Column: Charts -->
+            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card class="flex flex-col items-center justify-center">
+                    <template #title>
+                        <div class="text-center">나의 접수율</div>
+                    </template>
+                    <template #content>
+                        <div class="relative w-48 h-48 mx-auto">
+                            <Knob v-model="adminStatsComputed.acceptanceRate" readonly :strokeWidth="10" :size="180" valueTemplate="{value}%" />
+                        </div>
+                        <div class="text-center mt-2 text-sm text-muted-color">
+                            전체 {{ adminStatsComputed.totalRequests }}건 중 {{ adminStatsComputed.myTotalHandled }}건 처리
+                        </div>
+                    </template>
+                </Card>
+                <Card class="flex flex-col items-center justify-center">
+                    <template #title>
+                        <div class="text-center">나의 완료율</div>
+                    </template>
+                    <template #content>
+                        <div class="relative w-48 h-48 mx-auto">
+                            <Knob v-model="adminStatsComputed.completionRate" readonly :strokeWidth="10" :size="180" valueTemplate="{value}%" class="completion-knob" />
+                        </div>
+                        <div class="text-center mt-2 text-sm text-muted-color">
+                            처리한 {{ adminStatsComputed.myTotalHandled }}건 중 {{ adminStatsComputed.completedCount }}건 완료
+                        </div>
+                    </template>
+                </Card>
+            </div>
+        </div>
+    </div>
+
+    <!-- 모든 관리자 처리 현황 -->
+    <div class="card">
+        <h5 class="text-xl font-semibold mb-4">모든 관리자 처리 현황</h5>
+        <DataView :value="allAdminStats" layout="grid" :paginator="true" :rows="6">
+            <template #grid="slotProps">
+                <div class="grid grid-cols-12 gap-4">
+                    <div v-for="(item, index) in slotProps.items" :key="index" class="col-span-12 md:col-span-6 lg:col-span-4">
+                        <div class="card h-full">
+                            <div class="flex items-center mb-4">
+                                <Avatar v-if=" item.adminPhoto " :image="item.adminPhoto" class="mr-3" size="large" shape="circle" />
+                                <Avatar v-else :label="item.adminName.charAt(0).toUpperCase()"  class="mr-3" size="large" shape="circle" />
+                                <div>
+                                    <div class="font-bold">{{ item.adminName }}</div>
+                                    <div class="text-sm text-muted-color">총 처리: {{ item.totalHandled }}건</div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-2 text-center mb-4">
+                                <div>
+                                    <div class="text-orange-500 font-semibold">{{ item.inProgressCount }}</div>
+                                    <div class="text-xs">진행중</div>
+                                </div>
+                                <div>
+                                    <div class="text-green-500 font-semibold">{{ item.completedCount }}</div>
+                                    <div class="text-xs">완료</div>
+                                </div>
+                                <div>
+                                    <div class="text-red-500 font-semibold">{{ item.rejectedCount }}</div>
+                                    <div class="text-xs">반려</div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="mb-2">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm">접수율</span>
+                                        <span class="text-sm font-bold">{{ item.acceptanceRate }}%</span>
+                                    </div>
+                                    <ProgressBar :value="item.acceptanceRate" :showValue="false" style="height: 6px"></ProgressBar>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm">완료율</span>
+                                        <span class="text-sm font-bold">{{ item.completionRate }}%</span>
+                                    </div>
+                                    <ProgressBar :value="item.completionRate" :showValue="false" style="height: 6px" class="custom-progress-bar"></ProgressBar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </DataView>
+    </div>
+
+
+
+
+
+
 
     <!-- 회사별 접수 진행사항-->
     <div class="card">
@@ -190,3 +364,12 @@ const getStatusColor = (status) => {
         </div>
     
 </template>
+
+<style scoped>
+:deep(.completion-knob .p-knob-value) {
+    stroke: theme('colors.green.500');
+}
+.custom-progress-bar :deep(.p-progressbar-value) {
+    background-color: theme('colors.green.500');
+}
+</style>

@@ -50,6 +50,9 @@ cd "$Front_PATH" || exit 1
 # 프론트 빌드
 
 echo "=== 프론트 빌드 ==="
+
+npm install
+
 npm run build
 
 sleep 1   # 안전하게 1초 대기

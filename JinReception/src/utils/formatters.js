@@ -97,3 +97,7 @@ export const STATUS_ALL = Object.freeze([
      { name: 'COMPLETED', ttl:'완료', code: 3 },
      { name: 'DELETE', ttl:'삭제', code: 4 },
 ]);
+
+
+
+

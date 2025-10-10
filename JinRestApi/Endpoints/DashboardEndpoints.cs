@@ -51,6 +51,96 @@ public static class DashboardEndpoints
             }).ToList();
         }));
 
+        group.MapGet("/admin-stats", async (HttpContext http, AppDbContext db) =>
+        {
+            var uid = http.User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
+            if (string.IsNullOrEmpty(uid) || !int.TryParse(uid, out var adminId))
+            {
+                return Results.Unauthorized();
+            }
+
+            var totalRequests = await db.Requests.CountAsync();
+            var inProgressCount = await db.Requests.CountAsync(r => r.AdminId == adminId && r.Status == ImprovementStatus.InProgress);
+            var completedCount = await db.Requests.CountAsync(r => r.AdminId == adminId && r.Status == ImprovementStatus.Completed);
+            var rejectedCount = await db.Requests.CountAsync(r => r.AdminId == adminId && r.Status == ImprovementStatus.Rejected);
+
+            var stats = new AdminStatsDto
+            {
+                InProgressCount = inProgressCount,
+                CompletedCount = completedCount,
+                RejectedCount = rejectedCount,
+                TotalRequests = totalRequests
+            };
+
+            return Results.Ok(new { success = true, data = stats });
+
+        }).RequireAuthorization();
+
+        group.MapGet("/all-admin-stats", async (AppDbContext db) =>
+        {
+            var totalRequests = await db.Requests.CountAsync();
+
+            var adminStats = await db.Admins
+                .Select(admin => new AllAdminStatsDto
+                {
+                    AdminId = admin.Id,
+                    AdminName = admin.UserName,
+                    AdminPhoto = admin.Photo,
+                    InProgressCount = db.Requests.Count(r => r.AdminId == admin.Id && r.Status == ImprovementStatus.InProgress),
+                    CompletedCount = db.Requests.Count(r => r.AdminId == admin.Id && r.Status == ImprovementStatus.Completed),
+                    RejectedCount = db.Requests.Count(r => r.AdminId == admin.Id && r.Status == ImprovementStatus.Rejected),
+                    TotalHandled = db.Requests.Count(r => r.AdminId == admin.Id && (r.Status == ImprovementStatus.InProgress || r.Status == ImprovementStatus.Completed || r.Status == ImprovementStatus.Rejected))
+                })
+                .ToListAsync();
+
+            foreach (var stat in adminStats)
+            {
+                stat.AcceptanceRate = totalRequests > 0 ? Math.Round((double)stat.TotalHandled / totalRequests * 100, 1) : 0;
+                stat.CompletionRate = stat.TotalHandled > 0 ? Math.Round((double)stat.CompletedCount / stat.TotalHandled * 100, 1) : 0;
+            }
+
+            var sortedStats = adminStats
+                .OrderByDescending(s => s.AcceptanceRate)
+                .ThenByDescending(s => s.CompletionRate)
+                .ToList();
+
+            return Results.Ok(new { success = true, data = sortedStats });
+        }).RequireAuthorization();
+
+        group.MapGet("/my-company-stats", async (HttpContext http, AppDbContext db) => 
+        {
+            var uid = http.User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
+            if (string.IsNullOrEmpty(uid) || !int.TryParse(uid, out var customerId))
+            {
+                return Results.Unauthorized();
+            }
+
+            var customer = await db.Customers.FindAsync(customerId);
+            if (customer == null || customer.CompanyId == null)
+            {
+                return Results.NotFound("Customer or company not found.");
+            }
+
+            var companyId = customer.CompanyId;
+
+            var stats = await db.Requests
+                .Where(r => r.Customer.CompanyId == companyId)
+                .GroupBy(r => r.Status)
+                .Select(g => new { Status = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            var result = new MyCompanyStatsDto
+            {
+                PendingCount = stats.FirstOrDefault(s => s.Status == ImprovementStatus.Pending)?.Count ?? 0,
+                InProgressCount = stats.FirstOrDefault(s => s.Status == ImprovementStatus.InProgress)?.Count ?? 0,
+                CompletedCount = stats.FirstOrDefault(s => s.Status == ImprovementStatus.Completed)?.Count ?? 0,
+                RejectedCount = stats.FirstOrDefault(s => s.Status == ImprovementStatus.Rejected)?.Count ?? 0
+            };
+            result.TotalCount = result.PendingCount + result.InProgressCount + result.CompletedCount + result.RejectedCount;
+
+            return Results.Ok(new { success = true, data = result });
+        }).RequireAuthorization();
+
         group.MapGet("/requests/status-count", (AppDbContext db) => ApiResponseBuilder.CreateAsync(
             () => db.Requests.GroupBy(r => r.Status)
                 .Select(g => new { Status = g.Key, Count = g.Count() })

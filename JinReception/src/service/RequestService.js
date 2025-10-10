@@ -70,6 +70,18 @@ const _RequestService = {
     const res = await apiClient.get('/dashboard/company-stats');
     return res.data.data;
   },
+  async getAdminStats() {
+    const res = await apiClient.get('/dashboard/admin-stats');
+    return res.data.data;
+  },
+  async getAllAdminStats() {
+    const res = await apiClient.get('/dashboard/all-admin-stats');
+    return res.data.data;
+  },
+  async getMyCompanyStats() {
+    const res = await apiClient.get('/dashboard/my-company-stats');
+    return res.data.data;
+  },
 };
 
 export const RequestService = serviceWrapper('RequestService', _RequestService);

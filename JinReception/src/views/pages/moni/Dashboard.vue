@@ -1,7 +1,7 @@
 <script setup>
 import { useLayout } from '@/layout/composables/layout';
 import CustomerDashboard from './CustomerDashboard.vue';
-import RequestMonitor from './pages/reqs/RequestMonitor.vue';
+import RequestMonitor from './RequestMonitor.vue';
 
 const { loginUser } = useLayout();
 </script>

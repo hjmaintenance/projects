@@ -55,7 +55,11 @@ const handleReplySubmitted = (commentText) => {
 
 <div class="flex items-start gap-3">
   <!-- 아바타 -->
-  <img :src="comment?.author?.photo" :alt="comment?.author?.userName"  class="w-10 h-10 rounded-full" />
+ 
+                                <Avatar v-if=" comment?.author?.photo" :image="comment?.author?.photo" class="mr-3" size="large" shape="circle" />
+                                <Avatar v-else :label="comment?.author?.userName.charAt(0).toUpperCase()"  class="mr-3" size="large" shape="circle" />
+
+
 
   <!-- 내용 영역 -->
   <div class="flex flex-col">

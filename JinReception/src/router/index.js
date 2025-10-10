@@ -78,23 +78,23 @@ const router = createRouter({
         {
           path: '/dashboard',
           name: 'dashboard',
-          component: () => import('@/views/Dashboard.vue')
+          component: () => import('@/views/pages/moni/Dashboard.vue')
         },
         {
           path: '/custom_dashboard',
           name: 'custom_dashboard',
-          component: () => import('@/views/CustomerDashboard.vue')
+          component: () => import('@/views/pages/moni/CustomerDashboard.vue')
         },
         {
           path: '/',
           name: 'home',
-          component: () => import('@/views/Dashboard.vue')
+          component: () => import('@/views/pages/moni/Dashboard.vue')
         },
 
         {
           path: '/request_monitor',
           name: 'request_monitor',
-          component: () => import('@/views/pages/reqs/RequestMonitor.vue')
+          component: () => import('@/views/pages/moni/RequestMonitor.vue')
         },
 
         
