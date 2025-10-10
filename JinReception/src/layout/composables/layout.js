@@ -41,9 +41,11 @@ function clearLoginUser() {
 
 const layoutConfig = reactive({
   preset: localStorage.getItem('theme.preset') || 'Aura',
-  primary: localStorage.getItem('theme.primary') || 'emerald',
-  surface: localStorage.getItem('theme.surface') || null,
-  darkTheme: localStorage.getItem('theme.darkTheme') ? localStorage.getItem('user.theme.darkTheme') === 'true' : true,
+  primary: localStorage.getItem('theme.primary') || 'noir',
+  surface: localStorage.getItem('theme.surface') || 'viva',
+  darkTheme: localStorage.getItem('theme.darkTheme') !== null 
+              ? localStorage.getItem('theme.darkTheme') === 'true' 
+              : true,
   menuMode: localStorage.getItem('theme.menuMode') || 'static'
 });
 
@@ -88,7 +90,7 @@ export function useLayout() {
 
   const executeDarkModeToggle = () => {
 
-    console.log('executeDarkModeToggle', layoutConfig);
+    //console.log('executeDarkModeToggle', layoutConfig);
 
 
 
@@ -96,7 +98,7 @@ export function useLayout() {
 
     localStorage.setItem('theme.darkTheme', layoutConfig.darkTheme);
 
-    console.log('layoutConfig.darkTheme', layoutConfig.darkTheme);
+    //console.log('layoutConfig.darkTheme', layoutConfig.darkTheme);
 
     document.documentElement.classList.toggle('app-dark');
   };

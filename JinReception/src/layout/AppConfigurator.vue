@@ -230,17 +230,17 @@ const initColors = () => {
         updateSurfacePalette(surfaces.value.find((s) => s.name === layoutConfig.surface)?.palette); 
 
 
-    console.log('111111111111111111111111111111.darkTheme', layoutConfig.darkTheme);
+    //console.log('111111111111111111111111111111.darkTheme', layoutConfig.darkTheme);
 
 
-    console.log('222222222222222222222222222222222222.darkTheme', localStorage.getItem('theme.darkTheme') );
+    //console.log('222222222222222222222222222222222222.darkTheme', localStorage.getItem('theme.darkTheme') );
 
-layoutConfig.darkTheme = localStorage.getItem('theme.darkTheme') === 'true';
+//layoutConfig.darkTheme = localStorage.getItem('theme.darkTheme') === 'true';
 
-    console.log('3333333333333333333333333333333333333.darkTheme', layoutConfig.darkTheme);
+    //console.log('3333333333333333333333333333333333333.darkTheme', layoutConfig.darkTheme);
 
 
-    console.log('useLayout.darkTheme', layoutConfig.darkTheme);
+    //console.log('useLayout.darkTheme', layoutConfig.darkTheme);
 
 
     if (layoutConfig.darkTheme) {
