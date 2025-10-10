@@ -9,3 +9,5 @@ HANJU_UMS/packages/
 JinRestApi/publish/
 JinReception/src/assets/version.json
 .vscode/launch.json
+~$.*
+~*
