@@ -104,7 +104,7 @@ const deleteSelected = async () => {
 
 
   <!-- 조회영역 -->
-<form class="card flex flex-col gap-4 md:flex-row md:items-center md:justify-between" @submit.prevent="search">
+<form class="card flex flex-col gap-4 md:flex-row md:items-center md:justify-between" @submit.prevent="loadData">
 
     <div class="flex flex-col md:flex-row md:items-center gap-4 flex-1">
       <!-- 첫 번째 -->
