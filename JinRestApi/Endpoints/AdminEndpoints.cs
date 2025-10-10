@@ -143,15 +143,33 @@ public static class AdminEndpoints
         group.MapPost("/find-password", (AppDbContext db, FindPasswordDto findPasswordDto) => ApiResponseBuilder.CreateAsync(async () =>
         {
             var customer = await db.Customers.FirstOrDefaultAsync(a => a.LoginId == findPasswordDto.LoginId && a.Email == findPasswordDto.Email);
-            if (customer is null) return null;
+            var admin = await db.Admins.FirstOrDefaultAsync(a => a.LoginId == findPasswordDto.LoginId && a.Email == findPasswordDto.Email);
+            
+            if (customer is null)
+            {
+                if (admin is null) return null;
 
-            var passwordService = new PasswordService();
-            var tempPassword = Guid.NewGuid().ToString().Substring(0, 8);
-            customer.PasswordHash = passwordService.HashPassword<Customer>(customer, tempPassword);
-            //customer.MustChangePassword = true;
+                var passwordService = new PasswordService();
+                var tempPassword = Guid.NewGuid().ToString().Substring(0, 8);
+                admin.PasswordHash = passwordService.HashPassword<Admin>(admin, tempPassword);
+                admin.MustChangePassword = true;
 
-            await db.SaveChangesAsync();
-            return new { tempPassword };
+                await db.SaveChangesAsync();
+                return new { tempPassword };
+            } 
+            else
+            {
+                
+                var passwordService = new PasswordService();
+                var tempPassword = Guid.NewGuid().ToString().Substring(0, 8);
+                customer.PasswordHash = passwordService.HashPassword<Customer>(customer, tempPassword);
+                //customer.MustChangePassword = true;
+
+                await db.SaveChangesAsync();
+                return new { tempPassword };
+            }
+
+            
         }, "Password reset successfully."));
     }
 }
