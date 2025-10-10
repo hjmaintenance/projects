@@ -103,7 +103,7 @@
                 <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
                 <label for="rememberme1">Remember me</label>
               </div>
-              <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
+              <router-link to="/auth/find-password" class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">비밀번호 찾기</router-link>
             </div>
             <Button type="submit" label="Sign In" class="w-full" @click="submit"></Button>
           </form>

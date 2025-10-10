@@ -139,5 +139,19 @@ public static class AdminEndpoints
             await db.SaveChangesAsync();
             return new { DeletedId = id };
         }, "Admin deleted successfully."));
+
+        group.MapPost("/find-password", (AppDbContext db, FindPasswordDto findPasswordDto) => ApiResponseBuilder.CreateAsync(async () =>
+        {
+            var customer = await db.Customers.FirstOrDefaultAsync(a => a.LoginId == findPasswordDto.LoginId && a.Email == findPasswordDto.Email);
+            if (customer is null) return null;
+
+            var passwordService = new PasswordService();
+            var tempPassword = Guid.NewGuid().ToString().Substring(0, 8);
+            customer.PasswordHash = passwordService.HashPassword<Customer>(customer, tempPassword);
+            //customer.MustChangePassword = true;
+
+            await db.SaveChangesAsync();
+            return new { tempPassword };
+        }, "Password reset successfully."));
     }
 }

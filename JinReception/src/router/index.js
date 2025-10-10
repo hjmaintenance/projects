@@ -136,13 +136,18 @@ const router = createRouter({
       path: '/auth/change-password',
       name: 'change-password',
       component: () => import('@/views/pages/auth/ChangePassword.vue')
+    },
+    {
+      path: '/auth/find-password',
+      name: 'find-password',
+      component: () => import('@/views/pages/auth/FindPassword.vue')
     }
   ]
 });
 
 router.beforeEach((to, from, next) => {
   // 'login' 페이지와 같이 인증이 필요 없는 페이지 목록
-  const publicPages = ['login', 'register', 'landing', 'notfound', 'accessDenied', 'error'];
+  const publicPages = ['login', 'register', 'landing', 'notfound', 'accessDenied', 'error', 'find-password'];
   const authRequired = !publicPages.includes(to.name);
   const loggedIn = localStorage.getItem('jwt_token');
 
