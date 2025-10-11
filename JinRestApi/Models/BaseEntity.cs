@@ -26,6 +26,8 @@ namespace JinRestApi.Models
         public string? ActionService { get; set; }
         /// <summary>작업 메뉴/화면 정보</summary>
         public string? MenuContext { get; set; }
+        /// <summary>접근아이피</summary>
+        public string? RemoteAddress { get; set; }
     }
 
     /// <summary>고객사</summary>

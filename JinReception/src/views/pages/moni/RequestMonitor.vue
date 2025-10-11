@@ -3,15 +3,13 @@
   import { buildQueryPayload2 } from '@/utils/apiUtils';
   import { formatDate, formatDateSmart, STATUS , STATUS_ALL} from '@/utils/formatters';
   import { onMounted, reactive, ref, watch, nextTick, computed } from 'vue';
-  import { useLayout } from '@/layout/composables/layout';
+  import { useLayout } from '@/layout/composables/layout';  
   import { useRouter } from 'vue-router';
-
-  import apiClient from '@/service/api';
-
-
-import router from '@/router';
+  import { useRequestStore } from '@/store/requestStore';
 
 const { loginUser } = useLayout();
+const router = useRouter();
+const store = useRequestStore();
 const loading = ref(null);
 
 const companyStats = ref([]);
@@ -115,6 +113,21 @@ const getStatusColor = (status) => {
       }
     };
 
+const goToListByStatus = (statusName, admin = null) => {
+  // 상태 이름으로 상태 객체 찾기
+  const status = STATUS_ALL.find(s => s.name === statusName);
+  if (status) {
+    store.dropdownItem = status;
+  }
+
+  if (admin) {
+    store.adminItem = { id: admin.adminId, userName: admin.adminName };
+  } else {
+    store.adminItem = { id: loginUser.value.user_uid, userName: loginUser.value.user_name };
+  }
+  // 목록 페이지로 이동
+  router.push('/mng_request');
+}
 </script>
 
 <template>
@@ -137,9 +150,9 @@ const getStatusColor = (status) => {
     <div class="card">
         <h5 class="text-xl font-semibold mb-4">나의 요청 처리 현황</h5>
         <div v-if="adminStatsComputed" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <!-- First Column: Stats Cards -->
-            <div class="lg:col-span-1 space-y-4">
-                <Card>
+            <!-- First Column: Stats Cards - flex-row on mobile, flex-col on lg screens -->
+            <div class="lg:col-span-1 flex flex-row lg:flex-col gap-4">
+                <Card class="flex-1 text-center cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700/80" @click="goToListByStatus('IN_PROGRESS')">
                     <template #title>
                         <div class="flex items-center justify-between">
                             <span>진행중</span>
@@ -150,7 +163,7 @@ const getStatusColor = (status) => {
                         <p class="text-2xl font-bold">{{ adminStatsComputed.inProgressCount }}건</p>
                     </template>
                 </Card>
-                <Card>
+                <Card class="flex-1 text-center cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700/80" @click="goToListByStatus('COMPLETED')">
                     <template #title>
                         <div class="flex items-center justify-between">
                             <span>완료</span>
@@ -161,7 +174,7 @@ const getStatusColor = (status) => {
                         <p class="text-2xl font-bold">{{ adminStatsComputed.completedCount }}건</p>
                     </template>
                 </Card>
-                <Card>
+                <Card class="flex-1 text-center cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700/80" @click="goToListByStatus('REJECTED')">
                     <template #title>
                         <div class="flex items-center justify-between">
                             <span>반려</span>
@@ -175,7 +188,7 @@ const getStatusColor = (status) => {
             </div>
 
             <!-- Second and Third Column: Charts -->
-            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="lg:col-span-2 grid grid-cols-2 gap-4">
                 <Card class="flex flex-col items-center justify-center">
                     <template #title>
                         <div class="text-center">나의 접수율</div>
@@ -224,15 +237,15 @@ const getStatusColor = (status) => {
                             </div>
 
                             <div class="grid grid-cols-3 gap-2 text-center mb-4">
-                                <div>
+                                <div class="cursor-pointer p-2 rounded-md hover:bg-surface-100 dark:hover:bg-surface-700/80" @click="goToListByStatus('IN_PROGRESS', item)">
                                     <div class="text-orange-500 font-semibold">{{ item.inProgressCount }}</div>
                                     <div class="text-xs">진행중</div>
                                 </div>
-                                <div>
+                                <div class="cursor-pointer p-2 rounded-md hover:bg-surface-100 dark:hover:bg-surface-700/80" @click="goToListByStatus('COMPLETED', item)">
                                     <div class="text-green-500 font-semibold">{{ item.completedCount }}</div>
                                     <div class="text-xs">완료</div>
                                 </div>
-                                <div>
+                                <div class="cursor-pointer p-2 rounded-md hover:bg-surface-100 dark:hover:bg-surface-700/80" @click="goToListByStatus('REJECTED', item)">
                                     <div class="text-red-500 font-semibold">{{ item.rejectedCount }}</div>
                                     <div class="text-xs">반려</div>
                                 </div>

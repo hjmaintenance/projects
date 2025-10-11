@@ -18,6 +18,11 @@ const model = ref(null);
         //model.value = getBaseMenu();
 
         const customer = [
+                { label: '모니터링', icon: 'pi pi-fw pi-inbox',
+                  items: [
+                          { label: '대시보드', icon: 'pi pi-fw pi-list', to: '/' }
+                         ]
+                },
                 { label: '접수', icon: 'pi pi-fw pi-inbox',
                   items: [
                           { label: '나의 접수 목록', icon: 'pi pi-fw pi-list', to: '/mng_request' }

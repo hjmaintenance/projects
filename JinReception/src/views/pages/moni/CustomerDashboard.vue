@@ -1,8 +1,11 @@
 <script setup>
 import { ref, onMounted, computed, watch,nextTick } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
+import { useRouter } from 'vue-router';
 import Chart from 'primevue/chart';
 import { RequestService } from '@/service/RequestService';
+import { useRequestStore } from '@/store/requestStore';
+import { STATUS_ALL } from '@/utils/formatters';
 
 const { loginUser } = useLayout();
 const requests = ref([]);
@@ -14,6 +17,8 @@ const monthlyChartOptions = ref({});
 const dailyChartData = ref({});
 const dailyChartOptions = ref({});
 let documentStyle;
+const router = useRouter();
+const store = useRequestStore();
 let textColor;
 let textColorSecondary;
 let surfaceBorder;
@@ -176,6 +181,20 @@ const DoughnutCenterText = {
   }
 };
 
+const goToListByStatus = (statusName) => {
+  // 상태 이름으로 상태 객체 찾기
+  const status = STATUS_ALL.find(s => s.name === statusName);
+  if (status) {
+    store.dropdownItem = status;
+  }
+
+  // 다른 필터 초기화
+  store.adminItem = null;
+  store.companyItem = null;
+  store.Srch = '';
+
+  router.push('/mng_request');
+};
 
 
 
@@ -367,11 +386,11 @@ const reloadData = async () => {
 
 <template>
     <div class="card  hidden md:block ">
-        <Button label="데이터 다시 읽기" icon="pi pi-refresh" :loading="loading" @click="reloadData" raised />
+        <Button label="데이터 새로고침" icon="pi pi-refresh" :loading="loading" @click="reloadData" raised />
     </div>
     <div class="grid grid-cols-12 gap-8">
-        <div class="col-span-12 lg:col-span-6 xl:col-span-3">
-            <div class="card mb-0 border-l-4 border-blue-500">
+        <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer" @click="goToListByStatus('PENDING')">
+            <div class="card mb-0 border-l-4 border-blue-500 hover:bg-surface-100 dark:hover:bg-surface-700/80">
                 <div class="flex items-start justify-between mb-4">
                     <div>
                         <div class="text-muted-color font-medium mb-2">접수대기</div>
@@ -384,8 +403,8 @@ const reloadData = async () => {
                 <ProgressBar :value="statusPercentages.Pending" :showValue="false" style="height: 6px"></ProgressBar>
             </div>
         </div>
-        <div class="col-span-12 lg:col-span-6 xl:col-span-3">
-            <div class="card mb-0 border-l-4 border-orange-500">
+        <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer" @click="goToListByStatus('IN_PROGRESS')">
+            <div class="card mb-0 border-l-4 border-orange-500 hover:bg-surface-100 dark:hover:bg-surface-700/80">
                 <div class="flex items-start justify-between mb-4">
                     <div>
                         <div class="text-muted-color font-medium mb-2">진행중</div>
@@ -398,8 +417,8 @@ const reloadData = async () => {
                 <ProgressBar :value="statusPercentages.InProgress" :showValue="false" style="height: 6px" class="text-orange-500"></ProgressBar>
             </div>
         </div>
-        <div class="col-span-12 lg:col-span-6 xl:col-span-3">
-            <div class="card mb-0 border-l-4 border-green-500">
+        <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer" @click="goToListByStatus('COMPLETED')">
+            <div class="card mb-0 border-l-4 border-green-500 hover:bg-surface-100 dark:hover:bg-surface-700/80">
                 <div class="flex items-start justify-between mb-4">
                     <div>
                         <div class="text-muted-color font-medium mb-2">완료</div>
@@ -412,8 +431,8 @@ const reloadData = async () => {
                 <ProgressBar :value="statusPercentages.Completed" :showValue="false" style="height: 6px"></ProgressBar>
             </div>
         </div>
-        <div class="col-span-12 lg:col-span-6 xl:col-span-3">
-            <div class="card mb-0 border-l-4 border-red-500">
+        <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer" @click="goToListByStatus('REJECTED')">
+            <div class="card mb-0 border-l-4 border-red-500 hover:bg-surface-100 dark:hover:bg-surface-700/80">
                 <div class="flex items-start justify-between mb-4">
                     <div>
                         <div class="text-muted-color font-medium mb-2">반려</div>

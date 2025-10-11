@@ -100,6 +100,27 @@ public class AppDbContext : DbContext
             entityEntry.Entity.MenuContext = _httpContextAccessor?.HttpContext?.Request.Headers["X-Menu-Name"]; // MenuContext 자동 설정
 
             if (string.IsNullOrEmpty(entityEntry.Entity.MenuContext)) entityEntry.Entity.MenuContext = user; // MenuContext 기본값
+
+// 접속클라이언트의 아이피를 설정한다.
+            var httpContext = _httpContextAccessor?.HttpContext;
+            string remoteIpAddress = "";
+            if (httpContext != null)
+            {
+                // X-Forwarded-For 헤더 확인 (가장 일반적인 프록시 헤더)
+                var forwardedFor = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(forwardedFor))
+                {
+                    // 쉼표로 구분된 IP 목록 중 첫 번째 IP를 사용
+                    remoteIpAddress = forwardedFor.Split(',').FirstOrDefault()?.Trim() ?? "";
+                }
+
+                // 프록시 헤더가 없는 경우 직접 연결된 IP 주소 사용
+                if (string.IsNullOrEmpty(remoteIpAddress) && httpContext.Connection.RemoteIpAddress != null)
+                {
+                    remoteIpAddress = httpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+                }
+            }
+            entityEntry.Entity.RemoteAddress = remoteIpAddress;
         }
     }
 

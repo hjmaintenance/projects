@@ -1,11 +1,13 @@
 <script setup>
   import { RequestService } from '@/service/RequestService';
+  import { AdminService } from '@/service/AdminService';
+  import { CompanyService } from '@/service/CompanyService';
   import { buildQueryPayload2 } from '@/utils/apiUtils';
   import { formatDate, STATUS , STATUS_ALL} from '@/utils/formatters';
   import { onMounted, reactive, ref, watch, nextTick, computed } from 'vue';
   import { useLayout } from '@/layout/composables/layout';
   import { useRouter } from 'vue-router';
-
+  
 
   import { useRequestStore } from '@/store/requestStore';
 
@@ -21,13 +23,13 @@ const store = useRequestStore()
 
   const { loginUser } = useLayout();
   const loading = ref(null);
+  const admins = ref([]);
+  const companies = ref([]);
 
 
 
   const searchs = reactive({
-    Srch: '',
-    customerId: loginUser.value?.user_uid,
-    dropdownItem: ref(null)
+    customerId: loginUser.value?.user_uid
   });
 
 
@@ -39,7 +41,10 @@ const store = useRequestStore()
     ...(loginUser.value?.login_type !== 'admin'
       ? [{ model: searchs.customerId, fields: ['customerId'] }]
       : []),
-    //{ model: 'Srch', fields: ['id'], operator: '' },
+    ...(loginUser.value?.login_type === 'admin' ? [
+      { model: store.adminItem?.id, fields: ['adminId'], operator: '' },
+      { model: store.companyItem?.id, fields: ['customer.companyId'], operator: '' }
+    ] : []),
     { model: store.dropdownItem?.code, fields: ['status'], operator: '' }
   ]);
 
@@ -51,7 +56,6 @@ const store = useRequestStore()
     pageSize: 100
   });
 
-  const visible = ref(false);
 
   const requests = ref([]);
   const selectedRequest = ref(null);
@@ -86,6 +90,32 @@ const store = useRequestStore()
     { immediate: true }
   );
 
+  onMounted(async () => {
+    const adminList = await AdminService.getList(loading);
+    admins.value = [{ userName: '전체', id: null }, ...adminList];
+
+    const companyList = await CompanyService.getList(loading);
+    companies.value = [{ name: '전체', id: null }, ...companyList];
+
+    // 다른 페이지에서 관리자 필터를 설정하고 넘어온 경우,
+    // admins 목록에서 완전한 객체를 찾아 다시 할당해줍니다.
+
+    console.log('(store.adminItem && store.adminItem.id)', (store.adminItem && store.adminItem.id) );
+    if (store.adminItem && store.adminItem.id) {
+
+    console.log('다른 페이지에서 관리자 필터를 설정하고 넘어온 경우 이다.');
+
+      const foundAdmin = admins.value.find(a => a.id == store.adminItem.id);
+      if (foundAdmin) {
+
+    console.log('admin 찾았다.');
+
+        store.adminItem = foundAdmin;
+      }
+    }
+
+  });
+
   // 상태 선택이 변경되면 search()를 호출합니다.
   watch(
     () => store.dropdownItem,
@@ -94,74 +124,22 @@ const store = useRequestStore()
     }
   );
 
+  // 관리자 선택이 변경되면 search()를 호출합니다.
+  watch(
+    () => store.adminItem,
+    (newValue, oldValue) => {
+      if (newValue !== oldValue) search();
+    }
+  );
 
+  // 회사 선택이 변경되면 search()를 호출합니다.
+  watch(
+    () => store.companyItem,
+    (newValue, oldValue) => {
+      if (newValue !== oldValue) search();
+    }
+  );
 
-  //
-  const getDetail = async () => {
-      const fullRequestData = await RequestService.get(selectedRequest.value.id);
-      selectedRequest.value.description = fullRequestData.description;
-  };
-
-
-
-
-
-  //접수 담당자 지정
-  const accept_request = async () => {
-    if (!selectedRequest.value) return;
-        visible.value = false;
-await nextTick();
-
-    // 매직 넘버 대신 명확한 상수를 사용합니다.
-    selectedRequest.value.status = STATUS.IN_PROGRESS;
-    selectedRequest.value.adminId = loginUser.value?.user_uid;
-    await RequestService.accept(selectedRequest.value);
-    
-    actionRun();
-    
-    //search(); // 목록 새로고침
-  };
-
-  //
-  const actionRun = async () => {
-
-    const updatedItem = await RequestService.get(selectedRequest.value.id, {
-      remove: queryOptions.remove
-    });
-    const index = requests.value.findIndex((item) => item.id === updatedItem.id);
-    if (index !== -1) requests.value[index] = updatedItem;
-
-
-
-  };
-
-
-
-  //반려
-  const reject_request = async () => {
-    if (!selectedRequest.value) return;
-        visible.value = false;
-await nextTick();
-
-    selectedRequest.value.status = STATUS.REJECTED; // '대기' 상태로 변경 (또는 별도의 '반려' 상태가 있다면 해당 값 사용)
-    selectedRequest.value.adminId = loginUser.value?.user_uid;
-    await RequestService.accept(selectedRequest.value); // 'accept'는 PUT 요청이므로 재사용 가능
-
-    actionRun();
-  };
-
-  //완료
-  const complete_request = async () => {
-    if (!selectedRequest.value) return;
-        visible.value = false;
-    await nextTick();
-
-    selectedRequest.value.status = STATUS.COMPLETED; // '완료' 상태로 변경
-    selectedRequest.value.adminId = loginUser.value?.user_uid;
-    await RequestService.accept(selectedRequest.value);
-
-    actionRun();
-  };
 
 
 
@@ -182,6 +160,16 @@ await nextTick();
         
         <label for="state" class="w-24 md:text-right shrink-0">상태</label>
         <Select id="state" v-model="store.dropdownItem" :options="STATUS_ALL" optionLabel="ttl" placeholder="Select One" class="md:min-w-[12rem]"></Select>
+     
+        <template v-if="loginUser?.login_type === 'admin'">
+          <label for="admin" class="w-24 md:text-right shrink-0">관리자</label>
+          <Select id="admin" v-model="store.adminItem" :options="admins" optionLabel="userName" placeholder="Select One" class="md:min-w-[12rem]"></Select>
+
+          <label for="company" class="w-24 md:text-right shrink-0">회사</label>
+          <Select id="company" v-model="store.companyItem" :options="companies" optionLabel="name" placeholder="Select One" class="md:min-w-[12rem]"></Select>
+        </template>
+
+     
       </div>
     </div>
 
