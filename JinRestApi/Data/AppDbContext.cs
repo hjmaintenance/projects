@@ -275,17 +275,13 @@ public class AppDbContext : DbContext
                 .HasColumnType("varchar(50)"); // 데이터베이스 컬럼 타입을 명시적으로 지정합니다.
         }
 
-        // 마이그레이션 히스토리 테이블의 스키마를 'jsini'로 명시적으로 지정합니다.
-        modelBuilder.Entity<Microsoft.EntityFrameworkCore.Migrations.HistoryRow>().ToTable("__EFMigrationsHistory", "jsini");
-
+       
         foreach (var entity in modelBuilder.Model.GetEntityTypes())
         {
             // 테이블명 소문자화
-            if (entity.GetSchema() == "jsini") // jsini 스키마에 있는 테이블만 소문자화
+            var tableName = entity.GetTableName();
+            if (!string.IsNullOrEmpty(tableName))
             {
-                var tableName = entity.GetTableName();
-                // __EFMigrationsHistory 테이블은 소문자화에서 제외합니다.
-                if (string.IsNullOrEmpty(tableName) || tableName == "__EFMigrationsHistory") continue;
                 entity.SetTableName(tableName.ToLower());
             }
 
@@ -306,10 +302,6 @@ public class AppDbContext : DbContext
             foreach (var property in entity.GetProperties())
             {
                 // 컬럼명 소문자화
-                if (entity.GetTableName()?.ToLower() == "__efmigrationshistory")
-                {
-                    continue; // 마이그레이션 히스토리 테이블의 컬럼명은 변경하지 않습니다.
-                }
                 property.SetColumnName(property.Name.ToLower());
 
                 if (xmlDoc != null)
