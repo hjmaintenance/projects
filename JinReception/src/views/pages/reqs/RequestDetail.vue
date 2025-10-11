@@ -66,7 +66,7 @@
 
 
     if (statusName === 'COMPLETED' || statusName === 'REJECTED' || statusName === 'Reset') {
-      if( loginUser.value?.user_uid !== selectedRequest.value.adminId){
+      if( loginUser.value?.user_uid !== String(selectedRequest.value.adminId)){
         alert('접수 담당자가 아닙니다.');
         return;
       }
