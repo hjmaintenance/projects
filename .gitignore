@@ -11,3 +11,4 @@ JinReception/src/assets/version.json
 .vscode/launch.json
 ~$.*
 ~*
+.~lock*
