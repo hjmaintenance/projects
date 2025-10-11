@@ -19,6 +19,7 @@
         "@tiptap/vue-3": "^3.5.0",
         "axios": "^1.12.2",
         "chart.js": "3.3.2",
+        "ico-to-png": "^0.2.2",
         "jwt-decode": "^4.0.0",
         "pinia": "^3.0.3",
         "primeicons": "^7.0.0",

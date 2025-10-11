@@ -27,11 +27,6 @@
           label: '프로필',
           icon: 'pi pi-user',
           command: () => router.push('/profile')
-        },
-        {
-          label: '비밀번호 변경',
-          icon: 'pi pi-key',
-          command: () => router.push('/auth/change-password')
         }
       ]
     },
@@ -80,6 +75,7 @@
     <Avatar v-if="loginUser?.photo" :image="loginUser.photo" shape="circle" />
     <Avatar v-else :label="userInitials" shape="circle" />
     <div class="hidden md:block">
+
       <div class="font-semibold text-sm">{{ loginUser?.user_name }}</div>
       <div class="text-xs text-surface-500 dark:text-surface-400">{{ loginUser?.affiliation }}</div>
     </div>
@@ -88,7 +84,12 @@
   <Menu ref="menu" id="overlay_menu" :model="menuItems" :popup="true">
     <template #start>
       <div class="p-3">
-        <div class="font-bold">{{ loginUser?.user_name }}</div>
+
+      
+        <div>
+          <Avatar v-if="loginUser?.photo" :image="loginUser.photo" shape="circle" />
+          <div  class="font-bold">{{ loginUser?.user_name }}</div>
+        </div>
         <div class="text-sm text-surface-500 dark:text-surface-400">{{ loginUser?.email }}</div>
       </div>
     </template>

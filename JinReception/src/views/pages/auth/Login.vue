@@ -9,13 +9,12 @@
   const password = ref('');
   const loginType = ref('');
   const checked = ref(false);
-  const passwordInput = ref(null); 
+  const passwordInput = ref(null);
 
   const { setLoginUser } = useLayout();
   const router = useRouter();
 
   const errorMsg = ref('');
-
 
   onMounted(() => {
     const savedId = localStorage.getItem('rememberID');
@@ -35,6 +34,7 @@
     errorMsg.value = '';
 
     if (!password.value) {
+
     // password가 비어있으면 focus
     passwordInput.value?.$el?.querySelector("input")?.focus();
     return;
@@ -95,7 +95,7 @@
 
             <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
             <Password id="password1" v-model="password"
-             placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false"
+             placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false" @change="password = $event.target.value"
               ref="passwordInput" ></Password>
 
             <div class="flex items-center justify-between mt-2 mb-8 gap-8">

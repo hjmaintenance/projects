@@ -366,7 +366,7 @@ const reloadData = async () => {
 </script>
 
 <template>
-    <div class="card">
+    <div class="card  hidden md:block ">
         <Button label="데이터 다시 읽기" icon="pi pi-refresh" :loading="loading" @click="reloadData" raised />
     </div>
     <div class="grid grid-cols-12 gap-8">

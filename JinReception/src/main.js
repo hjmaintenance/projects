@@ -11,6 +11,8 @@ import ToastService from 'primevue/toastservice';
 import '@/assets/styles.scss';
 import '@/assets/main.css';
 
+import './pwa';
+
 const app = createApp(App);
 
 app.use(createPinia());

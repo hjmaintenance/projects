@@ -13,18 +13,19 @@
 
   const { loginUser } = useLayout();
   const router = useRouter();
+  const titleInput = ref(null);
 
   const editor = useEditor({
     extensions: [Color.configure({ types: [TextStyle.name, ListItem.name] }), TextStyle.configure({ types: [ListItem.name] }), StarterKit, Image],
     content: `
-<h2>주요 요구사항을 입력하세요.</h2>
+<h2>주요 요점을 명시</h2>
 
 <p>
   내용을 입력하세요.
 </p>
+<p /><p />
 
-
-<blockquote>해당 접수의 처리를 요청드립니다.<br />
+<blockquote>해당 건의 처리를 요청합니다.<br />
 — ${loginUser.value?.user_name} ( ${loginUser.value?.email} )
 </blockquote><p/><p/><p/><p/>`
   });
@@ -37,6 +38,7 @@
 
   onMounted(() => {
     document.addEventListener('paste', handlePaste);
+    titleInput.value?.$el?.focus();
   });
 
   onBeforeUnmount(() => {
@@ -96,41 +98,26 @@
 </script>
 
 <template>
-
-
-  <form class="card srcharea" @submit.prevent="search">
-
-<div class="flex flex-col sm:flex-row sm:items-center" >
-                   
-
-        
-   <label>제목</label>
-<InputText type="text" v-model="request.title" placeholder="Title..." class="ml-2" />
-
-
-                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-                        <div class="flex flex-row md:flex-col justify-between items-end gap-2">
-                        </div>
-                        <div></div>
-                        <div>                          
-      <Button label="접수하기" type="button" class="mr-2" @click="save" />
-      <Button label="접수목록보기" type="button" class="mr-2" @click="router.back()" />
-                        </div>
-                    </div>
-                </div>
-
-
-  </form>
-
-
-
-
-
-
-
-
-
   <div class="card">
+    <div class="flex flex-wrap justify-between items-center gap-4 mb-4">
+      <span class="text-xl font-semibold">새로운 요청 접수</span>
+      <div class="flex items-center gap-2">
+        <Button label="접수하기" @click="save" icon="pi pi-send" />
+        <Button label="목록" @click="router.back()" severity="secondary" outlined />
+      </div>
+    </div>
+
+    <div class="border-y border-surface-200 dark:border-surface-700">
+      <InputText
+        type="text"
+        v-model="request.title"
+        placeholder="제목을 입력하세요"
+        variant="borderless"
+        class="w-full text-lg font-medium"
+        ref="titleInput"
+      />
+    </div>
+
     <!-- 본문 작성 editor -->
     <editor-content :editor="editor" />
 

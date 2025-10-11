@@ -1,4 +1,4 @@
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, onMounted, onBeforeUnmount } from 'vue';
 
 const getInitialUser = () => {
   const userJSON = localStorage.getItem('loginUser');
@@ -59,14 +59,16 @@ const layoutState = reactive({
   activeMenuItem: null
 });
 
+import { pwa } from '@/pwa';
+
 export function useLayout() {
+  const { showInstallButton, installPWA } = pwa;
+
   const initializeTheme = () => {
 
 
     console.log('useLayout', layoutConfig);
     console.log('useLayout.darkTheme', layoutConfig.darkTheme);
-
-
     if (layoutConfig.darkTheme) {
       document.documentElement.classList.add('app-dark');
     } else {
@@ -136,6 +138,8 @@ export function useLayout() {
     setLoginUser,
     clearLoginUser,
     toggleDarkMode,
-    initializeTheme
+    initializeTheme,
+    showInstallButton,
+    installPWA
   };
 }

@@ -1,5 +1,5 @@
 <script setup>
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useToast } from 'primevue/usetoast';
   import { useRouter } from 'vue-router';
   import { useLayout } from '@/layout/composables/layout';
@@ -12,7 +12,7 @@
   const confirm = useConfirm();
 
   const toast = useToast();
-  const { toggleMenu, toggleDarkMode, isDarkTheme, loginUser, clearLoginUser, initLoginUser } = useLayout();
+  const { toggleMenu, toggleDarkMode, isDarkTheme, loginUser, clearLoginUser, initLoginUser, showInstallButton, installPWA } = useLayout();
   const router = useRouter();
   const menu = ref();
 
@@ -41,6 +41,10 @@
 
     <div class="layout-topbar-actions">
       <div class="layout-config-menu">
+        <!-- PWA 설치 버튼 -->
+        <button v-if="showInstallButton" type="button" class="layout-topbar-action" @click="installPWA" v-tooltip.bottom="'앱 설치'">
+          <i class="pi pi-download"></i>
+        </button>
 
         <button type="button" class="layout-topbar-action" @click="toggleDarkMode">
           <i :class="['pi', { 'pi-moon': isDarkTheme, 'pi-sun': !isDarkTheme }]"></i>
@@ -69,19 +73,7 @@
       <div class="layout-topbar-menu hidden lg:block">
         <div class="layout-topbar-menu-content">
 
-          <button type="button" class="layout-topbar-action">
-            <i class="pi pi-calendar"></i>
-            <span>Calendar</span>
-          </button>
-
-          <button type="button" class="layout-topbar-action">
-            <i class="pi pi-inbox"></i>
-            <span>Messages</span>
-          </button>
-
-        </div>
-      </div>
-
+          
 
 
       <div v-if="loginUser" class="layout-config-menu ">
@@ -105,6 +97,22 @@
           <UserConfigurator />
         </div>
       </div>
+      
+
+
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+
+
+
 
 
 

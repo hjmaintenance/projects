@@ -64,6 +64,15 @@
   const updateRequestStatus = async (statusName) => {
     if (!selectedRequest.value) return;
 
+
+    if (statusName === 'COMPLETED' || statusName === 'REJECTED' || statusName === 'Reset') {
+      if( loginUser.value?.user_uid !== selectedRequest.value.adminId){
+        alert('접수 담당자가 아닙니다.');
+        return;
+      }
+    }
+
+
     if (statusName === 'Reset') {
 
       await RequestService.reset(selectedRequest.value.id);
@@ -149,7 +158,7 @@
 
       <!-- Status 1 (In Progress): Can move to Completed (2) or Rejected (3) -->
       <Button v-if="selectedRequest.status === 1" type="button" label="완료" severity="success" class="flex-1 md:flex-none" @click="updateRequestStatus('COMPLETED')"></Button>
-      <Button v-if="selectedRequest.status === 1" type="button" label="반려" severity="secondary" class="flex-1 md:flex-none" @click="updateRequestStatus('REJECTED')"></Button>
+      <Button v-if="selectedRequest.status === 1" type="button" label="반려" severity="danger" class="flex-1 md:flex-none" @click="updateRequestStatus('REJECTED')"></Button>
       <Button v-if="selectedRequest.status === 2 || selectedRequest.status === 3" type="button" label="접수초기화" severity="success" class="flex-1 md:flex-none" @click="updateRequestStatus('Reset')"></Button>
     </template>
 
