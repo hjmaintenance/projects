@@ -196,56 +196,6 @@ public class AppDbContext : DbContext
 
 
 
-
-
-
-
-
-
-
-
-
-        /*
-
-        // lower 
-        foreach (var entity in modelBuilder.Model.GetEntityTypes())
-        {
-            var tableName = entity.GetTableName();
-            if (!string.IsNullOrEmpty(tableName))
-                entity.SetTableName(tableName.ToLower());
-
-            foreach (var property in entity.GetProperties())
-            {
-                if (!string.IsNullOrEmpty(property.Name))
-                    property.SetColumnName(property.Name.ToLower());
-            }
-        }
-
-
-        // comment from 코드 주석
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, "JinRestApi.xml");
-        if (File.Exists(xmlPath))
-        {
-            var xml = XDocument.Load(xmlPath);
-
-            foreach (var prop in typeof(User).GetProperties())
-            {
-                var memberName = $"P:{prop.DeclaringType.FullName}.{prop.Name}";
-                var summary = xml.Descendants("member")
-                    .FirstOrDefault(m => m.Attribute("name")?.Value == memberName)?
-                    .Element("summary")?.Value.Trim();
-
-                if (!string.IsNullOrEmpty(summary))
-                {
-                    modelBuilder.Entity<User>()
-                        .Property(prop.Name)
-                        .HasComment(summary);
-                }
-            }
-        }
-        */
-
-
         //foreach (var entity in modelBuilder.Model.GetEntityTypes())        {
         // 테이블/컬럼명 소문자 변환 및 XML 주석을 DB 코멘트로 적용
         var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -262,17 +212,17 @@ public class AppDbContext : DbContext
         foreach (var entityType in modelBuilder.Model.GetEntityTypes()
             .Where(e => e.ClrType.IsSubclassOf(typeof(BaseEntity))))
         {
-            modelBuilder.Entity(entityType.ClrType)
-                .ToTable(entityType.ClrType.Name.ToLower(), "jsini"); // 테이블명과 스키마를 명시적으로 설정
+            // modelBuilder.Entity(entityType.ClrType)
+            //     .ToTable(entityType.ClrType.Name.ToLower(), "jsini"); // 테이블명과 스키마를 명시적으로 설정
 
             modelBuilder.Entity(entityType.ClrType)
                 .Property(nameof(BaseEntity.Id))
                 .UseIdentityByDefaultColumn();
 
             // BaseEntity에 새로 추가된 속성을 모든 하위 엔티티에 적용합니다.
-            modelBuilder.Entity(entityType.ClrType)
-                .Property(nameof(BaseEntity.RemoteAddress))
-                .HasColumnType("varchar(50)"); // 데이터베이스 컬럼 타입을 명시적으로 지정합니다.
+            // modelBuilder.Entity(entityType.ClrType)
+            //     .Property(nameof(BaseEntity.RemoteAddress))
+            //     .HasColumnType("varchar(50)"); // 데이터베이스 컬럼 타입을 명시적으로 지정합니다.
         }
 
        
