@@ -72,6 +72,11 @@ cd "$Backend_PATH" || exit 1
 echo "=== 백엔드 빌드 ==="
 dotnet publish -c Release -o ./publish
 
+# 데이터베이스 마이그레이션 적용
+echo "=== 데이터베이스 마이그레이션 적용 ==="
+dotnet ef database update
+
+
 sleep 1   # 안전하게 1초 대기
 
 # 백엔드 재실행 (백그라운드 실행 + 로그 저장)
