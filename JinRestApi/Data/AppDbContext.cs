@@ -265,6 +265,11 @@ public class AppDbContext : DbContext
             modelBuilder.Entity(entityType.ClrType)
                 .Property(nameof(BaseEntity.Id))
                 .UseIdentityByDefaultColumn();
+
+            // BaseEntity에 새로 추가된 속성을 모든 하위 엔티티에 적용합니다.
+            modelBuilder.Entity(entityType.ClrType)
+                .Property(nameof(BaseEntity.RemoteAddress))
+                .HasColumnType("varchar(50)"); // 데이터베이스 컬럼 타입을 명시적으로 지정합니다.
         }
 
         foreach (var entity in modelBuilder.Model.GetEntityTypes())
