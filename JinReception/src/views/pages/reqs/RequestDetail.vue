@@ -138,6 +138,9 @@
     <!-- 버튼이 여러 개라면 flex-1 로 균등분할 -->
     <Button type="button" label="Reload" severity="primary" class="flex-1 md:flex-none" @click="getDetail"></Button>
 
+
+    <Button @click="router.push('/request/edit/'+route.query.id)" >수정</Button>
+
     <!-- Show buttons based on current status -->
     <template v-if="selectedRequest && loginUser && loginUser?.login_type === 'admin'">
       <!-- Status 0 (Pending): Can move to In Progress (1) or Delete (4) -->

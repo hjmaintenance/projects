@@ -38,6 +38,12 @@ const router = createRouter({
           meta: { hideFab: true }
         },
         {
+          path: '/request/edit/:id',
+          name: 'request_edit',
+          component: () => import('@/views/pages/reqs/RequestEdit.vue'),
+          meta: { hideFab: true }
+        },
+        {
           path: '/company',
           name: 'company',
           meta: { menuName: 'Company Management' },

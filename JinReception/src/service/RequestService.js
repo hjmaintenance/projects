@@ -57,6 +57,15 @@ const _RequestService = {
     return res.data.data;
   },
 
+  async updateWithAttachments(id, formData) {
+    const res = await apiClient.put(`/requests/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return res.data.data;
+  },
+
   async getComments(requestId) {
     const res = await apiClient.get(`/requests/${requestId}/comments`);
     return res.data.data;

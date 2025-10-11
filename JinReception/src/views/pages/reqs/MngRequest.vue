@@ -75,6 +75,8 @@ const store = useRequestStore()
     }
   });
 
+
+
   // loginUser.value.user_uid 값이 변경되거나 초기값이 있을 때 search()를 호출합니다.
   watch(
     () => loginUser.value?.user_uid,
@@ -82,6 +84,14 @@ const store = useRequestStore()
       if (newUid) search();
     },
     { immediate: true }
+  );
+
+  // 상태 선택이 변경되면 search()를 호출합니다.
+  watch(
+    () => store.dropdownItem,
+    (newValue, oldValue) => {
+      if (newValue !== oldValue) search();
+    }
   );
 
 

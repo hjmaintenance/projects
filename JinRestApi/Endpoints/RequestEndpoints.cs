@@ -262,21 +262,79 @@ public static class RequestEndpoints
             return req;
         }, "Request reset successfully."));
 
-        group.MapPut("/{id}", (AppDbContext db, int id, ImprovementRequest input) => ApiResponseBuilder.CreateAsync(async () =>
+        group.MapPut("/{id}", async (HttpRequest httpRequest, AppDbContext db, int id, IConfiguration configuration) =>
         {
-            //return null;
-            var req = await db.Requests.FindAsync(id);
-            if (req is null) return null;
+            var form = await httpRequest.ReadFormAsync();
+            var title = form["title"];
+            var description = form["description"];
+            var deletedFilesJson = form["deletedFiles"];
 
-            req.Title = input.Title;
-            req.Description = input.Description;
-            req.Status = input.Status;
-            req.AdminId = input.AdminId;
+            var result = await ApiResponseBuilder.CreateAsync(async () =>
+            {
+                var req = await db.Requests.FindAsync(id);
+                if (req is null) return null;
 
+                req.Title = title;
+                req.Description = description;
 
-            await db.SaveChangesAsync();
-            return req;
-        }, "Request updated successfully."));
+                if (!string.IsNullOrEmpty(deletedFilesJson)) 
+                {
+                    var deletedFileIds = JsonSerializer.Deserialize<List<int>>(deletedFilesJson);
+                    if (deletedFileIds != null && deletedFileIds.Any())
+                    {
+                        var attachmentsToDelete = await db.Attachments.Where(a => deletedFileIds.Contains(a.Id)).ToListAsync();
+                        foreach (var attachment in attachmentsToDelete)
+                        {
+                            var filePath = Path.Combine(attachment.FilePath, attachment.StoredFileName);
+                            if (File.Exists(filePath))
+                            {
+                                File.Delete(filePath);
+                            }
+                        }
+                        db.Attachments.RemoveRange(attachmentsToDelete);
+                    }
+                }
+
+                var files = form.Files;
+                if (files.Count > 0)
+                {
+                    var storagePath = configuration.GetValue<string>("FileStorage:BasePath") ?? "/home/lee/jinAttachment";
+                    Directory.CreateDirectory(storagePath);
+
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            var extension = Path.GetExtension(file.FileName);
+                            var storedFileName = $"{Guid.NewGuid()}{extension}";
+                            var filePath = Path.Combine(storagePath, storedFileName);
+
+                            await using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
+
+                            var attachment = new Attachment
+                            {
+                                OriginalFileName = file.FileName,
+                                StoredFileName = storedFileName,
+                                FilePath = storagePath,
+                                FileType = file.ContentType,
+                                FileSize = file.Length,
+                                EntityType = "ImprovementRequest",
+                                EntityId = req.Id,
+                                UploadedAt = DateTime.UtcNow
+                            };
+                            db.Attachments.Add(attachment);
+                        }
+                    }
+                }
+
+                await db.SaveChangesAsync();
+                return req;
+            }, "Request updated successfully.");
+            return result;
+        }).DisableAntiforgery();
 
         group.MapDelete("/{id}", (AppDbContext db, int id) => ApiResponseBuilder.CreateAsync(async () =>
         {
