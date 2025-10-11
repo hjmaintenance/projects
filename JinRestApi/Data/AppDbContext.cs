@@ -284,7 +284,8 @@ public class AppDbContext : DbContext
             if (entity.GetSchema() == "jsini") // jsini 스키마에 있는 테이블만 소문자화
             {
                 var tableName = entity.GetTableName();
-                if (string.IsNullOrEmpty(tableName)) continue;
+                // __EFMigrationsHistory 테이블은 소문자화에서 제외합니다.
+                if (string.IsNullOrEmpty(tableName) || tableName == "__EFMigrationsHistory") continue;
                 entity.SetTableName(tableName.ToLower());
             }
 
@@ -305,7 +306,7 @@ public class AppDbContext : DbContext
             foreach (var property in entity.GetProperties())
             {
                 // 컬럼명 소문자화
-                if (entity.GetTableName() == "__EFMigrationsHistory")
+                if (entity.GetTableName()?.ToLower() == "__efmigrationshistory")
                 {
                     continue; // 마이그레이션 히스토리 테이블의 컬럼명은 변경하지 않습니다.
                 }
