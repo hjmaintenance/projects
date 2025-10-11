@@ -304,8 +304,11 @@ public class AppDbContext : DbContext
 
             foreach (var property in entity.GetProperties())
             {
-
                 // 컬럼명 소문자화
+                if (entity.GetTableName() == "__EFMigrationsHistory")
+                {
+                    continue; // 마이그레이션 히스토리 테이블의 컬럼명은 변경하지 않습니다.
+                }
                 property.SetColumnName(property.Name.ToLower());
 
                 if (xmlDoc != null)
